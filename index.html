@@ -183,11 +183,13 @@
          ============================================================ -->
     <a-entity id="rig" position="0 0 18" locomotion="speed: 2; snapAngle: 45">
       <!-- 1.6 m eye height on desktop; in VR the headset supplies the real height. -->
+      <!-- stick-debug: temporary VR readout of thumbstick values. Delete it to remove. -->
       <a-entity id="camera" camera position="0 1.6 0"
-        look-controls="pointerLockEnabled: true"></a-entity>
-      <!-- Quest 2 Touch controllers -->
-      <a-entity id="left-hand" meta-touch-controls="hand: left"></a-entity>
-      <a-entity id="right-hand" meta-touch-controls="hand: right"></a-entity>
+        look-controls="pointerLockEnabled: true" stick-debug></a-entity>
+      <!-- Quest 2 Touch controllers. A-Frame 1.6.0 calls these oculus-touch-controls
+           (the newer name meta-touch-controls does not exist in this version). -->
+      <a-entity id="left-hand" oculus-touch-controls="hand: left"></a-entity>
+      <a-entity id="right-hand" oculus-touch-controls="hand: right"></a-entity>
     </a-entity>
 
   </a-scene>

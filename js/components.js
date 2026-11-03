@@ -376,7 +376,9 @@ AFRAME.registerComponent('locomotion', {
 
   init() {
     this.keys = new Set();
-    this.stick = { x: 0, y: 0 };
+    this.stick = { x: 0, y: 0 };          // left stick (walk)
+    this.turnStick = 0;                   // right stick x (snap turn)
+    this.inputSource = 'none';            // where the stick values came from (for stick-debug)
     this.turnReady = true;
 
     this.camera = this.el.querySelector('[camera]');
@@ -394,14 +396,40 @@ AFRAME.registerComponent('locomotion', {
     window.addEventListener('keyup', this.onKeyUp);
     window.addEventListener('blur', this.onBlur);
 
-    // VR controllers (they emit thumbstickmoved with x/y in the range -1..1)
+    // VR controllers, method 1: thumbstickmoved events from oculus-touch-controls
+    // (x/y in the range -1..1). Method 2, polling the gamepads, is in readGamepads().
     this.el.querySelector('#left-hand').addEventListener('thumbstickmoved', (e) => {
       this.stick.x = e.detail.x;
       this.stick.y = e.detail.y;
+      this.inputSource = 'events';
     });
     this.el.querySelector('#right-hand').addEventListener('thumbstickmoved', (e) => {
+      this.turnStick = e.detail.x;
+      this.inputSource = 'events';
       this.handleSnapTurn(e.detail.x);
     });
+  },
+
+  // VR controllers, method 2: read the WebXR gamepads directly every frame.
+  // On Quest Touch controllers (xr-standard mapping) the thumbstick is axes[2] (x)
+  // and axes[3] (y). This works even if the controller component never loads.
+  readGamepads() {
+    const xr = this.el.sceneEl.renderer && this.el.sceneEl.renderer.xr;
+    const session = xr && xr.getSession && xr.getSession();
+    if (!session) return;
+    for (const source of session.inputSources) {
+      const pad = source.gamepad;
+      if (!pad || pad.axes.length < 4) continue;
+      if (source.handedness === 'left') {
+        this.stick.x = pad.axes[2];
+        this.stick.y = pad.axes[3];
+        this.inputSource = 'gamepad';
+      } else if (source.handedness === 'right') {
+        this.turnStick = pad.axes[2];
+        this.inputSource = 'gamepad';
+        this.handleSnapTurn(pad.axes[2]);
+      }
+    }
   },
 
   remove() {
@@ -413,6 +441,7 @@ AFRAME.registerComponent('locomotion', {
   tick(time, delta) {
     const dt = Math.min(delta, 100) / 1000; // seconds; capped so a hiccup doesn't teleport you
     const k = this.keys;
+    this.readGamepads();
 
     // Input as "strafe right" (x) and "forward" (z), each roughly -1..1.
     let x = 0;
@@ -467,5 +496,46 @@ AFRAME.registerComponent('locomotion', {
     this.offset.copy(rig.position).sub(this.camPos).applyAxisAngle(this.up, angle);
     rig.position.copy(this.camPos).add(this.offset);
     rig.rotation.y += angle;
+  }
+});
+
+/* ------------------------------------------------------------------ */
+/* stick-debug (temporary)                                             */
+/* ------------------------------------------------------------------ */
+/*
+ * Shows the thumbstick values in VR, just below your view, so you can check
+ * that controller input is arriving. Put it on the camera:
+ *   <a-entity id="camera" camera ... stick-debug></a-entity>
+ * To remove it later, delete `stick-debug` from the camera (and this block if you like).
+ */
+AFRAME.registerComponent('stick-debug', {
+  init() {
+    this.rig = this.el.closest('[locomotion]');
+    this.label = document.createElement('a-entity');
+    this.label.setAttribute('position', '0 -0.32 -0.9');
+    this.label.setAttribute('text', 'value: sticks; align: center; width: 0.9; color: #fff8e6');
+    this.label.setAttribute('visible', false);  // only shown in VR
+    this.el.appendChild(this.label);
+    this.lastUpdate = 0;
+    this.onEnter = () => this.label.setAttribute('visible', true);
+    this.onExit = () => this.label.setAttribute('visible', false);
+    this.el.sceneEl.addEventListener('enter-vr', this.onEnter);
+    this.el.sceneEl.addEventListener('exit-vr', this.onExit);
+  },
+
+  remove() {
+    this.el.sceneEl.removeEventListener('enter-vr', this.onEnter);
+    this.el.sceneEl.removeEventListener('exit-vr', this.onExit);
+    this.label.remove();
+  },
+
+  tick(time) {
+    if (time - this.lastUpdate < 100 || !this.rig) return; // update ten times a second
+    this.lastUpdate = time;
+    const loco = this.rig.components.locomotion;
+    const f = (n) => (n >= 0 ? ' ' : '') + n.toFixed(2);
+    this.label.setAttribute('text', 'value',
+      `L  x ${f(loco.stick.x)}  y ${f(loco.stick.y)}    R  x ${f(loco.turnStick)}\n` +
+      `input: ${loco.inputSource}`);
   }
 });
