@@ -92,8 +92,8 @@
     <!-- Lawns in front of the set-back buildings on the west side, with front paths. -->
     <a-plane id="lawn-west" rotation="-90 0 0" position="-27.65 0.015 -38.7" width="34.7" height="77.4"
       material="color: #6f8048; roughness: 1"></a-plane>
+    <!-- (The courthouse has a paved forecourt instead: see #courthouse-grounds.) -->
     <a-entity id="paths">
-      <a-plane rotation="-90 0 0" position="-13.05 0.03 -7.05" width="5.5" height="5" material="color: #b9b0a0; roughness: 1"></a-plane>
       <a-plane rotation="-90 0 0" position="-13.4 0.03 -28.5" width="6.25" height="2.2" material="color: #b9b0a0; roughness: 1"></a-plane>
       <a-plane rotation="-90 0 0" position="-11.75 0.03 -51.2" width="2.9" height="1.4" material="color: #b9b0a0; roughness: 1"></a-plane>
       <a-plane rotation="-90 0 0" position="-12.6 0.03 -68.8" width="4.55" height="1.4" material="color: #b9b0a0; roughness: 1"></a-plane>
@@ -117,8 +117,28 @@
       kit-building="type: house; width: 8.6; depth: 12; stories: 2; color: #e3dccb; porchWidth: 4.4"></a-entity>
     <a-entity id="county-offices" position="-17.6 0 -28.5" rotation="0 90 0"
       kit-building="type: county-offices"></a-entity>
-    <a-entity id="courthouse" position="-17.8 0 -7.05" rotation="0 90 0"
-      kit-building="type: courthouse"></a-entity>
+    <!-- Hunterdon County Court House (75 Main): Blender model with Poly Haven textures and
+         baked late-afternoon light. Built by tools/blender/courthouse.py + courthouse_bake.py.
+         Position = centre of the portico front (8.0 m behind the property line); the
+         brownstone steps project 1.65 m further east, to x -16.69. It stands on the paved
+         forecourt at sidewalk height (y 0.15). The old code-built version is still
+         available as kit-building="type: courthouse". -->
+    <a-entity id="courthouse" position="-18.34 0.15 -6.85" rotation="0 90 0"
+      gltf-model="url(assets/models/courthouse.glb)"
+      baked-lighting="lightmap: assets/textures/courthouse-lightmap.jpg; intensity: 1.1979"></a-entity>
+    <!-- Paved forecourt (1906–1912 photos: no lawn) from the sidewalk to the portico,
+         flush with the sidewalk top (0.15) and out to the Court St line (z 0), and 15 cm grade slabs under the courthouse
+         body, north wing and jail yard so the walls don't float above the lawn. -->
+    <a-entity id="courthouse-grounds">
+      <a-box id="courthouse-forecourt" position="-14.4 0.075 -6.775" width="8.2" height="0.15" depth="13.55"
+        material="src: assets/textures/polyhaven/sidewalk_concrete.jpg; repeat: 2.7 4.5; roughness: 1"></a-box>
+      <a-box position="-30.8 0.075 -6.775" width="24.9" height="0.15" depth="13.55"
+        material="color: #8a8378; roughness: 1"></a-box>
+      <a-box position="-27.36 0.075 -15.45" width="7.82" height="0.15" depth="3.8"
+        material="color: #8a8378; roughness: 1"></a-box>
+      <a-box position="-48.9 0.075 -7.8" width="11.3" height="0.15" depth="15.6"
+        material="color: #8a8378; roughness: 1"></a-box>
+    </a-entity>
 
     <!-- East side (even numbers), north to south -->
     <!-- 56–66 Main: the 3-storey "Bank Building" (bank, men's furnishings, drugs, shoes, confectionery) -->

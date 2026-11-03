@@ -90,8 +90,31 @@ surfaces re-tinted by `tools/prepare_textures.py`.
 | `mud_forest.jpg` | Mud Forest (`mud_forest`) | https://polyhaven.com/a/mud_forest | CC0 | soil in the sidewalk tree pit (tile 2.35 m) |
 | `granite_tile_03.jpg` | Granite Tile 03 (`granite_tile_03`) | https://polyhaven.com/a/granite_tile_03 | CC0 | granite edging of the tree pit (tile 1.8 m) |
 
+### Hunterdon County Court House (`assets/textures/courthouse/`)
+
+1K colour (Diffuse) maps, re-saved at JPEG quality 85; coloured copies made by
+`tools/prepare_courthouse_textures.py`. The courthouse also reuses `trim_paint_cream.jpg`,
+`roof_slates_03.jpg`, `red_brick.jpg`, `door_paint_green.jpg`, `weathered_planks.jpg` and
+`wood_table_worn.jpg` from `assets/textures/polyhaven/` (listed above).
+
+| File | Poly Haven asset | URL | Licence | Used for |
+|------|------------------|-----|---------|----------|
+| `white_stucco.jpg` | White Stucco (`white_stucco`) | https://polyhaven.com/a/white_stucco | CC0 | untinted source |
+| `stucco_offwhite.jpg` | White Stucco (`white_stucco`), tinted #E6E1D4 | https://polyhaven.com/a/white_stucco | CC0 | stucco walls, antae, tympanum, cupola base (tile 2.0 m) |
+| `red_sandstone_pavement.jpg` | Red Sandstone Pavement (`red_sandstone_pavement`) | https://polyhaven.com/a/red_sandstone_pavement | CC0 | untinted source |
+| `brownstone.jpg` | Red Sandstone Pavement (`red_sandstone_pavement`), shifted toward #6E4A3C | https://polyhaven.com/a/red_sandstone_pavement | CC0 | brownstone steps, pedestals, base course, sills (tile 2.15 m) |
+| `brown_planks_05.jpg` | Brown Planks 05 (`brown_planks_05`) | https://polyhaven.com/a/brown_planks_05 | CC0 | untinted source |
+| `clapboard_buff.jpg` | Brown Planks 05 (`brown_planks_05`), tinted #9C8566 | https://polyhaven.com/a/brown_planks_05 | CC0 | north wing and jail-yard building clapboard (tile 1.0 m) |
+| `rock_wall_08.jpg` | Rock Wall 08 (`rock_wall_08`) | https://polyhaven.com/a/rock_wall_08 | CC0 | jail-yard rubble stone wall (tile 1.8 m) |
+| `green_metal_rust.jpg` | Green Metal Rust (`green_metal_rust`) | https://polyhaven.com/a/green_metal_rust | CC0 | untinted source |
+| `dome_paint_green.jpg` | Green Metal Rust (`green_metal_rust`), shifted to muted #4A5A46 | https://polyhaven.com/a/green_metal_rust | CC0 | cupola dome, painted sheet metal (tile 1.0 m) |
+| `paint_white.jpg` | Painted Plaster Wall (`painted_plaster_wall`, via `polyhaven/trim_paint_cream.jpg`), repainted #F2EFE6 at 25% contrast | https://polyhaven.com/a/painted_plaster_wall | CC0 | courthouse columns, entablature, brackets, cupola (tile 2.0 m); made by `tools/prepare_courthouse_paints.py` |
+| `stucco_cream.jpg` | White Stucco (`white_stucco`), tinted #E8DDC6 | https://polyhaven.com/a/white_stucco | CC0 | courthouse walls, warm cream (tile 2.0 m); made by `tools/prepare_courthouse_paints.py` |
+| `rock_wall_grey.jpg` | Rock Wall 08 (`rock_wall_08`), lightened to mid-grey #8A857C | https://polyhaven.com/a/rock_wall_08 | CC0 | jail-yard wall (tile 1.8 m); made by `tools/prepare_courthouse_paints.py` |
+
 `assets/textures/union-hotel-lightmap.jpg` is baked in Blender by
 `tools/blender/union_hotel_bake.py` (original work).
+`assets/textures/courthouse-lightmap.jpg` is baked in Blender by `tools/blender/courthouse_bake.py` (original work).
 
 ## Maps (`assets/maps/`)
 
