@@ -478,6 +478,12 @@ letters.transform(text.matrix_world)
 bpy.data.objects.remove(text, do_unlink=True)
 bpy.data.curves.remove(curve)
 letters.name = "UH_Letters"
+_bm = bmesh.new()                       # text meshes come with their flat faces pointing
+_bm.from_mesh(letters)                  # into the sign; turn them toward the street (-Y)
+_bm.normal_update()                     # so the lettering bakes lit
+bmesh.ops.reverse_faces(_bm, faces=[f for f in _bm.faces if f.normal.y > 0.5])
+_bm.to_mesh(letters)
+_bm.free()
 lobj = bpy.data.objects.new("UH_Letters", letters)
 letters.materials.clear()
 letters.materials.append(MATS["Trim"])
@@ -485,12 +491,4 @@ col.objects.link(lobj)
 
 tris = sum(len(p.vertices) - 2 for o in col.objects for p in o.data.polygons)
 print("Union Hotel built:", len(col.objects), "objects,", tris, "triangles")
-
-
-def export_glb(path=PROJECT + r"\assets\models\union_hotel.glb"):
-    """Export only the hotel (not the Preview props) as a GLB for the A-Frame scene."""
-    for obj in bpy.context.scene.objects:
-        obj.select_set(obj.name in col.objects)
-    bpy.ops.export_scene.gltf(filepath=path, export_format="GLB", use_selection=True,
-                              export_apply=True, export_yup=True)
-    print("Exported", path)
+# Materials, baked lighting and GLB export: run union_hotel_bake.py (it runs this file first).

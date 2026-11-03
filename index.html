@@ -122,10 +122,12 @@
     <!-- 68 Main: restaurant, pool room upstairs -->
     <a-entity id="bldg-68-main" position="10.6 0 -51.7" rotation="0 -90 0"
       building="width: 5.5; height: 7.5; depth: 18; stories: 2; color: #c7b48e; wall: wood; bays: 2; photo: "></a-entity>
-    <!-- Union Hotel: Blender model (tools/blender/union_hotel.py → assets/models/union_hotel.glb).
+    <!-- Union Hotel: Blender model with Poly Haven textures and baked late-afternoon light.
+         Built by tools/blender/union_hotel.py + union_hotel_bake.py.
          The old code-built version is still available as kit-building="type: union-hotel". -->
     <a-entity id="union-hotel" position="11.6 0 -30.75" rotation="0 -90 0"
-      gltf-model="url(assets/models/union_hotel.glb)"></a-entity>
+      gltf-model="url(assets/models/union-hotel.glb)"
+      baked-lighting="lightmap: assets/textures/union-hotel-lightmap.jpg; intensity: 1.2381"></a-entity>
     <!-- 78 Main: dry goods, 3 storeys -->
     <a-entity id="bldg-78-main" position="10.3 0 -9.1" rotation="0 -90 0"
       building="width: 7.3; height: 10.7; depth: 17; stories: 3; color: #874434; wall: brick; bays: 3; photo: "></a-entity>

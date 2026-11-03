@@ -64,6 +64,25 @@ details against the West Jersey History photos.
 | `wurts-law-office-east-front.jpg` | 1. EAST FRONT - Alexander Wurts Law Office, 59 Main Street | https://www.loc.gov/pictures/item/nj0072.photos.107271p/ |
 | `wurts-law-office-south-side.jpg` | 2. SOUTH SIDE - Alexander Wurts Law Office, 59 Main Street | https://www.loc.gov/pictures/item/nj0072.photos.107272p/ |
 
+## Textures (`assets/textures/polyhaven/`)
+
+From Poly Haven (https://polyhaven.com), CC0 (public domain). 1K colour maps; painted
+surfaces re-tinted by `tools/prepare_textures.py`.
+
+| File | Poly Haven asset | Used for |
+|------|------------------|----------|
+| `red_brick.jpg` | Red Brick (`red_brick`) | brick walls |
+| `trim_paint_cream.jpg` | Painted Plaster Wall (`painted_plaster_wall`), tinted cream | painted trim, porch, cornice |
+| `sign_paint_green.jpg` | Painted Plaster Wall (`painted_plaster_wall`), tinted green | sign board |
+| `weathered_planks.jpg` | Weathered Planks (`weathered_planks`) | porch floor |
+| `roof_slates_03.jpg` | Roof Slates 03 (`roof_slates_03`) | mansard roof |
+| `metal_plate_02.jpg` | Metal Plate 02 (`metal_plate_02`) | flat tin roofs |
+| `concrete_floor_worn_001.jpg` | Concrete Floor Worn 001 (`concrete_floor_worn_001`) | steps |
+| `wood_table_worn.jpg` | Wood Table Worn (`wood_table_worn`) | doors |
+
+`assets/textures/union-hotel-lightmap.jpg` is baked in Blender by
+`tools/blender/union_hotel_bake.py` (original work).
+
 ## Maps (`assets/maps/`)
 
 Sanborn Fire Insurance Map from Flemington, Hunterdon County, New Jersey, September 1921

@@ -500,6 +500,58 @@ AFRAME.registerComponent('locomotion', {
 });
 
 /* ------------------------------------------------------------------ */
+/* baked-lighting                                                      */
+/* ------------------------------------------------------------------ */
+/*
+ * For models whose sunlight, shadows and ambient occlusion were baked in Blender
+ * (see tools/blender/union_hotel_bake.py). Put it next to gltf-model:
+ *
+ *   <a-entity gltf-model="url(assets/models/union-hotel.glb)"
+ *             baked-lighting="lightmap: assets/textures/union-hotel-lightmap.jpg; intensity: 1.24">
+ *
+ * Every material becomes unlit (MeshBasicMaterial): colour texture x lightmap.
+ * The scene's lights no longer affect the model, and it is very cheap to draw.
+ * `intensity` is the LIGHTMAP_SCALE value the bake script prints.
+ */
+AFRAME.registerComponent('baked-lighting', {
+  schema: {
+    lightmap:  { default: '' },
+    intensity: { default: 1.0 }
+  },
+
+  init() {
+    this.texture = new THREE.TextureLoader().load(this.data.lightmap);
+    this.texture.flipY = false;                       // glTF UV convention
+    this.texture.channel = 1;                         // second UV map ("Lightmap")
+    this.texture.colorSpace = THREE.SRGBColorSpace;   // stored gamma-encoded
+    this.onLoaded = () => this.apply();
+    this.el.addEventListener('model-loaded', this.onLoaded);
+    if (this.el.getObject3D('mesh')) this.apply();
+  },
+
+  apply() {
+    const mesh = this.el.getObject3D('mesh');
+    if (!mesh) return;
+    mesh.traverse((obj) => {
+      if (!obj.isMesh || obj.material.isMeshBasicMaterial) return;
+      const old = obj.material;
+      obj.material = new THREE.MeshBasicMaterial({
+        map: old.map,
+        color: old.color,
+        lightMap: this.texture,
+        lightMapIntensity: this.data.intensity   // undoes the bake's 0..1 scaling
+      });
+      old.dispose();
+    });
+  },
+
+  remove() {
+    this.el.removeEventListener('model-loaded', this.onLoaded);
+    this.texture.dispose();
+  }
+});
+
+/* ------------------------------------------------------------------ */
 /* stick-debug (temporary)                                             */
 /* ------------------------------------------------------------------ */
 /*
