@@ -1,0 +1,28 @@
+# OS clutter
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Local Claude Code settings (launch.json is shared, personal settings are not)
+.claude/settings.local.json
+
+# Node, in case tooling is added later
+node_modules/
+
+# West Jersey History reference scans: kept local only, since reposting rights are
+# unconfirmed (listed with links in SOURCES.md). The public-domain HABS photos in
+# assets/photos/reference/habs/ are committed.
+assets/photos/reference/*.jpg
+
+# Raw, uncompressed source assets: keep originals out of git,
+# commit only the optimized versions used by the scene.
+assets/**/raw/
+*.psd
+*.blend1
+*.tif
+*.tiff

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flemington Main Street, c. 1920</title>
+
+  <!-- A-Frame (WebXR framework), loaded from its official CDN. -->
+  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  <!-- Our own code: shared components, the building kit, and the modelled landmarks. -->
+  <script src="js/components.js"></script>
+  <script src="js/kit.js"></script>
+  <script src="js/landmarks.js"></script>
+
+  <style>
+    /* On-screen help for desktop. Not visible inside the headset. */
+    #help {
+      position: fixed; top: 12px; left: 12px; z-index: 10;
+      padding: 10px 14px; max-width: 280px;
+      font: 13px/1.45 Georgia, serif; color: #f4ead8;
+      background: rgba(40, 28, 18, 0.72); border-radius: 6px;
+      pointer-events: none;
+    }
+    #help b { color: #fff; }
+  </style>
+</head>
+<body>
+  <div id="help">
+    <b>Flemington Main Street, c. 1920</b><br>
+    Click the scene to look with the mouse (Esc to release).<br>
+    W A S D / arrows to walk, Shift to walk faster.<br>
+    In VR: left stick walks, right stick snap-turns.
+  </div>
+
+  <!--
+    SCENE SETUP
+    - renderer: antialiasing on; foveation lowers detail at the lens edges on Quest.
+    - fog: warm exponential haze; colour matches the sky's horizon colour.
+  -->
+  <a-scene
+    renderer="antialias: true; foveationLevel: 1"
+    fog="type: exponential; color: #ecdfc4; density: 0.011">
+
+    <!-- ============================================================
+         SKY AND LIGHT
+         ============================================================ -->
+
+    <!-- Sky: a large inward-facing sphere with a gradient. Fog is turned off for it. -->
+    <a-entity id="sky"
+      geometry="primitive: sphere; radius: 400; segmentsWidth: 24; segmentsHeight: 16"
+      material="shader: flat; side: back; fog: false"
+      gradient-sky="top: #a9bfd2; horizon: #ecdfc4"></a-entity>
+
+    <!-- Soft fill light: warm from above, brown bounce from the ground. -->
+    <a-entity light="type: hemisphere; color: #fff0d4; groundColor: #7a5f45; intensity: 1.3"></a-entity>
+    <!-- Low, warm afternoon sun from the south-west. No shadows (expensive on Quest). -->
+    <a-entity light="type: directional; color: #ffd9a3; intensity: 1.8" position="-40 35 25"></a-entity>
+
+    <!-- ============================================================
+         LAYOUT (from the 1921 Sanborn map, sheets 2 and 3)
+         1 scene unit = 1 metre. Main Street runs north-south along Z (north = -Z).
+         z = 0 is the north side of Court Street.
+         Main Street is 66 ft (20.6 m) between property lines: x = -10.3 to +10.3.
+           Road:       x = -6.4 to 6.4
+           Sidewalks:  x = ±6.4 to ±10.3
+         Cross streets: Bloomfield Ave (east, z -89.8 to -77.6), Court St (west, z 0 to 12.2).
+         ============================================================ -->
+
+    <!-- Ground beyond the street (yards, lots). -->
+    <a-plane id="ground" rotation="-90 0 0" width="500" height="500"
+      material="color: #6f6a45; roughness: 1"></a-plane>
+
+    <!-- Dirt roads. -->
+    <a-plane id="road" rotation="-90 0 0" position="0 0.01 -50" width="12.8" height="260"
+      material="roughness: 1" canvas-texture="pattern: dirt; repeat: 1 20"></a-plane>
+    <a-plane id="bloomfield-ave" rotation="-90 0 0" position="35.15 0.01 -83.7" width="50" height="12.2"
+      material="roughness: 1" canvas-texture="pattern: dirt; repeat: 4 1; seed: 5"></a-plane>
+    <a-plane id="court-st" rotation="-90 0 0" position="-35.15 0.01 6.1" width="50" height="12.2"
+      material="roughness: 1" canvas-texture="pattern: dirt; repeat: 4 1; seed: 9"></a-plane>
+
+    <!-- Wooden sidewalks (raised 25 cm). -->
+    <a-box id="sidewalk-west" position="-8.35 0.125 -50" width="3.9" height="0.25" depth="260"
+      material="roughness: 1" canvas-texture="pattern: planks; repeat: 1 210; seed: 3"></a-box>
+    <a-box id="sidewalk-east" position="8.35 0.125 -50" width="3.9" height="0.25" depth="260"
+      material="roughness: 1" canvas-texture="pattern: planks; repeat: 1 210; seed: 11"></a-box>
+
+    <!-- Lawns in front of the set-back buildings on the west side, with front paths. -->
+    <a-plane id="lawn-west" rotation="-90 0 0" position="-27.65 0.015 -38.7" width="34.7" height="77.4"
+      material="color: #6f8048; roughness: 1"></a-plane>
+    <a-entity id="paths">
+      <a-plane rotation="-90 0 0" position="-13.05 0.03 -7.05" width="5.5" height="5" material="color: #b9b0a0; roughness: 1"></a-plane>
+      <a-plane rotation="-90 0 0" position="-13.4 0.03 -28.5" width="6.25" height="2.2" material="color: #b9b0a0; roughness: 1"></a-plane>
+      <a-plane rotation="-90 0 0" position="-11.75 0.03 -51.2" width="2.9" height="1.4" material="color: #b9b0a0; roughness: 1"></a-plane>
+      <a-plane rotation="-90 0 0" position="-12.6 0.03 -68.8" width="4.55" height="1.4" material="color: #b9b0a0; roughness: 1"></a-plane>
+    </a-entity>
+
+    <!-- ============================================================
+         STARTER BLOCK: Bloomfield Ave to Court St
+         Modelled buildings use `kit-building` (see js/landmarks.js).
+         Plain shopfront blocks use `building` (see js/components.js).
+         Position = centre of the building's front at ground level.
+         West side: rotation="0 90 0".  East side: rotation="0 -90 0".
+         ============================================================ -->
+
+    <!-- West side (odd numbers), north to south -->
+    <a-entity id="bldg-57-main" position="-11 0 -85.4" rotation="0 90 0"
+      building="width: 16; height: 10; depth: 20; stories: 3; color: #8e4a36; wall: brick; bays: 5; photo: "></a-entity>
+    <a-entity id="wurts-law-office" position="-15.2 0 -68.8" rotation="0 90 0"
+      kit-building="type: law-office"></a-entity>
+    <!-- 65 Main: 2½-storey frame dwelling. Porch position from the map; style is a guess. -->
+    <a-entity id="house-65-main" position="-16.3 0 -51.2" rotation="0 90 0"
+      kit-building="type: house; width: 8.6; depth: 12; stories: 2; color: #e3dccb; porchWidth: 4.4"></a-entity>
+    <a-entity id="county-offices" position="-17.6 0 -28.5" rotation="0 90 0"
+      kit-building="type: county-offices"></a-entity>
+    <a-entity id="courthouse" position="-17.8 0 -7.05" rotation="0 90 0"
+      kit-building="type: courthouse"></a-entity>
+
+    <!-- East side (even numbers), north to south -->
+    <!-- 56–66 Main: the 3-storey "Bank Building" (bank, men's furnishings, drugs, shoes, confectionery) -->
+    <a-entity id="bank-building" position="10.6 0 -66.2" rotation="0 -90 0"
+      building="width: 22.9; height: 12.2; depth: 15.6; stories: 3; color: #a4583f; wall: brick; bays: 12; photo: "></a-entity>
+    <!-- 68 Main: restaurant, pool room upstairs -->
+    <a-entity id="bldg-68-main" position="10.6 0 -51.7" rotation="0 -90 0"
+      building="width: 5.5; height: 7.5; depth: 18; stories: 2; color: #c7b48e; wall: wood; bays: 2; photo: "></a-entity>
+    <!-- Union Hotel: Blender model (tools/blender/union_hotel.py → assets/models/union_hotel.glb).
+         The old code-built version is still available as kit-building="type: union-hotel". -->
+    <a-entity id="union-hotel" position="11.6 0 -30.75" rotation="0 -90 0"
+      gltf-model="url(assets/models/union_hotel.glb)"></a-entity>
+    <!-- 78 Main: dry goods, 3 storeys -->
+    <a-entity id="bldg-78-main" position="10.3 0 -9.1" rotation="0 -90 0"
+      building="width: 7.3; height: 10.7; depth: 17; stories: 3; color: #874434; wall: brick; bays: 3; photo: "></a-entity>
+
+    <!-- ============================================================
+         BEYOND THE STARTER BLOCK: simple placeholders.
+         East-side widths and storeys follow the map; the rest are rough.
+         ============================================================ -->
+
+    <!-- North of Bloomfield Ave, east side -->
+    <a-entity id="bldg-48-52-main" position="10.3 0 -98.3" rotation="0 -90 0"
+      building="width: 15.7; height: 11; depth: 14; stories: 3; color: #7a3b2e; wall: brick; photo: "></a-entity>
+    <a-entity id="bldg-40-46-main" position="10.3 0 -115.8" rotation="0 -90 0"
+      building="width: 16; height: 7.5; depth: 12; stories: 2; color: #bfa77c; wall: wood; photo: "></a-entity>
+    <a-entity id="bldg-32-38-main" position="10.3 0 -130.7" rotation="0 -90 0"
+      building="width: 13.8; height: 7.5; depth: 12; stories: 2; color: #c8b48a; wall: wood; photo: "></a-entity>
+    <a-entity id="bldg-24-30-main" position="10.3 0 -149.1" rotation="0 -90 0"
+      building="width: 16.4; height: 7.5; depth: 12; stories: 2; color: #b59a72; wall: wood; photo: "></a-entity>
+
+    <!-- North of the starter block, west side -->
+    <a-entity id="county-hotel" position="-10.3 0 -111.8" rotation="0 90 0"
+      building="width: 24; height: 10.5; depth: 16; stories: 3; color: #d8ccb0; wall: wood; photo: "></a-entity>
+    <a-entity id="bldg-35-41-main" position="-10.3 0 -129.6" rotation="0 90 0"
+      building="width: 12; height: 7; depth: 12; stories: 2; color: #b8a07a; wall: wood; photo: "></a-entity>
+    <a-entity id="palace-theatre" position="-10.3 0 -145.7" rotation="0 90 0"
+      building="width: 12.7; height: 9; depth: 30; stories: 2; color: #7b4030; wall: brick; photo: "></a-entity>
+    <a-entity id="bldg-27-main" position="-10.3 0 -159.5" rotation="0 90 0"
+      building="width: 10.4; height: 9; depth: 20; stories: 2; color: #8f4c3a; wall: brick; photo: "></a-entity>
+
+    <!-- South of Court St, east side (sheet 3) -->
+    <a-entity id="bldg-82-84-main" position="10.3 0 7.7" rotation="0 -90 0"
+      building="width: 15.6; height: 10.7; depth: 14; stories: 3; color: #9c5b45; wall: brick; photo: "></a-entity>
+    <a-entity id="bldg-90-94-main" position="10.3 0 29.1" rotation="0 -90 0"
+      building="width: 20.8; height: 11.5; depth: 15; stories: 3; color: #8a4a38; wall: brick; photo: "></a-entity>
+    <a-entity id="bldg-96-98-main" position="10.3 0 42.8" rotation="0 -90 0"
+      building="width: 4.8; height: 7; depth: 12; stories: 2; color: #c2ad84; wall: wood; photo: "></a-entity>
+    <a-entity id="bldg-100-102-main" position="10.3 0 50.05" rotation="0 -90 0"
+      building="width: 9.7; height: 10; depth: 14; stories: 3; color: #a0604a; wall: brick; photo: "></a-entity>
+    <a-entity id="bldg-106-main" position="10.3 0 57.65" rotation="0 -90 0"
+      building="width: 5.5; height: 10; depth: 12; stories: 3; color: #b8a07a; wall: wood; photo: "></a-entity>
+
+    <!-- South of Court St, west side: houses (positions and styles are guesses) -->
+    <a-entity id="house-w-s1" position="-16 0 22" rotation="0 90 0"
+      kit-building="type: house; width: 9; depth: 11; stories: 2; color: #e8e1cf"></a-entity>
+    <a-entity id="house-w-s2" position="-16 0 38" rotation="0 90 0"
+      kit-building="type: house; width: 8; depth: 11; stories: 2; color: #d9cdb0; trim: #f3ecdc"></a-entity>
+    <a-entity id="house-w-s3" position="-16 0 54" rotation="0 90 0"
+      kit-building="type: house; width: 9; depth: 12; stories: 2; color: #e6dfd0; porchWidth: 6; porchX: -1.2"></a-entity>
+
+    <!-- ============================================================
+         PLAYER RIG
+         The rig is moved by `locomotion`. The camera and both hands are children,
+         so everything moves together. Start just south of the courthouse,
+         facing north, with the courthouse ahead-left and the Union Hotel ahead-right.
+         ============================================================ -->
+    <a-entity id="rig" position="0 0 18" locomotion="speed: 2; snapAngle: 45">
+      <!-- 1.6 m eye height on desktop; in VR the headset supplies the real height. -->
+      <a-entity id="camera" camera position="0 1.6 0"
+        look-controls="pointerLockEnabled: true"></a-entity>
+      <!-- Quest 2 Touch controllers -->
+      <a-entity id="left-hand" meta-touch-controls="hand: left"></a-entity>
+      <a-entity id="right-hand" meta-touch-controls="hand: right"></a-entity>
+    </a-entity>
+
+  </a-scene>
+</body>
+</html>
