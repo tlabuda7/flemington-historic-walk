@@ -44,6 +44,7 @@ LOOK = {
     "UH_Boards":  ("weathered_planks.jpg", 2.0, 0.9),
     "UH_Stone":   ("concrete_floor_worn_001.jpg", 3.0, 0.9),
     "UH_Wood":    ("wood_table_worn.jpg", 0.55, 0.7),
+    "UH_Door":    ("door_paint_green.jpg", 0.8, 0.7),
     "UH_Sign":    ("sign_paint_green.jpg", 2.0, 0.7),
     "UH_Glass":   None,
 }

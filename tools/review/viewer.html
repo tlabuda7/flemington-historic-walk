@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Model Review Viewer</title>
+  <!--
+    Loads one building model the way the scene does, for the reviewer agent.
+    URL:  tools/review/viewer.html?model=assets/models/<b>.glb
+            &lightmap=assets/textures/<b>-lightmap.jpg&intensity=<LIGHTMAP_SCALE>
+    Keys: 1 front, 2 three-quarter left, 3 three-quarter right, 4 close-up of the entrance.
+    window.reviewInfo = { loaded, triangles, meshes, materials, size, errors }.
+  -->
+  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  <script src="../../js/components.js"></script>
+  <style>
+    #help { position: fixed; top: 8px; left: 8px; z-index: 10; padding: 6px 10px;
+            font: 12px/1.4 system-ui, sans-serif; color: #fff; background: rgba(0,0,0,.6); border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <div id="help">Keys: 1 front · 2 ¾ left · 3 ¾ right · 4 entrance close-up</div>
+  <a-scene renderer="antialias: true" vr-mode-ui="enabled: false" background="color: #c9d3dc">
+    <a-entity light="type: hemisphere; color: #fff0d4; groundColor: #7a5f45; intensity: 1.3"></a-entity>
+    <a-entity light="type: directional; color: #ffd9a3; intensity: 1.8" position="-40 35 25"></a-entity>
+    <a-plane rotation="-90 0 0" width="200" height="200" material="color: #8f8a80; roughness: 1"></a-plane>
+    <a-entity id="model"></a-entity>
+    <a-entity id="cam" camera position="0 1.6 30"></a-entity>
+  </a-scene>
+
+  <script>
+    const q = new URLSearchParams(location.search);
+    const info = window.reviewInfo = { loaded: false, errors: [] };
+    window.addEventListener('error', (e) => info.errors.push(String(e.message)));
+    const el = document.querySelector('#model');
+    el.setAttribute('gltf-model', 'url(../../' + q.get('model') + ')');
+    if (q.get('lightmap')) {
+      el.setAttribute('baked-lighting', `lightmap: ../../${q.get('lightmap')}; intensity: ${q.get('intensity') || 1}`);
+    }
+    el.addEventListener('model-error', (e) => info.errors.push('model-error: ' + JSON.stringify(e.detail)));
+
+    let box;
+    el.addEventListener('model-loaded', () => {
+      const mesh = el.getObject3D('mesh');
+      let tris = 0, meshes = 0; const mats = new Set();
+      mesh.traverse((o) => {
+        if (!o.isMesh) return;
+        meshes++; mats.add(o.material.name || o.material.type);
+        const g = o.geometry;
+        tris += (g.index ? g.index.count : g.attributes.position.count) / 3;
+      });
+      box = new THREE.Box3().setFromObject(mesh);
+      const size = box.getSize(new THREE.Vector3());
+      Object.assign(info, { loaded: true, triangles: Math.round(tris), meshes, materials: [...mats],
+        size: [size.x, size.y, size.z].map((v) => +v.toFixed(2)) });
+      view(1);
+    });
+
+    // Model front faces +Z (toward the camera at +Z).
+    function view(n) {
+      if (!box) return;
+      const c = box.getCenter(new THREE.Vector3()), s = box.getSize(new THREE.Vector3());
+      const r = Math.max(s.x, s.y) * 0.75;
+      const presets = {
+        1: [c.x, s.y * 0.45, box.max.z + r, c.x, s.y * 0.45, c.z],
+        2: [c.x - r * 0.8, s.y * 0.4, box.max.z + r * 0.8, c.x, s.y * 0.45, c.z],
+        3: [c.x + r * 0.8, s.y * 0.4, box.max.z + r * 0.8, c.x, s.y * 0.45, c.z],
+        4: [c.x, 1.7, box.max.z + 6, c.x, 2.0, box.max.z - 2]
+      };
+      const [px, py, pz, tx, ty, tz] = presets[n];
+      const camEl = document.querySelector('#cam');
+      camEl.object3D.position.set(px, py, pz);
+      camEl.object3D.updateMatrixWorld();
+      camEl.getObject3D('camera').lookAt(tx, ty, tz);   // the camera itself looks down -Z
+    }
+    window.view = view;
+    window.addEventListener('keydown', (e) => { if ('1234'.includes(e.key)) view(+e.key); });
+  </script>
+</body>
+</html>

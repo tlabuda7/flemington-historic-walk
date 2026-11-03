@@ -110,6 +110,7 @@ MATS = {
     "Slate": slate("UH_Slate", "#4e5756"),
     "Glass": plain("UH_Glass", "#15191d", 0.12),
     "Wood": plain("UH_Wood", "#6f5a45", 0.8),
+    "Door": plain("UH_Door", "#5d6b5c", 0.7),       # painted grey-green doors
     "Boards": plain("UH_Boards", "#857a69", 0.85),
     "Stone": plain("UH_Stone", "#a39b8e", 0.9),
     "Sign": plain("UH_Sign", "#2f3a2c", 0.7),
@@ -250,28 +251,64 @@ LEFT_WALL = ("x", -W / 2, -1)
 RIGHT_WALL = ("x", W / 2, 1)
 
 
+def rect(u0, u1, v0, v1):
+    return [(u0, v0), (u1, v0), (u1, v1), (u0, v1)]
+
+
 def window(wall, cu, w, z_sill, z_spring, door=False):
-    """A round-headed window or door: opening, glass, sash bars, sill and hood."""
+    """A round-headed window (or door, see door_leaves): opening, glass, bars, sill, hood."""
     axis, face, out = wall
     D = lambda k: face + out * k        # k > 0 is outside the wall, k < 0 inside
     r = w / 2
     CUT.prism(arched(cu, w, z_sill, z_spring), D(0.2), D(-WALL - 0.2), axis)
+    G["Trim"].ring_arch(cu, z_spring, r + 0.02, r + 0.17, D(0.09), D(-0.02), axis)
+    if door:
+        door_leaves(wall, cu, w, z_sill, z_spring)
+        return
     G["Glass"].prism(arched(cu, w, z_sill, z_spring), D(-0.2), D(-0.23), axis)
     # sash: one meeting rail and a centre bar (two-over-two)
-    mid = z_sill + (z_spring - z_sill) * (0.45 if door else 0.5)
-    G["Trim"].prism([(cu - 0.03, z_sill), (cu + 0.03, z_sill), (cu + 0.03, z_spring + r * 0.95),
-                     (cu - 0.03, z_spring + r * 0.95)], D(-0.16), D(-0.2), axis)
-    G["Trim"].prism([(cu - r, mid - 0.04), (cu + r, mid - 0.04), (cu + r, mid + 0.04),
-                     (cu - r, mid + 0.04)], D(-0.16), D(-0.2), axis)
-    G["Trim"].prism([(cu - r, z_spring - 0.03), (cu + r, z_spring - 0.03), (cu + r, z_spring + 0.03),
-                     (cu - r, z_spring + 0.03)], D(-0.16), D(-0.2), axis)
-    if door:
-        G["Wood"].prism([(cu - r, z_sill), (cu + r, z_sill), (cu + r, mid), (cu - r, mid)],
-                        D(-0.14), D(-0.19), axis)
-    else:
-        G["Trim"].prism([(cu - r - 0.12, z_sill - 0.1), (cu + r + 0.12, z_sill - 0.1),
-                         (cu + r + 0.12, z_sill), (cu - r - 0.12, z_sill)], D(0.12), D(-0.1), axis)
-    G["Trim"].ring_arch(cu, z_spring, r + 0.02, r + 0.17, D(0.09), D(-0.02), axis)
+    mid = z_sill + (z_spring - z_sill) * 0.5
+    G["Trim"].prism(rect(cu - 0.03, cu + 0.03, z_sill, z_spring + r * 0.95), D(-0.16), D(-0.2), axis)
+    G["Trim"].prism(rect(cu - r, cu + r, mid - 0.04, mid + 0.04), D(-0.16), D(-0.2), axis)
+    G["Trim"].prism(rect(cu - r, cu + r, z_spring - 0.03, z_spring + 0.03), D(-0.16), D(-0.2), axis)
+    G["Trim"].prism(rect(cu - r - 0.12, cu + r + 0.12, z_sill - 0.1, z_sill), D(0.12), D(-0.1), axis)
+
+
+def door_leaves(wall, cu, w, z_sill, z_spring):
+    """Doorway as in the 1910s postcards and HABS photo: white frame, glass fanlight
+    with radiating bars in the arch, and painted panelled doors below (two leaves if wide)."""
+    axis, face, out = wall
+    D = lambda k: face + out * k
+    r = w / 2
+    f = 0.09                                         # frame width
+    # fanlight glass and its radiating bars
+    G["Glass"].prism([(cu + (r - f) * math.cos(math.pi * i / 12), z_spring + (r - f) * math.sin(math.pi * i / 12))
+                      for i in range(13)], D(-0.2), D(-0.23), axis)
+    for a in (math.pi / 4, math.pi / 2, 3 * math.pi / 4):
+        ca, sa = math.cos(a), math.sin(a)
+        nx, nz = -sa * 0.015, ca * 0.015
+        x1, z1 = cu + (r - f) * ca, z_spring + (r - f) * sa
+        G["Trim"].prism([(cu + nx, z_spring + nz), (cu - nx, z_spring - nz), (x1 - nx, z1 - nz), (x1 + nx, z1 + nz)],
+                        D(-0.16), D(-0.2), axis)
+    # white frame: jambs, transom bar, inner arch
+    G["Trim"].prism(rect(cu - r, cu - r + f, z_sill, z_spring), D(0.0), D(-0.25), axis)
+    G["Trim"].prism(rect(cu + r - f, cu + r, z_sill, z_spring), D(0.0), D(-0.25), axis)
+    G["Trim"].prism(rect(cu - r, cu + r, z_spring - 0.12, z_spring), D(0.0), D(-0.25), axis)
+    G["Trim"].ring_arch(cu, z_spring, r - f, r, D(0.0), D(-0.25), axis)
+    # door leaves with two raised panels each (tall upper, short lower)
+    top = z_spring - 0.12
+    leaves = 2 if w > 1.3 else 1
+    inner = w - 2 * f
+    leaf = inner / leaves
+    for i in range(leaves):
+        x0 = cu - inner / 2 + i * leaf + 0.008
+        x1 = x0 + leaf - 0.016
+        G["Door"].prism(rect(x0, x1, z_sill, top), D(-0.15), D(-0.21), axis)
+        p0, p1 = x0 + 0.1, x1 - 0.1
+        G["Door"].prism(rect(p0, p1, z_sill + 0.22, z_sill + 0.8), D(-0.13), D(-0.15), axis)
+        G["Door"].prism(rect(p0, p1, z_sill + 1.0, top - 0.18), D(-0.13), D(-0.15), axis)
+        knob_x = x1 - 0.09 if i == leaves - 1 or leaves == 1 else x1 - 0.06
+        G["Trim"].prism(rect(knob_x - 0.025, knob_x + 0.025, z_sill + 0.98, z_sill + 1.03), D(-0.11), D(-0.15), axis)
 
 
 # ---------------------------------------------------------------------------
