@@ -35,6 +35,7 @@ Decisions (2026-11-02):
 |----------|------|--------|-------|--------|----------|
 | Union Hotel (70–76 Main) | done before pipeline | done | done | — | yes |
 | Hunterdon County Courthouse (75 Main) | approved | done | done, round-1 fixes applied (13.7k tris, 2.6 MB) | round 2: PASS | yes (GLB, 2026-11-03) |
+| County Offices / Hall of Records (69–71 Main) | written, auto-approved (owner away) | done (1 new + 3 tinted, 3 reused) | done (8.6k tris, 2.2 MB, LIGHTMAP_SCALE 1.1299) | round 1: PASS | yes (GLB, 2026-11-03) |
 
 ## Building specs
 
@@ -263,6 +264,248 @@ take from this pass:
 - The south wall sits on the Court St line, so the whole south side is seen from Main St
   (looking down Court St): give it the same window detail as the front, not "simpler".
 
+### Hunterdon County Offices / Hall of Records (69–71 Main St)
+
+**Status:** **in scene** (scene-integrator, 2026-11-03): GLB at (−17.71, 0.02, −27.87), rotation 0 90 0, lightmap intensity 1.1299; three 1.6 m walks to the stoops (z −24.07, −27.87, −31.67) replace the old single path; all front paths merged into one mesh (`ground-patches`, 1 draw call). Props from the integrator notes **not added yet** (draw-call budget): low iron post-and-rail fence, ~2 m board fence to the courthouse wing, shade tree before the south half (curb tree `tree-west-3` at z −24 stands there already), telegraph pole. Earlier: reviewed, round 1: **PASS** (reviewer, 2026-11-03). Loads clean in the browser viewer
+(8,624 tris, 10 meshes, no errors; brick baseColorFactor survives `baked-lighting`); bay rhythm, 3 stoops, roof
+arch, string course, sign panel and brackets match the 1908/1912 cards; no lightmap blotches or seams. Minor notes:
+the roof arch is a little rounder than the 1908 card's segmental arch; ~1/3 of the lightmap is an unused black block
+(not sampled by any face). Next: scene-integrator. Earlier: built (blender-builder, 2026-11-03): `assets/models/county-offices.glb` (8,624 triangles,
+10 materials, 2.2 MB, TEXCOORD_0 + 1, brick tint as glTF baseColorFactor), `assets/textures/county-offices-lightmap.jpg`
+(2048², **LIGHTMAP_SCALE 1.1299**), scripts `tools/blender/county_offices.py` + `county_offices_bake.py` +
+`county_offices_preview.py`, source `assets/models/source/county_offices.blend`, previews
+`assets/models/previews/county-offices-{front,three-quarter-ne,three-quarter-se,detail,match-1908,match-1912}.png`.
+Simplified: brick voussoir rings not modelled (flush brick; keystones and frames only); north-inner upper window
+stands on the sign panel (sill 5.40 instead of 5.20); side/rear arches 6 segments; no rust streaks in the grime.
+Next: reviewer. Earlier: assets ready (asset-scout, 2026-11-03): new `county-offices/stone_buff.jpg` (Poly Haven
+`scuffed_cement`, shifted to #CDBFA2, tile 1.6 m) + tinted `trim_paint_drab.jpg`, `roof_tin_redbrown.jpg`,
+`door_varnish_dark.jpg`; reuse `polyhaven/red_brick.jpg`, `polyhaven/trim_paint_cream.jpg`,
+`courthouse/rock_wall_08.jpg`. Next: blender-builder.
+
+**What it is**: the county Hall of Records (county clerk and surrogate), built 1870–71, Italianate,
+red brick, 2 storeys, "originally built with three separate doorways each with its own steps,
+remodeled in 1928" (Hunterdon County Historical Society). So the 1920 state is the **original
+1870 front with three stoops**; anything later (1928 enlargement, today's look) is not ours.
+The map shows **one building** (one pink block, numbers 69 and 71, an interior "WALL 1ST ONLY"
+partition), not two, so this spec covers the whole block. Next building north is the frame
+house at 65 Main (separate spec later).
+
+**Orchestrator decisions** (settled from the photos/map; owner to check later)
+1. **One building, 13.9 × 15.2 m**, front wall 7.4 m behind the property line (map). The
+   placeholder (z −36.2 … −20.8 at x −17.6) is ~0.6 m too far north; move it (see Placement).
+2. **Front: 7 openings on the ground floor, W-D-W-D-W-D-W**, three round-arched doors each
+   with its own stoop (walking-tour text "three separate doorways each with its own steps";
+   1908 NE card shows 7 ground openings, 1906/1912 cards show the north and centre doors and a
+   door near the south end). Upper floor: 4 single windows over the ground windows plus a
+   **paired arched window in the centre** (1906, 1908, 1912 cards).
+3. **Curved (segmental) central roof arch** with a round oculus, rising above the bracketed
+   cornice over the centre bay (all eight views; Goodspeed lists it among Main St "roof arches").
+4. **Paired scroll brackets** on a deep wooden cornice, front and both sides (1906/1908 cards).
+5. **Shutters on the ground-floor windows only** (front and sides), open, cream; none upstairs
+   (1908 sepia, 1909, 1912).
+6. **No awnings.** Striped awnings appear in 1906/1908 only; 1909 and 1912 have none.
+7. **One plain pale stone panel** on the string course under the north inner upper window,
+   **no lettering** (it carried "DENTIST" 1909–12; the 1920 tenant is unknown).
+8. **Raised basement**: rough stone foundation 1.2 m high with small segmental basement windows;
+   first floor at 1.2 m, reached by 7-riser stoops with black iron railings (1906, 1912 close-ups).
+9. **Stoops, string course, sills, keystones: pale buff stone** (they read light in the sepia
+   cards and white in the 1908 colour card — not brownstone like the courthouse steps).
+10. **Roof: low hipped roof (~18°), painted tin, dark red-brown**; it only shows as a dark edge
+    behind the cornice (1908 sepia NE view). **No chimneys** — none show on the full north
+    roofline in the 1908 NE card. Sanborn wall symbols (see Sources) are not modelled.
+11. **Triangle class: ordinary building (≤ 10k)** — it is ornate (brackets, roof arch,
+    stoops, railings), but it isn't one of the two project landmarks and it's seen mostly from
+    the street. The ornament fits in 10k with low-poly brackets and simple railings.
+12. Front yard: lawn, three paved walks to the stoops, low iron post-and-rail fence along the
+    sidewalk (1909 and 1912, the views closest to 1920). The 1906/08 views show it paved;
+    these are integrator items, not part of the model.
+
+**Sources**
+- Map: 1921 Sanborn **sheet 2**, pink (brick) block labelled "COUNTY OFF'S", "2" storeys and
+  "28'" on both halves; street numbers **69, 71** (73 = courthouse below). Pixel box
+  **x 3164–3456, y 6232–6498** (front wall x 3456; rear 3164; north 6232; south 6498).
+  Internal E–W line at y 6326 marked "WALL 1ST ONLY" (ground-floor partition only: ignore).
+  An uncoloured **dashed line** runs the full front at x ≈ 3463–3468 (0.4 m outside the wall):
+  probably the stone stoops/area edge; stoops are modelled from photos instead. Wall marks:
+  "12 12" (12-inch brick walls, both storeys) and asterisk-like symbols on the N and S walls
+  at x ≈ 3250 and 3395 (meaning unclear; perhaps flues, not visible in photos). No rear wing.
+  Main St property line x ≈ 3600. Courthouse north wing (yellow, "1") at y 6567–6620.
+- Photos (all `assets/photos/reference/`, local only, never commit):
+  - **Primary: `flmngtncntybldngsvuof08.jpg`** (1908, sepia, from the NE across Main St):
+    whole front in perspective + north side; clearest bay rhythm, cornice brackets, roof arch,
+    string course and the sign panel. Use for bay layout and proportions.
+  - `flmngtnhtdncntycrtandbldg05.jpg` (1905) and `flmngtncntycourthsview06.jpg` (same view,
+    postmarked July 10, 1906; from the NE, nearer frontal): north half of the front close up —
+    arched door with a window either side, shutters, basement window, string course, panel;
+    used for heights (≈ 59 px/m at the north corner of the 1906 copy).
+  - `flmngtncrthouspublcbldg08.jpg` (1908, tinted colour, NE): red brick, pale string course
+    and panel, light grey cornice, cream shutters, grey stone stoops; awnings (omit).
+  - `flmngtncourthsandsurrogateoffice.jpg` (c. 1908, NE, sepia; "Court house and Surrogate
+    office"): confirms this is the Surrogate's/county office; north side brick wall; telegraph pole.
+  - `flemington_-_county_building_-_1912.jpg` (1912, sepia, from the SE) and
+    `flmngtnhtncountybldg08.jpg` / `flmngtncountybldnganddentistoffice09.jpg` (1908/1909 tinted
+    versions of the same SE view): **south side** (shuttered arched windows, rough stone
+    foundation with a segmental basement window), centre and north stoops with railings,
+    "DENTIST" panel, board fence between this building and the courthouse wing, lawn with a
+    low post fence. Closest dated view to 1920 → use it for the stoops and the south side.
+  - `flmngtncountycrthousvu09.jpg` (1909, colour): only the SE corner at the far right edge.
+  - HABS (`habs/`): no photo of this building (the courthouse sheets don't show it).
+- Web: Hunterdon County Historical Society walking tour
+  (https://hunterdonhistory.org/wp-content/uploads/2018/08/Flemington-TRAIL-online8-1.pdf,
+  p. 4: "71 Main Street, Hall Of Records (1870)… fine Italianate structure, originally built with
+  three separate doorways each with its own steps, was remodeled in 1928… 'common' bricks used
+  on the sides"); Clarke Caton Hintz (https://clarkecatonhintz.com/?p=1051: "erected in 1870…
+  in 1928 expanded to its current configuration"; later repairs to "roof and cornice");
+  Goodspeed Histories (https://goodspeedhistories.com/roof-arches-part-one/: "Hall of Records at
+  71 Main St. (1871)" keeps its roof arch). NRHP nomination PDF is a scan without text (not used).
+
+**Placement** (west side, front faces east onto Main St)
+- Entity position = centre of the front (brick) wall face at grade: **(−17.71, 0.02, −27.87)**,
+  `rotation="0 90 0"` (replaces the placeholder at (−17.6, 0, −28.5)). y 0.02 = lawn level
+  (`lawn-west` is at 0.015; sidewalk top 0.15).
+- Front wall x −17.71 (7.41 m behind the property line x −10.3); rear wall x −32.98;
+  north wall z −34.80; south wall z −20.94 (3.27 m clear of the courthouse wing at z −17.67).
+  Stoops reach x ≈ −15.3; cornice overhangs to x ≈ −17.0.
+- Blender local frame: front −Y, origin at the front wall face, **+X = north**, z = 0 = grade.
+  Body x −6.95 … +6.95, y 0 … 15.21. Stoops y −2.4 … 0. Sun "to sun" vector (−0.40, 0.90, 0.36).
+- Stoop centres in the scene: z −24.07 (south door), −27.87 (centre), −31.67 (north door).
+
+**Massing**
+- Body: 13.9 m wide (front, map 266 px) × 15.21 m deep (map 292 px = 50 ft), 2 storeys
+  + raised basement. Flat front, no projections except stoops, cornice and roof arch.
+- Levels (photo estimates, 1906 card at the north corner + map "28'"): grade 0; stone
+  foundation 0 → 1.20; first floor 1.20; second floor ≈ 5.0; frieze 7.75 → 8.25;
+  **cornice top 8.6 m** (map 28' = 8.53 m); cornice overhang 0.7 m on front and sides,
+  0.4 m at the rear.
+- Roof: **low hip, 18°**, from the cornice line (8.6) to a short E–W ridge ≈ 10.8 m
+  (13.9 m span → rise 2.25 m); ridge length ≈ 1.3 m. Barely visible from the street (guess).
+- **Roof arch** over the centre bay: a brick parapet 0.4 m thick standing on the front wall,
+  segmental arch from ±2.6 m at 8.6 m to a crown of **10.8 m** at x 0 (1905/1912 cards: rise
+  1.8–2.7 m; average). The hip roof meets its back.
+- Ground floor walls 0.30 m thick (12-inch brick, map): window/door reveals 0.20 m deep.
+
+**Elevation details (1920 state)**
+- **Front (east) ground floor**, openings centred at x = −5.5, −3.8, −2.1, 0, +2.1, +3.8, +5.5
+  (W D W D W D W, symmetric; 1908 NE card + walking-tour text):
+  - 4 windows at ±2.1, ±5.5: 1.0 × 2.35 m, sill 1.75, **round-arched head**, crown 4.10;
+    2/2 double-hung sash, light-painted frames; brick voussoir arch (0.25 m ring) with a pale
+    stone keystone; pale stone sill 1.2 × 0.12, projecting 0.06. **Shutters**: 2 open panelled
+    leaves per window, each 0.5 × 2.35 (with arched top cut square for simplicity), cream,
+    0.04 thick, standing 0.03 off the wall.
+  - 3 doors at 0, ±3.8: opening 1.15 m wide, threshold 1.20, round-arched crown 4.10;
+    semicircular fanlight (radiating bars) above a transom bar at 3.55; double-leaf panelled
+    doors (upper glazed panels) 1.15 × 2.35, dark varnished brown; brick arch + keystone as
+    windows; set 0.20 m into the wall.
+  - Basement windows: under each front window, segmental-headed 0.9 × 0.5 m, sill 0.35,
+    dark glass behind a 3-bar iron grille (1906, 1912 cards), in the stone foundation.
+- **String course**: pale stone band 0.22 m high, projecting 0.08 m, top at 5.05 m, full front
+  and both sides (1906/1908 cards; it doubles as the upper sill line).
+- **Front upper floor**: single windows at ±2.1 and ±5.5: 0.9 × 2.05 m, sill 5.20, round-
+  arched, crown 7.25; 2/2 sash; brick arch + keystone; no shutters. **Centre: paired window**
+  — two round-arched lights 0.75 × 2.05 separated by a 0.25 m brick mullion (overall 1.75 m),
+  same sill/crown, one stone sill across both. **Sign panel**: plain pale stone panel
+  1.5 × 0.35 m standing on the string course under the window at +2.1 (north inner), 0.05 proud.
+- **Cornice**: frieze band 7.75 → 8.25 (brick, flush); moulded wooden cornice 8.25 → 8.6
+  with 0.7 m soffit overhang; **paired scroll brackets** (each 0.9 high × 0.6 deep × 0.18 wide,
+  pair spacing 0.35 m) at: both front corners (wrapping), x ±4.6, and the two ends of the roof
+  arch (±2.6); small square dentils/blocks between optional. Main cornice is **interrupted**
+  between x −2.6 … +2.6 where the roof arch rises.
+- **Roof arch**: tympanum in brick; arched moulded cornice following the arch (0.35 m deep
+  profile, 0.45 m projection), terminating on the bracket pairs at ±2.6; **round oculus**
+  Ø 0.8 m, centre (0, 9.3), pale stone ring 0.12 m, dark glass. Back of the arch: plain brick.
+- **Stoops** (3, identical): pale buff stone, solid block with closed cheek walls; 1.6 m wide,
+  **7 risers × 0.171 m** (to 1.20), top landing 0.8 m deep in front of the door, 6 treads
+  × 0.27 m → projects 2.4 m (y −2.4 … 0). **Iron railings** both sides: black, 0.9 m high
+  above the nosing line, square newel post at the bottom (0.08 × 0.08 × 1.0), top + bottom rail,
+  vertical pickets every 0.15 m (thin 4-sided bars, 0.02 m), following the slope and the
+  landing; return to the wall.
+- **South and north sides** (common brick, same courses), 4 bays at y = 2.0, 5.7, 9.4, 13.1:
+  ground windows as the front (with shutters), upper windows as the front singles, basement
+  windows under the ground windows. String course and cornice with paired brackets at both
+  corners and at y ≈ 3.85, 7.55, 11.25 (between bays). Foundation as the front.
+- **Rear (west) wall** (not seen in any photo; guess): 3 bays of plain round-arched windows on
+  both floors (no shutters), a plain back door at ground level with a 4-riser wooden step,
+  plain cornice without brackets (overhang 0.4).
+- **Foundation**: rough coursed grey-brown stone, 0 → 1.20 m, flush with the brick above, a
+  0.05 m chamfered stone water-table cap at 1.20 m. Extend 0.2 m below z 0 (hidden skirt) so
+  the model never floats on the slightly uneven lawn.
+- No chimneys, no awnings, no signage, no flagpole, no lamps on the building (see decisions).
+
+**Materials & colours (1920)**
+- Walls: red pressed brick on the front, slightly duller "common" brick on the sides and rear
+  (≈ #8E3F2C front, #87452F sides; same texture, tint only). Thin light mortar.
+- Cornice, brackets, arch cornice, window frames and sash: painted wood, **light warm grey /
+  stone drab** (≈ #BDB4A0) (1908 colour card). Shutters: cream (≈ #D9CFB4).
+- String course, sills, keystones, oculus ring, sign panel, stoops: **pale buff sandstone**
+  (≈ #CDBFA2).
+- Foundation: rough grey-brown rubble/coursed stone.
+- Doors: dark varnished brown (≈ #3A2A1F). Glass very dark. Railings and grilles: black iron.
+- Roof: tin painted dark red-brown (≈ #5A3E34).
+- Textures — reuse: `polyhaven/red_brick.jpg` (walls, 1.4 m, tinted per wall), `polyhaven/
+  trim_paint_cream.jpg` (cornice, brackets, frames, shutters; 2.0 m; tint drab or cream),
+  `courthouse/rock_wall_08.jpg` (foundation, 1.8 m), `polyhaven/metal_plate_02.jpg` (roof, 2.0 m,
+  tinted), `polyhaven/wood_table_worn.jpg` (doors, 0.8 m, tinted dark). Sash/glass/iron: plain
+  colours as in the courthouse bake.
+  **New for asset-scout** (Poly Haven CC0, 1K colour, 1 map): **smooth pale buff sandstone /
+  dressed limestone** (fine-grained, no strong blocks or joints), tile ~1.5 m — for the
+  string course, sills, keystones and stoops. Fallback if none fits: reuse
+  `courthouse/stucco_offwhite.jpg` tinted buff.
+
+**Weathering**: soot darkening under the cornice soffit and on the brick just below it; dark
+streaks below each stone sill and keystone; brick darker and greenish in the 0.3 m above the
+foundation (damp); stoop treads worn and darker in the middle; rust streaks from the railing
+feet; paint slightly chalky on the brackets. A cared-for public building: subtler than the hotel.
+
+**Budget**: **ordinary building, hard cap 10k triangles, target ~8.5k**: walls with openings
+~1.8k, ~36 arched windows/doors with frames + sash ~3.4k (rear ones simplest), brackets
+(12 pairs = 24 brackets, ≤ 40 tris each as profile extrusions) ~1.0k, roof arch + cornices ~0.8k, 3 stoops with railings
+~1.2k (pickets as 4-sided bars, ≤ 40 per stoop), shutters/sills/basement windows ~0.6k, roof
+~0.1k. 5 reused + 1 new 1K colour texture, one 2K lightmap `assets/textures/county-offices-lightmap.jpg`.
+Files: `tools/blender/county_offices.py` + `county_offices_bake.py`,
+`assets/models/source/county-offices.blend`, `assets/models/county-offices.glb` (≤ 5 MB),
+previews `assets/models/previews/county-offices-*.png`. ≤ 10 materials.
+
+**Acceptance checks for the reviewer**
+1. Footprint 13.9 × 15.2 m, plain rectangle, no rear wing; origin at the centre of the front
+   wall face at grade, front faces −Y, +X = north.
+2. Front ground floor reads **W-D-W-D-W-D-W**: three round-arched doors (centre and ±3.8 m),
+   each with its **own 7-riser stone stoop and black iron railings**; four shuttered arched windows.
+3. Upper floor: four single round-arched windows aligned over the ground windows plus a
+   **paired arched window in the centre**; no shutters upstairs.
+4. **Curved roof arch with a round oculus** rises over the centre bay to ≈ 10.8 m; the main
+   cornice stops at its ends on paired brackets.
+5. Bracketed cornice top 8.6 ± 0.2 m above grade, overhang ≈ 0.7 m, **paired scroll
+   brackets** at the corners and between bays on front and sides.
+6. Pale stone string course at ≈ 5 m running round front and both sides; pale sills and
+   keystones; one plain panel on the string course under the north inner upper window.
+7. Raised rough-stone basement ≈ 1.2 m with small basement windows; first floor ≈ 1.2 m.
+8. Red brick walls, light drab cornice, cream shutters, dark doors; low hip roof hardly visible
+   from the sidewalk; no chimneys, awnings or lettering.
+9. ≤ 10k triangles, GLB ≤ 5 MB, 1K colour maps, 2K lightmap, TEXCOORD_0 + 1. With the WSW sun
+   the front is in shade: stoops, shutters and window reveals must still read (bounce light,
+   not black); the south side is sunlit and shows bracket and stoop shadows.
+
+**Integrator notes (scene, not the model)**
+- Move `#county-offices` to **(−17.71, 0.02, −27.87)**, rotation 0 90 0, GLB + lightmap.
+- Replace the single front path at (−13.4, −28.5) with **three walks** (≈ 1.6 m wide) from the
+  sidewalk (x −10.3) to the stoop feet (x ≈ −15.3) at z −24.07, −27.87, −31.67.
+- Later props (1909/1912 cards): low iron post-and-pipe-rail fence along the property line
+  with gaps at the walks; a vertical-board fence ≈ 2 m high across the gap between this
+  building's SE corner and the courthouse north wing; a large shade tree in front of the south
+  half; telegraph pole at the curb (1906). The horse fountain stands before the courthouse wing.
+
+**Pure guesses (owner to check)**
+1. Exact door/window positions on the south half of the front (perspective in the cards;
+   symmetric layout chosen).
+2. Roof form, pitch and material (low hip, tin) — never seen clearly.
+3. No chimneys; the Sanborn wall symbols at 4.4 m and 11.9 m from the front are unexplained.
+4. Rear wall layout and back door — not in any photo.
+5. Side walls have 4 bays — only 2–3 are visible in any one view.
+6. Colours of cornice (light drab) and stone trim (pale buff) come from one hand-tinted
+   card and the sepia tones.
+7. Stoop width/depth and railing pattern simplified (photos show ornamental cast-iron rails).
+8. Basement window grilles.
+
 ## Constraints
 
 - A-Frame from a CDN, plain HTML/JS. No build tools or frameworks.
@@ -353,3 +596,5 @@ Check licensing for every asset and note the source in the progress log.
 | 2026-11-02 | Planner: courthouse build spec written (Sanborn sheet 2 re-measured, 12 photos compared, NRHP/Preservation NJ/Goodspeed sources). New position (−18.34, y, −6.85). Awaiting user approval. |
 | 2026-11-03 | scene-integrator: rebuilt street tree integrated (`assets/models/street-tree.glb`, 896 triangles: bark, root flare, soil pit with granite edging). 12 trees moved to x = ±7.5 (builder suggested ±7.3, but at the varied scales the 1.44 m pit then crossed the curb's inner edge at ±6.64), y = 0.175 so the soil isn't hidden by the 0.15 sidewalk, rotations 0/90/180/270 so the pits line up with the street. Tested: no console errors, all trees and the baked-lit hotel load; 87 draw calls / 37.6k triangles from the street. Committed with the hotel door rebuild, roads, sidewalks, curbs, tree assets and agent pipeline files. |
 | 2026-11-03 | scene-integrator: Hunterdon County Court House GLB integrated (`assets/models/courthouse.glb`, 13,680 triangles, 12 materials, baked lightmap intensity 1.1979) at (−18.34, 0.15, −6.85): portico front 8.0 m behind the property line, steps reach x −16.69. The code-built placeholder and the lawn path at (−13.05, −7.05) were replaced by a paved concrete forecourt flush with the sidewalk (out to the Court St line), plus 15 cm grade slabs under the body, north wing and jail yard so no wall floats above the lawn. Curb trees at x −7.5 and the county offices placeholder (z ≤ −20.45) clear the model. Tested: no console errors, lightmap reads (no black faces; wing door and entablature fine). Start view (0, 0, 18) facing north: 160 draw calls / 53k triangles (was 149 / 39k); the ~150 call guideline is exceeded mainly by the code-built placeholders, which will drop as they are replaced by GLBs. |
+| 2026-11-03 | planner: County Offices / Hall of Records (69–71 Main, 1870 Italianate) spec written and auto-approved (owner away). Sanborn sheet 2 re-measured: one brick building 13.9 × 15.2 m, 2 storeys, 28', front 7.4 m behind the property line → entity (−17.71, 0.02, −27.87). Eight period cards compared (1905–1912); HCHS walking tour confirms three doorways with own steps until the 1928 remodel. Ordinary building (≤ 10k tris); 1 new texture (pale buff sandstone). Next: asset-scout. |
+| 2026-11-03 | scene-integrator: County Offices / Hall of Records GLB integrated (`assets/models/county-offices.glb`, 8,624 triangles, 10 materials, lightmap intensity 1.1299) at (−17.71, 0.02, −27.87), rotation 0 90 0; the kit placeholder at (−17.6, 0, −28.5) is gone. The single lawn path was replaced by three 1.6 m walks (sidewalk x −10.3 to just under the stoop feet at x −15.3); all five front paths are now one mesh via a new `ground-patches` component (js/components.js) to save draw calls. Fences, extra shade tree and telegraph pole skipped for the draw-call budget. Tested: no console errors (only the pane's pointer-lock errors), faces Main St, lightmap reads, stoops meet the walks, no floating. Draw calls / triangles before → after: start view (0, 0, 18) 160 / 53.0k → 162 / 61.5k; opposite sidewalk (8.5, −27.87) 79 / 47.9k → 82 / 56.3k; in front on the road (−2, −27.87) 46 / 16.5k → 50 / 25.0k. (The placeholder cost ~6 calls; the GLB costs 10, one per material.) Screenshot `assets/models/previews/county-offices-in-scene.png`. |

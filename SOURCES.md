@@ -112,6 +112,21 @@ surfaces re-tinted by `tools/prepare_textures.py`.
 | `stucco_cream.jpg` | White Stucco (`white_stucco`), tinted #E8DDC6 | https://polyhaven.com/a/white_stucco | CC0 | courthouse walls, warm cream (tile 2.0 m); made by `tools/prepare_courthouse_paints.py` |
 | `rock_wall_grey.jpg` | Rock Wall 08 (`rock_wall_08`), lightened to mid-grey #8A857C | https://polyhaven.com/a/rock_wall_08 | CC0 | jail-yard wall (tile 1.8 m); made by `tools/prepare_courthouse_paints.py` |
 
+### County Offices / Hall of Records (`assets/textures/county-offices/`)
+
+1K colour (Diffuse) maps, re-saved at JPEG quality 85; coloured copies made by
+`tools/prepare_county_offices_textures.py`. The building also reuses, unchanged,
+`polyhaven/red_brick.jpg` (walls), `polyhaven/trim_paint_cream.jpg` (shutters) and
+`courthouse/rock_wall_08.jpg` (foundation) (listed above).
+
+| File | Poly Haven asset | URL | Licence | Used for |
+|------|------------------|-----|---------|----------|
+| `scuffed_cement.jpg` | Scuffed Cement (`scuffed_cement`) | https://polyhaven.com/a/scuffed_cement | CC0 | untinted source |
+| `stone_buff.jpg` | Scuffed Cement (`scuffed_cement`), shifted to pale buff #CDBFA2 | https://polyhaven.com/a/scuffed_cement | CC0 | pale buff sandstone: string course, sills, keystones, oculus ring, sign panel, stoops (tile 1.6 m) |
+| `trim_paint_drab.jpg` | Painted Plaster Wall (`painted_plaster_wall`, via `polyhaven/trim_paint_cream.jpg`), tinted #BDB4A0 | https://polyhaven.com/a/painted_plaster_wall | CC0 | cornice, brackets, roof-arch cornice, window frames (tile 2.0 m) |
+| `roof_tin_redbrown.jpg` | Metal Plate 02 (`metal_plate_02`, via `polyhaven/metal_plate_02.jpg`), shifted to #5A3E34 | https://polyhaven.com/a/metal_plate_02 | CC0 | hipped tin roof painted dark red-brown (tile 2.0 m) |
+| `door_varnish_dark.jpg` | Wood Table Worn (`wood_table_worn`, via `polyhaven/wood_table_worn.jpg`), tinted #3A2A1F | https://polyhaven.com/a/wood_table_worn | CC0 | dark varnished doors (tile 0.8 m) |
+
 `assets/textures/union-hotel-lightmap.jpg` is baked in Blender by
 `tools/blender/union_hotel_bake.py` (original work).
 `assets/textures/courthouse-lightmap.jpg` is baked in Blender by `tools/blender/courthouse_bake.py` (original work).

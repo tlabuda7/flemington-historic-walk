@@ -552,6 +552,56 @@ AFRAME.registerComponent('baked-lighting', {
 });
 
 /* ------------------------------------------------------------------ */
+/* ground-patches                                                      */
+/* ------------------------------------------------------------------ */
+/*
+ * Several flat rectangles on the ground (paths, walks) drawn as ONE mesh, so they
+ * cost one draw call instead of one each. Each rectangle is "x z width depth"
+ * (centre in scene metres, width along X, depth along Z); separate them with commas:
+ *
+ *   <a-entity ground-patches="rects: -12.85 -24.07 5.1 1.6, -11.75 -51.2 2.9 1.4;
+ *                             y: 0.03; color: #b9b0a0"></a-entity>
+ */
+AFRAME.registerComponent('ground-patches', {
+  schema: {
+    rects: { default: '' },
+    y:     { default: 0.03 },
+    color: { type: 'color', default: '#b9b0a0' }
+  },
+
+  update() {
+    this.remove();
+    const pos = [];
+    const idx = [];
+    this.data.rects.split(',').forEach((r) => {
+      const v = r.trim().split(/\s+/).map(Number);
+      if (v.length !== 4 || v.some(isNaN)) return;
+      const [x, z, w, d] = v;
+      const i = pos.length / 3;
+      pos.push(x - w / 2, 0, z - d / 2,  x + w / 2, 0, z - d / 2,
+               x + w / 2, 0, z + d / 2,  x - w / 2, 0, z + d / 2);
+      idx.push(i, i + 2, i + 1,  i, i + 3, i + 2);   // counter-clockwise seen from above
+    });
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    geo.setIndex(idx);
+    geo.computeVertexNormals();
+    const mat = new THREE.MeshStandardMaterial({ color: this.data.color, roughness: 1 });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.y = this.data.y;
+    this.el.setObject3D('mesh', mesh);
+  },
+
+  remove() {
+    const mesh = this.el.getObject3D('mesh');
+    if (!mesh) return;
+    mesh.geometry.dispose();
+    mesh.material.dispose();
+    this.el.removeObject3D('mesh');
+  }
+});
+
+/* ------------------------------------------------------------------ */
 /* foliage                                                             */
 /* ------------------------------------------------------------------ */
 /*
