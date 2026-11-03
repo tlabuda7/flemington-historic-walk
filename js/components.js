@@ -552,6 +552,35 @@ AFRAME.registerComponent('baked-lighting', {
 });
 
 /* ------------------------------------------------------------------ */
+/* foliage                                                             */
+/* ------------------------------------------------------------------ */
+/*
+ * For tree models with leaf cards (see tools/blender/street_tree.py). Put it next to
+ * gltf-model. Any material whose texture has transparency is drawn as a hard
+ * cut-out (alpha test) and double-sided: no sorting problems, and cheap on Quest.
+ */
+AFRAME.registerComponent('foliage', {
+  init() {
+    this.onLoaded = () => {
+      this.el.getObject3D('mesh').traverse((obj) => {
+        const m = obj.material;
+        if (!obj.isMesh || !m.map || !(m.transparent || m.alphaTest > 0 || m.name.includes('Leaves'))) return;
+        m.transparent = false;
+        m.alphaTest = 0.5;
+        m.depthWrite = true;
+        m.side = THREE.DoubleSide;
+        m.needsUpdate = true;
+      });
+    };
+    this.el.addEventListener('model-loaded', this.onLoaded);
+  },
+
+  remove() {
+    this.el.removeEventListener('model-loaded', this.onLoaded);
+  }
+});
+
+/* ------------------------------------------------------------------ */
 /* stick-debug (temporary)                                             */
 /* ------------------------------------------------------------------ */
 /*

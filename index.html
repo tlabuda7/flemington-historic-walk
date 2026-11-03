@@ -70,19 +70,24 @@
     <a-plane id="ground" rotation="-90 0 0" width="500" height="500"
       material="color: #6f6a45; roughness: 1"></a-plane>
 
-    <!-- Dirt roads. -->
+    <!-- Paved roads: pale weathered macadam, as in the 1920s postcards.
+         Texture tiles every 3 m (repeat = size / 3). -->
     <a-plane id="road" rotation="-90 0 0" position="0 0.01 -50" width="12.8" height="260"
-      material="roughness: 1" canvas-texture="pattern: dirt; repeat: 1 20"></a-plane>
+      material="src: assets/textures/polyhaven/road_macadam.jpg; repeat: 4.3 87; roughness: 1"></a-plane>
     <a-plane id="bloomfield-ave" rotation="-90 0 0" position="35.15 0.01 -83.7" width="50" height="12.2"
-      material="roughness: 1" canvas-texture="pattern: dirt; repeat: 4 1; seed: 5"></a-plane>
+      material="src: assets/textures/polyhaven/road_macadam.jpg; repeat: 16.7 4; roughness: 1"></a-plane>
     <a-plane id="court-st" rotation="-90 0 0" position="-35.15 0.01 6.1" width="50" height="12.2"
-      material="roughness: 1" canvas-texture="pattern: dirt; repeat: 4 1; seed: 9"></a-plane>
+      material="src: assets/textures/polyhaven/road_macadam.jpg; repeat: 16.7 4; roughness: 1"></a-plane>
 
-    <!-- Wooden sidewalks (raised 25 cm). -->
-    <a-box id="sidewalk-west" position="-8.35 0.125 -50" width="3.9" height="0.25" depth="260"
-      material="roughness: 1" canvas-texture="pattern: planks; repeat: 1 210; seed: 3"></a-box>
-    <a-box id="sidewalk-east" position="8.35 0.125 -50" width="3.9" height="0.25" depth="260"
-      material="roughness: 1" canvas-texture="pattern: planks; repeat: 1 210; seed: 11"></a-box>
+    <!-- Concrete sidewalks (15 cm high, scored into 1.5 m slabs) with stone curbs. -->
+    <a-box id="sidewalk-west" position="-8.35 0.075 -50" width="3.9" height="0.15" depth="260"
+      material="src: assets/textures/polyhaven/sidewalk_concrete.jpg; repeat: 1.3 87; roughness: 1"></a-box>
+    <a-box id="sidewalk-east" position="8.35 0.075 -50" width="3.9" height="0.15" depth="260"
+      material="src: assets/textures/polyhaven/sidewalk_concrete.jpg; repeat: 1.3 87; roughness: 1"></a-box>
+    <a-box id="curb-west" position="-6.52 0.08 -50" width="0.24" height="0.16" depth="260"
+      material="color: #a49d92; roughness: 1"></a-box>
+    <a-box id="curb-east" position="6.52 0.08 -50" width="0.24" height="0.16" depth="260"
+      material="color: #a49d92; roughness: 1"></a-box>
 
     <!-- Lawns in front of the set-back buildings on the west side, with front paths. -->
     <a-plane id="lawn-west" rotation="-90 0 0" position="-27.65 0.015 -38.7" width="34.7" height="77.4"
@@ -125,9 +130,36 @@
     <!-- Union Hotel: Blender model with Poly Haven textures and baked late-afternoon light.
          Built by tools/blender/union_hotel.py + union_hotel_bake.py.
          The old code-built version is still available as kit-building="type: union-hotel". -->
-    <a-entity id="union-hotel" position="11.6 0 -30.75" rotation="0 -90 0"
+    <a-entity id="union-hotel" position="11.6 0.15 -30.75" rotation="0 -90 0"
       gltf-model="url(assets/models/union-hotel.glb)"
-      baked-lighting="lightmap: assets/textures/union-hotel-lightmap.jpg; intensity: 1.2381"></a-entity>
+      baked-lighting="lightmap: assets/textures/union-hotel-lightmap.jpg; intensity: 1.2646"></a-entity>
+
+    <!-- ============================================================
+         STREET TREES (tools/blender/street_tree.py → assets/models/street-tree.glb)
+         1920s postcards show a row of trees at the curb in front of the Union Hotel.
+         The west-side trees follow the 1906–1912 courthouse and county building views.
+         Each model includes its square soil pit with granite edging (1.44 m, origin at the
+         base, pit top at y = 0). The soil dips to y = −0.02, so the trees stand at y = 0.175
+         (2.5 cm above the 0.15 sidewalk top) or the sidewalk hides the soil; the granite
+         edging then stands ~3.5 cm proud of the paving, like a real curb. x = ±7.5 keeps
+         the largest pit (scale 1.15 → half-width 0.83 m) clear of the curb (inner edge ±6.64).
+         Rotations are multiples of 90° so the pits line up with the street; the scales
+         vary so the trees don't look stamped.
+         ============================================================ -->
+    <a-entity id="street-trees">
+      <a-entity id="tree-hotel-1" position="7.5 0.175 -44"   rotation="0 0 0"  scale="1.05 1.05 1.05" gltf-model="url(assets/models/street-tree.glb)" foliage></a-entity>
+      <a-entity id="tree-hotel-2" position="7.5 0.175 -39.8" rotation="0 90 0" scale="0.92 0.95 0.92" gltf-model="url(assets/models/street-tree.glb)" foliage></a-entity>
+      <a-entity id="tree-hotel-3" position="7.5 0.175 -35.6" rotation="0 180 0"  scale="1.1 1.08 1.1"   gltf-model="url(assets/models/street-tree.glb)" foliage></a-entity>
+      <a-entity id="tree-hotel-4" position="7.5 0.175 -31.4" rotation="0 270 0" scale="0.97 1 0.97"    gltf-model="url(assets/models/street-tree.glb)" foliage></a-entity>
+      <a-entity id="tree-hotel-5" position="7.5 0.175 -27.2" rotation="0 90 0" scale="1.02 0.94 1.02" gltf-model="url(assets/models/street-tree.glb)" foliage></a-entity>
+      <a-entity id="tree-hotel-6" position="7.5 0.175 -23"   rotation="0 0 0" scale="0.9 0.9 0.9"    gltf-model="url(assets/models/street-tree.glb)" foliage></a-entity>
+      <a-entity id="tree-hotel-7" position="7.5 0.175 -18.8" rotation="0 180 0"  scale="1.12 1.1 1.12"  gltf-model="url(assets/models/street-tree.glb)" foliage></a-entity>
+      <a-entity id="tree-west-1"  position="-7.5 0.175 -2.6"  rotation="0 270 0" scale="0.85 0.88 0.85" gltf-model="url(assets/models/street-tree.glb)" foliage></a-entity>
+      <a-entity id="tree-west-2"  position="-7.5 0.175 -11.5" rotation="0 0 0" scale="0.9 0.92 0.9"   gltf-model="url(assets/models/street-tree.glb)" foliage></a-entity>
+      <a-entity id="tree-west-3"  position="-7.5 0.175 -24"   rotation="0 90 0"   scale="1.15 1.12 1.15" gltf-model="url(assets/models/street-tree.glb)" foliage></a-entity>
+      <a-entity id="tree-west-4"  position="-7.5 0.175 -33"   rotation="0 180 0" scale="1.05 1.1 1.05"  gltf-model="url(assets/models/street-tree.glb)" foliage></a-entity>
+      <a-entity id="tree-west-5"  position="-7.5 0.175 -60"   rotation="0 270 0" scale="1 1 1"         gltf-model="url(assets/models/street-tree.glb)" foliage></a-entity>
+    </a-entity>
     <!-- 78 Main: dry goods, 3 storeys -->
     <a-entity id="bldg-78-main" position="10.3 0 -9.1" rotation="0 -90 0"
       building="width: 7.3; height: 10.7; depth: 17; stories: 3; color: #874434; wall: brick; bays: 3; photo: "></a-entity>

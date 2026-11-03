@@ -80,6 +80,16 @@ surfaces re-tinted by `tools/prepare_textures.py`.
 | `concrete_floor_worn_001.jpg` | Concrete Floor Worn 001 (`concrete_floor_worn_001`) | steps |
 | `wood_table_worn.jpg` | Wood Table Worn (`wood_table_worn`) | doors |
 
+### Street tree (`assets/textures/street-tree/`)
+
+1K colour (Diffuse) maps, unmodified.
+
+| File | Poly Haven asset | URL | Licence | Used for |
+|------|------------------|-----|---------|----------|
+| `bark_willow_02.jpg` | Bark Willow 02 (`bark_willow_02`) | https://polyhaven.com/a/bark_willow_02 | CC0 | trunk bark and root flare (tile 2.15 m) |
+| `mud_forest.jpg` | Mud Forest (`mud_forest`) | https://polyhaven.com/a/mud_forest | CC0 | soil in the sidewalk tree pit (tile 2.35 m) |
+| `granite_tile_03.jpg` | Granite Tile 03 (`granite_tile_03`) | https://polyhaven.com/a/granite_tile_03 | CC0 | granite edging of the tree pit (tile 1.8 m) |
+
 `assets/textures/union-hotel-lightmap.jpg` is baked in Blender by
 `tools/blender/union_hotel_bake.py` (original work).
 
