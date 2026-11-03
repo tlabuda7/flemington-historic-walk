@@ -36,6 +36,7 @@ Decisions (2026-11-02):
 | Union Hotel (70–76 Main) | done before pipeline | done | done | — | yes |
 | Hunterdon County Courthouse (75 Main) | approved | done | done, round-1 fixes applied (13.7k tris, 2.6 MB) | round 2: PASS | yes (GLB, 2026-11-03) |
 | County Offices / Hall of Records (69–71 Main) | written, auto-approved (owner away) | done (1 new + 3 tinted, 3 reused) | done (8.6k tris, 2.2 MB, LIGHTMAP_SCALE 1.1299) | round 1: PASS | yes (GLB, 2026-11-03) |
+| Wurts Law Office (59 Main) | written, auto-approved (owner away) | reused, none new (asset-scout skipped; 1 grey copy of weathered_planks made locally) | done (7.6k tris, 5 materials, 1.2 MB, 1K lightmap, LIGHTMAP_SCALE 1.1647) | round 1: PASS | yes (GLB, 2026-11-03) |
 
 ## Building specs
 
@@ -506,6 +507,216 @@ previews `assets/models/previews/county-offices-*.png`. ≤ 10 materials.
 7. Stoop width/depth and railing pattern simplified (photos show ornamental cast-iron rails).
 8. Basement window grilles.
 
+### Wurts Law Office (59 Main St)
+
+**Status:** in scene (scene-integrator, 2026-11-03): `#wurts-law-office` at (−14.95, 0.02, −68.69), rotation 0 90 0, GLB + baked lightmap (intensity 1.1647), replacing the kit placeholder; front path now `-12.5 -68.69 4.5 1.2` (sidewalk to 0.1 m under the step at x −14.65). No console errors; loaded bounds x −24.23 … −14.65, z −71.36 … −66.02, y −0.18 … 6.52 (no float, no z-fight with lawn or path). Draw calls / triangles: start view 162 / 61.5k → 160 / 69.0k. Screenshot `assets/models/previews/wurts-law-office-in-scene.png`. Shaded east front reads slightly cooler than the warm cream 65 Main, but acceptable next to its neighbours. Earlier: reviewer round 1: **PASS** (2026-11-03): GLB loads in the browser viewer with no errors (7,627 tris, 5 materials, 1.24 MB, TEXCOORD_0+1, 4 × 1K JPEG, 1K lightmap clean); matches both HABS views. Minor notes only: the shaded east front reads slightly cool/grey, the wreaths look octagonal up close, the chimney may sit ~0.3 m too far forward. Next: scene-integrator. Earlier: built and baked (blender-builder, 2026-11-03). Asset-scout skipped (nothing new needed; the four reused textures confirmed; grey copy `wurts-law-office/planks_grey.jpg` made by `tools/prepare_wurts_textures.py`). `assets/models/wurts-law-office.glb`: 7,627 triangles, 5 materials, 1.2 MB; lightmap `wurts-law-office-lightmap.jpg` 1024² (no seams seen, 2048 not needed), LIGHTMAP_SCALE 1.1647; previews `assets/models/previews/wurts-law-office-*.png`.
+
+**What it is**: the Alexander Wurts (a.k.a. Samuel Southard) law office, a tiny 1-storey frame
+office built c. 1811 as a plain clapboard building and remodelled c. 1840 by builder Mahlon
+Fisher into a Greek Revival "temple" with a 4-pillar portico, a deep entablature with carved
+wooden wreaths in the frieze and a flat roof. Wurts used it 1820–1881. In the **late 1920s**
+the Women's Club turned it into a public restroom; the **west (rear) T-wing seen in HABS is a
+later addition** (HABS data form: "T-shaped… western wing is an addition"). The 1921 map
+shows only a small rear lean-to, so the 1920 state is the plain rectangle + portico.
+
+**Orchestrator decisions** (settled from the photos/map; owner to check later)
+1. **Footprint: 4.70 m wide × 8.0 m deep** (portico 1.6 + body 6.4). The map gives 8.0 m total
+   depth (body 7.06 + front strip 0.89) but only **4.12 m width**; at 4.12 m the HABS front would
+   have a 1.6–1.9 m tall, 0.6 m wide door — impossible. The two HABS photos together (front
+   width ÷ height 1.11; side length ÷ height 1.86, perspective-corrected) give W ≈ 4.75 m and
+   H ≈ 4.4 m when the side length is the map's 8.0 m; the door then comes out 0.78 × 2.2 m and
+   the side clapboard exposure ≈ 0.2 m. Width kept centred on the map's centre line.
+2. **Portico 1.6 m deep, not the map's 0.89 m strip**: in the HABS south photo the portico is
+   0.25 × the body length (anta to pillar front), and a front-photo capital-height parallax check
+   gives 1.6–2.2 m. The map's front line (porch edge) is kept as the model's front.
+3. **No rear T-wing** (HABS data: later addition; not on the 1921 map). Instead a small
+   1-storey **frame lean-to at the rear**, 2.9 × 1.1 m (map), low detail.
+4. **Flat roof** (HABS data form) behind the entablature, tin (map "o" roof symbol); not visible
+   from the street.
+5. **One interior brick chimney** rising ~2.1 m above the cornice, south of centre (both HABS
+   photos). Kept for 1920: a stove-heated office needed one; nothing suggests it is later.
+6. **Colours: white paint all over, dark green louvred shutters, open** (HABS shows white with
+   dark shutters; standard for a Greek Revival office of the period). **Door: same dark green**
+   (one material shared with the shutters, saves a draw call; the HABS white door may be a
+   later replacement).
+7. **No signage** (the HABS "COUNTY SUPERINTENDENT OF SCHOOLS" board is mid-20th-century; the
+   1920 occupant is unknown). No house number, lamps or awnings.
+8. **Square pillars, plain shafts, moulded capitals** ("square, with egg and dart molding on
+   capitals": HABS data); egg-and-dart is not modelled, only a stepped capital profile.
+9. **Material count 5** (see Budget): one white paint for all painted wood (walls, clapboard as
+   geometry, pillars, entablature, wreaths, dentils, sash, casings), one dark green (shutters,
+   doors), plain dark glass (no texture), red brick (chimney), one grey (porch deck, step,
+   foundation, roofs). **No new textures.**
+10. **Ordinary building**, target ~6k triangles (hard cap 10k); lightmap **1024²** is enough
+    for a building this small (2048² only if seams show).
+
+**Sources**
+- Map: 1921 Sanborn **sheet 2**, yellow (frame) "OFF." labelled "1" storey, street number
+  **59** (between the 3-storey brick block 57 to the north and the frame house 65 to the south).
+  Pixel box (line centres): body **x 3356–3491.5, y 5542–5621.5**; front strip ("1", "o")
+  x 3491.5–3508.5 across the full width; rear lean-to (yellow, "1") **x 3334.5–3356,
+  y 5552.5–5607.5**. "o" = slate/tin roof on body and front strip. Main St property line
+  x 3600. Lot lines y 5460 (north) and 5787 (south). No height note.
+- Photos:
+  - **Primary: `habs/wurts-law-office-east-front.jpg`** (HABS NJ-772-1, mid-20th c., probably
+    1960s–70s; public domain): straight-on east front. Use for the front proportions, pillar
+    spacing, entablature layers, wreath count (7), window/door layout, chimney.
+  - `habs/wurts-law-office-south-side.jpg` (HABS NJ-772-2, same date, from the SE): south side —
+    2 shuttered windows, a mid-side pilaster, dentil course, 9 wreaths along the side frieze,
+    portico depth, chimney; at the far left the later T-wing (do not build).
+  - West Jersey History photos (`assets/photos/reference/`, all 32 checked on contact sheets):
+    **none shows the law office** (the closest, `flmngtnmainstrycolrvu10.jpg` and the 1907
+    "business blocks" card, show other buildings).
+- Web: HABS NJ-772 data form (https://tile.loc.gov/storage-services/master/pnp/habshaer/nj/nj0000/nj0072/data/nj0072data.pdf:
+  "ca. 1830, Mahlon Fisher, builder… Frame, with flush siding on east facade and clapboards on
+  other facades… T-shaped; 1-story; 1-story, columned portico on east front; flat roof… Large
+  entablature with dentilled architrave and simple projecting cornice, frieze decorated by
+  carved wood wreaths; portico columns are square, with egg and dart molding on capitals…
+  Western wing is an addition"); HCHS walking tour
+  (https://hunterdonhistory.org/wp-content/uploads/2018/08/Flemington-TRAIL-online8-1.pdf:
+  "59 Main Street, Samuel Southard Law Office (1811)… Mahlon Fisher updated the simple
+  clapboard structure to its current Greek Revival style in 1840… opened it for a time in the
+  late 1920's as a women's public restroom"); The History Girl
+  (https://thehistorygirl.com/2013/01/23/leaving-his-mark-in-flemington/: four square columns,
+  egg-and-dart capitals, carved wooden wreaths = Fisher trademark); Clarke Caton Hintz
+  (https://clarkecatonhintz.com/project/samuel-lewis-southard-law-office/: "originally built as a
+  simple, clapboarded office", later Greek Revival); Wikipedia, Flemington Historic District
+  (https://en.wikipedia.org/wiki/Flemington_Historic_District: Wurts office 1820–1881).
+
+**Placement** (west side, front faces east onto Main St)
+- Entity position = centre of the portico front line (pillar front faces / porch edge) at
+  grade: **(−14.95, 0.02, −68.69)**, `rotation="0 90 0"` (replaces the placeholder at
+  (−15.2, 0, −68.8)). y 0.02 = lawn level.
+- Portico front x −14.95 (map px 3508.5; **4.69 m** behind the property line x −10.26);
+  front wall x −16.55; rear wall x −22.95 (map 3356 → −22.98); lean-to to x −24.05.
+  North wall z −71.04, south wall z −66.34. The step and cornice reach x ≈ −14.65.
+- Neighbours: brick block 57 Main to the north (front x ≈ −12.35, i.e. 2.6 m further east;
+  south wall z ≈ −77.2, 6 m clear); frame house 65 Main to the south (north wall z ≈ −55.7,
+  10 m clear). Lot lines z −75.0 (north) and −58.0 (south). Nothing within 5 m of the office.
+- Blender local frame: front −Y, origin at the portico front at grade, **+X = north**, z = 0 =
+  grade. Portico y 0 … 1.6; body x −2.35 … +2.35, y 1.6 … 8.0; lean-to x −1.35 … +1.55,
+  y 8.0 … 9.1. Step y −0.30 … 0. Sun "to sun" vector (−0.40, 0.90, 0.36).
+
+**Massing**
+- Body + portico: one rectangle 4.70 × 8.0 m under one flat roof and one continuous
+  entablature (decision 1–2). Body walls 6.4 m deep; the portico is the front 1.6 m, open on
+  the front and recessed between the side walls' front ends (the side walls stop at the
+  front wall; the portico sides are open between the corner anta and the outer pillar).
+- Levels above grade (front photo at 102.7 px/m on the pillar plane; checked against the
+  side photo): porch floor **0.30**; pillar base 0.30–0.42; shaft 0.42–3.08; capital
+  3.08–3.30; architrave 3.30–3.52; dentil course 3.52–3.62; frieze 3.62–4.06; cornice
+  4.06–4.42 → **cornice top 4.42 m**, overhang 0.30 m on front and sides, 0.20 at the rear.
+- Roof: flat tin deck at 4.32 with a slight fall to the rear (2 %), hidden by the cornice
+  (a 0.10 m parapet lip). Not visible from the street.
+- Foundation: grey stone underpinning 0 → 0.25 under the walls, skirt to −0.2 (hidden) so it
+  never floats; porch platform 0 → 0.30 with grey painted board facing.
+- Rear lean-to: 2.9 (N–S) × 1.1 m (map), 1 storey frame, shed roof falling west from 3.0 to
+  2.4 m, tucked under the main cornice (guess for heights).
+- Chimney: brick, 0.60 (x) × 0.70 (y), centre **(x −1.0, y 4.4)**, from the roof to **6.5 m**,
+  corbelled cap course 0.15 m projecting 0.05 (HABS front + side).
+
+**Elevation details (1920 state)**
+- **Portico pillars**: 4, **square**, 0.38 × 0.38 m, plain (no flutes, no panels), evenly
+  spaced, centres x = **±0.72, ±2.16** (spacing 1.44; outer faces flush with the side walls),
+  front faces at y 0 (centres y 0.19). Base: plinth 0.46 square × 0.12. Capital 3.08–3.30:
+  necking band 0.04, flared echinus to 0.46, abacus 0.50 × 0.50 × 0.08.
+- **Antae**: flat corner pilasters on the front-wall corners, 0.24 m on both faces, 0.04 proud,
+  same base and capital profile as the pillars (seen in both photos).
+- **Entablature** (front and both sides, continuous over the portico; rear plain): architrave
+  plain fascia 0.22; **dentil course** 0.10 high (blocks 0.07 wide × 0.06 deep at 0.12 m
+  centres) front and sides; frieze 0.44 flat; cornice 0.36: corona 0.26 with 0.30 overhang
+  and a small top moulding 0.10. Porch ceiling flat at 3.30 (underside of the architrave).
+- **Wreaths** (carved wood): ring Ø 0.34 m, tube Ø 0.07, projecting 0.05, centred in the
+  frieze at 3.84 m. **Front: 7** at 0.72 m centres (x = −2.16 … +2.16). **Each side: 9** at
+  0.8875 m centres, y = 0.35 … 7.45. Rear: none.
+- **Front wall** (y 1.6, flush boarding, painted white), **W-D-W**:
+  - Door centred: opening **0.78 × 2.20** (0.30 → 2.50), panelled (4 panels: two tall upper,
+    two short lower), set 0.10 in; flat casing 0.08 m; head casing with a small cornice cap
+    0.15 tall, 0.05 proud, top at 2.75. No fanlight or sidelights (HABS).
+  - Windows at x **±1.32**: opening **0.78 × 1.70**, sill 1.05, head 2.75; **6/6 double-hung**
+    (3 × 2 panes per sash), muntins 0.025; casing 0.07, head cap as the door; sill board 0.05.
+  - **Shutters**: 2 louvred leaves per window, 0.36 × 1.70, open flat, 0.03 off the wall,
+    dark green (louvres as texture/shallow grooves, not modelled slats). The outer leaf may
+    touch the anta and the inner leaf the door casing — as in the photo.
+- **Side walls** (south and north alike; north mirrored, no photo): clapboard, **0.20 m
+  exposure** (16 courses 0.25 → 3.30), modelled as a stepped profile; corner boards 0.20 at
+  the rear corners; a flat **pilaster 0.20 wide** at **y 4.4** from sill board to architrave
+  (HABS south). Two windows as the front (with shutters) at **y 3.32 and 6.79**.
+- **Rear wall** (guess, not seen): clapboard, blank; the lean-to covers the middle.
+- **Lean-to**: clapboard as the sides, plain door 0.75 × 1.95 on its south face, one small
+  2/2 window 0.6 × 0.8 (sill 1.2) on its west face; shed roof grey; no ornament.
+- **Porch and step**: board deck at 0.30 from y 0 to 1.6 with 0.03 nosing; one step 0.15 high ×
+  0.30 deep, **2.6 m wide**, centred (y −0.30 … 0) (HABS front).
+- No railings, gutters/downpipes not modelled, no lamps, no sign.
+
+**Materials & colours (1920)** — 5 materials
+1. `white_paint` — all painted wood: walls, clapboard, pillars, antae, entablature, dentils,
+   wreaths, casings, sash, porch ceiling, lean-to walls. Warm white ≈ #EEEBE2.
+   Texture reuse **`courthouse/paint_white.jpg`**, tile 2.0 m.
+2. `green_paint` — shutters and both doors, dark green ≈ #2F3B2C.
+   Reuse **`polyhaven/door_paint_green.jpg`**, tile 0.8 m (tint darker if needed).
+3. `glass` — plain colour, no texture: very dark blue-grey ≈ #1E2226, roughness 0.15.
+4. `brick` — chimney. Reuse **`polyhaven/red_brick.jpg`**, tile 1.4 m.
+5. `grey` — porch deck, step, porch facing, stone underpinning, flat roof, lean-to roof.
+   Reuse **`polyhaven/weathered_planks.jpg`** tinted mid grey ≈ #8A877F, tile 2.0 m.
+- **New for asset-scout: none.** All maps exist; asset-scout only needs to confirm the four
+  files above and log nothing new.
+
+**Weathering**: light — a small, cared-for white building. Dirt splash on the bottom 0.3 m of
+walls and pillar bases; faint grey streaks under window sills and below the cornice corona;
+soot on the chimney top; porch deck worn darker in front of the door; slight chalkiness on
+the south (sunlit) side.
+
+**Budget**: **ordinary building, target ~6k triangles, hard cap 10k**: walls with openings +
+clapboard profile ~0.9k; 4 pillars + 2 antae with base/capital ~0.5k; entablature ~0.4k;
+dentils (≈ 40 front + 2 × 66 sides, 10 tris each) ~1.7k; wreaths (25 × low-poly torus 8 × 4)
+~1.6k; 6 windows + door with sash/casings ~0.6k; 12 shutters ~0.3k; porch, step, chimney,
+roof, lean-to ~0.3k. **5 materials = 5 draw calls**, no new textures, one lightmap
+`assets/textures/wurts-law-office-lightmap.jpg` (1024², 2048² only if needed). Files:
+`tools/blender/wurts_law_office.py` + `wurts_law_office_bake.py`,
+`assets/models/source/wurts_law_office.blend`, `assets/models/wurts-law-office.glb` (≤ 5 MB,
+expect < 1 MB), previews `assets/models/previews/wurts-law-office-*.png`.
+
+**Acceptance checks for the reviewer**
+1. Footprint 4.70 × 8.0 m plain rectangle (no T-wing) plus a small rear lean-to 2.9 × 1.1 m;
+   origin at the portico front at grade, front faces −Y, +X = north.
+2. **Four square, plain pillars**, evenly spaced across the full front, outer faces flush with
+   the side walls; portico 1.6 m deep with matching antae at the front-wall corners.
+3. Front wall reads **W-D-W**: centred panelled door, two 6/6 windows with open dark-green
+   louvred shutters.
+4. Deep entablature (≈ 1.1 m) with a dentil course and **7 round wreaths** on the front frieze
+   and **9 on each side**; cornice top 4.42 ± 0.15 m.
+5. **Flat roof** — no gable or hip shows above the cornice; one brick chimney south of centre
+   rising ≈ 2 m above the cornice.
+6. Side walls clapboard with two shuttered windows and a mid pilaster; front wall smooth.
+7. Porch floor ≈ 0.3 m with one wide step; all white except shutters/doors (dark green),
+   brick chimney, grey porch and roof.
+8. ≤ 10k triangles (target ~6k), **≤ 5 materials**, GLB ≤ 5 MB, TEXCOORD_0 + 1. With the WSW
+   sun the front is in shade: pillars, shutters and wreaths must still read (bounce light, not
+   flat grey); the south side is sunlit with clear shutter and cornice shadows.
+
+**Integrator notes (scene, not the model)**
+- Move `#wurts-law-office` to **(−14.95, 0.02, −68.69)**, rotation 0 90 0, GLB + lightmap;
+  remove the kit placeholder.
+- Front path (`#paths` ground-patches): replace `-12.6 -68.8 4.55 1.4` with
+  **`-12.5 -68.69 4.5 1.2`** (sidewalk x −10.25 to x −14.75, 0.1 m under the step).
+- Optional later (draw-call budget): one large shade tree just north of the portico at about
+  (−14.3, −71.9) (HABS shows a big old trunk there; likely a mid-size tree in 1920 — guess).
+  No fence known.
+
+**Differences HABS (mid-20th c.) vs. 1920** (build 1920): HABS has the rear T-wing (wider than
+the body on the south, with its own wreath frieze), the "County Superintendent of Schools"
+board, a white door, shrubs and a concrete walk; possibly a raised grade around the porch.
+
+**Pure guesses (owner to check)**
+1. Exact width (4.70 m) — map 4.12 m vs photo; see decision 1.
+2. North side layout (mirror of the south) and blank rear wall.
+3. Lean-to heights, door and window; whether it was enclosed (map yellow = frame).
+4. Door and shutter colour (dark green) and door panelling in 1920.
+5. Porch floor height (0.30) and step size — the HABS ground may be higher than in 1920.
+6. Chimney present in 1920 and its cap detail.
+7. Front-yard tree and path width.
+
 ## Constraints
 
 - A-Frame from a CDN, plain HTML/JS. No build tools or frameworks.
@@ -598,3 +809,6 @@ Check licensing for every asset and note the source in the progress log.
 | 2026-11-03 | scene-integrator: Hunterdon County Court House GLB integrated (`assets/models/courthouse.glb`, 13,680 triangles, 12 materials, baked lightmap intensity 1.1979) at (−18.34, 0.15, −6.85): portico front 8.0 m behind the property line, steps reach x −16.69. The code-built placeholder and the lawn path at (−13.05, −7.05) were replaced by a paved concrete forecourt flush with the sidewalk (out to the Court St line), plus 15 cm grade slabs under the body, north wing and jail yard so no wall floats above the lawn. Curb trees at x −7.5 and the county offices placeholder (z ≤ −20.45) clear the model. Tested: no console errors, lightmap reads (no black faces; wing door and entablature fine). Start view (0, 0, 18) facing north: 160 draw calls / 53k triangles (was 149 / 39k); the ~150 call guideline is exceeded mainly by the code-built placeholders, which will drop as they are replaced by GLBs. |
 | 2026-11-03 | planner: County Offices / Hall of Records (69–71 Main, 1870 Italianate) spec written and auto-approved (owner away). Sanborn sheet 2 re-measured: one brick building 13.9 × 15.2 m, 2 storeys, 28', front 7.4 m behind the property line → entity (−17.71, 0.02, −27.87). Eight period cards compared (1905–1912); HCHS walking tour confirms three doorways with own steps until the 1928 remodel. Ordinary building (≤ 10k tris); 1 new texture (pale buff sandstone). Next: asset-scout. |
 | 2026-11-03 | scene-integrator: County Offices / Hall of Records GLB integrated (`assets/models/county-offices.glb`, 8,624 triangles, 10 materials, lightmap intensity 1.1299) at (−17.71, 0.02, −27.87), rotation 0 90 0; the kit placeholder at (−17.6, 0, −28.5) is gone. The single lawn path was replaced by three 1.6 m walks (sidewalk x −10.3 to just under the stoop feet at x −15.3); all five front paths are now one mesh via a new `ground-patches` component (js/components.js) to save draw calls. Fences, extra shade tree and telegraph pole skipped for the draw-call budget. Tested: no console errors (only the pane's pointer-lock errors), faces Main St, lightmap reads, stoops meet the walks, no floating. Draw calls / triangles before → after: start view (0, 0, 18) 160 / 53.0k → 162 / 61.5k; opposite sidewalk (8.5, −27.87) 79 / 47.9k → 82 / 56.3k; in front on the road (−2, −27.87) 46 / 16.5k → 50 / 25.0k. (The placeholder cost ~6 calls; the GLB costs 10, one per material.) Screenshot `assets/models/previews/county-offices-in-scene.png`. |
+| 2026-11-03 | planner: Wurts Law Office (59 Main, c. 1811, Greek Revival remodel c. 1840) spec written and auto-approved (owner away). Sanborn sheet 2: 1-storey frame office, 8.0 m deep, portico front 4.7 m behind the property line → entity (−14.95, 0.02, −68.69). Width set to 4.70 m from the two HABS photos (map's 4.12 m would give a 1.7 m door). 1920 state: no rear T-wing (later addition per the HABS data form), flat roof, 4 square pillars, wreath frieze. No West Jersey History photo shows it. Target ~6k tris, 5 materials, no new textures. Next: asset-scout. |
+| 2026-11-03 | blender-builder + reviewer: Wurts Law Office built and baked (`assets/models/wurts-law-office.glb`, 7,627 triangles, 5 materials, 1.2 MB, 1K lightmap, LIGHTMAP_SCALE 1.1647; asset-scout skipped, grey planks copy made by `tools/prepare_wurts_textures.py`). Review round 1: PASS. |
+| 2026-11-03 | scene-integrator: Wurts Law Office GLB integrated at (−14.95, 0.02, −68.69), rotation 0 90 0; the kit placeholder at (−15.2, 0, −68.8) is gone; its front path narrowed to 1.2 m and re-centred on the portico (x −14.75 … −10.25). Optional shade tree skipped (draw-call budget). Tested: no console errors (only the pane's pointer-lock errors), faces Main St, lightmap reads on all 5 materials, step meets the path, nothing floats. Draw calls / triangles before → after: start view (0, 0, 18) 162 / 61.5k → 160 / 69.0k; opposite sidewalk (8.5, −68.69) 60 / 23.8k → 58 / 31.3k; in front on the road (−2, −68.69) 49 / 13.3k → 47 / 20.8k. (The placeholder cost ~7 calls; the GLB costs 5.) Screenshot `assets/models/previews/wurts-law-office-in-scene.png`. |

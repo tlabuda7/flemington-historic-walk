@@ -127,9 +127,21 @@ surfaces re-tinted by `tools/prepare_textures.py`.
 | `roof_tin_redbrown.jpg` | Metal Plate 02 (`metal_plate_02`, via `polyhaven/metal_plate_02.jpg`), shifted to #5A3E34 | https://polyhaven.com/a/metal_plate_02 | CC0 | hipped tin roof painted dark red-brown (tile 2.0 m) |
 | `door_varnish_dark.jpg` | Wood Table Worn (`wood_table_worn`, via `polyhaven/wood_table_worn.jpg`), tinted #3A2A1F | https://polyhaven.com/a/wood_table_worn | CC0 | dark varnished doors (tile 0.8 m) |
 
+### Wurts Law Office (`assets/textures/wurts-law-office/`)
+
+Nothing new downloaded. The building reuses, unchanged, `courthouse/paint_white.jpg` (all
+painted wood), `polyhaven/door_paint_green.jpg` (shutters, doors; darkened by a colour factor
+in the GLB) and `polyhaven/red_brick.jpg` (chimney) (listed above). One re-coloured copy, made by
+`tools/prepare_wurts_textures.py`:
+
+| File | Poly Haven asset | URL | Licence | Used for |
+|------|------------------|-----|---------|----------|
+| `planks_grey.jpg` | Weathered Planks (`weathered_planks`, via `polyhaven/weathered_planks.jpg`), greyed to #8A877F at 70% contrast | https://polyhaven.com/a/weathered_planks | CC0 | porch deck, step, underpinning, flat roof, lean-to roof (tile 2.0 m) |
+
 `assets/textures/union-hotel-lightmap.jpg` is baked in Blender by
 `tools/blender/union_hotel_bake.py` (original work).
 `assets/textures/courthouse-lightmap.jpg` is baked in Blender by `tools/blender/courthouse_bake.py` (original work).
+`assets/textures/wurts-law-office-lightmap.jpg` is baked in Blender by `tools/blender/wurts_law_office_bake.py` (original work).
 
 ## Maps (`assets/maps/`)
 
