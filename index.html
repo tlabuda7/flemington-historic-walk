@@ -185,13 +185,23 @@
     <a-entity id="bank-building" position="12.24 0.15 -66.24" rotation="0 -90 0"
       gltf-model="url(assets/models/bank-building.glb)"
       baked-lighting="lightmap: assets/textures/bank-building-lightmap.jpg; intensity: 1.1241"></a-entity>
-    <!-- Paved strip between the sidewalk and the bank's front wall (x 10.30–12.28, flush with
-         the sidewalk top 0.15) along its 22.14 m frontage; the stoops stand on it. -->
-    <a-box id="bank-forecourt" position="11.29 0.075 -66.24" width="1.98" height="0.15" depth="22.14"
-      material="src: assets/textures/polyhaven/sidewalk_concrete.jpg; repeat: 0.66 7.4; roughness: 1"></a-box>
-    <!-- 68 Main: restaurant, pool room upstairs -->
-    <a-entity id="bldg-68-main" position="10.6 0 -51.7" rotation="0 -90 0"
-      building="width: 5.5; height: 7.5; depth: 18; stories: 2; color: #c7b48e; wall: wood; bays: 2; photo: "></a-entity>
+    <!-- Paved strip between the sidewalk and the fronts of the bank and 68 Main (x 10.30–12.66,
+         flush with the sidewalk top 0.15) from Bloomfield Ave (z -77.31) to 68's south wall
+         (z -49.13); the bank's stoops and 68's steps stand on it. It runs 0.42 m under the
+         bank's front wall (x 12.24), so the two meet with no gap. -->
+    <a-box id="bank-forecourt" position="11.48 0.075 -63.22" width="2.36" height="0.15" depth="28.18"
+      material="src: assets/textures/polyhaven/sidewalk_concrete.jpg; repeat: 0.79 9.4; roughness: 1"></a-box>
+    <!-- Lovell's Restaurant (68 Main, 2-storey frame restaurant with pool room upstairs, 1870
+         front with an arch in the roofline): Blender model with Poly Haven textures and baked
+         late-afternoon light. Built by tools/blender/lovells_restaurant.py +
+         lovells_restaurant_bake.py. Position = centre of the front wall face at sidewalk level,
+         2.36 m behind the property line. North wall z -55.13 (4 cm clear of the bank's south
+         wall), south wall z -49.13, rear wall x 31.05; the steps reach x 11.71 and the awning
+         about x 11.7. Its foundation skirts 0.1 m below the sidewalk top, so it meets the
+         ground in the gap to the Union Hotel without floating. -->
+    <a-entity id="bldg-68-main" position="12.66 0.15 -52.13" rotation="0 -90 0"
+      gltf-model="url(assets/models/lovells-restaurant.glb)"
+      baked-lighting="lightmap: assets/textures/lovells-restaurant-lightmap.jpg; intensity: 1.2462"></a-entity>
     <!-- Union Hotel: Blender model with Poly Haven textures and baked late-afternoon light.
          Built by tools/blender/union_hotel.py + union_hotel_bake.py.
          The old code-built version is still available as kit-building="type: union-hotel". -->
