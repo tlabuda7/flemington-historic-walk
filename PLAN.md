@@ -37,6 +37,7 @@ Decisions (2026-11-02):
 | Hunterdon County Courthouse (75 Main) | approved | done | done, round-1 fixes applied (13.7k tris, 2.6 MB) | round 2: PASS | yes (GLB, 2026-11-03) |
 | County Offices / Hall of Records (69–71 Main) | written, auto-approved (owner away) | done (1 new + 3 tinted, 3 reused) | done (8.6k tris, 2.2 MB, LIGHTMAP_SCALE 1.1299) | round 1: PASS | yes (GLB, 2026-11-03) |
 | Wurts Law Office (59 Main) | written, auto-approved (owner away) | reused, none new (asset-scout skipped; 1 grey copy of weathered_planks made locally) | done (7.6k tris, 5 materials, 1.2 MB, 1K lightmap, LIGHTMAP_SCALE 1.1647) | round 1: PASS | yes (GLB, 2026-11-03) |
+| Bank Building / Flemington National Bank (56–66 Main) | written, auto-approved (owner away) | done (1 new: sandstone_blocks_05 greyed → stone_rockfaced; 1 generated: awning_stripes; 3 reused) | done, round-1 fixes applied (8.8k tris, 6 materials, 1.8 MB, 2K lightmap, LIGHTMAP_SCALE 1.1241) | round 2: PASS | yes (GLB at 12.24, 0.15, −66.24) |
 
 ## Building specs
 
@@ -717,6 +718,275 @@ board, a white door, shrubs and a concrete walk; possibly a raised grade around 
 6. Chimney present in 1920 and its cap detail.
 7. Front-yard tree and path width.
 
+### Bank Building / Flemington National Bank (56–66 Main St)
+
+**Status:** in scene (scene-integrator, 2026-11-03): GLB placed at (12.24, 0.15, −66.24), rotation 0 −90 0, lightmap intensity 1.1241; code-built placeholder replaced; front strip x 10.30–12.28 paved with one concrete box (`#bank-forecourt`, flush with the sidewalk top). Tested: no console errors, faces Main St, lightmap reads, stoops sit on the strip, north wall meets the Bloomfield Ave grade with no gap. Earlier: review round 2: PASS (reviewer, 2026-11-03): GLB 8,808 tris, 6 materials, 1.79 MB, 5 × 1K JPG, TEXCOORD_0+1; lightmap 2048², LIGHTMAP_SCALE 1.1241; loads in the review viewer with no console errors. Stone now reads mid grey, clearly darker than the pale trim (1908 colour card); chimney now shows above the SW cornice return; no regressions. Next: show the owner, then scene-integrator. Earlier: round-1 fixes applied (blender-builder, 2026-11-03): stone tinted to a mid cool grey (baseColorFactor 0.66/0.68/0.72), chimney raised to 13.20; re-baked and re-exported: 8,808 triangles, 6 materials, 1.79 MB, **LIGHTMAP_SCALE 1.1241**; all previews re-rendered. Next: reviewer round 2. Earlier: review round 1: FIXES (reviewer, 2026-11-03): GLB 8,802 tris, 6 materials, 1.79 MB, 5 × 1K JPG, TEXCOORD_0+1; lightmap 2048²; loads in the review viewer at intensity 1.1249 with no console errors, brick/trim colour factors survive. Proportions, 12 bays, 12.2 m cornice, roundels, bank entrance, shop fronts, awnings and lightmap all good; builder simplifications 1–7 accepted. Fixes: (1) stone ground storey too pale/cream, reads as bright as the trim; darken ~30% and cool it to mid grey (1908 colour card, 1907 card); (2) optional: chimney barely shows above the cornice, raise to ~13.2 m (1908 SW card). Next: blender-builder fixes, then review round 2. Earlier: built (blender-builder, 2026-11-03): `assets/models/bank-building.glb` 8,802 triangles, 6 materials (brick, stone, trim, glass, dark, awning), 1.79 MB, TEXCOORD_0 + TEXCOORD_1, one 2K lightmap `assets/textures/bank-building-lightmap.jpg`, **LIGHTMAP_SCALE 1.1249**; scripts `tools/blender/bank_building.py`, `bank_building_bake.py`, `bank_building_preview.py`; source `assets/models/source/bank_building.blend`; previews `assets/models/previews/bank-building-{front,three-quarter-nw,three-quarter-sw,detail,match-1907,match-1908}.png`. Next: reviewer. Earlier: assets ready (asset-scout, 2026-11-03): new `bank-building/stone_rockfaced.jpg` (Poly Haven `sandstone_blocks_05`, 1K, rock-faced coursed ashlar greyed to #A8A294, tile 3.0 m, ~7 courses of 0.34–0.47 m per tile; untinted source kept as `sandstone_blocks_05.jpg`); generated `bank-building/awning_stripes.jpg` (1K, red #9A4A3E / cream #DDD3BC 0.15 m stripes running along V, canvas weave + fading, seamless, tile 0.6 m across); reused unchanged and confirmed present: `polyhaven/red_brick.jpg` (1.4 m), `county-offices/trim_paint_drab.jpg` (2.0 m), `county-offices/door_varnish_dark.jpg` (0.8 m). Script `tools/prepare_bank_textures.py`; logged in SOURCES.md. Next: blender-builder. Earlier: spec written — auto-approved (owner away) (planner, 2026-11-03).
+
+**What it is**: the 3-storey brick-and-stone "Bank Building" (also "Richards Building") on the
+**SE corner of Main St and Bloomfield Ave**, built **1897** by William Richards on the site of
+"Blackwell's Row"; the Flemington National Bank (chartered 1876) had its banking room in the
+north end. A **first-floor fire on 9 Feb 1901** was repaired; the 1906–1908 cards show the
+repaired building. HCHS: "classic brick and stone building… Multiple entryways have been changed
+over the years" — so the 1920 state is the 1906–08 postcard state. In 1921 the map tenants are
+(north → south) Bank (56), Men's Furnishings (58), Drugs (62), Boots & Shoes (64), Confectionery (66).
+**The Post Office is not in this building**: the 1906/1907 cards ("Post Office – Richards Bldg /
+Bank Building – Union Hotel") show the "P.O." awning on the 3-storey Italianate block **across
+Bloomfield Ave to the north** (scene placeholder `bldg-48-52-main`, spec later).
+
+**Orchestrator decisions** (settled from the photos/map; owner to check later)
+1. **One model for the whole 56–66 block, 22.14 m frontage.** The map draws two brick parts
+   with a party wall at 11.46 m from the north (56–58 is 20.32 m deep, 62–66 only 11.05 m), but
+   every photo (1906, 1907, both 1908 cards) shows **one continuous 1897 facade** with the same
+   bays, belt course and cornice from the Bloomfield corner to the frame building at 68. The
+   L-shaped plan follows the map; the facade is one.
+2. **Front wall 1.95 m behind the property line** (map: thin wall line at px 4032, street line
+   3990–3995; the gap holds the stoops). Entity **(12.24, 0.15, −66.24)**, not the placeholder's
+   (10.6, 0, −66.2). The strip between the sidewalk and the front is paved by the integrator.
+3. **Bays: 12 equal upper bays on the front, 11 on the north (Bloomfield) side**, brick
+   pilaster between every bay (1908 SW card: 12 third-floor windows counted; side bays look the
+   same width as front bays in the 1906/07 cards). Ground floor = **6 bays of 2 upper bays each**
+   between rock-faced stone piers (the piers line up with the map's partitions at 11.5, 14.7,
+   17.7 m within 0.4 m).
+4. **Ground storey of rock-faced grey stone on the front and the whole north side**, stone belt
+   course at 4.3–4.6 m; red brick above (all cards). Upper windows: **2nd floor rectangular with
+   pale stone lintels, 3rd floor round-arched**; **pale roundels** in the band above the arches,
+   one over every second pilaster (1908 colour card shows one roundel per pair of windows).
+5. **Bank front (north end)**: ground bay 1 = big bank window, ground bay 2 = **round-arched
+   stone entrance with its own stoop and iron railings** (1906/1907 close views). The other four
+   ground bays are **shop fronts with raised floors and small stone stoops** (1908 cards).
+6. **Raised ground floor at 0.90 m** (5 risers) for bank and shops; small basement windows
+   under the bank window and the north-side windows (1907 card: low openings under the sill line).
+7. **Stoops perpendicular to the front**, inside the 1.95 m strip (bank stoop 1.8 m, shop stoops
+   1.2 m) — the 1908 colour card shows sloping stone cheek walls coming out toward the street.
+8. **Awnings: striped canvas awnings on the four shop bays only**, extended; none on the bank
+   bays and **none on the upper windows** (1906–08 all show shop awnings; upper-window awnings are
+   seasonal and costly). Faded red-and-cream stripes (1908 colour card). No lettering.
+9. **Roof: shed roofs falling to the rear, hidden** behind the front and north cornices (1908 SW
+   card: the south wall top steps down toward the back). **One chimney**, on the south wall near
+   the front (1908 SW card); no others seen.
+10. **South wall plain common brick, no openings** (it abuts 68 Main; 1908 SW card shows it blank
+    above 68's roof). Cornice returns 0.8 m round the SW corner, then stops.
+11. **North side cornice and frieze run the full 20.3 m** (it is a street front on Bloomfield
+    Ave; only the front 4 bays are visible in the cards, the rest is hidden by the P.O. block).
+12. **Colours**: front and north brick red-brown; stone light warm grey; cornice, frieze,
+    lintels, sills, roundels, shop fronts and sash share one **pale drab stone/paint colour**;
+    doors dark varnish. (Cards disagree — 1908 NW card: dark grey cornice, red brick; 1908 SW
+    card: pinkish front — the pale-drab trim is the middle reading and saves a material.)
+13. **Ordinary building, hard cap 10k triangles, target ~8.5k**, **6 materials** (see Budget).
+    It is large but repetitive (identical bays); it is not one of the two project landmarks.
+14. **Rear parts on Bloomfield Ave and in the back yard are not modelled** (outbuildings on hold;
+    see Sources for what the map shows). The two rear walls are plain brick with simple windows.
+
+**Sources**
+- Map: 1921 Sanborn **sheet 2**, pink (brick) block, street numbers **56, 58, 62, 64, 66**,
+  "3" storeys and **"40'"** on all units; wall marks "12 12 16" (north part) and "12 12 12" (south).
+  Pixel lines (centres): **front wall x 4032**; street line x 3990–3995; **north wall y 5416**
+  (on the Bloomfield Ave street line, y 5414); **south wall y 5841** (68 Main's north wall at
+  5850); **party wall y 5636** (with a "‖" fire-wall mark, carried across the front strip to the
+  street line, as is the lot line at 5841). **Rear of 56–58: x 4422; rear of 62–66: x 4244.**
+  Partitions: dashed (non-structural) line between 56/58 at y 5530; "WALL 1ST ONLY" at y 5700 and
+  5757. Not modelled (rear, low): 1-storey brick at x 4300–4422, y 5638–5690; 3-storey frame strip
+  x 4245–4422, y 5690–5720; 1-storey brick/frame + stairs behind 66 (x 4245–4300, y 5740–5840);
+  on Bloomfield Ave a 1-storey frame strip x 4422–4455, y 5418–5530, a 2-storey frame strip
+  x 4422–4455, y 5530–5640 and a 1-storey brick wing x 4455–4570, y 5530–5640 with a porch.
+- Photos (all `assets/photos/reference/`, local only, never commit):
+  - **Primary: `flmngtnpobankunionhtl07.jpg`** (1907, sepia, "Post Office – Bank Building –
+    Union Hotel", from the NW across Bloomfield Ave): NW corner, front 4 bays and north side 4
+    bays sharp — rock-faced ground storey, belt course, pilasters, lintels, arched 3rd-floor
+    windows, roundel, panelled frieze, modillion cornice, bank window, arched bank entrance with
+    stoop and railings, shop awnings. Use for the vertical layout (≈ 31 px/m at the corner).
+  - `flmingtnporichardsbldgunionhtl.jpg` / `flmngtnmainstrichardsbldgpo06.jpg` (1906, same
+    viewpoint, "Richards Bldg"): same detail; confirms 4 bays per visible north-side stretch.
+  - `flmngtnbankandpovu08.jpg` (1908, tinted, from the SW, west side of Main St): **whole front**
+    — 12 upper bays, shop fronts with stoops, the plain red south wall with the chimney and the
+    stepped-down coping; 68 Main (frame, 2 storeys) to the right; the P.O. block beyond Bloomfield.
+  - `flmngtnpoandnatbank08.jpg` (1908, tinted, from the SW, closer): red brick, grey rock-faced
+    ground storey and piers, pale lintels, **roundels between window pairs**, dark grey cornice,
+    striped red/cream shop awnings and upper-window awnings, stone stoops with cheek walls.
+  - Checked, **not this building**: `flmngtnmainstrycolrvu10.jpg` (1910; a 3-storey brick
+    building with a hedge and brick, not stone, ground storey — probably the block north of
+    Bloomfield Ave), `flemington_-_some_business_blocks_on_main_street_-_1907.jpg` and
+    `flmgtnmainststores.jpg` (west-side blocks), all Union Hotel views (bank out of frame).
+    No HABS sheet covers it.
+- Web: HCHS walking tour (https://hunterdonhistory.org/wp-content/uploads/2018/08/Flemington-TRAIL-online8-1.pdf:
+  "56 Main Street Bank Building (1897) This classic brick and stone building survived a first
+  floor fire in 1901. Multiple entryways have been changed over the years."); Goodspeed Histories
+  (https://goodspeedhistories.com/?p=23290: at "the south corner of the Main & Bloomfield
+  intersection… a large building that once was headquarters for the Flemington National Bank";
+  "The building that replaced Blackwell's Row was built by William Richards in 1897"); Bank Note
+  History wiki (https://banknotehistory.spmc.org/wiki/Flemington_National_Bank,_Flemington,_NJ_(Charter_2331):
+  9 Feb 1901 fire started in the Henry Richards building and spread to the bank building;
+  chartered 1876); bank centennial booklet 1976 (https://www.butkus.org/information/flemington_nat_bank/flemington_national_bank-1976.pdf,
+  via search snippet: "Main Street Office – Corner of Main & Bloomfield Avenue").
+
+**Placement** (east side, front faces west onto Main St)
+- Entity position = centre of the front (ground-storey stone) wall face at sidewalk level:
+  **(12.24, 0.15, −66.24)**, `rotation="0 -90 0"` (replaces `#bank-building` at (10.6, 0, −66.2)).
+  y 0.15 = sidewalk top (the front strip gets paved to that level).
+- Front wall x 12.24 (1.94 m behind the property line x 10.30); north wall z −77.31 (0.3 m
+  inside Bloomfield Ave's road edge z −77.6); south wall z −55.17 (68 Main's north wall
+  ≈ −54.7); rear of the north part x 32.56, of the south part x 23.29; party wall z −65.85.
+  Stoops reach x ≈ 10.45, awnings x ≈ 10.5, cornice x ≈ 11.5 — all inside the property line.
+- Blender local frame: front −Y, origin at the centre of the front wall face at sidewalk level,
+  **+X = south**, −X = north (Bloomfield Ave), z = 0 = sidewalk top. North part x −11.07 … +0.39,
+  y 0 … 20.32; south part x +0.39 … +11.07, y 0 … 11.05. Walls skirt down to z −0.20 (the
+  Bloomfield side ground is 0.15 lower). Sun "to sun" vector **(0.40, −0.90, 0.36)** (front is
+  sunlit, north side in shade).
+
+**Massing**
+- L-shaped plan (map): north part 11.46 × 20.32 m, south part 10.68 × 11.05 m, both 3 storeys,
+  **cornice top 12.20 m** (map 40' = 12.19 m) on the front and the whole north side.
+- Levels (1907 card at the NW corner, ≈ 31 px/m, upper floors corrected for the low viewpoint):
+  ground/shop floor 0.90; stone ground storey 0 → 4.30; **belt course 4.30–4.60**; 2nd floor
+  ≈ 4.75; 3rd floor ≈ 7.60; pilaster caps 10.45–10.60; **frieze 10.60–11.45**; **cornice
+  11.45–12.20**, projecting 0.75 m (front and north), 0.8 m return on the south and rear corners.
+- Roof (hidden): north part shed from 11.40 at the front to 10.40 at the rear; south part 11.40
+  → 10.60. Flat-ish, dark. Rear walls end in a 0.3 m coping above the roof's low edge.
+- South wall coping follows the roof slope behind the cornice return. **Chimney** on the south
+  wall: 0.90 (y) × 0.55 (x, set into the wall, flush outside), centre y 1.6, top **12.60**,
+  plain with a 0.10 projecting cap course.
+
+**Elevation details (1920 state)**
+- **Front grid** (x from north −11.07 to south +11.07): corner piers 0.80 m; 12 bays at
+  **1.712 m**; window centres x = ±0.856, ±2.568, ±4.280, ±5.992, ±7.704, ±9.416; pilasters
+  (brick, 0.65 wide, 0.08 proud, 4.60 → 10.45, corbelled cap 10.45–10.60 proj 0.12) at
+  x = 0, ±1.712, ±3.424, ±5.136, ±6.848, ±8.560; the corner piers run full height as pilasters.
+- **Ground storey** (stone, rock-faced, face at y 0; 0 → 4.30): stone piers 0.80 wide at the
+  corners and at x = ±3.424, ±6.848 and 0 (0.04 proud of the infill); clear bays 2.62 m:
+  - **G1 bank window** (x −10.27 … −7.25): stone infill with one opening **2.0 × 2.5 m** (sill
+    1.20, head 3.70), central mullion 0.12 and transom bar at 3.10 (4 lights), trim frame, stone
+    lintel flush; basement window 1.2 × 0.45 below (sill 0.25), dark glass.
+  - **G2 bank entrance** (x −6.45 … −3.82, centre −5.136): stone infill, **round-arched doorway
+    1.5 m wide**, threshold 0.90, spring 3.05, crown 3.80, rock-faced voussoir ring 0.30 with a
+    keystone; recessed 0.45; panelled double doors 1.5 × 1.9 (dark varnish, upper glazed panels),
+    transom bar at 2.80, semicircular fanlight. **Stoop**: stone, 2.1 m wide, 5 risers × 0.18,
+    4 treads × 0.30 (y −1.80 … −0.60) + landing y −0.60 … 0; stone cheek walls 0.25 thick with
+    sloping tops; **black iron handrail** on each cheek (end posts 0.05 sq., one top rail).
+  - **G3–G6 shop fronts** (centres x −1.712, +1.712, +5.136, +8.560): painted wood (trim) in
+    the 2.62 m opening: stone plinth 0 → 0.90; **recessed entrance 1.0 m wide × 0.9 m deep**
+    centred, half-glazed door 0.95 × 2.30 (0.90 → 3.20), transom to 3.60; display windows each
+    side (0.81 wide, bulkhead panel 0.90–1.30, glass 1.30–3.20); 3-light transom band 3.20–3.60;
+    plain fascia 3.60–4.30 (no lettering). **Stoop**: 5 risers, 1.0 m wide in the recess line,
+    4 treads y −1.20 … 0, landing in the recess; stone cheek walls 0.20 each side, no railings.
+    **G6** variant: entrance recess at the south side of the bay (display window 1.62 m on the
+    north), with the store door at the back and a second door (upper floors) in the recess's
+    south side wall.
+- **Belt course**: stone, 4.30–4.60, projects 0.12, front and full north side.
+- **2nd floor** (front 12, north 11): opening **0.95 × 1.95**, sill 5.00 (trim sill 0.08 thick,
+  proj 0.06), head 6.95; **flat stone lintel** 1.25 × 0.30 (6.95–7.25), 0.04 proud, trim
+  material; 1/1 double-hung sash, trim-colour frames, set 0.12 in.
+- **3rd floor**: **round-arched** opening 0.95 wide, sill 7.75, spring 9.30, crown 9.775;
+  1/1 sash with arched head; brick hood ring 0.15 wide, 0.05 proud; small trim keystone
+  0.20 × 0.30; trim sill as below.
+- **Roundels**: trim discs Ø 0.55, 0.06 proud (8-sided is fine), centre z 10.25, over
+  pilasters x = ±1.712, ±5.136, ±8.560 (6 on the front, one centred over each ground bay) and
+  on the north side over pilasters 1, 3, 5, 7, 9 (5).
+- **Frieze** 10.60–11.45: trim (painted galvanised iron), flat, with shallow raised panels
+  0.35 × 0.45, 0.02 proud, two per bay (≈ 0.86 m centres) on front and north side.
+- **Cornice** 11.45–12.20: bed moulding 0.10; **modillions** 0.12 w × 0.20 h × 0.40 deep at
+  0.57 m centres (3 per bay) under a corona projecting 0.75; top cap moulding 0.08. Front, full
+  north side, 0.8 m returns at the SW and NE corners.
+- **North (Bloomfield) side** (x −11.07; from front y 0 to rear y 20.32): NW corner pier
+  0.80, 11 bays at **1.72 m** (bay centres y = 1.66 + 1.72·k), rear corner pier 0.60; upper
+  floors as the front; ground storey rock-faced stone with one window per bay **0.95 × 2.60**
+  (sill 1.00, head 3.60, trim frame, 2/2 sash) and a basement window 0.80 × 0.40 (0.15–0.55)
+  under each. No door.
+- **Rear walls** (east; never photographed): common brick, no ornament; north part 4 windows
+  per floor, south part 3; segmental-headed 0.9 × 1.8 upstairs, 0.9 × 2.2 + one back door
+  0.9 × 2.1 on the ground floor of each part; stone sills. **Courtyard face** of the north part
+  (x +0.39, y 11.05 … 20.32): 2 plain windows on each upper floor.
+- **South wall**: plain common brick, no openings, sloping coping, chimney (see Massing).
+- Not modelled: gutters, downpipes, signs, lettering, upper-floor awnings, lamps, flagpole.
+
+**Materials & colours (1920)** — **6 materials = 6 draw calls**
+1. `brick` — walls, pilasters, hood rings, chimney, rear/south walls. Red-brown pressed brick
+   ≈ #8A4030 (front and north), common brick ≈ #87452F (south, rear, courtyard; tint only).
+   Reuse **`polyhaven/red_brick.jpg`**, tile 1.4 m.
+2. `stone` — rock-faced ground storey, piers, infill, belt course, voussoirs, plinths, stoops,
+   cheek walls. Light warm grey ≈ #A8A294. **New texture** (below), tile 3.0 m.
+3. `trim` — everything painted or smooth-pale: cornice, modillions, frieze and panels, lintels,
+   sills, keystones, roundels, shop fronts, bulkheads, fascias, window frames and sash.
+   Pale drab ≈ #B5AC98. Reuse **`county-offices/trim_paint_drab.jpg`**, tile 2.0 m.
+4. `glass` — plain colour, no texture, very dark blue-grey ≈ #1E2226, roughness 0.15.
+5. `dark` — doors (dark varnish ≈ #3A2A1F), iron handrails, roof surfaces, chimney cap.
+   Reuse **`county-offices/door_varnish_dark.jpg`**, tile 0.8 m.
+6. `awning` — 4 shop awnings. Faded red ≈ #9A4A3E and cream ≈ #DDD3BC stripes, 0.15 m each,
+   running down the slope. Texture `bank-building/awning_stripes.jpg` (1K) **generated locally**
+   by a small Pillow script (`tools/prepare_bank_textures.py`: stripes + light canvas noise), tile
+   0.6 m across the stripes. Not a download.
+- **New for asset-scout** (Poly Haven CC0, 1K colour, **1 map**): **coursed rock-faced (quarry-
+  faced) stone ashlar, light grey**, regular courses ≈ 0.45–0.55 m high, blocks 0.9–1.5 m long,
+  bumpy faces and thin joints (not random rubble, not smooth sawn blocks); real-world tile ≈ 3 m.
+  Save as `assets/textures/bank-building/stone_rockfaced.jpg`. Fallback if nothing fits: reuse
+  `courthouse/rock_wall_grey.jpg` (tile 1.8 m). Asset-scout also makes `awning_stripes.jpg`.
+
+**Weathering**: moderate (busy commercial block, 23 years old): soot under the cornice
+corona and on the frieze; dark streaks under every lintel, sill and roundel; brick darker on
+the shaded north side; grime and splash on the bottom 0.5 m of the stone and on stoop treads
+(worn darker in the middle); soot round the chimney top; awnings sun-bleached on top and
+slightly darker at the valance; a little rust under the handrail feet.
+
+**Budget**: **ordinary building, hard cap 10k triangles, target ~8.5k**: walls with openings
+~1.6k; 46 upper windows (frames + sash + glass, arched ones ≤ 70 tris) ~2.6k; 11 north ground
+windows + 13 basement/rear/courtyard openings ~0.8k; pilasters + caps ~0.5k; 75 modillions as
+simple blocks ~0.75k; cornice/frieze + 46 panels ~0.8k; 11 roundels ~0.2k; bank window,
+entrance arch, 5 shop fronts ~0.8k; 5 stoops + rails ~0.4k; awnings, roof, chimney ~0.1k. If
+over budget: flatten rear/courtyard windows to inset panels first, then drop frieze panels.
+**6 materials**, 1 new + 1 generated + 3 reused 1K colour maps, one **2K lightmap**
+`assets/textures/bank-building-lightmap.jpg` (the walls are large: 2K needed). Files:
+`tools/blender/bank_building.py` + `bank_building_bake.py`, `assets/models/source/bank_building.blend`,
+`assets/models/bank-building.glb` (≤ 5 MB, expect ~2 MB), previews
+`assets/models/previews/bank-building-*.png` (incl. matches to the 1907 NW and 1908 SW views).
+
+**Acceptance checks for the reviewer**
+1. L-shaped plan: front 22.14 m; north part 20.3 m deep, south part 11.05 m deep; origin at
+   the centre of the front stone face at sidewalk level, front −Y, **+X = south**.
+2. Front reads as **one continuous facade with 12 equal upper bays** divided by brick
+   pilasters; 2nd-floor windows rectangular with pale lintels, **3rd-floor windows round-arched**;
+   6 pale roundels, one centred over each ground bay.
+3. **Rock-faced grey stone ground storey** with a projecting belt course at ≈ 4.3–4.6 m on the
+   front and the whole north side; red brick above.
+4. Ground floor N→S: **bank window, arched bank entrance with stoop and black railings, then
+   four shop fronts** with recessed doors, small stone stoops and **striped awnings** (none on
+   the bank bays or upper windows).
+5. Cornice top 12.2 ± 0.2 m with modillions and a panelled frieze, running along the front and
+   the **entire Bloomfield (north) side**; short return on the south corner.
+6. North side: 11 bays, same window pattern as the front, stone ground storey with tall windows
+   and basement windows, no door.
+7. South wall plain brick with **one chimney near the front**; no roof form visible above the
+   cornice from the sidewalk.
+8. Nothing crosses the property line: stoops end ≈ 1.8 m (bank) / 1.2 m (shops) in front of the
+   wall; awnings ≈ 1.75 m.
+9. ≤ 10k triangles, **≤ 6 materials**, GLB ≤ 5 MB, 1K colour maps, 2K lightmap, TEXCOORD_0 + 1.
+   With the WSW sun the front is sunlit (pilaster, lintel, awning and stoop shadows visible); the
+   north side is in shade but its windows and roundels still read.
+
+**Integrator notes (scene, not the model)**
+- Replace `#bank-building` with the GLB at **(12.24, 0.15, −66.24)**, rotation 0 −90 0,
+  lightmap + LIGHTMAP_SCALE from the bake.
+- **Pave the front strip**: one box x 10.30 … 12.24, z −77.31 … −55.17, top y 0.15, texture
+  `polyhaven/sidewalk_concrete.jpg` (photos: paving runs up to the stoops). +1 draw call; the
+  same box can later be lengthened south for 68 Main (front at map px 4040 → x ≈ 12.66).
+- Expected draw-call change: kit placeholder (~6–7 calls) → GLB 6 + strip 1, i.e. about ±0.
+- Optional later (budget): telegraph pole at the curb before the bank (1906), fire hydrant on the
+  sidewalk near the Bloomfield corner (1907).
+
+**Differences 1906–08 vs 1920** (build 1920): the upper-window awnings of 1907–08 are left
+out; shop awning lettering is unreadable and omitted; the entrances may have changed by 1920
+(HCHS) — the 1906–08 layout is kept as the best evidence.
+
+**Pure guesses (owner to check)**
+1. Exact storey heights above the belt course (low-viewpoint postcards; only the 40' total is
+   measured).
+2. North side beyond the first 4 bays (11 bays, all windows, no side door) and the cornice
+   running its full length.
+3. Rear and courtyard walls, rear windows and doors; roof slopes and heights.
+4. Shop-front details (door recess, bulkheads, transoms) and the G6 upper-floor door.
+5. Colours: brick tone, stone grey, one pale drab for cornice and trim, awning stripe colours.
+6. Roundel placement on the north side and the frieze panel pattern.
+7. Stoop sizes; railings only on the bank stoop.
+8. Only one chimney.
+
 ## Constraints
 
 - A-Frame from a CDN, plain HTML/JS. No build tools or frameworks.
@@ -812,3 +1082,6 @@ Check licensing for every asset and note the source in the progress log.
 | 2026-11-03 | planner: Wurts Law Office (59 Main, c. 1811, Greek Revival remodel c. 1840) spec written and auto-approved (owner away). Sanborn sheet 2: 1-storey frame office, 8.0 m deep, portico front 4.7 m behind the property line → entity (−14.95, 0.02, −68.69). Width set to 4.70 m from the two HABS photos (map's 4.12 m would give a 1.7 m door). 1920 state: no rear T-wing (later addition per the HABS data form), flat roof, 4 square pillars, wreath frieze. No West Jersey History photo shows it. Target ~6k tris, 5 materials, no new textures. Next: asset-scout. |
 | 2026-11-03 | blender-builder + reviewer: Wurts Law Office built and baked (`assets/models/wurts-law-office.glb`, 7,627 triangles, 5 materials, 1.2 MB, 1K lightmap, LIGHTMAP_SCALE 1.1647; asset-scout skipped, grey planks copy made by `tools/prepare_wurts_textures.py`). Review round 1: PASS. |
 | 2026-11-03 | scene-integrator: Wurts Law Office GLB integrated at (−14.95, 0.02, −68.69), rotation 0 90 0; the kit placeholder at (−15.2, 0, −68.8) is gone; its front path narrowed to 1.2 m and re-centred on the portico (x −14.75 … −10.25). Optional shade tree skipped (draw-call budget). Tested: no console errors (only the pane's pointer-lock errors), faces Main St, lightmap reads on all 5 materials, step meets the path, nothing floats. Draw calls / triangles before → after: start view (0, 0, 18) 162 / 61.5k → 160 / 69.0k; opposite sidewalk (8.5, −68.69) 60 / 23.8k → 58 / 31.3k; in front on the road (−2, −68.69) 49 / 13.3k → 47 / 20.8k. (The placeholder cost ~7 calls; the GLB costs 5.) Screenshot `assets/models/previews/wurts-law-office-in-scene.png`. |
+| 2026-11-03 | planner: Bank Building / Flemington National Bank (56–66 Main, 1897, SE corner of Bloomfield Ave) spec written and auto-approved (owner away). Sanborn sheet 2: one L-shaped 3-storey brick block, 40', front 22.14 m, 20.3 m deep (56–58) / 11.05 m (62–66), front wall 1.95 m behind the property line → entity (12.24, 0.15, −66.24). 1906–08 cards: one continuous facade, 12 bays, rock-faced stone ground storey, arched 3rd-floor windows, roundels, modillion cornice on front and Bloomfield side, bank entrance + 4 shop fronts with stoops and striped awnings. The Post Office was across Bloomfield Ave (not this building). Ordinary (≤ 10k tris), 6 materials; 1 new Poly Haven texture (rock-faced ashlar) + 1 locally generated awning stripe. Next: asset-scout. |
+| 2026-11-03 | asset-scout + blender-builder + reviewer: Bank Building built and baked (`assets/models/bank-building.glb`, 8,808 triangles, 6 materials, 1.79 MB, 2K lightmap, LIGHTMAP_SCALE 1.1241). Review round 1: FIXES (stone too pale, chimney too low); round 2: PASS. |
+| 2026-11-03 | scene-integrator: Bank Building GLB integrated at (12.24, 0.15, −66.24), rotation 0 −90 0; the code-built placeholder at (10.6, 0, −66.2) is gone. The 1.98 m strip between the sidewalk and the front wall (x 10.30–12.28, z −77.31 … −55.17) is paved with one concrete box flush with the sidewalk top (`#bank-forecourt`, +1 draw call: the patch list is a flat plane in a different colour, so it couldn't be merged). Clear of 68 Main (z ≥ −54.45; the bank's south cornice return at z −54.37 is above 68's 7.5 m roof), Bloomfield Ave and 48–52 Main; walls skirt to y −0.05 so the north side meets the Bloomfield grade without a gap. Tested: no console errors (only the pane's pointer-lock errors), faces Main St, lightmap reads. Draw calls / triangles before → after: start view (0, 0, 18) 162 / 69.0k → 163 / 77.8k; in front on the road (0, −66) facing east 23 / 26.3k → 30 / 35.2k; west sidewalk (−8, −66) facing east 34 / 27.5k → 39 / 37.3k. Screenshot `assets/models/previews/bank-building-in-scene.png`. |

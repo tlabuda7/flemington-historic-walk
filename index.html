@@ -159,9 +159,20 @@
     </a-entity>
 
     <!-- East side (even numbers), north to south -->
-    <!-- 56–66 Main: the 3-storey "Bank Building" (bank, men's furnishings, drugs, shoes, confectionery) -->
-    <a-entity id="bank-building" position="10.6 0 -66.2" rotation="0 -90 0"
-      building="width: 22.9; height: 12.2; depth: 15.6; stories: 3; color: #a4583f; wall: brick; bays: 12; photo: "></a-entity>
+    <!-- Bank Building / Flemington National Bank (56–66 Main, 1897: bank, men's furnishings,
+         drugs, shoes, confectionery): Blender model with Poly Haven textures and baked
+         late-afternoon light. Built by tools/blender/bank_building.py + bank_building_bake.py.
+         Position = centre of the front stone wall face at sidewalk level, 1.94 m behind the
+         property line; the stoops project 1.8 m further west, to x 10.45. North wall on
+         Bloomfield Ave at z -77.31, south wall at z -55.17 (against 68 Main). Its walls skirt
+         0.2 m below the sidewalk top, so they meet the lower Bloomfield Ave grade without a gap. -->
+    <a-entity id="bank-building" position="12.24 0.15 -66.24" rotation="0 -90 0"
+      gltf-model="url(assets/models/bank-building.glb)"
+      baked-lighting="lightmap: assets/textures/bank-building-lightmap.jpg; intensity: 1.1241"></a-entity>
+    <!-- Paved strip between the sidewalk and the bank's front wall (x 10.30–12.28, flush with
+         the sidewalk top 0.15) along its 22.14 m frontage; the stoops stand on it. -->
+    <a-box id="bank-forecourt" position="11.29 0.075 -66.24" width="1.98" height="0.15" depth="22.14"
+      material="src: assets/textures/polyhaven/sidewalk_concrete.jpg; repeat: 0.66 7.4; roughness: 1"></a-box>
     <!-- 68 Main: restaurant, pool room upstairs -->
     <a-entity id="bldg-68-main" position="10.6 0 -51.7" rotation="0 -90 0"
       building="width: 5.5; height: 7.5; depth: 18; stories: 2; color: #c7b48e; wall: wood; bays: 2; photo: "></a-entity>
