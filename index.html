@@ -271,8 +271,10 @@
          so everything moves together. Start just south of the courthouse,
          facing north, with the courthouse ahead-left and the Union Hotel ahead-right.
          ============================================================ -->
-    <a-entity id="rig" position="0 0 18" locomotion="speed: 2; snapAngle: 45">
-      <!-- 1.6 m eye height on desktop; in VR the headset supplies the real height. -->
+    <!-- Rig y = 0.15 raises the viewer 15 cm (sidewalk height), in VR and on desktop. -->
+    <a-entity id="rig" position="0 0.15 18" locomotion="speed: 2; snapAngle: 45">
+      <!-- 1.6 m eye height on desktop (1.75 m with the rig offset); in VR the headset
+           supplies the real height, plus the rig's 0.15 m. -->
       <!-- stick-debug: temporary VR readout of thumbstick values. Delete it to remove. -->
       <a-entity id="camera" camera position="0 1.6 0"
         look-controls="pointerLockEnabled: true" stick-debug></a-entity>
