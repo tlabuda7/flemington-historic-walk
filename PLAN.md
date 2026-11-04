@@ -1833,6 +1833,19 @@ Buildings are named `bldg-w01`–`bldg-w08` (west side, north to south) and
 9. [ ] Audio: low-volume ambient loop, positional sounds near landmarks.
 10. [ ] Information points: short captions about each building's history.
 11. [ ] Performance pass on the Quest 2 (check draw calls, frame rate, texture sizes).
+       2026-11-04 draw-call pass ("texture-sheet pass", done in the browser, GLBs unchanged):
+       `baked-lighting` now merges each baked building into **one draw call** (all its 1024²
+       colour maps go into one sRGB texture array, one layer each, still tiling; per-vertex
+       layer + colour tint; same lightmap; plain colours skip the texture). Anything unusual
+       (alpha, non-1024 map, no uv1, skinned, multi-material) keeps the old path;
+       `merge: false` turns it off. Street trees: `instanced-trees` loads the tree GLB once
+       and draws all 12 with instancing (4 calls instead of 48). Look is pixel-identical
+       (differences only on a few edge pixels and Mr. Pickell's animation frame).
+       Draw calls / triangles before → after: start (0, 0.15, 18) 161 / 108.4k → 69 / 108.4k;
+       (0, −30) north 94 / 59.4k → 56 / 66.3k; (0, −60) south 156 / 92.4k → 74 / 92.4k;
+       west sidewalk (−8.5, −52) east 56 / 53.2k → 20 / 59.1k. Texture memory (estimate,
+       RGBA + mips) ~561 MB → ~458 MB (one tree model instead of 12 copies).
+       Placeholders (`building`, `kit-building`) unchanged. Still to check on the Quest: fps.
 12. [ ] Optional: host on HTTPS (e.g. GitHub Pages) to open directly in the Quest browser without Link.
 
 ## Later phases (owner's ideas, 2026-11-03)
@@ -2280,3 +2293,4 @@ Check licensing for every asset and note the source in the progress log.
 | 2026-11-03 | planner: Lovell's Restaurant (68 Main, 2-storey frame restaurant with pool room upstairs; 1870 front with an arch in the roofline; Fred Lovell's restaurant c. 1910–1935+, today Higgins News Agency, refaced) spec written and auto-approved (owner away). Sanborn sheet 2: 18.39 m deep, front 2.36 m behind the property line; width 6.00 m (north wall put against the bank, photos show the fronts touching) → entity (12.66, 0.15, −52.13). Primary photos: Lovell's Restaurant (after 1910) and the c. 1900 "Oysters" front (Goodspeed Histories), 1908 colour card. Ordinary (target ~5k tris), **4 materials** (paint, dark, signs, stone), no downloads (1 generated sign atlas), 2K lightmap, hotel/bank occluder proxies for the bake. Next: blender-builder. |
 | 2026-11-04 | scene-integrator: John B. Pickell placed at (9.50, 0.15, −8.45), rotation 0 −60 0, with Idle/Talk via aframe-extras 7.7.0 `animation-mixer`, blob shadow and a talking dialogue panel (`js/people.js`, `data/dialogue/pickell.json`, right-hand laser in VR, mouse/keys 1–3 on desktop). No console errors; panel opens at 2.5 m, closes past 4 m; all 11 nodes walked through. Draw calls / triangles: start view 159 / 90.9k → 161 / 103.7k; near him 102 → 103 with the panel open (+1 laser line in VR). Screenshots `assets/models/previews/npc-pickell-in-scene.png`, `npc-pickell-dialogue.png`. |
 | 2026-11-04 | scene-integrator: Lovell's Restaurant (68 Main) GLB integrated (`assets/models/lovells-restaurant.glb`, 4,752 triangles, 4 materials, lightmap intensity 1.2462) at (12.66, 0.15, −52.13), rotation 0 −90 0, front wall 2.36 m behind the property line; the code-built placeholder at (10.6, 0, −51.7) is gone (id `bldg-68-main` kept). `#bank-forecourt` enlarged to x 10.30–12.66, z −77.31 … −49.13 (centre 11.48, −63.22; 2.36 × 28.18 m) so one box paves the strip in front of both the bank and 68 (runs 0.42 m under the bank's front wall, no gap; no extra draw call). The 3.5 m gap to the Union Hotel shows ground; the bank seam and cornice return show no z-fighting (68's side cornice dies into the bank's south wall). Tested: no console errors, faces Main St, lightmap and signs read, Mr. Pickell's panel still opens beside him. Draw calls / triangles before → after: start view (0, 0.15, 18) 161 / 103.7k → 161 / 108.4k; in front on the road (2, −52.13) facing east 40 / 43.8k → 40 / 48.5k; west sidewalk (−8, −52.13) 55 / 48.4k → 55 / 53.1k (the placeholder's calls are replaced by the GLB's 4 materials). Screenshot `assets/models/previews/lovells-restaurant-in-scene.png`. |
+| 2026-11-04 | scene-integrator: draw-call pass. `baked-lighting` merges each of the 8 baked buildings into one draw call (texture array + per-vertex layer/tint; all 8 merged, none skipped: courthouse 12 materials, Union Hotel 11, county offices 10, bank 6, Wurts 5, Nevius 5, 65 Main 4, Lovell's 4); street trees drawn with `instanced-trees` (one GLB load, 4 instanced calls). Start view 161 → 69 draw calls, same triangles (108.4k); (0, −60) south 156 → 74. Before/after screenshots `assets/models/previews/perf-before-*.png` / `perf-after-*.png` match pixel for pixel apart from edge pixels and Mr. Pickell's animation; his dialogue still opens. No console errors. |

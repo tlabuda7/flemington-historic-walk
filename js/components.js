@@ -518,11 +518,20 @@ AFRAME.registerComponent('locomotion', {
  * Every material becomes unlit (MeshBasicMaterial): colour texture x lightmap.
  * The scene's lights no longer affect the model, and it is very cheap to draw.
  * `intensity` is the LIGHTMAP_SCALE value the bake script prints.
+ *
+ * merge (on by default): the whole building is then drawn in ONE draw call instead of
+ * one per material. All its colour textures go into one texture array (one layer each,
+ * still tiling normally), and all its meshes become one mesh whose vertices remember
+ * their texture layer and colour tint. Anything unusual (see mergeProblem) keeps the
+ * normal one-material-per-call path. `merge: false` turns it off.
  */
+const MERGE_SIZE = 1024;   // colour textures must be this size to go into the array
+
 AFRAME.registerComponent('baked-lighting', {
   schema: {
     lightmap:  { default: '' },
-    intensity: { default: 1.0 }
+    intensity: { default: 1.0 },
+    merge:     { default: true }
   },
 
   init() {
@@ -536,10 +545,27 @@ AFRAME.registerComponent('baked-lighting', {
   },
 
   apply() {
-    const mesh = this.el.getObject3D('mesh');
-    if (!mesh) return;
-    mesh.traverse((obj) => {
-      if (!obj.isMesh || obj.material.isMeshBasicMaterial) return;
+    const root = this.el.getObject3D('mesh');
+    if (!root || root.userData.bakedLightingDone) return;
+    root.userData.bakedLightingDone = true;
+
+    const meshes = [];
+    root.traverse((obj) => { if (obj.isMesh) meshes.push(obj); });
+
+    let merged = [];
+    const skipped = [];
+    if (this.data.merge && this.el.sceneEl.renderer.capabilities.isWebGL2) {
+      for (const m of meshes) {
+        const why = this.mergeProblem(m);
+        if (why) skipped.push(`${m.name} (${why})`);
+        else merged.push(m);
+      }
+      if (merged.length < 2) merged = [];   // nothing to gain
+    }
+
+    // Meshes that are not merged: one unlit material each (the original path).
+    for (const obj of meshes) {
+      if (merged.includes(obj)) continue;
       const old = obj.material;
       obj.material = new THREE.MeshBasicMaterial({
         map: old.map,
@@ -548,12 +574,213 @@ AFRAME.registerComponent('baked-lighting', {
         lightMapIntensity: this.data.intensity   // undoes the bake's 0..1 scaling
       });
       old.dispose();
+    }
+
+    const name = this.el.id || 'model';
+    if (!merged.length) {
+      console.info(`baked-lighting ${name}: not merged` +
+        (this.data.merge ? ` (${skipped.join(', ') || 'too few meshes'})` : ' (merge: false)'));
+      return;
+    }
+    const nMaterials = new Set(merged.map((m) => m.material)).size;
+    this.mergeMeshes(root, merged);
+    console.info(`baked-lighting ${name}: merged ${nMaterials} materials → 1 call` +
+      (skipped.length ? `; kept separate: ${skipped.join(', ')}` : ''));
+  },
+
+  // Why a mesh can't go into the merged mesh ('' = it can).
+  mergeProblem(m) {
+    const mat = m.material;
+    const geo = m.geometry;
+    if (m.isSkinnedMesh || m.isInstancedMesh || m.morphTargetInfluences) return 'skinned/instanced/morph';
+    if (Array.isArray(mat)) return 'multi-material';
+    if (mat.transparent || mat.alphaTest > 0 || mat.opacity < 1) return 'transparent/alpha';
+    if (!geo.attributes.uv1) return 'no uv1';
+    if (geo.morphAttributes && Object.keys(geo.morphAttributes).length) return 'morph targets';
+    const map = mat.map;
+    if (map) {
+      const img = map.image;
+      if (!img || img.width !== MERGE_SIZE || img.height !== MERGE_SIZE) return 'texture not 1024²';
+      if (!geo.attributes.uv) return 'no uv';
+      if (map.channel !== 0 || map.flipY || map.rotation !== 0 || map.offset.x || map.offset.y ||
+          map.repeat.x !== 1 || map.repeat.y !== 1) return 'texture transform';
+      if (map.wrapS !== THREE.RepeatWrapping || map.wrapT !== THREE.RepeatWrapping) return 'not repeat-wrapped';
+    }
+    return '';
+  },
+
+  mergeMeshes(root, meshes) {
+    // 1) One texture-array layer per distinct colour image.
+    const layerOf = new Map();       // texture source uuid -> layer
+    const images = [];
+    let anisotropy = 1;
+    for (const m of meshes) {
+      const map = m.material.map;
+      if (!map || layerOf.has(map.source.uuid)) continue;
+      layerOf.set(map.source.uuid, images.length);
+      images.push(map.image);
+      anisotropy = Math.max(anisotropy, map.anisotropy);
+    }
+    const S = MERGE_SIZE;
+    const layerBytes = S * S * 4;
+    const pixels = new Uint8Array(layerBytes * Math.max(1, images.length));
+    const canvas = makeCanvas(S, S);
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    images.forEach((img, i) => {
+      ctx.clearRect(0, 0, S, S);
+      ctx.drawImage(img, 0, 0, S, S);       // no flip: glTF maps use flipY = false
+      pixels.set(ctx.getImageData(0, 0, S, S).data, i * layerBytes);
     });
+    if (!images.length) pixels.fill(255);   // only plain colours: one white layer
+    const arrayMap = new THREE.DataArrayTexture(pixels, S, S, Math.max(1, images.length));
+    arrayMap.format = THREE.RGBAFormat;
+    arrayMap.type = THREE.UnsignedByteType;
+    arrayMap.colorSpace = THREE.SRGBColorSpace;
+    arrayMap.wrapS = arrayMap.wrapT = THREE.RepeatWrapping;
+    arrayMap.magFilter = THREE.LinearFilter;
+    arrayMap.minFilter = THREE.LinearMipmapLinearFilter;
+    arrayMap.generateMipmaps = true;
+    arrayMap.anisotropy = anisotropy;
+    arrayMap.needsUpdate = true;
+    // Once on the GPU, drop the CPU copy (tens of MB per building).
+    arrayMap.onUpdate = () => { arrayMap.image.data = null; arrayMap.onUpdate = null; };
+
+    // 2) One geometry in the model root's local space.
+    root.updateMatrixWorld(true);
+    const toRoot = new THREE.Matrix4().copy(root.matrixWorld).invert();
+    let nVerts = 0;
+    let nIdx = 0;
+    for (const m of meshes) {
+      nVerts += m.geometry.attributes.position.count;
+      nIdx += m.geometry.index ? m.geometry.index.count : m.geometry.attributes.position.count;
+    }
+    const pos = new Float32Array(nVerts * 3);
+    const nor = new Float32Array(nVerts * 3);
+    const uv = new Float32Array(nVerts * 2);
+    const uv1 = new Float32Array(nVerts * 2);
+    const layer = new Float32Array(nVerts);
+    const tint = new Float32Array(nVerts * 3);
+    const index = nVerts > 65535 ? new Uint32Array(nIdx) : new Uint16Array(nIdx);
+    const mat4 = new THREE.Matrix4();
+    const nmat = new THREE.Matrix3();
+    const v = new THREE.Vector3();
+    let vo = 0;
+    let io = 0;
+    for (const m of meshes) {
+      const g = m.geometry;
+      const a = g.attributes;
+      const mat = m.material;
+      mat4.multiplyMatrices(toRoot, m.matrixWorld);
+      nmat.getNormalMatrix(mat4);
+      const L = mat.map ? layerOf.get(mat.map.source.uuid) : -1;   // -1 = plain colour
+      const c = mat.color;
+      const n = a.position.count;
+      for (let i = 0; i < n; i++) {
+        const k = vo + i;
+        v.fromBufferAttribute(a.position, i).applyMatrix4(mat4);
+        pos[k * 3] = v.x; pos[k * 3 + 1] = v.y; pos[k * 3 + 2] = v.z;
+        if (a.normal) {
+          v.fromBufferAttribute(a.normal, i).applyMatrix3(nmat).normalize();
+          nor[k * 3] = v.x; nor[k * 3 + 1] = v.y; nor[k * 3 + 2] = v.z;
+        }
+        if (a.uv) { uv[k * 2] = a.uv.getX(i); uv[k * 2 + 1] = a.uv.getY(i); }
+        uv1[k * 2] = a.uv1.getX(i); uv1[k * 2 + 1] = a.uv1.getY(i);
+        layer[k] = L;
+        tint[k * 3] = c.r; tint[k * 3 + 1] = c.g; tint[k * 3 + 2] = c.b;
+      }
+      // Mirrored transforms flip the winding; swap two corners to keep front faces.
+      const flip = mat4.determinant() < 0;
+      const count = g.index ? g.index.count : n;
+      for (let i = 0; i < count; i += 3) {
+        const i0 = g.index ? g.index.getX(i) : i;
+        const i1 = g.index ? g.index.getX(i + 1) : i + 1;
+        const i2 = g.index ? g.index.getX(i + 2) : i + 2;
+        index[io++] = vo + i0;
+        index[io++] = vo + (flip ? i2 : i1);
+        index[io++] = vo + (flip ? i1 : i2);
+      }
+      vo += n;
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    geo.setAttribute('normal', new THREE.BufferAttribute(nor, 3));
+    geo.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+    geo.setAttribute('uv1', new THREE.BufferAttribute(uv1, 2));
+    geo.setAttribute('aLayer', new THREE.BufferAttribute(layer, 1));
+    geo.setAttribute('aTint', new THREE.BufferAttribute(tint, 3));
+    geo.setIndex(new THREE.BufferAttribute(index, 1));
+    geo.computeBoundingBox();
+    geo.computeBoundingSphere();
+
+    // 3) One unlit material: array texture x per-vertex tint x lightmap.
+    // Same maths as MeshBasicMaterial's map x color: the array is sRGB (decoded to linear
+    // by the GPU when sampled, like the original maps) and the tint is three.js's linear colour.
+    const material = new THREE.MeshBasicMaterial({
+      lightMap: this.texture,
+      lightMapIntensity: this.data.intensity
+    });
+    material.userData.arrayMap = arrayMap;
+    material.onBeforeCompile = (shader) => {
+      shader.uniforms.arrayMap = { value: arrayMap };
+      shader.vertexShader = shader.vertexShader
+        .replace('#include <common>', `#include <common>
+          attribute float aLayer;
+          attribute vec3 aTint;
+          flat varying float vLayer;
+          varying vec3 vTint;
+          varying vec2 vArrayUv;`)
+        .replace('#include <uv_vertex>', `#include <uv_vertex>
+          vLayer = aLayer;
+          vTint = aTint;
+          vArrayUv = uv;`);
+      shader.fragmentShader = shader.fragmentShader
+        .replace('#include <common>', `#include <common>
+          uniform highp sampler2DArray arrayMap;
+          flat varying float vLayer;
+          varying vec3 vTint;
+          varying vec2 vArrayUv;`)
+        .replace('#include <map_fragment>', `
+          // Sample outside the branch so mipmap derivatives stay valid.
+          vec4 arrayTexel = texture(arrayMap, vec3(vArrayUv, max(vLayer, 0.0)));
+          diffuseColor.rgb *= (vLayer < 0.0 ? vec3(1.0) : arrayTexel.rgb) * vTint;`);
+    };
+    material.customProgramCacheKey = () => 'baked-lighting-merged';
+
+    // 4) Swap in the merged mesh; free the old meshes, materials and textures.
+    const oldTextures = new Set();
+    const oldMaterials = new Set();
+    for (const m of meshes) {
+      if (m.material.map) oldTextures.add(m.material.map);
+      oldMaterials.add(m.material);
+      m.geometry.dispose();
+      m.removeFromParent();
+    }
+    // (Meshes kept separate are still in root and keep their textures.)
+    oldMaterials.forEach((mt) => mt.dispose());
+    root.traverse((o) => { if (o.isMesh && o.material.map) oldTextures.delete(o.material.map); });  // still used
+    oldTextures.forEach((t) => {
+      t.dispose();
+      if (t.image && t.image.close) t.image.close();   // ImageBitmap
+    });
+    // Remove groups left empty by the merge.
+    const empties = [];
+    root.traverse((o) => { if (o !== root && !o.isMesh && !o.children.length) empties.push(o); });
+    empties.forEach((o) => o.removeFromParent());
+
+    const mergedMesh = new THREE.Mesh(geo, material);
+    mergedMesh.name = 'baked-merged';
+    root.add(mergedMesh);
+    this.merged = mergedMesh;
   },
 
   remove() {
     this.el.removeEventListener('model-loaded', this.onLoaded);
     this.texture.dispose();
+    if (this.merged) {
+      this.merged.geometry.dispose();
+      this.merged.material.userData.arrayMap.dispose();
+      this.merged.material.dispose();
+    }
   }
 });
 
@@ -633,6 +860,74 @@ AFRAME.registerComponent('foliage', {
 
   remove() {
     this.el.removeEventListener('model-loaded', this.onLoaded);
+  }
+});
+
+/* ------------------------------------------------------------------ */
+/* instanced-trees                                                     */
+/* ------------------------------------------------------------------ */
+/*
+ * Many copies of one tree model drawn with instancing: the model is loaded once and
+ * each of its parts (bark, leaves, soil, edging) is ONE draw call for all the trees.
+ * Each child entity marks one tree (position, rotation, scale); it has no model itself:
+ *
+ *   <a-entity id="street-trees" instanced-trees="src: url(assets/models/street-tree.glb)">
+ *     <a-entity id="tree-1" position="7.5 0.175 -44" rotation="0 90 0" scale="1 1 1"></a-entity>
+ *   </a-entity>
+ *
+ * Leaf materials get the same treatment as `foliage` (hard cut-out, double-sided).
+ * The trees are lit by the scene's lights, exactly as single gltf-model trees would be.
+ */
+AFRAME.registerComponent('instanced-trees', {
+  schema: {
+    src: { type: 'model' }
+  },
+
+  init() {
+    new THREE.GLTFLoader().load(this.data.src, (gltf) => this.build(gltf.scene),
+      undefined, (err) => console.error('instanced-trees: could not load', this.data.src, err));
+  },
+
+  build(model) {
+    // One transform per child entity, relative to this entity.
+    const trees = Array.from(this.el.children).filter((c) => c.object3D);
+    const matrices = trees.map((c) => { c.object3D.updateMatrix(); return c.object3D.matrix.clone(); });
+
+    model.updateMatrixWorld(true);
+    const group = new THREE.Group();
+    model.traverse((obj) => {
+      if (!obj.isMesh) return;
+      // Bake the part's own offset inside the model into its geometry.
+      const geo = obj.geometry.clone().applyMatrix4(obj.matrixWorld);
+      const m = obj.material;
+      if (m.map && (m.transparent || m.alphaTest > 0 || m.name.includes('Leaves'))) {
+        m.transparent = false;
+        m.alphaTest = 0.5;
+        m.depthWrite = true;
+        m.side = THREE.DoubleSide;
+      }
+      const inst = new THREE.InstancedMesh(geo, m, matrices.length);
+      matrices.forEach((mx, i) => inst.setMatrixAt(i, mx));
+      inst.instanceMatrix.needsUpdate = true;
+      inst.computeBoundingBox();
+      inst.computeBoundingSphere();   // covers every tree, so none pops out at the edges
+      inst.name = obj.name;
+      group.add(inst);
+      obj.geometry.dispose();
+    });
+    this.el.setObject3D('mesh', group);
+  },
+
+  remove() {
+    const group = this.el.getObject3D('mesh');
+    if (!group) return;
+    group.children.forEach((inst) => {
+      inst.geometry.dispose();
+      if (inst.material.map) inst.material.map.dispose();
+      inst.material.dispose();
+      inst.dispose();
+    });
+    this.el.removeObject3D('mesh');
   }
 });
 

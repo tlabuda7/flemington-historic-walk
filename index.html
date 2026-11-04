@@ -220,20 +220,22 @@
          the largest pit (scale 1.15 → half-width 0.83 m) clear of the curb (inner edge ±6.64).
          Rotations are multiples of 90° so the pits line up with the street; the scales
          vary so the trees don't look stamped.
+         Each child below marks one tree. `instanced-trees` (js/components.js) loads the model
+         once and draws all the trees together (4 draw calls in total instead of 4 per tree).
          ============================================================ -->
-    <a-entity id="street-trees">
-      <a-entity id="tree-hotel-1" position="7.5 0.175 -44"   rotation="0 0 0"  scale="1.05 1.05 1.05" gltf-model="url(assets/models/street-tree.glb)" foliage></a-entity>
-      <a-entity id="tree-hotel-2" position="7.5 0.175 -39.8" rotation="0 90 0" scale="0.92 0.95 0.92" gltf-model="url(assets/models/street-tree.glb)" foliage></a-entity>
-      <a-entity id="tree-hotel-3" position="7.5 0.175 -35.6" rotation="0 180 0"  scale="1.1 1.08 1.1"   gltf-model="url(assets/models/street-tree.glb)" foliage></a-entity>
-      <a-entity id="tree-hotel-4" position="7.5 0.175 -31.4" rotation="0 270 0" scale="0.97 1 0.97"    gltf-model="url(assets/models/street-tree.glb)" foliage></a-entity>
-      <a-entity id="tree-hotel-5" position="7.5 0.175 -27.2" rotation="0 90 0" scale="1.02 0.94 1.02" gltf-model="url(assets/models/street-tree.glb)" foliage></a-entity>
-      <a-entity id="tree-hotel-6" position="7.5 0.175 -23"   rotation="0 0 0" scale="0.9 0.9 0.9"    gltf-model="url(assets/models/street-tree.glb)" foliage></a-entity>
-      <a-entity id="tree-hotel-7" position="7.5 0.175 -18.8" rotation="0 180 0"  scale="1.12 1.1 1.12"  gltf-model="url(assets/models/street-tree.glb)" foliage></a-entity>
-      <a-entity id="tree-west-1"  position="-7.5 0.175 -2.6"  rotation="0 270 0" scale="0.85 0.88 0.85" gltf-model="url(assets/models/street-tree.glb)" foliage></a-entity>
-      <a-entity id="tree-west-2"  position="-7.5 0.175 -11.5" rotation="0 0 0" scale="0.9 0.92 0.9"   gltf-model="url(assets/models/street-tree.glb)" foliage></a-entity>
-      <a-entity id="tree-west-3"  position="-7.5 0.175 -24"   rotation="0 90 0"   scale="1.15 1.12 1.15" gltf-model="url(assets/models/street-tree.glb)" foliage></a-entity>
-      <a-entity id="tree-west-4"  position="-7.5 0.175 -33"   rotation="0 180 0" scale="1.05 1.1 1.05"  gltf-model="url(assets/models/street-tree.glb)" foliage></a-entity>
-      <a-entity id="tree-west-5"  position="-7.5 0.175 -60"   rotation="0 270 0" scale="1 1 1"         gltf-model="url(assets/models/street-tree.glb)" foliage></a-entity>
+    <a-entity id="street-trees" instanced-trees="src: url(assets/models/street-tree.glb)">
+      <a-entity id="tree-hotel-1" position="7.5 0.175 -44"   rotation="0 0 0"  scale="1.05 1.05 1.05"></a-entity>
+      <a-entity id="tree-hotel-2" position="7.5 0.175 -39.8" rotation="0 90 0" scale="0.92 0.95 0.92"></a-entity>
+      <a-entity id="tree-hotel-3" position="7.5 0.175 -35.6" rotation="0 180 0"  scale="1.1 1.08 1.1"  ></a-entity>
+      <a-entity id="tree-hotel-4" position="7.5 0.175 -31.4" rotation="0 270 0" scale="0.97 1 0.97"   ></a-entity>
+      <a-entity id="tree-hotel-5" position="7.5 0.175 -27.2" rotation="0 90 0" scale="1.02 0.94 1.02"></a-entity>
+      <a-entity id="tree-hotel-6" position="7.5 0.175 -23"   rotation="0 0 0" scale="0.9 0.9 0.9"   ></a-entity>
+      <a-entity id="tree-hotel-7" position="7.5 0.175 -18.8" rotation="0 180 0"  scale="1.12 1.1 1.12" ></a-entity>
+      <a-entity id="tree-west-1"  position="-7.5 0.175 -2.6"  rotation="0 270 0" scale="0.85 0.88 0.85"></a-entity>
+      <a-entity id="tree-west-2"  position="-7.5 0.175 -11.5" rotation="0 0 0" scale="0.9 0.92 0.9"  ></a-entity>
+      <a-entity id="tree-west-3"  position="-7.5 0.175 -24"   rotation="0 90 0"   scale="1.15 1.12 1.15"></a-entity>
+      <a-entity id="tree-west-4"  position="-7.5 0.175 -33"   rotation="0 180 0" scale="1.05 1.1 1.05" ></a-entity>
+      <a-entity id="tree-west-5"  position="-7.5 0.175 -60"   rotation="0 270 0" scale="1 1 1"        ></a-entity>
     </a-entity>
     <!-- Nevius Store / Fulper's Dry Goods Building (78 Main, 3-storey brick Italianate store,
          front c. 1880): Blender model with Poly Haven textures and baked late-afternoon light.
