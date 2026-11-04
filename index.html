@@ -11,11 +11,12 @@
        which plays the people's animation clips (Idle, Talk). -->
   <script src="https://cdn.jsdelivr.net/npm/aframe-extras@7.7.0/dist/aframe-extras.loaders.min.js"></script>
   <!-- Our own code: shared components, the building kit, the modelled landmarks,
-       and the townspeople you can talk to. -->
+       the townspeople you can talk to, and the street sounds. -->
   <script src="js/components.js"></script>
   <script src="js/kit.js"></script>
   <script src="js/landmarks.js"></script>
   <script src="js/people.js"></script>
+  <script src="js/ambience.js"></script>
 
   <style>
     /* On-screen help for desktop. Not visible inside the headset. */
@@ -37,17 +38,21 @@
     In VR: left stick walks (hold left trigger to walk faster), right stick snap-turns.<br>
     <b>Talking to people:</b> walk up to someone (within a few steps) and they speak.
     Pick a reply with 1 / 2 / 3 or a mouse click; in VR point the right controller at it
-    and pull the right trigger. Walk away to end the conversation.
+    and pull the right trigger. Walk away to end the conversation.<br>
+    <b>Sound</b> starts with your first click or key press (or Enter VR); M mutes / unmutes.
   </div>
 
   <!--
     SCENE SETUP
     - renderer: antialiasing on; foveation lowers detail at the lens edges on Quest.
     - fog: warm exponential haze; colour matches the sky's horizon colour.
+    - street-ambience: town sounds, birds, unseen passing wagons and Model Ts, the church
+      bell (js/ambience.js; clips in assets/audio/, listed in SOURCES.md).
   -->
   <a-scene
     renderer="antialias: true; foveationLevel: 1"
-    fog="type: exponential; color: #ecdfc4; density: 0.011">
+    fog="type: exponential; color: #ecdfc4; density: 0.011"
+    street-ambience>
 
     <!-- ============================================================
          SKY AND LIGHT

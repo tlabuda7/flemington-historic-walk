@@ -44,6 +44,7 @@ Decisions (2026-11-02):
 | Frame Dwelling at 65 Main (old no. 510) | written, auto-approved (owner away) | reused, 1 recoloured copy (asset-scout skipped; brown_planks_05 → clapboard_cream made by the builder; roof_slates_03 + red_brick reused) | done (6.3k tris, 4 materials, 1.0 MB, 2K lightmap, LIGHTMAP_SCALE 1.274) | round 1: PASS | yes (GLB, 2026-11-03) |
 | Lovell's Restaurant (68 Main) | written, auto-approved (owner away) | reused + 2 generated (asset-scout skipped; clapboard_cream reused; signs_atlas + stone_bluestone (lightened concrete_floor_worn_001) made by the builder) | done, round-1 fixes applied (4.75k tris, 4 materials, 0.77 MB, 2K lightmap, LIGHTMAP_SCALE 1.2462) | round 2: PASS (round 1: awning raised/shortened, glazed doors, lighter stone; LIGHTMAP_SCALE now 1.2462) | yes (2026-11-04) at (12.66, 0.15, −52.13); bank forecourt extended over its front strip |
 | Test person 1: John B. Pickell, clerk at the Nevius store (78 Main) | written, auto-approved (owner away) | done (Quaternius UAL Standard rig + clips incl. Idle_Talking_Loop; UBC Standard = Superhero bodies only, no Regular; MakeHuman system assets + MPFB 2.0.18 zip, not installed; 3 Poly Haven cloth/leather maps + 3 tinted) | done, round-1 fixes applied (12.8k tris, 65 bones, 1 mesh / 1 material / 1 2K atlas, 1.25 MB; Idle 6 s, Talk 3 s, Walk 1.33 s; MPFB head + hands) | round 2: PASS (round 1 FIXES: moustache, stance/crotch, shoulder and collar, jacket fronts, cuffs, gaze, chain) | **yes** (9.50, 0.15, −8.45), talks (js/people.js) |
+| Street ambiance pass 1: sound + street props (`street-props.glb`, `assets/audio/`) | written, auto-approved (owner away) | done (3 Poly Haven maps + 3 recoloured, 3 reused; 16 audio clips, 1.96 MB / 250 s; bed = #0659 instead of #1911) | — | — | sound: yes (2026-11-04, `js/ambience.js`); props: pending |
 
 ## Building specs
 
@@ -1876,6 +1877,310 @@ Order agreed with the owner: finish 65 Main → **one test person** → 68 Main 
 - Background: the rest of the town beyond the walkable street (distant buildings, trees, hills,
   sky) as cheap low-detail scenery.
 
+## Street ambiance
+
+(Non-building items that make the street feel lived in. Same pipeline: planner → asset-scout →
+blender-builder → reviewer → scene-integrator.)
+
+### Pass 1: sound and street props
+
+**Status:** assets ready (asset-scout, 2026-11-04). Textures in `assets/textures/street-props/`
+(3 new Poly Haven maps + 3 re-coloured copies by `tools/prepare_street_props_textures.py`;
+reused `polyhaven/metal_plate_02`, `polyhaven/wood_table_worn`, `street-tree/granite_tile_03`).
+Substitutions: rough granite = `rock_boulder_dry` greyed (`granite_wall` has block joints);
+dressed granite = joint-free seamless copy of `granite_tile_03`. Audio: 16 mono OGG files in
+`assets/audio/`, 1.96 MB, 250 s, ~−20 LUFS; bed = #0659 "Wind in a Tree" (not #1911, which has
+loud crickets and dense European birdsong). Next: blender-builder (`street-props.glb`),
+reviewer, scene-integrator (placement, wires, sound).
+
+**Orchestrator decisions**
+- Auto-approved, owner away (2026-11-04). The owner approved the direction ("sound plus a batch
+  of street props: fast win, makes the street feel lived in"). Open questions below were settled
+  from the photos and the 1921 Sanborn map; the owner can check them later.
+
+#### Sources
+
+Photos (local only, `assets/photos/reference/`), what each shows at street level:
+
+| Photo | Date | Viewpoint | Street furniture shown |
+|-------|------|-----------|------------------------|
+| `flmngtndrinkingfountainbycrthous.jpg` | c. 1910 | close-up, looking W at the county building | **Primary for the fountain.** Rough-faced granite monolith with a rounded top, horse-head relief in a smoothed oval, round dressed bowl in front, dark recess above the bowl, small arched niche at the bottom left, iron 4-arm holder with a white globe on top. Behind: brick wall, "SHERIFF'S OFFICE" in a window, "DE…" sign, stoops with iron rails = County Offices (69–71). |
+| `flemington_-_union_hotel_-_union_hotel_-_1910s.jpg`, `flmngtndcmuirheadsunionhtl10.jpg` | 1910s (Model T) | from the W side looking E at the hotel | The same fountain (back face, globe on top) in the foreground at the **west curb**, roughly opposite the hotel centre. |
+| `flmngtnunionhtlwthsnow.jpg`, `flemington_-_the_union_hotel_in_winter.jpg` | c. 1910 | same | Fountain with globe again, sleighs in the road. |
+| `flmngtncountycrthousvu09.jpg` | 1909 | NE of the courthouse | Fountain (globe) at the west curb N of the portico; tall smooth pole at the curb S of the portico; bicycle. |
+| `flemington_-_some_business_blocks_on_main_street_-_1907.jpg`, `flmgtnmainststores.jpg` | 1907 / 1910s | E sidewalk at 78 Main, looking S | **Primary for poles.** Wooden pole at the east curb in front of 80–82 Main: two crossarms with glass insulators, a lamp on a short bracket at ~⅓ height; wires along the street and crossing it; low granite carriage-step blocks at the curb in front of 78 Main and by the pole; a sandwich board at the curb further S; crates under the awnings. |
+| `flmngtncntycourthsview06.jpg`, `flmngtnhtdncntycrtandbldg05.jpg` | 1906 / 1905 | SE of the courthouse | Wooden pole with crossarm and bracket at the **west curb** in front of the County Offices. |
+| `flmngtncntybldngsvuof08.jpg`, `flmngtncrthouspublcbldg08.jpg` | 1908 | SE | Square stone posts (~1 m) at the west curb in front of the courthouse / County Offices (hitching posts). |
+| `flmngtnpobankunionhtl07.jpg` | 1907 | N of Bloomfield Ave, looking S | Fire hydrant at the east curb by the Bloomfield corner; bicycle at the curb; sandwich board near the hotel. |
+| `flmingtnporichardsbldgunionhtl.jpg`, `flmngtnmainstrichardsbldgpo06.jpg` | 1906 | same | Wooden pole, one long crossarm, at the east curb at the bank's Bloomfield corner; crates and a bicycle at the curb. |
+| `flmngtnmainstrycolrvu10.jpg` | 1910 | street view, trees | **Enclosed arc lamp hung over the street** on a span wire (reflector cap + globe). |
+| `flmngtnbankandpovu08.jpg`, `flmngtnpoandnatbank08.jpg` | 1908 | Bloomfield corner | Horse and wagon at the curb (vehicles: later pass), poles. |
+| `flmngtnunionhtlvu20s.jpg`, `flemington_-_the_union_hotel_with_parked_cars.jpg`, `flmngtnunionhtl.jpg` | late 1920s–early 1930s (car styles) | W side | Ornamental lamp standards with lantern heads and wires across the hotel front. **Later than 1920: not used.** Whitewashed lower tree trunks (note for the tree pass). |
+
+HABS photos (1963) show no period street furniture; not used.
+
+1921 Sanborn (sheet 2 unless noted; `x = (px − 3797) × 0.0521`, `z = (py − 6900) × 0.0521`):
+- "T.H." hydrant at px (3675, 6815) → x −6.36, z −4.43 (west curb, in front of the courthouse;
+  repeated on sheet 3 at (3670, 1222)).
+- "T.H." hydrant at px (3910, 5155) → x +5.9, z −90.9 (east curb, N corner of Bloomfield Ave;
+  matches the 1907 card).
+- "F.A." (fire-alarm box) at px (3480, 6805) → x −16.5, z −4.9 (at the foot of the courthouse
+  steps). Not modelled (see open questions).
+- Sheet 3: "500 gal gasol. tank buried" at px (3915, 2212) → x +6.15, z +47.15: a curb gasoline
+  pump in front of 100–102 Main ("Auto Supplies").
+- Main St water pipes 8" and 4"; "Light: Elec." on the Union Hotel and County Hotel.
+
+Web: Wisconsin Historical Society, Albertype card "The Fountain, Flemington, N.J." (stone fountain
+with light fixture and carved horse head on a curb in front of a "Clerk's Office" and a "Dentist",
+undated): https://www.wisconsinhistory.org/Records/Image/IM77896 — confirms the fountain stood
+at the curb in front of the county office building. Flemington Baptist Church (1867, 170 Main St,
+spire seen at the S end in the 1907 card): https://ldsgenealogy.com/NJ/books/History-of-Hunterdon-and-Somerset-counties-New-Jersey-with-illustrations-and-biographical-sketches-of-its-prominent-men-and-pioneers-part-81.htm.
+National Humane Alliance fountains (1903–13, granite, a similar type; Flemington's is a rougher
+local design): https://en.wikipedia.org/wiki/National_Humane_Alliance_fountains. No source on
+Flemington's street lighting was found; arc lamps and pole lamps are from the 1907/1910 cards.
+
+#### A. Street props kit: `assets/models/street-props.glb`
+
+One GLB, built by `tools/blender/street_props.py` + `street_props_bake.py`, collection
+`street_props`. **Each prop is a separate named object/node** at the file origin (not placed),
+so the scene can stamp it many times. Conventions per prop: Z up, metres, **front faces −Y**
+(becomes +Z in glTF), origin at the centre of its footprint at ground level (exceptions noted).
+West-side placements use `rotation="0 90 0"` (front faces the street, +X), east-side
+`rotation="0 -90 0"`.
+
+**One material, one 2048² atlas** (`assets/textures/street-props-atlas.jpg`, also embedded): colour
+maps tiled at real-world size, packed per prop, multiplied by a Cycles AO bake (no sun bake: the
+props are placed at both orientations). No alpha anywhere (spokes, insulators are geometry), so
+the whole kit can be merged into a few static meshes. Material: lit by the scene lights
+(MeshStandard, roughness ~0.9, metalness 0), like Mr. Pickell. GLB ≤ 2 MB. 2K atlas justified:
+11 props share it instead of 11 textures.
+
+Texture types for asset-scout (Poly Haven CC0, 1K colour only):
+| Want | Suggested Poly Haven id | Real tile | Used on |
+|------|------------------------|-----------|---------|
+| weathered grey-brown wood, vertical grain | `old_planks_02` (new) | 1.5 m | poles, crossarms, crates, sandwich boards |
+| rough pitched light-grey granite | `granite_wall` (new) | 1.5 m | fountain monolith |
+| dressed light granite | reuse `street-tree/granite_tile_03.jpg` | 1.0 m | fountain bowl, hitching posts, carriage steps |
+| rusty/painted cast iron | `rust_coarse_01` (new) + reuse `polyhaven/metal_plate_02.jpg` | 0.8 m | hydrant, lamp brackets, fountain lamp holder, pump, barrel hoops |
+| barrel staves | reuse `polyhaven/wood_table_worn.jpg` | 0.6 m | barrel |
+Small painted lettering (two sandwich boards, pump "GASOLINE") is drawn by the builder into the
+atlas (plain serif capitals, no invented business names).
+
+Props (triangle targets are per prop; total unique ≤ 8,000):
+
+| Node | What (1920 state) | Dimensions | Tris | Evidence |
+|------|-------------------|------------|------|----------|
+| `pole` | Wooden utility pole, dark weathered grey-brown, 10-sided taper 0.30 m Ø base → 0.20 m top, **10.8 m** above grade + 0.2 m below. **Two crossarms** 2.4 m × 0.09 × 0.11 at y 10.2 (upper) and 9.5 (lower), each with 2 diagonal iron braces; **crossarms run along the glTF Z axis (Blender Y)** so they end up across the wire line in the scene. 6 pin insulators per arm (pale green glass, 8-sided, 0.08 Ø × 0.10) at Blender Y = ±0.40, ±0.75, ±1.05. A small eye bolt on the front (−Y) face at y 8.6 for cross-street span wires. A few iron step pegs from 2.5 m up (optional). | 0.30 Ø × 10.8 m, arms 2.4 m | ≤ 600 | 1906, 1907 cards |
+| `pole_lamp` | Bracket street lamp to bolt on a pole: iron arm 1.1 m pointing −Y (to the street) with a scroll brace, enamelled radial-wave reflector 0.42 m Ø (dark green outside, white inside), clear bulb. **Origin at the pole axis**, mounting height built in: arm at y 4.6. | reach 1.1 m | ≤ 200 | 1907 card (lamp on pole), 1906 card |
+| `arc_lamp` | Enclosed carbon-arc street lamp hung from a span wire: hook + short rod, dark iron mechanism case (cylinder 0.16 Ø × 0.45), flat reflector cap 0.48 Ø, opal globe (oval, 0.30 Ø × 0.38). **Origin at the top hook.** Total 1.10 m. | 0.48 Ø × 1.10 | ≤ 320 | 1910 colour card |
+| `fountain` | Horse/drinking fountain: rough-pitched light-grey granite monolith **1.05 w × 0.65 d × 1.95 h** with a rounded, irregular top; on the front (−Y) face a smooth oval medallion 0.55 × 0.45 centred 1.35 m up with a low-relief horse head (simple extruded profile, ~3 cm relief); below it a dark iron spout plate 0.45 × 0.30 at 0.75–1.05 m; a **round dressed-granite bowl** 1.00 Ø outer, 0.85 inner, 0.32 deep, rim at 0.62 m above the base, centre 0.50 m in front of the monolith face (bowl front reaches 1.0 m in front of it); water in the bowl as a dark flat disc 5 cm below the rim; at the bottom left of the front face a small arched niche 0.30 w × 0.28 h (dog trough) with a shallow basin. On top, a cast-iron 4-arm scroll holder 0.30 h with a **white opal globe 0.38 Ø** (top of globe 2.55 m). Origin: centre of the monolith base. | 1.05 × 1.65 (incl. bowl) × 2.55 | ≤ 1,500 | fountain photo + 4 hotel/courthouse cards |
+| `hitching_post` | Square granite post 0.22 × 0.22 × 0.95, pyramidal chamfered top, iron tie ring (8-sided torus, 0.10 Ø) on the front face at 0.80 m. | 0.22 × 0.22 × 0.95 | ≤ 120 | 1908 cards |
+| `carriage_step` | Granite mounting block 0.90 (along glTF X = along the curb) × 0.45 × 0.35 h, chamfered top edges, slightly rough. | 0.90 × 0.45 × 0.35 | ≤ 40 | 1907 card |
+| `hydrant` | Post hydrant c. 1910: barrel 0.24 Ø, body height 0.80 m, flange ring at 0.08 m, domed bonnet with pentagon operating nut, two 0.08 Ø hose nozzles at the sides with caps on chains (chains as thin boxes), a larger 0.12 Ø steamer nozzle to the front (−Y). Dark red-brown paint #5A2A22, worn to iron at edges (colour is a guess). | 0.24 Ø × 0.88 | ≤ 300 | Sanborn T.H. ×2, 1907 card |
+| `shop_goods` | Group at a shop front: 3 slatted wooden crates (0.60 × 0.40 × 0.35, stacked 2 + 1, the top one tilted 5°), one 12-staved barrel (0.55 Ø × 0.80, 3 iron hoops, lid). | 1.3 × 0.6 × 0.8 | ≤ 400 | 1906/1907 cards |
+| `sandwich_board_groceries` / `sandwich_board_icecream` | A-frame board 0.60 w × 1.00 h, legs splayed 0.45 m at the base, dark green paint, cream lettering "GROCERIES" / "ICE CREAM · SODA" on both faces (only what the Sanborn uses say: 84 Main "Gro.", 66 Main "Conf'y"). Faces ±Y. | 0.6 × 0.45 × 1.0 | ≤ 60 each | 1907 cards |
+| `bicycle` | Upright roadster bicycle c. 1910: 28" wheels (0.71 Ø, 16-gon rims + tyres), 12 spokes each as thin boxes, diamond frame (tube 0.03), upright bars, leather saddle, no gears; **modelled leaning 12° to its left** about its long axis (glTF Z), long axis along glTF Z (Blender Y), front wheel toward glTF −Z (Blender +Y). Origin: midpoint between the tyre contact points. Black enamel, nickel bars. | 1.75 × 0.55 × 1.05 | ≤ 600 | 1907 and 1909 cards |
+| `gas_pump` | Curb gasoline pump c. 1920 (cabinet type): square cast-iron cabinet 0.45 × 0.45 × 1.55 on a 0.55 base, domed cap, crank handle on the right side, hose (8-sided tube) coiled on a hook, round glass globe 0.36 Ø on top (white, red band, "GASOLINE"). Red paint (guess). Total 2.20 m. | 0.55 × 0.55 × 2.2 | ≤ 500 | Sanborn sheet 3 buried tank |
+
+Total unique ≈ 4,700 tris (well under 8k; builder may spend the margin on the fountain and pole).
+
+**Overhead wires (not in the GLB):** the integrator builds them in the scene from the placed
+poles' insulator positions, as one `THREE.LineSegments` (1 draw call, colour #1E1A17, no fog
+change). Each span: a parabola with 12 segments, sag = 1.2 % of span length (≈ 0.35 m over 30 m),
+`y(t) = lerp(y0, y1, t) − 4·sag·t(1−t)`. Wires per span along each side: **6** (upper arm
+±0.40, ±1.05; lower arm ±1.05; glTF-local Z offsets → scene ±X around the pole). Two cross-street
+**span wires** at 8.6 m (pole eye bolt) carry the arc lamps (sag 0.25 m at the lamp). Optional
+2–3 service drops from E1/E2 lower arms to building fronts at ~7 m (1907 card shows several).
+
+**Scene placements** (y = 0.15 sidewalk top unless noted; west poles `0 90 0`, east `0 -90 0`).
+Curb inner edge is x ±6.64; tree pits at x ±7.5 reach ±0.83 m; every prop below was checked
+against the tree pits, the front paths (z −24.07, −27.87, −31.67, −51.19, −68.69), the Nevius
+door (z −7.33) and Mr. Pickell (9.50, −8.45). The walking strip x ±7.4 … ±10.3 stays ≥ 2.4 m clear.
+
+| Prop | id | x | y | z | rot Y | Note |
+|------|----|---|---|---|-------|------|
+| pole | W0 | −6.90 | 0.15 | 28.0 | 90 | S of Court St (guess, keeps wires running past the start) |
+| pole + `pole_lamp` | W1 | −6.90 | 0.15 | −0.6 | 90 | Court St corner; anchors arc lamp A1 (1909 card pole S of portico) |
+| pole + `pole_lamp` | W2 | −6.90 | 0.15 | −21.5 | 90 | in front of County Offices N end (1906 card) |
+| pole + `pole_lamp` | W3 | −6.90 | 0.15 | −55.0 | 90 | between 65 Main path and tree-west-5 |
+| pole | W4 | −6.90 | 0.15 | −86.0 | 90 | opposite Bloomfield Ave; anchors arc lamp A2 |
+| pole + `pole_lamp` | W5 | −6.90 | 0.15 | −118.0 | 90 | |
+| pole | W6 | −6.90 | 0.15 | −150.0 | 90 | end of line |
+| pole | E0 | 6.90 | 0.15 | 34.0 | −90 | S of Court St (guess) |
+| pole + `pole_lamp` | E1 | 6.90 | 0.15 | 3.0 | −90 | in front of 80–82 Main (**1907 card**); anchors A1 |
+| pole | E2 | 6.90 | 0.15 | −15.5 | −90 | between Nevius (N wall −11.33) and tree-hotel-7 |
+| pole + `pole_lamp` | E3 | 6.90 | 0.15 | −46.5 | −90 | in the gap between the hotel and Lovell's |
+| pole | E4 | 6.90 | 0.15 | −76.5 | −90 | bank's Bloomfield corner (**1906 PO card**); anchors A2 |
+| pole | E5 | 6.90 | 0.15 | −92.5 | −90 | N corner of Bloomfield |
+| pole + `pole_lamp` | E6 | 6.90 | 0.15 | −124.0 | −90 | |
+| pole | E7 | 6.90 | 0.15 | −156.0 | −90 | end of line |
+| arc_lamp | A1 | 0.00 | 8.35 | 1.2 | 0 | hook on the W1–E1 span (Court St crossing) |
+| arc_lamp | A2 | 0.00 | 8.35 | −81.25 | 0 | hook on the W4–E4 span (Bloomfield crossing) |
+| fountain | F1 | −7.45 | 0.15 | −29.8 | 90 | monolith centre; bowl front at x −6.45 (over the curb, horses drink from the road); in front of the County Offices between the middle and N walks |
+| hitching_post | H1 | −6.80 | 0.15 | −9.4 | 90 | courthouse front |
+| hitching_post | H2 | −6.80 | 0.15 | −14.6 | 90 | |
+| hitching_post | H3 | −6.80 | 0.15 | −26.2 | 90 | County Offices |
+| hitching_post | H4 | −6.80 | 0.15 | −35.0 | 90 | |
+| carriage_step | C1 | 6.89 | 0.15 | −7.3 | −90 | in front of Nevius (1907 card) |
+| carriage_step | C2 | 6.89 | 0.15 | 1.6 | −90 | next to pole E1 (1907 card) |
+| hydrant | Y1 | −6.85 | 0.15 | −4.4 | 90 | Sanborn T.H. |
+| hydrant | Y2 | 6.85 | 0.15 | −90.9 | −90 | Sanborn T.H. (1907 card) |
+| shop_goods | G1 | 9.95 | 0.15 | −4.0 | −90 | Nevius S window, under the awning, clear of the door |
+| shop_goods | G2 | 11.95 | 0.15 | −56.0 | −90 | on the bank forecourt at 66 Main (confectionery); integrator shifts ±1 m in z to clear a stoop |
+| shop_goods | G3 | 9.95 | 0.15 | 11.0 | −90 | 84 Main (grocer) |
+| sandwich_board_groceries | S1 | 7.25 | 0.15 | 12.5 | 0 | curb at 84 Main; faces ±Z (along the walk) |
+| sandwich_board_icecream | S2 | 7.25 | 0.15 | −58.0 | 0 | curb at 66 Main (1907 card shows a board here) |
+| bicycle | B1 | −7.05 | 0.15 | −15.5 | 0 | leaning on H2 (1909 card); integrator nudges so the bars touch the post |
+| bicycle | B2 | 7.15 | 0.15 | −75.3 | 180 | leaning on E4 (1907 card) |
+| gas_pump | P1 | 6.95 | 0.15 | 47.2 | −90 | Sanborn sheet 3 buried tank, 100–102 Main |
+
+Counts: 15 poles (7 with lamps), 2 arc lamps, 1 fountain, 4 hitching posts, 2 carriage steps,
+2 hydrants, 3 shop-goods groups, 2 sandwich boards, 2 bicycles, 1 gas pump = 34 placements,
+~14k triangles in total (≤ 60k in view).
+
+**Draw calls (≤ 10 extra; target 4):** new component `street-props` (js/components.js): loads
+the GLB once, bakes each placement's transform into a copy of the node geometry and **merges
+all placements into 3 static meshes by z band** (z > −20, −20 … −60, < −60) sharing the one
+material → 3 draw calls (with per-band frustum culling) + 1 for the wires. Fallback if merging is
+awkward: one `InstancedMesh` per node (≤ 12 calls; then drop the bicycles first).
+
+#### B. Ambient sound
+
+All files mono OGG Vorbis (~64 kbps, 44.1 kHz), saved to `assets/audio/`, logged in SOURCES.md.
+**Total ≤ 4 MB** (estimate ≈ 2.3 MB) and **≤ ~5 min total duration** (Web Audio decodes every
+clip to PCM: ~190 KB per second at 48 kHz, so 5 min ≈ 55 MB of memory). Loops trimmed at
+zero-crossings with a 0.5–1 s crossfade so they loop without a click. **No modern sounds:**
+asset-scout listens to every clip and rejects/cuts any aircraft, motorway hum, sirens, modern
+engines, phones, reversing beeps or clear modern speech.
+
+Licences checked 2026-11-04:
+- **BigSoundBank** (Joseph Sardin): every sound "CC0 / WTFPL / public domain", attribution
+  optional; direct downloads without an account at `https://bigsoundbank.com/UPLOAD/ogg/<NNNN>.ogg`
+  (verified: HTTP 200, no login). Licence page: https://bigsoundbank.com/droit.html.
+- **Wikimedia Commons**, G. McGrane bird recordings (NC, 1999–2008): "I, the copyright holder of
+  this work, release this work into the public domain."
+- **Freesound, user craigsmith**: each file below is marked **Creative Commons 0**; the
+  full-quality download needs a login, but the **HQ preview MP3** (`cdn.freesound.org/previews/…-hq.mp3`,
+  verified HTTP 200, no login) is good enough for 64 kbps mono. Risk: these are his digitised
+  copies of 1930s–60s Hollywood studio effects; he released them CC0, but the underlying studio
+  rights are not documented. Use them only where no BigSoundBank/Commons alternative exists
+  (wagon, Model T, walla, shop bell) and note this in SOURCES.md. Sonniss is not used.
+
+| File (assets/audio/) | Source + URL | Licence | Trim | Use |
+|---|---|---|---|---|
+| `amb-town-bed.ogg` | BigSoundBank #1911 "Countryside #3" (afternoon, May 2020, recorded in lockdown so no traffic): https://bigsoundbank.com/countryside-3-s1911.html → `UPLOAD/ogg/1911.ogg` | CC0 | 60–75 s clean section, loop | global bed |
+| (alt. bed) | #0659 "Wind in a Tree" https://bigsoundbank.com/wind-in-a-tree-s0659.html; #0097 "Countryside" https://bigsoundbank.com/countryside-s0097.html | CC0 | | if #1911 has modern noise or too many European-only birds (blackbird, chaffinch, cuckoo) |
+| `amb-walla.ogg` | craigsmith 817131 "Crowd Walla" (outdoor, repeating loop): https://freesound.org/s/817131/ → `https://cdn.freesound.org/previews/817/817131_2524442-hq.mp3`; alt. 675026 "Crowd walla at outdoor farmers' market" https://freesound.org/s/675026/ | CC0 | 40 s, loop | 2 positional sources |
+| `bird-robin.ogg` | https://commons.wikimedia.org/wiki/File:American_Robin.ogg → https://upload.wikimedia.org/wikipedia/commons/4/4e/American_Robin.ogg | PD | 2–3 phrases, ~10 s | one-shots |
+| `bird-cardinal.ogg` | https://commons.wikimedia.org/wiki/File:Northern_Cardinal.ogg → https://upload.wikimedia.org/wikipedia/commons/f/f6/Northern_Cardinal.ogg | PD | ~10 s | one-shots |
+| `bird-titmouse.ogg` | https://commons.wikimedia.org/wiki/File:Tufted_Titmouse.ogg → https://upload.wikimedia.org/wikipedia/commons/4/45/Tufted_Titmouse.ogg | PD | ~8 s | one-shots |
+| `bird-catbird.ogg` | https://commons.wikimedia.org/wiki/File:Gray_Catbird.ogg → https://upload.wikimedia.org/wikipedia/commons/5/5a/Gray_Catbird.ogg | PD | ~8 s | one-shots |
+| `horse-carriage.ogg` | craigsmith 437076 "Horse Drawn Carriage" (wheels + hooves, hard surface): https://freesound.org/s/437076/ → `…/previews/437/437076_2524442-hq.mp3` | CC0 | 30 s | wagon pass |
+| `horse-buckboard.ogg` | craigsmith 437077 "Buckboard Wagon": https://freesound.org/s/437077/ → `…/previews/437/437077_2524442-hq.mp3` | CC0 | 25 s | wagon pass (variant) |
+| `horse-neigh.ogg` | BigSoundBank #0863 "Horse Neighing #3": https://bigsoundbank.com/horse-neighing-3-s0863.html | CC0 | 4 s | during a pass |
+| `horse-snort.ogg` | BigSoundBank #0286 "Breath of a horse #2": https://bigsoundbank.com/breath-of-a-horse-2-s0286.html | CC0 | 1 s | during a pass |
+| `modelt-run.ogg` | craigsmith 675236 "Model T steady; clatters": https://freesound.org/s/675236/ → `…/previews/675/675236_2524442-hq.mp3` | CC0 | 15 s, loop | car pass |
+| `modelt-stop.ogg` | craigsmith 675234 "Model T Ford in & stop": https://freesound.org/s/675234/ → `…/previews/675/675234_2524442-hq.mp3` | CC0 | 15 s | occasional |
+| `horn-oogah.ogg` | BigSoundBank #2541 "Oogah horn #2": https://bigsoundbank.com/oogah-horn-2-s2541.html (alt. #0679) | CC0 | 2 s | rare, during a car pass |
+| `bell-five.ogg` | BigSoundBank #3445 "Bell 5 O'clock" (church bell strikes five): https://bigsoundbank.com/bell-5-o-clock-s3445.html | CC0 | 13 s | five o'clock fits the late-afternoon light |
+| `shop-bell.ogg` | craigsmith 479988 "Shop Bell" (small bell on a shop door): https://freesound.org/s/479988/ → `…/previews/479/479988_2524442-hq.mp3` | CC0 | one 2 s jingle | Nevius door |
+| `train-whistle.ogg` (optional) | BigSoundBank #3013 "Hiss of steam train #4" (steam whistle): https://bigsoundbank.com/hiss-of-steam-train-4-s3013.html | CC0 | 4 s | very distant; played at 0.8× speed (lower, closer to an American chime whistle) |
+
+Sound sources in the scene (A-Frame `sound`: `positional: true`, `distanceModel: inverse`
+unless noted; volumes are starting values for the integrator to balance by ear):
+
+| Source | File | Position (x, y, z) | Loop / schedule | volume | refDistance | maxDistance | rolloff |
+|--------|------|--------------------|-----------------|--------|-------------|-------------|---------|
+| Town bed | amb-town-bed | non-positional | loop, 3 s fade-in | 0.35 | — | — | — |
+| Walla, hotel veranda | amb-walla | (10.5, 1.6, −30.75) | loop | 0.30 | 5 | 45 | 1.2 |
+| Walla, courthouse steps | amb-walla (start offset 20 s) | (−15.5, 1.6, −6.85) | loop | 0.20 | 4 | 35 | 1.2 |
+| Birds | 4 bird clips, random | a random street-tree crown: tree position + (0, 6.5, 0) | one every 8–25 s, never the same clip twice running | 0.35–0.5 random | 6 | 60 | 1 |
+| Horse + wagon pass | horse-carriage / horse-buckboard | moving along a random unseen route (below) at 2.0 m/s | every 70–150 s; 2 s fades; 30 % chance of a neigh/snort mid-pass | 0.8 | 8 | 120 | 1 |
+| Model T pass | modelt-run (loop while moving) | route at 6 m/s | every 3–6 min; 40 % chance of one horn blast; 1 in 4 passes ends with modelt-stop instead | 0.6 (horn 0.5) | 8 | 150 | 1 |
+| Bell strikes five | bell-five | (30, 30, 260) (Baptist church, S end of Main) | first at 75 s, then every 6 min | 0.6 | 80 | 600 | 1 |
+| Shop door bell | shop-bell | (10.5, 2.2, −7.33) (Nevius door) | random every 40–120 s, only while the player is within 20 m | 0.5 | 2 | 20 | 2 |
+| Train whistle (optional) | train-whistle, playbackRate 0.8 | (−500, 20, 150) | every 8–14 min | 0.35 | 150 | 800 | 1 |
+
+Unseen routes for passing traffic (sounds only, so they must never seem to be on Main St in view):
+R1 west back lane x −55, z +40 → −120 (behind the courthouse/county buildings); R2 east back lane
+x +60, z −130 → +40 (behind the hotel/bank); R3 Bloomfield Ave far east (220, 1, −84) → (120, 1, −84)
+(≥ 110 m, in the haze); R4 Main St far north x +3, z −270 → −200 (in the haze). Random direction.
+
+Implementation (scene-integrator): new `js/ambience.js` with a `street-ambience` component on the
+scene. Nothing plays until the first user gesture (`click`, `keydown`, `touchstart` or `enter-vr`):
+then resume the Web Audio context (`this.el.sceneEl.audioListener.context.resume()`), start the
+loops with a 3 s fade-in and begin the random schedulers. Pause everything on
+`visibilitychange` (hidden) and resume after. **M** toggles mute (add a line to `#help`).
+Load clips after the scene has loaded (not in `<a-assets>`, so they don't delay the first frame).
+One-shots use `poolSize: 2`. No console errors or autoplay warnings.
+
+#### Weathering
+
+Poles dark grey-brown with paler sun-bleached upper parts and darker creosote base; insulators
+pale green glass; iron parts rust at edges and joints; granite with grime in the pitched faces and
+a darker water stain below the spout and around the bowl; hydrant paint chipped at the nozzles;
+crates and boards dull and greyed; sandwich-board paint scuffed at the feet.
+
+#### Budget
+
+Kit ≤ 8,000 unique triangles (target ~4.7k); ~14k placed; ≤ 60k in view. One material, one 2K
+atlas, GLB ≤ 2 MB. Draw calls +4 (≤ 10). Audio ≤ 4 MB, ≤ 5 min decoded.
+
+#### Acceptance checks for the reviewer
+
+1. `street-props.glb` has these 12 separate nodes at the origin: pole, pole_lamp, arc_lamp,
+   fountain, hitching_post, carriage_step, hydrant, shop_goods, sandwich_board_groceries,
+   sandwich_board_icecream, bicycle, gas_pump; one material, one 2K atlas, no alpha;
+   ≤ 8,000 triangles; ≤ 2 MB.
+2. Pole: wooden, 10.8 m, **two crossarms with glass insulators**, crossarms along the glTF Z axis
+   (in the scene they run across the street, not along it).
+3. Fountain matches `flmngtndrinkingfountainbycrthous.jpg`: rough grey granite block with a
+   rounded top, horse-head medallion on the street face, round bowl projecting toward the road,
+   small arched niche bottom left, iron holder with a white globe on top, ~2.5 m tall.
+4. Arc lamps hang from span wires over the centre of Main St at the Court St and Bloomfield
+   crossings, globe bottom ~7.2 m above the road.
+5. In the scene: 15 poles along both curbs with sagging wires (6 per span, one draw call);
+   hydrants at (−6.85, −4.4) and (6.85, −90.9); fountain at the west curb in front of the County
+   Offices with its bowl over the curb.
+6. No prop blocks a doorway, stoop, front path or Mr. Pickell; the sidewalk keeps ≥ 2.4 m clear;
+   nothing floats or sinks (bases at y 0.15).
+7. Draw calls at the start view (0, 0.15, 18) rise by ≤ 10 (target 4) and triangles by ≤ 60k.
+8. Sound: silent until the first click/key/Enter VR, then a quiet bed with walla near the hotel,
+   birds from the trees, an occasional unseen wagon or Model T, the bell striking five; M mutes;
+   no autoplay warning in the console.
+9. Every audio file is CC0/PD from the table above, logged in SOURCES.md; total ≤ 4 MB; no
+   modern sounds audible (aircraft, motorway, sirens, modern engines).
+
+#### Open questions / guesses
+
+- **Fountain position (guess within ±3 m):** the Albertype caption and the fountain photo put it
+  in front of the County Offices; the hotel cards put it roughly opposite the hotel centre;
+  chosen z −29.8. Its exact donor/date unknown.
+- **Pole line:** the 1905–07 cards show poles on both curbs; spacing (~30 m) and positions other
+  than E1, W2 and E4 are guesses; heights scaled from the 3-storey fronts.
+- **Street lighting in 1920:** arc lamps (1910 card) may already have been replaced by
+  incandescent lamps; we keep both. The ornamental lantern posts in the hotel cards are from the
+  late 1920s/30s and are left out.
+- **Hydrant colour** unknown (dark in the cards); dark red-brown chosen. **Gas pump** type and
+  colour are guesses (Sanborn only shows the tank).
+- **Fire-alarm box** (Sanborn "F.A." at the courthouse steps) not modelled: no photo shows it.
+- No flagpole/flag, benches, mailboxes or street-name signs: none appear in the period photos.
+- **craigsmith (Freesound) files:** CC0 by the uploader, but they are digitised studio effects
+  (see licence note); replace if better CC0/PD wagon, Model T or walla recordings turn up.
+- The bed recording is French countryside; if its birds are clearly European, use the
+  alternates and let the American bird one-shots carry the birdsong.
+- Bell origin (Baptist church spire at 170 Main, seen in the 1907 card) is plausible, not documented.
+
+#### Out of scope for pass 1
+
+- Moving vehicles or animals you can see (horse and wagon, Model T, parked cars), and people:
+  later passes (Later phases A).
+- Road, gutter, crossing and sidewalk surface rework; side streets; background scenery (Later
+  phases B).
+- Night lighting / lit lamps, weather, seasons; footstep sounds for the player; interactive
+  props (talking notice board, newspaper stand).
+- Awnings and shop signs (already on the buildings).
+
 ## People
 
 (Character specs, written by the planner. Same pipeline as the buildings: planner → asset-scout →
@@ -2294,3 +2599,6 @@ Check licensing for every asset and note the source in the progress log.
 | 2026-11-04 | scene-integrator: John B. Pickell placed at (9.50, 0.15, −8.45), rotation 0 −60 0, with Idle/Talk via aframe-extras 7.7.0 `animation-mixer`, blob shadow and a talking dialogue panel (`js/people.js`, `data/dialogue/pickell.json`, right-hand laser in VR, mouse/keys 1–3 on desktop). No console errors; panel opens at 2.5 m, closes past 4 m; all 11 nodes walked through. Draw calls / triangles: start view 159 / 90.9k → 161 / 103.7k; near him 102 → 103 with the panel open (+1 laser line in VR). Screenshots `assets/models/previews/npc-pickell-in-scene.png`, `npc-pickell-dialogue.png`. |
 | 2026-11-04 | scene-integrator: Lovell's Restaurant (68 Main) GLB integrated (`assets/models/lovells-restaurant.glb`, 4,752 triangles, 4 materials, lightmap intensity 1.2462) at (12.66, 0.15, −52.13), rotation 0 −90 0, front wall 2.36 m behind the property line; the code-built placeholder at (10.6, 0, −51.7) is gone (id `bldg-68-main` kept). `#bank-forecourt` enlarged to x 10.30–12.66, z −77.31 … −49.13 (centre 11.48, −63.22; 2.36 × 28.18 m) so one box paves the strip in front of both the bank and 68 (runs 0.42 m under the bank's front wall, no gap; no extra draw call). The 3.5 m gap to the Union Hotel shows ground; the bank seam and cornice return show no z-fighting (68's side cornice dies into the bank's south wall). Tested: no console errors, faces Main St, lightmap and signs read, Mr. Pickell's panel still opens beside him. Draw calls / triangles before → after: start view (0, 0.15, 18) 161 / 103.7k → 161 / 108.4k; in front on the road (2, −52.13) facing east 40 / 43.8k → 40 / 48.5k; west sidewalk (−8, −52.13) 55 / 48.4k → 55 / 53.1k (the placeholder's calls are replaced by the GLB's 4 materials). Screenshot `assets/models/previews/lovells-restaurant-in-scene.png`. |
 | 2026-11-04 | scene-integrator: draw-call pass. `baked-lighting` merges each of the 8 baked buildings into one draw call (texture array + per-vertex layer/tint; all 8 merged, none skipped: courthouse 12 materials, Union Hotel 11, county offices 10, bank 6, Wurts 5, Nevius 5, 65 Main 4, Lovell's 4); street trees drawn with `instanced-trees` (one GLB load, 4 instanced calls). Start view 161 → 69 draw calls, same triangles (108.4k); (0, −60) south 156 → 74. Before/after screenshots `assets/models/previews/perf-before-*.png` / `perf-after-*.png` match pixel for pixel apart from edge pixels and Mr. Pickell's animation; his dialogue still opens. No console errors. |
+| 2026-11-04 | planner: Street ambiance pass 1 (sound + street props) spec written and auto-approved (owner away), new section "## Street ambiance". From 14 period cards + the 1921 Sanborn: one kit GLB `street-props.glb` (12 named nodes, one material, one 2K atlas, ~4.7k unique tris): wooden utility poles with two crossarms (1906/1907 cards), pole bracket lamps, 2 span-wire arc lamps (1910 card), the granite horse/drinking fountain with globe lamp at the west curb in front of the County Offices (fountain photo, hotel cards, Albertype "Clerk's Office / Dentist" caption), granite hitching posts and carriage steps, 2 hydrants at the Sanborn "T.H." spots, shop goods, 2 sandwich boards, 2 leaning bicycles, a curb gasoline pump (Sanborn sheet 3 buried tank at 100–102 Main). 34 placements, wires as one LineSegments, target +4 draw calls. Sound: CC0/PD only (BigSoundBank, Commons G. McGrane birds, Freesound craigsmith CC0 previews; ~2.3 MB): bed, walla, American birds, unseen wagon and Model T passes, bell striking five, Nevius shop bell, optional distant train whistle; starts on first gesture, M mutes. Next: asset-scout. |
+| 2026-11-04 | asset-scout: Street ambiance pass 1 assets ready. Textures (`assets/textures/street-props/`, Poly Haven CC0, 1K): `old_planks_02` (poles, crossarms, crates, boards), `rust_coarse_01` (iron), `rock_boulder_dry` greyed → `granite_rough_grey` (fountain monolith; `granite_wall` rejected for its block joints), seamless joint-free `granite_dressed_light` from `granite_tile_03` (bowl, posts, steps), `iron_paint_redbrown` from `metal_plate_02` (hydrant); reused `metal_plate_02`, `wood_table_worn`. Audio (`assets/audio/`): 16 mono OGG clips, 1.96 MB, 250 s total, ~−20 LUFS, loops crossfaded (BigSoundBank CC0, Commons G. McGrane PD birds, Freesound craigsmith CC0 previews with a rights note in SOURCES.md). Bed = BigSoundBank #0659 "Wind in a Tree" instead of #1911 (loud crickets, dense European birdsong). Converted with ffmpeg from the `imageio-ffmpeg` pip package (no ffmpeg on the PC). Next: blender-builder. |
+| 2026-11-04 | scene-integrator: Street ambiance pass 1, **sound part** integrated (props and wires come later). New `js/ambience.js`, `street-ambience` on `<a-scene>`: clips fetched after the scene loads, AudioContext + one `THREE.AudioListener` created at the first click/key/touch/Enter VR (no autoplay warning), listener on the active THREE camera (follows the headset in VR; XR select/squeeze also resume the context), buffers decoded once and reused, max 6 voices. Bed 0.35 (3 s fade-in, non-positional); walla hotel (10.5, 1.6, −30.75) 0.30 ref 5/max 45/rolloff 1.2 and courthouse (−15.5, 1.6, −6.85) 0.20 ref 4/max 35, 20 s offset; birds from the 12 street-tree crowns (+6.5 m), 8–25 s, never the same clip twice; horse/wagon passes every 70–150 s at 2 m/s on routes R1–R4 (the clip's 50–60 m centred on the point nearest the visitor; 2 s fades; 30 % neigh/snort); Model T every 3–6 min at 6 m/s along a whole route (40 % oogah horn, 1 in 4 ends with modelt-stop); bell at 75 s then every 6 min from (30, 30, 260); shop bell every 40–120 s only within 20 m of the Nevius door; train whistle at 0.8× every 8–14 min from (−500, 20, 150). Timers run on the scene clock and the context is suspended while the tab is hidden; M mutes (help text updated). Tested in the preview: silent and no AudioContext before the click, context `running` after, 16/16 decoded, loops at the spec gains, every source at its spec position/ref/max/rolloff, horse source moving at 2.0 m/s with the panner following, car horn + stop ending, shop bell skipped at 26 m and played at 5 m, M ramps the master gain 1 → 0 → 1; no console errors. Draw calls/triangles unchanged (start view 69 / 108.4k); tick ≈ 0.4 µs. Not yet heard in the headset. |

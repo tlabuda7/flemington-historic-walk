@@ -195,6 +195,22 @@ by the scene). Tinted copies made with the `tint` function of `tools/prepare_tex
 | `brown_leather.jpg` | Brown Leather (`brown_leather`), 0.40 m | https://polyhaven.com/a/brown_leather | CC0 | source of the shoe leather |
 | `shoe_black_calf.jpg` | same, tinted #1C1714 | https://polyhaven.com/a/brown_leather | CC0 | black calf oxfords |
 
+### Street props kit (`assets/textures/street-props/`)
+
+1K Diffuse JPGs from Poly Haven, baked by the builder into the kit's one 2K atlas
+(`street-props-atlas.jpg`). Re-coloured copies made by `tools/prepare_street_props_textures.py`.
+The kit also reuses, unchanged, `polyhaven/metal_plate_02.jpg` (iron) and
+`polyhaven/wood_table_worn.jpg` (barrel staves) (listed above).
+
+| File | Poly Haven asset | URL | Licence | Used for |
+|------|------------------|-----|---------|----------|
+| `old_planks_02.jpg` | Old Planks 02 (`old_planks_02`), 2.0 m | https://polyhaven.com/a/old_planks_02 | CC0 | weathered grey-brown wood: poles, crossarms, crates, sandwich boards (tile 2.0 m) |
+| `rock_boulder_dry.jpg` | Rock Boulder Dry (`rock_boulder_dry`), 1.8 m | https://polyhaven.com/a/rock_boulder_dry | CC0 | untinted source |
+| `granite_rough_grey.jpg` | same, recoloured light grey #A5A39D at 125% contrast | https://polyhaven.com/a/rock_boulder_dry | CC0 | rough-pitched granite fountain monolith (tile 1.8 m; no block joints, unlike `granite_wall`) |
+| `granite_dressed_light.jpg` | Granite Tile 03 (`granite_tile_03`, via `street-tree/granite_tile_03.jpg`): one joint-free square made seamless and repeated 2 × 2, recoloured #AEABA4 | https://polyhaven.com/a/granite_tile_03 | CC0 | dressed granite: fountain bowl, hitching posts, carriage steps (tile 1.125 m) |
+| `rust_coarse_01.jpg` | Rust Coarse 01 (`rust_coarse_01`), 2.2 m | https://polyhaven.com/a/rust_coarse_01 | CC0 | rusty cast iron: lamp brackets, fountain lamp holder, barrel hoops, rust at edges |
+| `iron_paint_redbrown.jpg` | Metal Plate 02 (`metal_plate_02`, via `polyhaven/metal_plate_02.jpg`), tinted #5A2A22 at 130% contrast | https://polyhaven.com/a/metal_plate_02 | CC0 | hydrant paint (tile 2.0 m; colour is a guess) |
+
 ## Characters (`assets/characters/source/`, local only)
 
 Raw packs for building people in Blender. The folder is gitignored (~600 MB); re-download from
@@ -220,6 +236,41 @@ guide of a scalp-grown hair shell; its texture is not used). No CC-BY pack items
 | `assets/models/npc-pickell.glb` | `tools/blender/npc_pickell.py` + `npc_pickell_bake.py` (original work on the CC0 UAL rig/clips, MakeHuman and Poly Haven sources above) | original work; sources CC0 |
 | `assets/textures/npc-pickell-atlas.jpg` (2048², also embedded in the GLB) | baked by `tools/blender/npc_pickell_bake.py` (Poly Haven cloth maps from `assets/textures/npc-pickell/`, MakeHuman skin/eye/eyebrow maps, procedural hair, tie, tape, moustache) | original work; sources CC0 |
 | `data/dialogue/pickell.json` | his lines, written for this project from the web sources listed per node in the file (facts only, no quoted text) | original work |
+
+## Audio (`assets/audio/`)
+
+Street ambiance pass 1. All files: mono OGG Vorbis, 44.1 kHz, ~64 kbps, trimmed, high-passed
+(removes wind thumps, mains hum and traffic rumble below the useful band), loudness-normalised
+to about −20 LUFS (true peak ≤ −1 dBFS; a light limiter where needed); loops have a 0.75–1 s
+equal-power crossfade so they wrap without a click. Licences checked on each source page on
+2026-11-04. BigSoundBank (Joseph Sardin): "CC0 / WTFPL / public domain", licence page
+https://bigsoundbank.com/droit.html. Wikimedia Commons recordings by G. McGrane: released into the
+public domain by the author. Freesound user craigsmith: each file marked Creative Commons 0
+(https://creativecommons.org/publicdomain/zero/1.0/); the no-login "HQ preview" MP3 was used.
+
+**Note on the craigsmith (Freesound) files:** these are his digitised copies of older
+(c. 1930s–60s) studio sound-effect records. He released them as CC0, but the rights in the
+underlying studio recordings are not documented, so they are uncertain. Swap each one if a clean
+CC0 / public-domain alternative turns up.
+
+| File | Source | URL | Licence | Used for |
+|------|--------|-----|---------|----------|
+| `amb-town-bed.ogg` | BigSoundBank #0659 "Wind in a Tree" (J. Sardin), 42–107 s, loop | https://bigsoundbank.com/wind-in-a-tree-s0659.html (file https://bigsoundbank.com/UPLOAD/ogg/0659.ogg) | CC0 | global background bed, 65 s loop. Chosen over the spec's #1911 "Countryside #3": that recording (France, May 2020) has loud field crickets and dense European birdsong throughout |
+| `amb-walla.ogg` | Freesound 817131 "Crowd Walla" by craigsmith, 10–50 s, loop | https://freesound.org/s/817131/ (file https://cdn.freesound.org/previews/817/817131_2524442-hq.mp3) | CC0 (see note above) | crowd murmur at the hotel veranda and courthouse steps |
+| `bird-robin.ogg` | "American Robin" by G. McGrane (North Carolina, 2007), 31.5–41.5 s | https://commons.wikimedia.org/wiki/File:American_Robin.ogg | Public domain | birdsong one-shot |
+| `bird-cardinal.ogg` | "Northern Cardinal" by G. McGrane (FL / NC), 100–110 s | https://commons.wikimedia.org/wiki/File:Northern_Cardinal.ogg | Public domain | birdsong one-shot |
+| `bird-titmouse.ogg` | "Tufted Titmouse" by G. McGrane (Wilkes County, NC), 34.5–42.5 s | https://commons.wikimedia.org/wiki/File:Tufted_Titmouse.ogg | Public domain | birdsong one-shot |
+| `bird-catbird.ogg` | "Gray Catbird" by G. McGrane (Smoky Mountains, NC), 2–10 s | https://commons.wikimedia.org/wiki/File:Gray_Catbird.ogg | Public domain | birdsong one-shot |
+| `horse-carriage.ogg` | Freesound 437076 "G52-07-Horse Drawn Carriage" by craigsmith, 10–40 s | https://freesound.org/s/437076/ (file https://cdn.freesound.org/previews/437/437076_2524442-hq.mp3) | CC0 (see note above) | unseen horse-and-wagon pass |
+| `horse-buckboard.ogg` | Freesound 437077 "G52-06-Buckboard Wagon" by craigsmith, 5–30 s | https://freesound.org/s/437077/ (file https://cdn.freesound.org/previews/437/437077_2524442-hq.mp3) | CC0 (see note above) | wagon pass (variant) |
+| `horse-neigh.ogg` | BigSoundBank #0863 "Horse Neighing #3" (J. Sardin), whole | https://bigsoundbank.com/horse-neighing-3-s0863.html | CC0 | neigh during a pass |
+| `horse-snort.ogg` | BigSoundBank #0286 "Breath of a horse #2" (DenisChardonnet), whole | https://bigsoundbank.com/breath-of-a-horse-2-s0286.html | CC0 | snort during a pass |
+| `modelt-run.ogg` | Freesound 675236 "S07-22 Model T steady; clatters" by craigsmith, 2–17 s, loop | https://freesound.org/s/675236/ (file https://cdn.freesound.org/previews/675/675236_2524442-hq.mp3) | CC0 (see note above) | unseen Model T pass |
+| `modelt-stop.ogg` | Freesound 675234 "S03-38 Model T Ford in & stop" by craigsmith, 5.2–20.2 s | https://freesound.org/s/675234/ (file https://cdn.freesound.org/previews/675/675234_2524442-hq.mp3) | CC0 (see note above) | Model T pulling in and stopping |
+| `horn-oogah.ogg` | BigSoundBank #2541 "Oogah horn #2" (J. Sardin, "Museum of Lost Sounds"), whole | https://bigsoundbank.com/oogah-horn-2-s2541.html | CC0 | horn during a car pass |
+| `bell-five.ogg` | BigSoundBank #3445 "Bell 5 O'clock" (J. Sardin & Axeline T.; church of La Loupe, France), whole | https://bigsoundbank.com/bell-5-o-clock-s3445.html | CC0 | distant church bell striking five |
+| `shop-bell.ogg` | Freesound 479988 "R04-62-Shop Bell" by craigsmith, one jingle 3.3–5.6 s | https://freesound.org/s/479988/ (file https://cdn.freesound.org/previews/479/479988_2524442-hq.mp3) | CC0 (see note above) | Nevius shop door bell |
+| `train-whistle.ogg` | BigSoundBank #3013 "Hiss of steam train #4" (J. Sardin; steam whistle, Martel, France), whole | https://bigsoundbank.com/hiss-of-steam-train-4-s3013.html | CC0 | very distant train whistle (optional) |
 
 ## Code libraries (loaded from CDNs, not stored in the repo)
 
