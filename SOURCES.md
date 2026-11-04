@@ -187,6 +187,21 @@ Nothing new downloaded. Reused unchanged: `polyhaven/red_brick.jpg` (brick), `co
 `assets/textures/rea-building-lightmap.jpg` is baked in Blender by `tools/blender/rea_building_bake.py` (original work).
 Reference photos viewed only (Goodspeed Histories, not saved in the project): see PLAN.md, Rea Building, Sources.
 
+### County Hotel, 47–49 Main St (`assets/textures/county-hotel/`)
+
+Nothing new downloaded. Reused unchanged: `courthouse/paint_white.jpg` (trim, darkened by a colour factor),
+`polyhaven/door_paint_green.jpg` (doors, darkened by a colour factor), `polyhaven/red_brick.jpg` (chimneys),
+`lovells-restaurant/stone_bluestone.jpg` (veranda paving, steps), `house-65-main/clapboard_cream.jpg` (Bar & Pool Room wing)
+(all listed above).
+
+| File | Source | URL | Licence | Used for |
+|------|--------|-----|---------|----------|
+| `brick_painted_cream.jpg` | recolour of `polyhaven/red_brick.jpg` (Poly Haven `red_brick`, CC0) by `tools/prepare_county_hotel_textures.py`: repainted #D8CDB4, brick detail inverted (shadowed joints) at low contrast | see `polyhaven/red_brick.jpg` above | CC0 | painted-brick walls (tile 1.4 m) |
+| `signs_atlas.jpg` | none: drawn by `tools/prepare_county_hotel_textures.py` with Pillow (original work, no download). Lantern lettering set in Georgia Bold (`georgiab.ttf`, installed with Windows; rendered into the image, no font file is shipped) | — | original work | dark green louvred shutter leaves, veranda post faces with sunk "X" panels, lantern panes "COUNTY / HOTEL" (1024², one material) |
+
+`assets/textures/county-hotel-lightmap.jpg` is baked in Blender by `tools/blender/county_hotel_bake.py` (original work).
+Reference photos viewed only (Goodspeed Histories, West Jersey History; not saved in the project): see PLAN.md, County Hotel, Sources.
+
 `assets/textures/union-hotel-lightmap.jpg` is baked in Blender by
 `tools/blender/union_hotel_bake.py` (original work).
 `assets/textures/courthouse-lightmap.jpg` is baked in Blender by `tools/blender/courthouse_bake.py` (original work).

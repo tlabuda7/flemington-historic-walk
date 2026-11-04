@@ -97,6 +97,10 @@ Cite them by filename. Saved 2026-11-01 (7) and 2026-11-02 (25). Captions are co
 | [P30] | `flmngtnunionhtlview.jpg` | Union Hotel (undated) |
 | [P31] | `flmngtnunionhtlvu20s.jpg` | Union Hotel – 1920s |
 | [P32] | `flmngtnunionhtlwthsnow.jpg` | Union Hotel With Snow – c 1910 |
+| [P33] | `flmngtncountyhtl06.jpg` | The County Hotel – 1906 (tinted) — **viewed online 2026-11-04, not saved locally** |
+| [P34] | `flmngtncountyhotel08.jpg` | The County Hotel – 1908 — viewed online, not saved locally |
+| [P35] | `flmngtnmainstrtcountyhtlvu06.jpg` | Main Street – County Hotel – 1906 (looking south) — viewed online, not saved locally |
+| [P36] | `flmngntnmainstcountyhtl08.jpg` | Main Street and County Hotel – 1908 (looking north) — viewed online, not saved locally |
 
 ### 1.4 Web photographs (looked at only, not saved to the project)
 
@@ -112,6 +116,7 @@ All are in Goodspeed Histories articles ([W12], [W18]). Photographers are named 
 | [G6] | 50 Main St from the SW, Feb 2016 | https://i0.wp.com/goodspeedhistories.com/wp-content/uploads/2021/08/50Main-Feb2016_088-copy.jpeg |
 | [G7] | Rea clock-tower cupola close-up (modern) | https://i0.wp.com/goodspeedhistories.com/wp-content/uploads/2021/08/Rea-Clock-Tower-copy.jpg |
 | [G8] | Flemington National Bank in the Rea Building, 1876–91 | https://i0.wp.com/goodspeedhistories.com/wp-content/uploads/2021/08/54-Rea-FNB-copy.jpg |
+| [G9] | "Mount's Hotel" (the County Hotel), c. 1905 (before Aug 1906), from the SE; Hunterdon County Historical Society PX333 (2.01.00333), in [W38] | https://i0.wp.com/goodspeedhistories.com/wp-content/uploads/2025/11/Hotel-Tunison.jpg |
 
 Not given an ID: a modern photo of the Higgins News Agency (68 Main) in [W12], looked at and not used (no URL recorded).
 
@@ -159,6 +164,7 @@ written, so the page was read on or just before that day.
 | **[W35]** | U.S. Bureau of Labor Statistics via FRED (Federal Reserve Bank of St. Louis), Consumer Price Index for All Urban Consumers, not seasonally adjusted (CPIAUCNS), https://fred.stlouisfed.org/series/CPIAUCNS | 2026-11-03 |
 | **[W36]** | Fashion Institute of Technology, *Fashion History Timeline*, "1920–1929", https://fashionhistory.fitnyc.edu/1920-1929/ | 2026-11-03 |
 | **[W37]** | *Whitehouse Review*, 17 April 1945, p. 1 (article on John B. Pickell's 50 years with the Nevius store). **Not seen.** Known only as quoted in [W24]. | — |
+| **[W38]** | Goodspeed Histories, "The County House, Part One", https://goodspeedhistories.com/the-county-house-part-one/ — names (County House / County Hotel / Mount's Hotel), W. H. Force, S. H. Mount 1891, 1907 sale, C. Tunison, architect Chris Pickell's notes, New Market (1970s), the "County Hotel" sidewalk slab; reader comments | 2026-11-04 |
 
 ---
 
@@ -447,6 +453,31 @@ block** for it: its historical basis is **source not recorded** beyond the photo
 | PI-D22 | [bye] "Mind the motor cars at the Court Street corner." | Guess / artistic | — | Court St is 8 m south of his spot in the scene. |
 | PI-D23 | [brief] Flemington has about 2,600 people. | Documented | W32 | 1920 census: 2,590. |
 
+### 2.12 County Hotel (47–49 Main St) — spec written, awaiting owner approval
+
+| ID | Claim | Grade | Sources | Method / note |
+|----|-------|-------|---------|---------------|
+| CY-1 | On the site of an 18th-century tavern (County Tavern; "County House" from 1855 under Jacob B. Smith). | Documented | W38, W11 | Not modelled; background only. |
+| CY-2 | William H. Force bought it "not long after the Civil War" and called it "The County Hotel". | Documented | W38 | |
+| CY-3 | Samuel H. Mount bought it from William H. and Hannah Force on 1 June 1891 for $25,000; c. 1905 it was "Mount's Hotel" (lettered lantern). | Documented | W38, G9 | |
+| CY-4 | Sold in 1907, still as the County Hotel; buyer not named. | Documented | W38 | |
+| CY-5 | Called "County Hotel" in September 1921, with "Heat: Steam", "Light: Elec.", and a 1-storey "Bar & Pool Room" wing behind. | Documented | M1 | Labels only; whether drink was served under Prohibition is not known. |
+| CY-6 | The 1920 proprietor. | **Not known** | — | Searched 2026-11-04; nothing found. |
+| CY-7 | Italianate style (c. 1850–70); exterior walls solid brick. | Documented | W38 (quoting architect Chris Pickell) | Conflicts with the Sanborn colour (frame), see CY-10. |
+| CY-8 | Replaced in the 1970s by the "New Market" shops (Don Shuman); a sandstone slab lettered "County Hotel" was in the sidewalk. | Documented | W38 (text and reader comments) | |
+| CY-9 | Main block 23.86 × 9.07 m, 3 storeys, 30 ft; 2-storey veranda 2.52 m deep across the whole front, its front on the property line; street numbers 47 and 49. | Measured / Documented | M1 (px x 3377–3551, y 4520–4978; veranda x 3551–3600) | Cornice top taken as 9.15 m. |
+| CY-10 | Front and south walls marked grey "(Ir. Cl.)" (iron-clad) on a frame (yellow) building. | Documented (map) | M1 | Meaning for the 1920 look uncertain; not shown in the model. |
+| CY-11 | A 1-storey canted bay at the rear of the south wall (4.4 m along the wall, 1.2 m out); Bar & Pool Room wing 14.4 m long behind; rear porches. | Measured | M1 | The c. 1905 photo shows a squarer projection there. |
+| CY-12 | Three storeys with a flat roofline, deep cornice with closely spaced scroll brackets; 12 shuttered 2/2 windows on the 3rd floor front; 3 / 2 / 1 windows on the south side; two brick chimneys (south near the front, north end). | Documented | G9, P33, P34 | Window count ±1. |
+| CY-13 | Veranda: 9 square posts per floor with long sunk "X" panels, diamond-lattice railing, bracketed porch cornice under the 3rd-floor windows; floor = the paved walk. | Documented | G9, P34, P33 | |
+| CY-14 | Floor levels and sizes (2nd floor ≈ 3.05 m, 3rd ≈ 6.15 m, porch deck 3.10 m, porch cornice 6.40 m, window sizes). | Measured (photo estimate) | G9 (≈ 63 px/m at the SE corner, cornice top = 9.15 m), M1 | ±0.2 m. |
+| CY-15 | North-end veranda bay enclosed on both floors, glazed upstairs. | Documented (1906) / Inferred (1920) | P35, P33 | |
+| CY-16 | Walls: red brick c. 1905–06; pale (painted) by 1908. The model uses pale cream-buff paint. | Documented (photos) / Inferred (1920) | G9, P33 (red, tinted), P34 (pale) | Owner may choose red brick. |
+| CY-17 | Shutters dark green, trim off-white. | Inferred | P33 (tinted green shutters), P34 | Tinted card is weak colour evidence. |
+| CY-18 | A cast-iron lamp standard with a lettered lantern (eagle finial) at the south end of the veranda. | Documented (c. 1905–08) / Guess (1920) | G9, P33, P34 | Lantern read "MOUNT'S HOTEL" c. 1905; **"COUNTY HOTEL" lettering in the model is a guess**. W38 names the man beside it as Cornelius "Dutchy" Tunison (billiard tables; died Aug 1906). |
+| CY-19 | Ground-floor openings (display window and door in the south bay, double main door in bay 3), 2nd-floor door/window pattern, north and rear walls, roof form, chimney positions, wing details. | Guess / artistic (partly Inferred from G9) | G9 (partial) | |
+| CY-20 | No local reference photo or HABS photo shows the hotel. | Documented (search result) | P01–P32, H1–H3 checked | |
+
 ---
 
 ## 3. Known uncertainties / questions for the Historical Society
@@ -491,6 +522,9 @@ Ordered roughly by how much the answer would change the walk.
     1920? Sanborn sheet 3 shows only a buried tank.
 15. **Nevius awning, 1920.** Did it still carry the "Dry Goods · Nevius Bros · Notions"
     lettering? (The model has a plain awning, but Pickell refers to the lettering.)
+16. **County Hotel, 1920.** Who ran it in 1920 (after the 1907 sale)? Were the walls painted, red
+    brick, or sheathed in sheet iron (Sanborn 1921 "Ir. Cl.")? Did the lamp standard still stand,
+    and what did the lantern say? Are there photos of it from 1910–1930?
 
 ### Internal inconsistencies noted while compiling (for the project, not the Society)
 

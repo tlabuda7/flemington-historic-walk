@@ -373,10 +373,19 @@
       building="width: 16.4; height: 7.5; depth: 12; stories: 2; color: #b59a72; wall: wood; photo: "></a-entity>
 
     <!-- North of the starter block, west side -->
-    <a-entity id="county-hotel" position="-10.3 0 -111.8" rotation="0 90 0"
-      building="width: 24; height: 10.5; depth: 16; stories: 3; color: #d8ccb0; wall: wood; photo: "></a-entity>
-    <a-entity id="bldg-35-41-main" position="-10.3 0 -129.6" rotation="0 90 0"
-      building="width: 12; height: 7; depth: 12; stories: 2; color: #b8a07a; wall: wood; photo: "></a-entity>
+    <!-- County Hotel (47–49 Main, 3-storey Italianate painted-brick hotel with a full-width
+         2-storey veranda over the sidewalk, lamp standard at its south end): Blender model with
+         Poly Haven textures and baked late-afternoon light. Built by tools/blender/county_hotel.py
+         + county_hotel_bake.py (textures: tools/prepare_county_hotel_textures.py).
+         Position = centre of the veranda front line at sidewalk level, on the property line;
+         the veranda floor is paved flush with the sidewalk top. Front wall x -12.82, north wall
+         z -124.00, south wall z -100.14; Bar & Pool Room wing back to x -36.31. -->
+    <a-entity id="county-hotel" position="-10.3 0.15 -112.07" rotation="0 90 0"
+      gltf-model="url(assets/models/county-hotel.glb)"
+      baked-lighting="lightmap: assets/textures/county-hotel-lightmap.jpg; intensity: 1.1087"></a-entity>
+    <!-- 35–41 placeholder: z -135.6 … -124.2, trim to -124.05 (stops short of the County Hotel's north wall) -->
+    <a-entity id="bldg-35-41-main" position="-10.3 0 -129.9" rotation="0 90 0"
+      building="width: 11.4; height: 7; depth: 12; stories: 2; color: #b8a07a; wall: wood; photo: "></a-entity>
     <a-entity id="palace-theatre" position="-10.3 0 -145.7" rotation="0 90 0"
       building="width: 12.7; height: 9; depth: 30; stories: 2; color: #7b4030; wall: brick; photo: "></a-entity>
     <a-entity id="bldg-27-main" position="-10.3 0 -159.5" rotation="0 90 0"

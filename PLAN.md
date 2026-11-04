@@ -44,6 +44,7 @@ Decisions (2026-11-02):
 | Frame Dwelling at 65 Main (old no. 510) | written, auto-approved (owner away) | reused, 1 recoloured copy (asset-scout skipped; brown_planks_05 → clapboard_cream made by the builder; roof_slates_03 + red_brick reused) | done (6.3k tris, 4 materials, 1.0 MB, 2K lightmap, LIGHTMAP_SCALE 1.274) | round 1: PASS | yes (GLB, 2026-11-03) |
 | Lovell's Restaurant (68 Main) | written, auto-approved (owner away) | reused + 2 generated (asset-scout skipped; clapboard_cream reused; signs_atlas + stone_bluestone (lightened concrete_floor_worn_001) made by the builder) | done, round-1 fixes applied (4.75k tris, 4 materials, 0.77 MB, 2K lightmap, LIGHTMAP_SCALE 1.2462) | round 2: PASS (round 1: awning raised/shortened, glazed doors, lighter stone; LIGHTMAP_SCALE now 1.2462) | yes (2026-11-04) at (12.66, 0.15, −52.13); bank forecourt extended over its front strip |
 | Rea Building / Clock Tower Building, old Post Office block (48–52 Main) | approved by owner 2026-11-04, **landmark** detail (≤ 15k tris) | — | done (14.6k tris, 5 materials, 1.89 MB, 2K lightmap, LIGHTMAP_SCALE 1.1735) | round 1: PASS | yes (2026-11-04) at (10.85, 0.15, −97.79); 1 draw call |
+| County Hotel (47–49 Main) | approved by owner 2026-11-04: pale painted walls, **landmark** detail (≤ 15k tris) | — | done (10.2k tris, 8 materials, 1.81 MB, 2K lightmap, LIGHTMAP_SCALE 1.1087) | round 1: PASS | in scene 2026-11-04 (−10.30, 0.15, −112.07), 1 draw call |
 | Test person 1: John B. Pickell, clerk at the Nevius store (78 Main) | written, auto-approved (owner away) | done (Quaternius UAL Standard rig + clips incl. Idle_Talking_Loop; UBC Standard = Superhero bodies only, no Regular; MakeHuman system assets + MPFB 2.0.18 zip, not installed; 3 Poly Haven cloth/leather maps + 3 tinted) | done, round-1 fixes applied (12.8k tris, 65 bones, 1 mesh / 1 material / 1 2K atlas, 1.25 MB; Idle 6 s, Talk 3 s, Walk 1.33 s; MPFB head + hands) | round 2: PASS (round 1 FIXES: moustache, stance/crotch, shoulder and collar, jacket fronts, cuffs, gaze, chain) | **yes** (9.50, 0.15, −8.45), talks with a voice (js/people.js) |
 | Street ambiance pass 1: sound + street props (`street-props.glb`, `assets/audio/`) | written, auto-approved (owner away) | done (3 Poly Haven maps + 3 recoloured, 3 reused; 16 audio clips, 1.96 MB / 250 s; bed = #0659 instead of #1911) | props done, round-1 fixes applied (4.75k tris, 12 nodes, 1 material / 1 2K atlas colour × AO, 0.83 MB) | props round 2: PASS (round 1 FIXES: horse-head relief, pump globe lettering seam) | sound: yes (2026-11-04, `js/ambience.js`); props: yes (2026-11-04, `street-props` in `js/components.js`: 34 placements in 3 z-band meshes + 1 wire mesh, +4 draw calls) |
 
@@ -2083,6 +2084,276 @@ sign over the stair-hall door (P.O. gone by 1921), upper-window awnings.
    chimney position; north, rear and Flats walls entirely guessed.
 7. Steps continuous along the whole front (1906–07 cards) and 4 risers.
 
+### County Hotel (47–49 Main St)
+
+**Status:** **In scene** (scene-integrator, 2026-11-04): `#county-hotel` at (−10.30, 0.15, −112.07), rotation 0 90 0, faces Main St, veranda floor flush with the sidewalk; merged to 1 draw call; `#bldg-35-41-main` placeholder shortened to z −135.6 … −124.2; no props moved (pole-W5 clear, no trees nearby); no console errors; screenshots `assets/models/previews/county-hotel-scene-{across,veranda}.png`. Earlier: **Reviewed, round 1: PASS** (reviewer, 2026-11-04): loads in the viewer with no errors (10,234 tris, 8 materials, TEXCOORD_0 + 1, all colour maps 1K, 2K lightmap); matches the c. 1905 photo (8-bay two-storey veranda, X-panel posts, lattice railing, bracketed porch and main cornices, 12 shuttered 3rd-floor windows, lamp, south bay, rear wing); clean soft-shade lightmap, pale paint not overbright. Next: show the owner, then scene-integrator. Earlier: **Built** (blender-builder, 2026-11-04): `assets/models/county-hotel.glb` (1.81 MB, 10,234 tris, 8 materials, TEXCOORD_0 + 1), 2K lightmap `assets/textures/county-hotel-lightmap.jpg`, **LIGHTMAP_SCALE 1.1087**; scripts `tools/blender/county_hotel.py` + `_bake.py` + `_preview.py`, `tools/prepare_county_hotel_textures.py` (painted-brick recolour + signs atlas); source `assets/models/source/county-hotel.blend`; previews `assets/models/previews/county-hotel-{front,three-quarter,detail,north}.png`. Earlier: spec approved by the owner (2026-11-04): pale painted walls, landmark detail (≤ 15k tris); asset-scout skipped (no downloads). Next: reviewer.
+
+**What it is**: the town's second hotel, on the **west side of Main St, opposite the Rea Building
+and a little north of the Union Hotel**. The lot was a tavern from the 18th century (County
+Tavern, "County House" from 1855); **William H. Force** bought it after the Civil War and called it
+**"The County Hotel"**; **Samuel H. Mount** bought it on **1 June 1891** ($25,000), and c. 1905 it
+was "Mount's Hotel" (lettered lantern in the photo); it was **sold again in 1907, still as the
+County Hotel** (buyer not named). The 1921 Sanborn labels it **"COUNTY HOTEL", "Heat: Steam",
+"Light: Elec."**, with a 1-storey **"Bar & Pool Room"** wing behind. Architect Chris Pickell calls
+the style **Italianate (c. 1850–70)** and found **solid brick exterior walls**. Replaced in the
+1970s by the "New Market" shops (Don Shuman); a sandstone slab lettered "County Hotel" was long
+in the sidewalk. **The 1920 proprietor is not known.**
+
+What it looked like (1905–08 photos): a long **3-storey flat-topped block, 24 m front, 8 bays,
+with a deep bracketed cornice and shuttered 2/2 windows**, and a **full-width 2-storey veranda over
+the sidewalk**: square posts with long sunk "X" panels, a **diamond-lattice railing** on the upper
+deck and a **bracketed porch cornice** just under the 3rd-floor windows. A cast-iron lamp standard
+with a lettered lantern stood at the south end of the veranda.
+
+**Planner decisions** (from the map and photos; owner to confirm)
+1. **Footprint and height from the 1921 Sanborn** (frontage 23.86 m, main block 9.07 m deep,
+   veranda 2.52 m, "3" storeys, "30'"), **form and details from the c. 1905 "Mount's Hotel"
+   photograph** (sharp, near-frontal from the SE), checked against the 1906 and 1908 cards.
+2. **Walls painted pale cream-buff (painted brick)** for 1920. Evidence conflicts: c. 1905 photo
+   and 1906 tinted card = unpainted red brick; **1908 card = pale walls** (painted by then);
+   1921 Sanborn = frame (yellow) with the **front and south walls marked grey "(Ir. Cl.)"
+   (iron-clad)**; Pickell = solid brick. Pale painted is the latest evidence. **Owner option:
+   red brick (reuse `polyhaven/red_brick.jpg` unchanged).**
+3. **North end bay of the veranda enclosed on both floors** (glazed upper room, boarded ground
+   floor with a window), as in the 1906 "Main Street – County Hotel" card and the 1906 tinted card.
+4. **Lamp standard kept, lantern lettered "COUNTY HOTEL"** (it read "MOUNT'S HOTEL" c. 1905;
+   name per 1907/1921). Whether it still stood in 1920 is a guess. No other signs (the
+   "Jacob Veit Livery" board on the corner post c. 1905 is left out).
+5. **Bar & Pool Room wing modelled as a simple 1-storey clapboard box** (visible through the open
+   lot to the south); the rear porches are not modelled.
+6. **Budget: recommend "landmark detail" cap 15k tris (target ~13k), 8 materials merged to one
+   draw call.** Why: the façade is 24 m of repeated detail (≈ 70 scroll brackets, 8 bays of
+   lattice railing, 18 posts, ~50 shuttered windows); at 10k the railing and brackets must be
+   flattened and the building's character (it is the visitor's main west-side view north of
+   Bloomfield Ave, opposite the Rea Building) would suffer. It is not a top landmark like the
+   courthouse or Union Hotel, so not 30k. **Ordinary (10k) fallback**: see Budget.
+
+**Sources**
+- Map: 1921 Sanborn **sheet 2** [M1]: "COUNTY HOTEL / HEAT: STEAM / LIGHT: ELEC.", yellow
+  (frame), **"3"** storeys, **"30'"**, a grey L-shaped strip along the inside of the front and south
+  walls lettered **"(IR. CL.)"**, "o" marks (non-combustible roofs); street numbers **47, 49** (old
+  514/515); a yellow **"2"**-storey strip across the whole front (the veranda). Pixel lines:
+  **front wall x 3551; veranda front x 3600 (= the dashed property line); rear wall x 3377;
+  north wall y 4520 (party line with the brick "Cobbler" building, 39–41); south wall y 4978**.
+  South-wall canted 1-storey bay: base x 3380–3465, outer face x 3400–3440 at y 5001.
+  Bar & Pool Room (1-storey frame): from the rear wall to x 3100, south edge (3372, 4985) →
+  (3100, 4940), north edge (3340, 4855) → (3165, 4825), plus a small 1-storey bump at its NW
+  end and a stoop on its south side. Rear porches: 2-storey x 3340–3377, y 4530–4650; 1-storey
+  x 3340–3377, y 4785–4850. South of the hotel an open lot (y 4978 … ~5095, 6.1 m) to 51–57 Main.
+- Photos (**none of the local `assets/photos/reference/` files or HABS photos show this hotel**;
+  all checked). Viewed online for this spec, not saved to the project:
+  - **Primary: "Mount's Hotel", c. 1905 (before Aug 1906)**, HCHS PX333, in Goodspeed "The
+    County House, Part One":
+    https://i0.wp.com/goodspeedhistories.com/wp-content/uploads/2025/11/Hotel-Tunison.jpg
+    (3081 × 2516; from the street to the SE, front + south side; brick, cornice, 12 upper
+    windows, 9 veranda posts with X panels, lattice railing, porch brackets, lamp, south bay,
+    clapboard wing behind, two chimneys). All proportions below were scaled on it
+    (≈ 63 px/m at the SE corner on the 1400-px copy, from cornice top = 9.15 m).
+  - **"The County Hotel – 1908"** (WJH `flmngtncountyhotel08.jpg`): same viewpoint, **pale walls**,
+    dark shutters, same veranda and lamp. Closest to 1920 for colour.
+  - **"The County Hotel – 1906"** (WJH `flmngtncountyhtl06.jpg`, tinted): salmon/red walls, green
+    shutters, brown trim; the north-end upper bay glazed; chimneys at both ends.
+  - **"Main Street – County Hotel – 1906"** (WJH `flmngtnmainstrtcountyhtlvu06.jpg`, looking
+    south from the north): **north-end veranda bay enclosed on both floors** (two windows in its
+    north face upstairs, a window below), chimney mid-roof, flat roofline.
+  - "Main Street and County Hotel – 1908" (WJH `flmngntnmainstcountyhtl08.jpg`, looking north,
+    dark): confirms the long veranda and cornice; no detail.
+  - Originals at `https://westjerseyhistory.org/images/hunterdon/flemington/data/images/<file>`.
+    The orchestrator may ask asset-scout to save the four WJH cards **local-only** (gitignored)
+    for the reviewer.
+- Web text: Goodspeed Histories, "The County House, Part One"
+  (https://goodspeedhistories.com/the-county-house-part-one/): names, Force, Mount 1891, 1907
+  sale, Tunison, Pickell (Italianate, solid brick walls), New Market 1970s, "County Hotel" slab;
+  "County House" series [W11] (18th–early 19th c. tavern; not used for the 1920 form).
+
+**Placement** (west side, front faces east onto Main St)
+- Entity position = centre of the veranda front line at sidewalk level:
+  **(−10.30, 0.15, −112.07)**, `rotation="0 90 0"`; replaces the kit placeholder `#county-hotel`
+  at (−10.3, 0, −111.8) (keep the id).
+- Scene lines: veranda front x −10.30 (property line; map −10.26); **front wall x −12.82**;
+  **rear wall x −21.88**; **north wall z −124.00**; **south wall z −100.14**; Bar & Pool Room
+  wing to x −36.31. Cornices overhang the veranda front by 0.30 (to x −10.00), above 5.7 m.
+- **Neighbours**: north, the brick "Cobbler" (39–41; front ≈ x −13.1, z −129.2 … −124.0) abuts
+  the north wall. Its kit placeholder `#bldg-35-41-main` (front x −10.3, z −135.6 … −123.6)
+  **overlaps the hotel by 0.4 m** — scene-integrator: shorten/shift it to end at z ≤ −124.05
+  (not part of this model). South: an open lot 6.1 m wide, then the `#bldg-57-main` placeholder
+  (z ≥ −93.4). Opposite: the Rea Building.
+- **Street props**: pole-W5 (−6.9, −118) is 3.4 m in front of the veranda — clear; no street
+  trees between z −95 and −130. The lamp standard (part of this model) stands at world
+  ≈ (−9.70, 0.15, −102.2), 3.2 m from the curb.
+- **Ground**: the veranda floor is the paved strip between the property line and the front wall
+  (flush with the sidewalk top, local z 0), so no paving box is needed. All walls and the paving
+  skirt to local z −0.20 (world −0.05; the side lot and rear yard are at world y 0).
+- **Blender local frame**: front −Y, origin at the centre of the veranda front line at sidewalk
+  level, **+X = north**, −X = south, z = 0 = sidewalk top. Main block X −11.93 … +11.93,
+  Y 2.52 … 11.58; veranda Y 0 … 2.52. Sun "to sun" **(−0.40, 0.90, 0.36)** (front in shade,
+  south side grazed, rear sunlit). Optional bake occluder (not exported): box for 39–41 at
+  X +11.93 … +17.1, Y 2.8 … 11.6, z 0 … 8.5.
+
+**Massing** (heights: cornice top = Sanborn 30' = 9.15 m; levels scaled on the c. 1905 photo)
+- Main block **23.86 × 9.07 m**, 3 storeys. Ground floor 0.15 above the paving (one sill
+  step at doors); **2nd floor ≈ 3.05; 3rd floor ≈ 6.15**.
+- Main entablature: frieze band 8.10–8.75 (brackets 8.15–8.75), **cornice 8.75–9.15 projecting
+  0.65**, all four sides (rear: plain fascia, no brackets).
+- **Roof**: flat/very low tin deck (≈ 3°) behind the cornice, top ≤ 9.45; never seen in photos;
+  dark grey.
+- **Chimneys** (brick, 0.90 × 0.50, top **10.30**, 0.08 corbel cap): one on the south wall at
+  Y 4.5 (≈ 2 m behind the front), one on the north wall at Y 4.5 (photo shows a north-end
+  stack; position a guess).
+- **Veranda**: full width (X −11.93 … +11.93), Y 0 … 2.52, 2 storeys: ground-floor posts on the
+  paving; **upper deck top 3.10** (fascia beam 2.80–3.10); railing top 4.00; upper posts to 5.75;
+  **porch entablature 5.75–6.40** (frieze with brackets 5.80–6.25, cornice 6.25–6.40 projecting
+  0.30 at front and ends); porch roof (tin) slopes from 6.40 at the front to 6.55 at the wall
+  (under the 3rd-floor sills).
+- **South-wall bay** (1 storey, canted, map): on the south face X −11.93, base Y 7.00 … 11.43,
+  outer face Y 8.30 … 10.38 at X −13.13; walls to 3.30, small cornice to 3.50, flat tin roof.
+- **Bar & Pool Room wing** (1-storey frame, map): trapezoid in plan, corners (X, Y) =
+  (−11.93, 11.58), (−5.55, 11.58), (−3.95, 26.00), (−9.95, 26.00); clapboard walls to **3.60**,
+  low shed roof falling to the south (top 4.20 at the north wall), 0.25 eave. 2 windows on its
+  south side, a door with one step at Y 19.0 (map stoop), plain elsewhere. The small NW bump is
+  left out.
+
+**Elevation details (1920 state)** — X from south (−) to north (+)
+- **Veranda posts: 9 per floor, evenly spaced at X = −11.80 + 2.95 k (k = 0 … 8), front face at
+  Y 0.** Ground posts 0.26 square, 0 → 2.80, with a 0.10 plinth block and a moulded cap
+  (0.34 square, 0.12); upper posts 0.24 square, 3.10 → 5.75, same cap. Each post face shows a
+  **long sunk panel with an "X"** (two X's stacked on the ground posts, one on the upper) — atlas
+  texture, not geometry.
+- **Upper deck**: fascia beam 0.30 deep across the front and both ends; deck edge at Y 0.
+  **Railing**: 8 bays between the posts (and the two ends, Y 0 … 2.52), top rail 0.10 × 0.06 at
+  3.94–4.00, bottom rail at 3.20–3.26, filled with **crossed diagonal slats** (0.04 × 0.03,
+  at ±45°, 0.25 m apart = a diamond lattice, as the c. 1905 photo). The north bay has no railing
+  (enclosed).
+- **Porch entablature**: plain frieze board, **scroll brackets every ≈ 0.98 m (one over each post
+  + two between: 25 on the front, 3 on each end)**, 0.45 tall, 0.30 deep, 0.10 wide; cornice
+  with a 0.30 soffit. A sloping tin leader (downpipe) from the south end of the porch roof to the
+  wall (as photo): optional.
+- **Enclosed north bay** (X +8.85 … +11.93, Y 0.10 … 2.52, both floors): ground floor boarded
+  (trim material, panelled), one 0.90 × 1.70 window in the front and one in the north face;
+  upper floor glazed: front face **two 0.90 × 1.80 sash windows**, north face two, on a panelled
+  dado 3.10–3.90.
+- **Main front, ground floor** (behind the veranda, Y 2.52), per bay centre: bay 1 (X −10.33):
+  **large display window 1.60 × 1.90** (sill 0.60) left + panelled door 0.90 × 2.30 right;
+  bay 2: window; **bay 3: main entrance, double doors 1.30 × 2.60 with tall etched-glass upper
+  panels, transom to 3.00**; bays 4–7: windows **0.90 × 1.70, sill 1.10**, 2/2, open louvred
+  shutters; bay 8 behind the enclosure (one door 0.90 × 2.30).
+- **Main front, 2nd floor** (behind the veranda): one opening per bay centre, bays 1–7:
+  windows 0.85 × 1.70 (sill 3.60) with shutters in bays 1, 3, 5, 7; **glazed doors 0.85 × 2.30
+  onto the deck in bays 2, 4, 6** (guess pattern; the photo shows a mix). Bay 8 behind the
+  enclosure: one window.
+- **3rd floor front: 12 windows, centres X = −10.94 + 1.99 k (k = 0 … 11)**, **0.80 × 1.20,
+  sill 6.70**, 2/2 sash, plain frame 0.10, stone/painted sill, **open louvred shutters**
+  (2 × 0.40 × 1.20). (Count 12 ± 1 on the photo.)
+- **Main cornice brackets**: large scroll brackets 0.60 tall × 0.45 deep × 0.12 wide, **every
+  ≈ 1.0 m (24 on the front, 9 on each side), a pair at each front corner**, with sunk panels in
+  the frieze between them; cornice crown moulding.
+- **South side** (X −11.93, Y 2.52 … 11.58; exposed to the open lot): 3rd floor **3 windows at
+  Y 3.6, 6.9, 10.1**; 2nd floor **2 windows at Y 3.6 and 10.1**; ground floor 1 window at Y 3.6,
+  then the canted bay (one 1.10 × 1.70 window in the outer face, a 0.60 × 1.70 one in each
+  canted face). All with shutters, sizes as the front floors (2nd: 0.85 × 1.70, sill 3.60).
+- **North side**: as the south upper floors (guess); the ground floor is hidden by 39–41.
+- **Rear (west)**: 2nd and 3rd floors 5 windows each (no shutters), ground floor hidden by the
+  wing and rear porches (2 windows north of the wing); plain fascia cornice. Guess.
+- **Lamp standard** (cast iron, documented 1905–08): at **(X −9.90, Y −0.60)**; fluted base
+  Ø 0.30 × 0.50, shaft Ø 0.10 to 3.00, **square lantern 0.40 × 0.40 × 0.70 (3.00–3.70)** with a
+  pyramid cap and a small ball/spike finial to 4.10 (the eagle is simplified). Glass panes
+  **lettered "COUNTY HOTEL"** (atlas, two words stacked, dark letters on pale glass).
+- Not modelled: gutters, telephone/electric drops, the rear porches, the wing's NW bump,
+  interiors, the c. 1905 livery sign.
+
+**Materials & colours (1920)** — 8 materials (merged into one draw call by `baked-lighting`)
+1. `walls` — **painted brick, pale cream-buff ≈ #D8CDB4**: new local recolour
+   **`assets/textures/county-hotel/brick_painted_cream.jpg`** from `polyhaven/red_brick.jpg`
+   (desaturate, lighten, ~30 % contrast so the coursing just shows), tile 1.4 m. (Owner option:
+   unpainted red brick → reuse `polyhaven/red_brick.jpg`.)
+2. `trim` — cornices, brackets, frieze, veranda posts/beams/railing/brackets, window frames, sash,
+   enclosure boards, door frames: **off-white** — reuse **`courthouse/paint_white.jpg`**, tile 2.0
+   m, bake tint (0.96, 0.94, 0.88) so it reads just lighter than the walls (1908 card).
+3. `shutters` — shutters and doors: **dark green** — reuse **`polyhaven/door_paint_green.jpg`**,
+   darkened (1906 tinted card: green; dark in all sepia views); louvre lines from the atlas.
+4. `dark` — plain colour: glass ≈ #1E2226, roofs/tin ≈ #4A4C50, lamp iron ≈ #24262A.
+5. `brick` — chimneys: reuse **`polyhaven/red_brick.jpg`**, tile 1.4 m.
+6. `paving` — veranda floor strip: reuse **`lovells-restaurant/stone_bluestone.jpg`** (flags),
+   tile 2.0 m (c. 1905 photo: flagged/brick walk under the veranda).
+7. `clapboard` — Bar & Pool Room wing: reuse **`house-65-main/clapboard_cream.jpg`**, tile 1.6 m
+   (c. 1905 photo: pale clapboard wing).
+8. `signs` — **new locally generated atlas `assets/textures/county-hotel/signs_atlas.jpg`, 1024²**
+   (Pillow script `tools/prepare_county_hotel_textures.py`, own work, logged in SOURCES.md):
+   louvre pattern (dark green slats with shadow lines), **post face with a long sunk "X" panel**
+   (off-white, shadowed edges; one cell for the double-X ground post, one single-X), lantern pane
+   "COUNTY HOTEL" (dark serif capitals on pale amber glass).
+- **New for asset-scout: none** (2 locally generated files). One **2K lightmap**
+  `assets/textures/county-hotel-lightmap.jpg` (front, veranda and south side weighted up; rear,
+  north wall and roofs down).
+
+**Weathering**: a 1850s–60s building in a working hotel, kept up but not new: soot under the
+main and porch cornices; grey streaks under the 3rd-floor sills and bracket feet; paint chalkier
+and slightly dirtier on the south wall; dark scuffing on the lower 0.6 m of the ground-floor
+wall and the post plinths; the paving darker and worn along the door line and at the bay-3
+entrance; railing paint a little grey; rust stain under the lamp lantern; tin roofs dull; soot
+on the chimney tops; the clapboard wing greyer than the hotel.
+
+**Budget**: **recommended cap 15k triangles, target ~13k**: walls with openings ~1.2k; ~55
+windows (frames, sash, glass, sills) ~2.8k; ~45 shutter pairs as boxes ~1.1k; ~70 main + porch
+scroll brackets (10-point profile) ~2.6k; railing lattice (8 bays + ends, slats as thin boxes)
+~2.0k; 18 posts with caps and plinths ~0.6k; cornices, friezes, beams, porch roof ~0.8k; doors
+and enclosure ~0.6k; south bay ~0.3k; wing ~0.3k; chimneys, lamp ~0.4k; paving, roof ~0.1k.
+**If the owner chooses ordinary (≤ 10k)**: railing as a top/bottom rail with one diagonal per
+0.5 m, porch brackets only over the posts (9), main brackets every 2 m, rear/north windows as
+flat inset panels. Textures: 6 reused 1K maps + 2 generated (1 recolour, 1 atlas), one 2K
+lightmap. Files: `tools/blender/county_hotel.py` + `county_hotel_bake.py` (+ `_preview.py`),
+`assets/models/source/county_hotel.blend`, `assets/models/county-hotel.glb` (≤ 5 MB, expect
+~2 MB), previews `assets/models/previews/county-hotel-*.png` (incl. one from the SE at street
+level matching the c. 1905 photo's viewpoint, one from the north on the west sidewalk
+matching the 1906 "Main Street – County Hotel" card, one frontal).
+
+**Acceptance checks for the reviewer**
+1. Main block 23.86 × 9.07 m, cornice top 9.15 ± 0.2 m; veranda 2.52 m deep across the full
+   front; origin at the centre of the veranda front line at sidewalk level, front −Y, **+X = north**.
+2. **Two-storey veranda with 9 evenly spaced posts per floor (8 bays)**, posts showing sunk "X"
+   panels, a **diamond-lattice railing** on the upper deck, and a **bracketed porch cornice just
+   below the 3rd-floor windows**.
+3. **12 shuttered 3rd-floor windows** across the front above the porch roof; deep main cornice
+   with closely spaced scroll brackets (≈ 1 m) on the front and both sides; flat roofline (no
+   visible roof).
+4. **North-end veranda bay enclosed on both floors**, glazed upstairs.
+5. South side: 3 / 2 / 1 windows (3rd / 2nd / ground) plus a **1-storey canted bay** at the rear
+   corner; a brick chimney near the front on the south wall.
+6. Ground floor: display window + door in the south bay, **double main entrance in bay 3**,
+   shuttered windows elsewhere.
+7. Cast-iron **lamp standard with a lantern lettered "COUNTY HOTEL"** at the south end, in front
+   of the veranda.
+8. 1-storey clapboard **Bar & Pool Room** wing behind, reaching 14.4 m beyond the rear wall.
+9. Walls read **pale cream-buff with faint brick coursing**; trim off-white; shutters dark green;
+   chimneys red brick.
+10. ≤ 15k triangles (or ≤ 10k if the owner chose ordinary), ≤ 8 materials, GLB ≤ 5 MB,
+    TEXCOORD_0 + 1, 1K colour maps, 2K lightmap; with the WSW sun the front and veranda are in
+    soft shade, the south wall grazed; nothing floats at the side lot or the rear yard.
+
+**Integrator notes (scene, not the model)**
+- Replace `#county-hotel` with the GLB at **(−10.30, 0.15, −112.07)**, rotation 0 90 0,
+  `baked-lighting` with the bake's LIGHTMAP_SCALE; keep the id.
+- Shorten/shift `#bldg-35-41-main` so it ends at z ≤ −124.05 (0.4 m overlap today).
+- No paving box (the model's veranda floor covers x −10.30 … −12.82).
+
+**Photos vs 1920**: the latest views of the hotel are the 1908 cards, 12 years early. Taken from
+them: pale walls, the veranda, lamp and the enclosed north bay. From the sharper c. 1905 photo:
+all proportions and details. Left out as earlier: "MOUNT'S HOTEL" lantern lettering, the livery
+sign. The 1921 Sanborn confirms the 1920 footprint, height, veranda and rear wing; its "(Ir. Cl.)"
+note on the front and south walls may mean these walls were sheathed in sheet metal by 1921,
+which the model does not show (no evidence of its pattern).
+
+**Pure guesses (owner to check)**
+1. Wall finish in 1920: pale painted brick (1908 card) vs red brick (c. 1905, 1906) vs iron
+   cladding (Sanborn "Ir. Cl."); colours of trim and shutters (one tinted card).
+2. The lamp standard and its "COUNTY HOTEL" lettering still there in 1920.
+3. 2nd-floor door/window pattern behind the veranda; ground-floor openings in bays 2 and 4–8.
+4. North-wall windows, rear wall, chimney positions, roof form, the wing's roof and openings.
+5. South bay shape: canted per the 1921 map (the c. 1905 photo shows a squarer 1-storey
+   projection; the map is followed).
+6. Window count 12 on the 3rd floor (±1) and the bracket spacing (≈ 1 m) from one photo.
+7. The 1920 proprietor (unknown; nothing in the model depends on it).
+
 ## Constraints
 
 - A-Frame from a CDN, plain HTML/JS. No build tools or frameworks.
@@ -2937,3 +3208,7 @@ Check licensing for every asset and note the source in the progress log.
 | 2026-11-04 | blender-builder: Rea Building / Clock Tower Building (48–52 Main) **built** at landmark detail: `tools/blender/rea_building.py` + `_bake.py` + `_preview.py`, `tools/prepare_rea_textures.py` (sign/clock/louvre/dentil atlas). 14,593 tris after hidden-face removal, 5 materials, GLB 1.89 MB, 2K lightmap, LIGHTMAP_SCALE 1.1735. 7 bays 2–3–2 with hoods, keystones, louvred shutters; segmental pediments (front with oval window, Bloomfield side), 20 scroll brackets, dentil course; cupola with 4 clock gables and dials, pole to 18.7 m; shop fronts 48/52, rusticated arches, steps along the front, Green's and striped awnings; Flats wing. Previews: front, three-quarter, cupola, detail, match-flmngtnpoandnatbank08, match-flmngtnpobankunionhtl07. Next: reviewer. |
 | 2026-11-04 | reviewer: Rea Building / Clock Tower Building (48–52 Main) round 1: **PASS**. GLB 1.89 MB, 14,593 tris (≤ 15k landmark cap), 5 materials, 4 × 1K JPEG + 2K lightmap, TEXCOORD_0/1; viewer loads with no errors. Matches the 1907/1908 cards and spec: 7 bays 2–3–2 with hoods, keystones and shutters, broken segmental pediment with oval window, paired brackets and dentils, cupola with 4 clock gables and pole to 18.7 m, rusticated arches (door, window, door), steps, Green's and striped awnings, Bloomfield side with side arch, chimney and Flats. Optional: warmer cream cupola; Flats door step projects 0.40 m onto Bloomfield Ave. |
 | 2026-11-04 | scene-integrator: Rea Building / Clock Tower Building (48–52 Main) **in scene** at (10.85, 0.15, −97.79), rotation 0 −90 0, replacing the placeholder `#bldg-48-52-main` (id kept); `baked-lighting` intensity 1.1735, merged 5 materials → 1 call. Draw calls / triangles (looking north): start 73 → 70 / 125.7k → 140.3k; z −60: 56 → 53 / 39.1k → 53.7k; z −90: 41 → 38 / 7.2k → 21.8k (placeholder used 4 calls). Steps stand on the sidewalk to x 9.65, clear of pole E5 and hydrant Y2; no props or trees moved; `#bank-forecourt` unchanged; 2.0 m passage to the 40–46 placeholder; Flats door step (0.40 m onto Bloomfield Ave) looks fine. No console errors. Also added HISTORY-SOURCES.md (register of historical claims and sources). |
+| 2026-11-04 | planner: County Hotel (47–49 Main, west side opposite the Rea Building; Italianate hotel, "County Hotel" under W. H. Force after the Civil War, Mount's Hotel from 1891, sold 1907, demolished 1970s for New Market) spec written, **awaiting owner approval**. Sanborn sheet 2: 3 storeys, 30', 23.86 × 9.07 m, full-width 2-storey veranda 2.52 m deep to the property line, front/south walls "(Ir. Cl.)", 1-storey Bar & Pool Room wing → entity (−10.30, 0.15, −112.07). No local photo shows it; four West Jersey History cards (1906–08) and the c. 1905 "Mount's Hotel" photo (Goodspeed/HCHS) viewed online: 8-bay veranda with X-panel posts and diamond-lattice railing, 12 shuttered 3rd-floor windows, bracketed cornice, lamp standard. Walls pale painted brick (1908) vs red brick (1905–06): owner to choose. Recommended 15k tris (landmark detail), 8 materials, no downloads (1 recolour + 1 sign atlas generated), 2K lightmap. |
+| 2026-11-04 | blender-builder: County Hotel (47–49 Main) **built**: `tools/blender/county_hotel.py` + `_bake.py` + `_preview.py`, `tools/prepare_county_hotel_textures.py` (brick_painted_cream.jpg, signs_atlas.jpg). GLB 1.81 MB, 10,234 tris (≤ 15k cap), 8 materials, 2K lightmap, LIGHTMAP_SCALE 1.1087, west-side sun (−0.40, 0.90, 0.36), 39–41 bake occluder 7 m. Changes from spec: north-wall windows only on the 3rd floor (plain, unshuttered; the 2nd floor is hidden by the 7 m neighbour), rear 2nd floor 4 windows (moved clear of the wing roof), main-door transom to 2.92 (under the 3.00 deck ceiling), enclosure windows recessed 0.10. Next: reviewer. |
+| 2026-11-04 | reviewer: County Hotel (47–49 Main) round 1 **PASS**: GLB loads cleanly (10,234 tris, 8 materials, UV2), proportions and veranda/cornice/shutter/lamp detail match the c. 1905 photo, lightmap clean (no blotches, seams or black spots). Builder deviations accepted. Next: owner, then scene-integrator. |
+| 2026-11-04 | scene-integrator: County Hotel (47–49 Main) **in scene** at (−10.30, 0.15, −112.07), 1 draw call; 35–41 placeholder shortened to end at z −124.2; no props moved. Draw calls/tris (looking north): start 70/140k → 67/150k, z −90 38/22k → 35/32k, z −110 37/7k → 34/17k. |
