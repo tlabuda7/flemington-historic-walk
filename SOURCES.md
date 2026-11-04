@@ -272,6 +272,30 @@ CC0 / public-domain alternative turns up.
 | `shop-bell.ogg` | Freesound 479988 "R04-62-Shop Bell" by craigsmith, one jingle 3.3–5.6 s | https://freesound.org/s/479988/ (file https://cdn.freesound.org/previews/479/479988_2524442-hq.mp3) | CC0 (see note above) | Nevius shop door bell |
 | `train-whistle.ogg` | BigSoundBank #3013 "Hiss of steam train #4" (J. Sardin; steam whistle, Martel, France), whole | https://bigsoundbank.com/hiss-of-steam-train-4-s3013.html | CC0 | very distant train whistle (optional) |
 
+### Voice of Mr. Pickell (`assets/audio/voices/pickell/`)
+
+Synthetic speech, made offline on 2026-11-04 by `tools/make_voice_pickell.py` (11 clips
+`<node-id>.ogg` = his 11 dialogue lines, plus `timings.json` with per-word times). Mono OGG
+Vorbis, 22.05 kHz, 64 kbps, about −18 LUFS (true peak ≤ −1 dBFS). The voice model and the TTS
+program were used only on the PC; neither is stored in the repo.
+
+**Attribution (CC BY 4.0 requires it; shown on the page in `index.html` `#credits`, bottom-left):**
+*"Mr. Pickell's voice: synthetic speech made with Piper TTS, voice model en_US-libritts-high
+(speaker 595), trained on the LibriTTS corpus by H. Zen, V. Dang, R. Clark, Y. Zhang, R. J. Weiss,
+Y. Jia, Z. Chen and Y. Wu (2019), CC BY 4.0, http://www.openslr.org/60/. Changes: new text."*
+
+| File | Source | URL | Licence | Used for |
+|------|--------|-----|---------|----------|
+| `<node-id>.ogg` × 11, `timings.json` | Piper voice model **`en_US-libritts-high`**, speaker index **595** (= LibriTTS reader 7241), from the official `rhasspy/piper-voices` repo; model card: dataset LibriTTS train-clean-360, "trained from scratch" | https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/libritts/high | Dataset **CC BY 4.0** (http://www.openslr.org/60/; LibriTTS is cut from LibriVox public-domain audiobook readings). Model repo: MIT | Mr. Pickell's spoken lines |
+| (tool, not shipped) | **Piper TTS** `piper-tts` 1.8.0 from PyPI (Open Home Foundation, https://github.com/OHF-Voice/piper1-gpl), installed only in a throwaway virtual environment | https://pypi.org/project/piper-tts/ | **GPL-3.0-or-later** (applies to the program; the audio it outputs is not covered by the GPL) | generating the clips |
+
+Why this model: the owner asked for a clearly permissive licence. `en_US-libritts_r-medium`
+(CC BY 4.0 data) was not used because its model card says it was fine-tuned from the `lessac`
+voice, whose Blizzard 2013 dataset licence is restrictive; `libritts-high` was trained from
+scratch on LibriTTS only. Rejected: `ryan` and `hfc_male` (CC BY-NC-SA data), `arctic` (no clear
+licence). Public-domain alternatives if ever needed: `en_US-norman-medium` (LibriVox, trained from
+scratch).
+
 ## Code libraries (loaded from CDNs, not stored in the repo)
 
 | Library | Version | URL | Licence | Used for |

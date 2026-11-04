@@ -16,6 +16,17 @@
  * - Timers run on the scene clock (tick), so they stop while the tab is hidden; the
  *   audio context is suspended then too.
  * - M mutes / unmutes.
+ *
+ * Shared audio API for other scripts (used by js/people.js for spoken lines):
+ *   const amb = sceneEl.components['street-ambience'];
+ *   amb.audioReady()        true once the first gesture has created the AudioContext
+ *   amb.prefetch(url)       download a clip early (no decoding yet)
+ *   amb.getBuffer(url)      Promise<AudioBuffer>: decoded once, cached by URL
+ *   amb.makeVoice(parent)   a THREE.PositionalAudio on the shared listener (counts toward
+ *                           MAX_VOICES, so ambient one-shots give way; speech itself is never
+ *                           refused). M mute applies to it too (the listener's gain).
+ *   amb.duck(on)            lower the town bed and walla by DUCK_DB while someone talks
+ *   amb.fadeOutStop(a, s)   fade a voice out over s seconds and stop it
  */
 (function () {
   const DIR = 'assets/audio/';
@@ -28,6 +39,8 @@
   ];
   const BIRDS = ['bird-robin', 'bird-cardinal', 'bird-titmouse', 'bird-catbird'];
   const MAX_VOICES = 6;
+  const DUCK_DB = -4;               // town bed + walla while a person speaks
+  const LOOP_VOL = { bed: 0.35, wallaHotel: 0.30, wallaCourt: 0.20 };
 
   // Unseen routes for passing traffic (PLAN.md): behind the buildings or far in the haze.
   const ROUTES = [
@@ -56,6 +69,8 @@
       this.passes = [];       // moving traffic passes in progress
       this.voices = [];       // every THREE.Audio we made (for the voice cap)
       this.lastBird = '';
+      this.clips = {};        // url -> { raw: Promise<ArrayBuffer>, decoded: Promise<AudioBuffer> }
+      this.duckGain = 1;      // 1, or 10^(DUCK_DB/20) while someone speaks
       this.tmpV = new THREE.Vector3();
 
       // Download the clips once the scene is up (not in <a-assets>: they must not
@@ -205,15 +220,55 @@
     },
 
     onDecoded(name) {
-      if (name === 'amb-town-bed') this.startLoop(this.bed, name, 0.35, 3);
+      const k = this.duckGain;
+      if (name === 'amb-town-bed') this.startLoop(this.bed, name, LOOP_VOL.bed * k, 3);
       if (name === 'amb-walla') {
-        this.startLoop(this.wallaHotel, name, 0.30, 3);
-        this.startLoop(this.wallaCourt, name, 0.20, 3);
+        this.startLoop(this.wallaHotel, name, LOOP_VOL.wallaHotel * k, 3);
+        this.startLoop(this.wallaCourt, name, LOOP_VOL.wallaCourt * k, 3);
       }
       if (BIRDS.every((b) => this.buffers[b]) &&
           ['horse-carriage', 'modelt-run', 'bell-five', 'shop-bell'].every((b) => this.buffers[b])) {
         this.ready = true;
       }
+    },
+
+    /* ---------- shared API (see the header) ---------- */
+
+    audioReady() {
+      return !!(this.data.enabled && this.started && this.ctx && this.ctx.state !== 'closed');
+    },
+
+    prefetch(url) {
+      let c = this.clips[url];
+      if (!c) {
+        c = this.clips[url] = {
+          raw: fetch(url).then((r) => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.arrayBuffer(); }),
+          decoded: null
+        };
+        c.raw.catch(() => {});   // reported by getBuffer
+      }
+      return c;
+    },
+
+    getBuffer(url) {
+      if (!this.audioReady()) return Promise.reject(new Error('audio not started'));
+      const c = this.prefetch(url);
+      if (!c.decoded) c.decoded = c.raw.then((ab) => this.ctx.decodeAudioData(ab));
+      return c.decoded;
+    },
+
+    makeVoice(parent) {
+      const a = new THREE.PositionalAudio(this.listener);
+      parent.add(a);
+      this.voices.push(a);
+      return a;
+    },
+
+    duck(on) {
+      this.duckGain = on ? Math.pow(10, DUCK_DB / 20) : 1;
+      if (!this.ctx) return;
+      [[this.bed, LOOP_VOL.bed], [this.wallaHotel, LOOP_VOL.wallaHotel], [this.wallaCourt, LOOP_VOL.wallaCourt]]
+        .forEach(([a, v]) => { if (a && a.isPlaying) this.fade(a, v * this.duckGain, on ? 0.4 : 1.2); });
     },
 
     /* ---------- helpers ---------- */

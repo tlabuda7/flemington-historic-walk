@@ -28,6 +28,14 @@
       pointer-events: none;
     }
     #help b { color: #fff; }
+    /* Credits that need to be shown (CC BY). Small, bottom-left; links clickable. */
+    #credits {
+      position: fixed; bottom: 8px; left: 12px; z-index: 10;
+      max-width: 520px; padding: 4px 10px;
+      font: 11px/1.4 Georgia, serif; color: #f4ead8;
+      background: rgba(40, 28, 18, 0.6); border-radius: 4px;
+    }
+    #credits a { color: #f4ead8; }
   </style>
 </head>
 <body>
@@ -38,8 +46,15 @@
     In VR: left stick walks (hold left trigger to walk faster), right stick snap-turns.<br>
     <b>Talking to people:</b> walk up to someone (within a few steps) and they speak.
     Pick a reply with 1 / 2 / 3 or a mouse click; in VR point the right controller at it
-    and pull the right trigger. Walk away to end the conversation.<br>
+    and pull the right trigger (press Space, click or pull the trigger to read ahead while
+    they speak). Walk away to end the conversation.<br>
     <b>Sound</b> starts with your first click or key press (or Enter VR); M mutes / unmutes.
+  </div>
+  <div id="credits">
+    Mr. Pickell's voice: synthetic speech (Piper TTS, model en_US-libritts-high, speaker 595),
+    trained on LibriTTS by H. Zen et al. (2019),
+    <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>,
+    <a href="http://www.openslr.org/60/" target="_blank" rel="noopener">openslr.org/60</a>. Changes: new text.
   </div>
 
   <!--
@@ -323,11 +338,13 @@
          door, under the awning. Built by tools/blender/npc_pickell.py + npc_pickell_bake.py.
          Lit by the scene's lights (no lightmap: he moves); his texture has baked shading.
          Faces across the street, turned 30° toward the start point; turns to face you
-         while you talk. Remove `blob-shadow` first if the draw-call budget gets tight. -->
+         while you talk. Remove `blob-shadow` first if the draw-call budget gets tight.
+         Voice: assets/audio/voices/pickell/<node-id>.ogg + timings.json (made by
+         tools/make_voice_pickell.py; credit in #credits above, licence in SOURCES.md). -->
     <a-entity id="npc-pickell" position="9.5 0.15 -8.45" rotation="0 -60 0"
       gltf-model="url(assets/models/npc-pickell.glb)"
       animation-mixer="clip: Idle; crossFadeDuration: 0.4"
-      npc="dialogue: data/dialogue/pickell.json; radius: 2.5; closeRadius: 4"
+      npc="dialogue: data/dialogue/pickell.json; voice: assets/audio/voices/pickell/; radius: 2.5; closeRadius: 4"
       blob-shadow="width: 0.9; depth: 0.6; opacity: 0.6"></a-entity>
 
     <!-- ============================================================

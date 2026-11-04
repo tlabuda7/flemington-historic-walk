@@ -43,7 +43,7 @@ Decisions (2026-11-02):
 | Nevius Store / Fulper's Dry Goods (78 Main) | written, auto-approved (owner away) | reused, none new (asset-scout skipped; 4 reused maps) | done, round-1 fixes applied (7.0k tris, 5 materials, 1.3 MB, 2K lightmap, LIGHTMAP_SCALE 1.1072) | round 2: PASS (round 1: 3rd-floor windows raised; LIGHTMAP_SCALE now 1.1072) | **yes** (10.30, 0.15, −7.33) |
 | Frame Dwelling at 65 Main (old no. 510) | written, auto-approved (owner away) | reused, 1 recoloured copy (asset-scout skipped; brown_planks_05 → clapboard_cream made by the builder; roof_slates_03 + red_brick reused) | done (6.3k tris, 4 materials, 1.0 MB, 2K lightmap, LIGHTMAP_SCALE 1.274) | round 1: PASS | yes (GLB, 2026-11-03) |
 | Lovell's Restaurant (68 Main) | written, auto-approved (owner away) | reused + 2 generated (asset-scout skipped; clapboard_cream reused; signs_atlas + stone_bluestone (lightened concrete_floor_worn_001) made by the builder) | done, round-1 fixes applied (4.75k tris, 4 materials, 0.77 MB, 2K lightmap, LIGHTMAP_SCALE 1.2462) | round 2: PASS (round 1: awning raised/shortened, glazed doors, lighter stone; LIGHTMAP_SCALE now 1.2462) | yes (2026-11-04) at (12.66, 0.15, −52.13); bank forecourt extended over its front strip |
-| Test person 1: John B. Pickell, clerk at the Nevius store (78 Main) | written, auto-approved (owner away) | done (Quaternius UAL Standard rig + clips incl. Idle_Talking_Loop; UBC Standard = Superhero bodies only, no Regular; MakeHuman system assets + MPFB 2.0.18 zip, not installed; 3 Poly Haven cloth/leather maps + 3 tinted) | done, round-1 fixes applied (12.8k tris, 65 bones, 1 mesh / 1 material / 1 2K atlas, 1.25 MB; Idle 6 s, Talk 3 s, Walk 1.33 s; MPFB head + hands) | round 2: PASS (round 1 FIXES: moustache, stance/crotch, shoulder and collar, jacket fronts, cuffs, gaze, chain) | **yes** (9.50, 0.15, −8.45), talks (js/people.js) |
+| Test person 1: John B. Pickell, clerk at the Nevius store (78 Main) | written, auto-approved (owner away) | done (Quaternius UAL Standard rig + clips incl. Idle_Talking_Loop; UBC Standard = Superhero bodies only, no Regular; MakeHuman system assets + MPFB 2.0.18 zip, not installed; 3 Poly Haven cloth/leather maps + 3 tinted) | done, round-1 fixes applied (12.8k tris, 65 bones, 1 mesh / 1 material / 1 2K atlas, 1.25 MB; Idle 6 s, Talk 3 s, Walk 1.33 s; MPFB head + hands) | round 2: PASS (round 1 FIXES: moustache, stance/crotch, shoulder and collar, jacket fronts, cuffs, gaze, chain) | **yes** (9.50, 0.15, −8.45), talks with a voice (js/people.js) |
 | Street ambiance pass 1: sound + street props (`street-props.glb`, `assets/audio/`) | written, auto-approved (owner away) | done (3 Poly Haven maps + 3 recoloured, 3 reused; 16 audio clips, 1.96 MB / 250 s; bed = #0659 instead of #1911) | props done, round-1 fixes applied (4.75k tris, 12 nodes, 1 material / 1 2K atlas colour × AO, 0.83 MB) | props round 2: PASS (round 1 FIXES: horse-head relief, pump globe lettering seam) | sound: yes (2026-11-04, `js/ambience.js`); props: yes (2026-11-04, `street-props` in `js/components.js`: 34 placements in 3 z-band meshes + 1 wire mesh, +4 draw calls) |
 
 ## Building specs
@@ -2194,7 +2194,7 @@ blender-builder → reviewer → scene-integrator. Dialogue lines live in `data/
 
 ### Test person 1: John B. Pickell, clerk at the Nevius store (78 Main St)
 
-**Status:** built (blender-builder, 2026-11-03): `assets/models/npc-pickell.glb`, 1.25 MB, one
+**Status:** in scene and **voiced** (scene-integrator, 2026-11-04: clip per line, word-by-word text, Talk for the clip length; see "Voice in scene" below). Earlier: built (blender-builder, 2026-11-03): `assets/models/npc-pickell.glb`, 1.25 MB, one
 skinned mesh, one material, one 2048² JPEG atlas (colour × baked AO, embedded; copy at
 `assets/textures/npc-pickell-atlas.jpg`), 12,756 triangles, 65 bones (UAL rig unchanged apart from a
 uniform 0.9403 scale to 1.72 m), clips `Idle` 6.0 s, `Talk` 3.0 s, `Walk` 1.33 s (24 fps), soles at
@@ -2230,6 +2230,28 @@ with a T-bar at the centre buttonhole. Next: reviewer (round 2).
 chain across the waistcoat. Minor notes, no fix needed: a soft fabric fold still hangs between the
 thighs in Talk; the lower right coat front corner is slightly angular.
 **In scene (scene-integrator, 2026-11-04):** `#npc-pickell` at (9.50, 0.15, −8.45), rotation 0 −60 0, clear of the step (his max x 9.74 < 10.05) and awning; `animation-mixer` (aframe-extras 7.7.0 loaders, pinned) plays Idle, crossfades (0.4 s) to Talk while he speaks a line; blob shadow kept. New `js/people.js` (`npc`, `blob-shadow`, `dialogue` system: one 0.80 × 0.50 m canvas panel, scripted provider + commented AI hook), `data/dialogue/pickell.json` (11 nodes verbatim, sources, brief), `#right-laser` in the rig. Tested on desktop: opens at 2.45 m, closes at 4.09 m, turns to face the visitor and back to −60°, every node reached by keys 1–3 and mouse clicks, `again` on the return visit, `[Walk on]` closes; VR laser/trigger simulated with events (not tested in a headset). Draw calls / triangles: start view 159 / 90.9k → 161 / 103.7k; panel +1 call (+1 laser line in VR). Next: owner check in the headset.
+**Voice (2026-11-04, owner approved TTS):** 11 clips `assets/audio/voices/pickell/<node-id>.ogg`
+(one per node `text`; replies are not voiced), 5.4–18.4 s, 1.29 MB total, mono Vorbis 64 kbps
+22.05 kHz, −18 LUFS, plus `timings.json` (node → `duration_s`, `words[{w,start,end}]`, one entry per
+on-screen token, times from Piper's phoneme alignment) for word-by-word reveal. Offline Piper TTS,
+model `en_US-libritts-high` speaker 595 (calm, low ~90 Hz), length_scale 1.15, noise defaults;
+CC BY 4.0 attribution text in SOURCES.md (needs a credits line). Regenerate with
+`tools/make_voice_pickell.py` (pronunciation map inside). Next: scene-integrator (play the clip
+when a line opens, drive Talk/Idle by the clip length, reveal words by `timings.json`).
+**Voice in scene (scene-integrator, 2026-11-04):** `npc="…; voice: assets/audio/voices/pickell/"`.
+When a line opens its clip plays as a `THREE.PositionalAudio` at his head (1.65 m above his feet;
+inverse distance, ref 1.5 m, rolloff 1.6: about −6 dB at 2.5 m, −18 dB at 8 m; gain 1.3) on the
+shared AudioContext/listener of `js/ambience.js` (new small API: `audioReady`, `prefetch`,
+`getBuffer` (decode once, cached by URL), `makeVoice`, `duck`), so M mutes him too; clips download
+when you come within 25 m and decode once sound is on. Town bed and walla duck −4 dB while he
+speaks. Text appears word by word on the audio clock (panel redrawn only when a word appears);
+replies show at the end of the line; Space / Enter / 1–3 / a click / the right trigger during a line
+shows it all at once (voice keeps going); a reply fades the clip out (0.08 s) and starts the next;
+walking away fades it out (0.25 s). Talk runs for the clip's `duration_s`, then Idle. Missing clip
+or sound not started yet → old text-only behaviour. No jaw movement: the GLB has no jaw bone (only
+`Head`, `neck_01`) and no morph targets. CC BY 4.0 credit added as `#credits` (bottom-left of the
+page). Tested on desktop: word reveal within 0–20 ms of `words[].start`, Talk 10.36 s for `start`
+(10.358 s clip), clips switch on reply, fade-out on walking away, 404 → text only, no new meshes.
 
 **Who**: **John B. Pickell** (b. c. 1879), the senior clerk of the Nevius dry-goods store at
 78 Main, standing on the sidewalk at his shop door, as a clerk does in the 1907 and 1910s cards.
@@ -2613,3 +2635,5 @@ Check licensing for every asset and note the source in the progress log.
 | 2026-11-04 | reviewer: street props kit round 1: **FIXES (2)**. GLB 0.82 MB loads in the viewer without errors (4,594 tris, 12 named nodes at the origin, one material `M_StreetProps`, one 2048² JPEG, opaque, POSITION/NORMAL/TEXCOORD_0); scale, pole/crossarm/eye-bolt orientation, bicycle lean, lettering on the boards all correct. Fix: (1) fountain horse-head relief doesn't read as a horse head (compare `flmngtndrinkingfountainbycrthous.jpg`); (2) pump globe "GASOLINE" band garbled at the UV seam. |
 | 2026-11-04 | reviewer: street props kit round 2: **PASS**. Horse head now reads clearly (ears, muzzle, jaw, neck, eye, mane; matches `flmngtndrinkingfountainbycrthous.jpg`); "GASOLINE" clean front and back on a 16-sided globe. GLB 833,384 bytes reloads fresh in the viewer without errors: 4,754 tris, 12 nodes, 1 material, 1 2048² JPEG, opaque; other props unchanged (same bounds). Ready for scene-integrator. |
 | 2026-11-04 | scene-integrator: Street ambiance pass 1, **street props** integrated: 15 wooden poles (7 with bracket lamps) along both curbs with sagging overhead wires, 2 arc lamps on span wires over the Court St and Bloomfield crossings, the horse fountain before the County Offices, 4 hitching posts, 2 carriage steps, 2 hydrants, 3 shop-goods groups, 2 sandwich boards, 2 bicycles, the curb gas pump (34 placements, 17.2k triangles). New `street-props` component in `js/components.js` (reuses `mergeGeometries` from `js/kit.js`): 3 merged z-band meshes + 1 wire mesh = +4 draw calls at the start view (69 → 73), +3 further north (one band culled). Fountain moved 0.25 m back from the road, shop goods at 66 Main moved 3 m north off the stoop, bicycles turned to lean on their posts. |
+| 2026-11-04 | voice: Mr. Pickell's 11 dialogue lines voiced offline with Piper TTS 1.8.0 (scratch venv), model `en_US-libritts-high` speaker 595 (LibriTTS CC BY 4.0, trained from scratch; `libritts_r` skipped as a fine-tune of the restrictively licensed lessac voice), length_scale 1.15. `assets/audio/voices/pickell/<node-id>.ogg` (5.4–18.4 s, 1.29 MB total, −18 LUFS) + `timings.json` (per-word times from Piper's phoneme alignment); script `tools/make_voice_pickell.py`; SOURCES.md has the attribution. Next: scene-integrator (play clips, word reveal, credits line). |
+| 2026-11-04 | scene-integrator: Mr. Pickell **voiced in scene**: each line's clip plays from his head (shared Web Audio of `js/ambience.js`, M mutes it, walla/town bed −4 dB while he speaks), text revealed word by word from `timings.json` (0–20 ms off), replies after the line or on Space/click/trigger, Talk for the clip length, fade-out on reply/walking away, text-only fallback if a clip fails; CC BY 4.0 voice credit on the page. No jaw (model has no jaw bone or morphs). No extra draw calls. |
