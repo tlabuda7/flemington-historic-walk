@@ -175,6 +175,18 @@ Two textures made by `tools/prepare_lovells_textures.py`:
 `assets/textures/lovells-restaurant-lightmap.jpg` is baked in Blender by `tools/blender/lovells_restaurant_bake.py` (original work).
 Reference photos viewed only (Goodspeed Histories, not saved in the project): see PLAN.md, Lovell's Restaurant, Sources.
 
+### Rea Building / Clock Tower Building, 48–52 Main St (`assets/textures/rea-building/`)
+
+Nothing new downloaded. Reused unchanged: `polyhaven/red_brick.jpg` (brick), `county-offices/trim_paint_drab.jpg`
+(trim and cupola), `lovells-restaurant/stone_bluestone.jpg` (steps, water table) (all listed above).
+
+| File | Source | URL | Licence | Used for |
+|------|--------|-----|---------|----------|
+| `signs_atlas.jpg` | none: drawn by `tools/prepare_rea_textures.py` with Pillow (original work, no download); stripes resampled from the generated `bank-building/awning_stripes.jpg`. Lettering set in fonts installed with Windows and rendered into the image (no font file is shipped): Bookman Old Style (`BOOKOS.TTF`, valance), Georgia Bold (`georgiab.ttf`, JEWELER and SHOES REPAIRED boards), Times New Roman (`times.ttf`, clock numerals) | — | original work | awning canvas and stripes, valance "GREEN'S APOTHECARY", striped valance, clock dial, shutter louvres, dentil strip, sign boards (1024², one material) |
+
+`assets/textures/rea-building-lightmap.jpg` is baked in Blender by `tools/blender/rea_building_bake.py` (original work).
+Reference photos viewed only (Goodspeed Histories, not saved in the project): see PLAN.md, Rea Building, Sources.
+
 `assets/textures/union-hotel-lightmap.jpg` is baked in Blender by
 `tools/blender/union_hotel_bake.py` (original work).
 `assets/textures/courthouse-lightmap.jpg` is baked in Blender by `tools/blender/courthouse_bake.py` (original work).

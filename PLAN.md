@@ -43,6 +43,7 @@ Decisions (2026-11-02):
 | Nevius Store / Fulper's Dry Goods (78 Main) | written, auto-approved (owner away) | reused, none new (asset-scout skipped; 4 reused maps) | done, round-1 fixes applied (7.0k tris, 5 materials, 1.3 MB, 2K lightmap, LIGHTMAP_SCALE 1.1072) | round 2: PASS (round 1: 3rd-floor windows raised; LIGHTMAP_SCALE now 1.1072) | **yes** (10.30, 0.15, −7.33) |
 | Frame Dwelling at 65 Main (old no. 510) | written, auto-approved (owner away) | reused, 1 recoloured copy (asset-scout skipped; brown_planks_05 → clapboard_cream made by the builder; roof_slates_03 + red_brick reused) | done (6.3k tris, 4 materials, 1.0 MB, 2K lightmap, LIGHTMAP_SCALE 1.274) | round 1: PASS | yes (GLB, 2026-11-03) |
 | Lovell's Restaurant (68 Main) | written, auto-approved (owner away) | reused + 2 generated (asset-scout skipped; clapboard_cream reused; signs_atlas + stone_bluestone (lightened concrete_floor_worn_001) made by the builder) | done, round-1 fixes applied (4.75k tris, 4 materials, 0.77 MB, 2K lightmap, LIGHTMAP_SCALE 1.2462) | round 2: PASS (round 1: awning raised/shortened, glazed doors, lighter stone; LIGHTMAP_SCALE now 1.2462) | yes (2026-11-04) at (12.66, 0.15, −52.13); bank forecourt extended over its front strip |
+| Rea Building / Clock Tower Building, old Post Office block (48–52 Main) | approved by owner 2026-11-04, **landmark** detail (≤ 15k tris) | — | done (14.6k tris, 5 materials, 1.89 MB, 2K lightmap, LIGHTMAP_SCALE 1.1735) | round 1: PASS | yes (2026-11-04) at (10.85, 0.15, −97.79); 1 draw call |
 | Test person 1: John B. Pickell, clerk at the Nevius store (78 Main) | written, auto-approved (owner away) | done (Quaternius UAL Standard rig + clips incl. Idle_Talking_Loop; UBC Standard = Superhero bodies only, no Regular; MakeHuman system assets + MPFB 2.0.18 zip, not installed; 3 Poly Haven cloth/leather maps + 3 tinted) | done, round-1 fixes applied (12.8k tris, 65 bones, 1 mesh / 1 material / 1 2K atlas, 1.25 MB; Idle 6 s, Talk 3 s, Walk 1.33 s; MPFB head + hands) | round 2: PASS (round 1 FIXES: moustache, stance/crotch, shoulder and collar, jacket fronts, cuffs, gaze, chain) | **yes** (9.50, 0.15, −8.45), talks with a voice (js/people.js) |
 | Street ambiance pass 1: sound + street props (`street-props.glb`, `assets/audio/`) | written, auto-approved (owner away) | done (3 Poly Haven maps + 3 recoloured, 3 reused; 16 audio clips, 1.96 MB / 250 s; bed = #0659 instead of #1911) | props done, round-1 fixes applied (4.75k tris, 12 nodes, 1 material / 1 2K atlas colour × AO, 0.83 MB) | props round 2: PASS (round 1 FIXES: horse-head relief, pump globe lettering seam) | sound: yes (2026-11-04, `js/ambience.js`); props: yes (2026-11-04, `street-props` in `js/components.js`: 34 placements in 3 z-band meshes + 1 wire mesh, +4 draw calls) |
 
@@ -1792,6 +1793,296 @@ the 1935 photo (Coca-Cola signs) are later and not used.
 6. Awning projection (1.55 m) and side cheeks; lantern size.
 7. Bracket count (3 per block) and the moulding profile of the arch.
 
+### Rea Building / "Clock Tower Building", the old Post Office block (48–52 Main St)
+
+**Status:** Spec approved by the owner (2026-11-04) at **landmark** detail (cap 15k tris). Asset-scout skipped (no downloads). **Built by blender-builder 2026-11-04**: 14,593 tris, 5 materials (brick, trim, stone, dark, signs), GLB 1.89 MB, 2K lightmap, LIGHTMAP_SCALE 1.1735; generated atlas `rea-building/signs_atlas.jpg` (`tools/prepare_rea_textures.py`); previews `assets/models/previews/rea-building-*.png`. **Review round 1 (2026-11-04): PASS** (14,593 tris, 5 materials, 1.89 MB, UV2, 2K lightmap; loads cleanly; minor optional notes: cupola could be a touch more cream-yellow, Flats door step sticks 0.40 m past the south wall onto Bloomfield Ave). Owner approved placement ("Place it", cupola colour left as is). **In scene 2026-11-04 (scene-integrator)** at (10.85, 0.15, −97.79), `rotation="0 -90 0"`, replacing the `#bldg-48-52-main` placeholder (id kept); merged 5 materials → 1 draw call; steps cover the strip behind the sidewalk (no paving box); no props moved; Flats door step left as is (minor). Screenshots `assets/models/previews/rea-building-scene-*.png`.
+
+**What it is**: the 3-storey red-brick **Italianate block on the NE corner of Main St and
+Bloomfield Ave**, built **1874 for George A. Rea** (shoe dealer; "the new building under the Town
+Clock", 1878 ad). It has a **segmental arched pediment with an oval window in the middle of the
+front roofline**, a second arch on the Bloomfield side, a bracketed cornice and a **square wooden
+cupola with a clock on all four faces**. Flemington National Bank 1876–1891 in the south shop; the
+**U.S. Post Office from 1 Feb 1899** (south shop, "P.O." awning in the 1906/07 cards). It still
+stands (50 Main St), little changed above the shop fronts. It is **not** the "Richards Building":
+in the 1905–07 card captions "Post Office – Richards Bldg – Union Hotel" the Richards Bldg is the
+Bank Building across Bloomfield Ave. **c. 1920 tenants (Sanborn 1921), north → south: 48 Drugs
+(Green's drug store; "Green's Apothecary" awning 1906–07; Frank E. Green bought the building in
+1915), 50 Cobbler, 52 Jeweler (1st) / Club Rooms (2nd).** The Post Office had left by 1921 (no
+"P.O." on the map; where it went is unknown).
+
+**Planner decisions** (from the map and photos; owner to confirm)
+1. **One model: the main block (15.94 × 15.20 m) plus the 3-storey brick "Flats" wing behind it on
+   Bloomfield Ave** (7.87 × 8.91 m, same 36' height; the modern photo shows one continuous cornice
+   along the whole Bloomfield side). The frame rear porches (yellow on the map) are not modelled.
+2. **Height: cornice top 11.0 m = Sanborn "36'"**. The modern frontal photo, if not stretched,
+   would give ~12.5 m, but it is perspective-corrected (vertically stretched); a vanishing-point
+   check on the 1907 card puts the PO cornice ~1.4 m below the bank's 12.2 m, i.e. ≈ 10.8 m.
+   All levels below are the modern photo's proportions scaled to 11.0 m.
+3. **Facade = 2016 frontal photo for the upper floors** (7 bays grouped 2–3–2, pediment over the
+   middle 3), **1906–07 cards + 1880s photo for the ground floor** (raised shop floors with stone
+   steps along the whole front; 3 round arches in the middle section; shop fronts with arched-head
+   display windows).
+4. **Middle section arches (1920 guess)**: north arch = cobbler's door (50), middle arch = window,
+   south arch = door to the stair hall (club rooms upstairs; the old P.O. lobby door with its sign in
+   1907). The 1907 card shows window, window, door; today it is window, door, window.
+5. **Front wall 0.55 m behind the scene's property line** (map); **steps run along the whole front
+   and stand on the public sidewalk** to x 9.65, as in the 1906–08 cards. No forecourt box needed.
+6. **Awnings 1920**: 48 plain cream canvas, valance lettered "GREEN'S APOTHECARY"; 52 red/cream
+   striped, no lettering; none on 50 or the upper windows (the 1906–07 upper-window awnings are left
+   out, as on the bank).
+7. **Ordinary building: hard cap 10k triangles, target ~9k; 5 materials; no downloads.**
+
+**Sources**
+- Map: 1921 Sanborn **sheet 2**, pink (brick), **"3"** storeys, **"36'"** on all three units,
+  "o" (non-combustible roof) marks; street numbers 48, 50, 52; "Drugs", "Cobbler",
+  "Jeweler 1st / Club Rooms 2nd". Pixel lines: **front wall x 4004–4008** (east street line slants
+  from x 3963 at y 4880 to 3975 at y 5150; a dashed line at x 3993–3997 = scene property line
+  10.30); **north wall y 4870**; **south wall y 5176** (on the Bloomfield Ave line); **rear wall
+  x 4297**; partitions: solid with a central opening at y 4960 (48|50), dashed at y 5040 (50|52).
+  **Flats** (street no. 4/6 Bloomfield): x 4297–4448, y 5005–5176, "3", "36'", NE corner chamfered
+  (4420,5005)→(4447,5030). Not modelled: 3-storey frame porch strip x 4297–4318, y 4890–5000 and a
+  1-storey frame strip x 4318–4420, y 4970–5005. North neighbour (44–46, frame "Shoe Shine &
+  Fruits") south wall y ≈ 4826: a 2.3 m open passage. Hydrant "T.H." off the SW corner.
+- Photos, West Jersey History (`assets/photos/reference/`, local only, never commit):
+  - **Primary (ground floor, 1906–07): `flmngtnpobankunionhtl07.jpg`** (1907, from the NW on the
+    sidewalk, "Post Office – Bank Building – Union Hotel"): front from the middle to the SW corner:
+    3 round arches in a pale rusticated middle section, "GREEN'S APOTHECARY" awning (48), striped
+    awning (52), 4-riser stone steps along the front, segmental-headed upper windows with hoods,
+    paired corner brackets, the arched pediment with the oval window (top left).
+  - `flmingtnporichardsbldgunionhtl.jpg` and `flmngtnmainstrichardsbldgpo06.jpg` (1906, same
+    viewpoint): same; **"P.O." on the striped south awning**, a sign over the south arch door.
+  - `flmngtnpoandnatbank08.jpg` (1908, tinted, from the SW): the **Bloomfield side**: red brick,
+    pale open shutters on the 1st/2nd-floor windows, segmental 3rd-floor window, cream cupola with
+    pilasters and tall windows, a brick chimney beside it, a tall spike on top.
+  - `flmngtnbankandpovu08.jpg` (1908, tinted, from the SW, farther): whole block behind the bank:
+    front with the arched pediment, cupola with a tall pole, pale shop fronts and awnings.
+  - Checked, not this building: `flmngtnmainstrycolrvu10.jpg` (brick ground storey, no arches),
+    the "business blocks" cards (78 Main southward), all Union Hotel/courthouse cards and all
+    HABS photos (none show it).
+- Web photos (Goodspeed Histories, viewed for reference only, not saved to the project):
+  - **Primary (upper floors and roofline): modern frontal view, Dave Norton**:
+    https://i0.wp.com/goodspeedhistories.com/wp-content/uploads/2021/08/54-Rea-Bldg-copy.jpg
+    (all window positions and the pediment were measured on it: facade 1130 px = 15.94 m).
+  - 2016 view from the SW (front + Bloomfield side, cupola):
+    https://i0.wp.com/goodspeedhistories.com/wp-content/uploads/2021/08/50Main-Feb2016_088-copy.jpeg
+  - Roof-top close-up of the cupola (clapboard body, pilasters with consoles, tall windows, a
+    segmental arched gable with a clock dial on each face, metal roof):
+    https://i0.wp.com/goodspeedhistories.com/wp-content/uploads/2021/08/Rea-Clock-Tower-copy.jpg
+  - Flemington National Bank in the south shop, 1876–91, from the SW (shop fronts with arched-head
+    windows, corner pilaster with console, steps, Bloomfield side windows with shutters):
+    https://i0.wp.com/goodspeedhistories.com/wp-content/uploads/2021/08/54-Rea-FNB-copy.jpg
+- Web text: Goodspeed Histories, "The Clock Tower Building"
+  (https://goodspeedhistories.com/the-clock-tower-building/): 1874, Rea; bank 1876–91; Shields
+  bought it and "the rear building on Bloomfield Avenue" 1895; repainted 1895; granolithic walk
+  1898; **P.O. leased the first-floor room (16 × 46 ft) from 1 Feb 1899**; Berkaw 1911, Frank E.
+  Green 1915; 1979 county survey: "3-story, brick, Italianate", "stone keystones and sills",
+  "segmentally arched pediments on the central bay of each side", oval front window, "segmentally
+  arched brick hoods", "wood cupola" with "a clock on each of its 4 sides", ground floor "stucco
+  panels". "A Distinctive Feature of Downtown Flemington" (https://goodspeedhistories.com/roof-arches-part-one/):
+  Bertland: "square cupola, low pitched roof, wide bracket eaves cornice and segmental arched
+  windows"; the pediment is "broken… along the bottom". HCHS (https://hunterdonhistory.org/?p=6574):
+  built 1874, "one of the best preserved". HCHS container list
+  (https://hunterdonhistory.org/wp-content/uploads/2022/06/Collection-238-Container-List.pdf): photo
+  of the corner with "Green Apothecary, Shoemaker, and Post Office".
+
+**Placement** (east side, front faces west onto Main St)
+- Entity position = centre of the front wall face at sidewalk level: **(10.85, 0.15, −97.79)**,
+  `rotation="0 -90 0"`; replaces the kit placeholder `#bldg-48-52-main` at (10.3, 0, −98.3)
+  (keep the id).
+- Scene lines: front wall x 10.85; **north wall z −105.76**; **south wall z −89.82** (Bloomfield
+  Ave road plane starts at −89.8); main-block rear wall x 26.05; Flats x 26.05 … 33.92,
+  z −98.73 … −89.82. Steps reach **x 9.65**, awnings x 8.65, cornice x 10.0 — street props
+  nearby (pole-E5 at 6.9/−92.5, hydrant-Y2 at 6.85/−90.9) are clear.
+- **Neighbours**: the Bank Building (front x 12.24, north wall z −77.31) is across Bloomfield Ave,
+  12.5 m south; its `#bank-forecourt` (z −77.31 … −49.13) does **not** reach this block and needs
+  no change. This front is 1.39 m further west than the bank's (1907 card: the PO steps come further
+  into the sidewalk than the bank stoops). North: 2.0 m open passage, then the 40–46 placeholder
+  (z ≤ −107.8).
+- **Sidewalk**: the strip x 10.30 … 10.85 lies under the steps; the steps' blocks and cheek walls
+  skirt down to local z −0.20 (world −0.05), so no paving box is needed. All walls also skirt to
+  −0.20 (Bloomfield side and passage are at ground y 0).
+- **Blender local frame**: front −Y, origin at the centre of the front wall face at sidewalk
+  level, **+X = south** (Bloomfield), −X = north, z = 0 = sidewalk top. Main block
+  x −7.97 … +7.97, y 0 … 15.20; Flats x −0.96 … +7.97, y 15.20 … 23.07 (chamfer from
+  (−0.96, 21.60) to (+0.34, 23.07)). Sun "to sun" **(0.40, −0.90, 0.36)** (front sunlit, Bloomfield
+  side grazed, north side in shade). Optional bake occluder (not exported): box for 44–46 at
+  x −26.0 … −10.28, y −0.55 … 16.0, z 0 … 8.0.
+
+**Massing** (heights = modern frontal photo proportions scaled to cornice top 11.0 m;
+widths measured on the same photo at 15.94 m across)
+- Main block 15.94 × 15.20 m, Flats 8.91 × 7.87 m; both 3 storeys, **cornice top 11.00** all round.
+- Levels: shop floors **0.60** (4 risers); ground storey to the shop entablature top **4.70**;
+  2nd floor ≈ 4.75; 3rd floor ≈ 7.75; frieze 9.75–10.55; cornice 10.55–11.00.
+- **Roof**: low hipped tin roof (≈ 12°) from 10.75 behind the cornice up to a flat deck at
+  **11.95** under the cupola (main block); Flats: flat tin roof at 10.70 behind its cornice.
+  Hardly visible from the street; dark grey.
+- **Front pediment** (centred, X 0): **segmental arch, outer moulding chord 6.00 m (X ±3.00),
+  springing at 11.00 on the cornice ends, crown 12.10** (R ≈ 4.64 m); moulding 0.30 deep (crown
+  roll 0.12 + fascia), projecting 0.25, with a dentil course under it (see Elevation). The main
+  cornice stops at X ±2.20 with short returns; **between them the brick wall rises as the tympanum**
+  to the arch's underside (the pediment is "broken along the bottom"). Behind the arch a
+  **segmental barrel roof**, same profile, runs 1.50 m back (tin) and dies into the hip roof.
+- **Side pediment** (Bloomfield face, centred at y 7.60): same design, **chord 5.00, crown 11.95**,
+  no oval window; barrel 1.20 m deep.
+- **Cupola** (centred at x 0, y 7.60, on the deck): wood, clapboard. Plinth 3.70 sq, 11.95–12.30,
+  sloped top; **body 3.30 × 3.30, 12.30–14.70**, corner pilasters 0.30 wide with scroll consoles at
+  the top; one tall window per face **0.80 × 1.80** (sill 12.60), narrow sunk panel 0.35 wide each
+  side; frieze 14.40–14.70; **cornice 14.70–14.95, 0.30 overhang, small brackets (2 per face)**.
+  On each face a **segmental arched clock gable**: chord 1.70, from 14.95 up to **15.95**, front
+  face flush with the body, its own 0.08 moulding; **clock dial Ø 1.00, centre 15.40**, 0.04 proud.
+  Behind the four gables: low pyramid roof, 14.95 → 15.70, plus the four little barrel roofs of the
+  gables (tin). **Iron pole** Ø 0.05 from the apex to **18.70** with a ball Ø 0.12 (1908 cards).
+- **Chimney**: one, brick, on the south wall at y 11.5 (behind the side pediment), 0.90 × 0.50,
+  top **12.60**, 0.08 corbel cap (1908 SW card: a brick stack beside the cupola).
+
+**Elevation details (1920 state)** — X from north (−) to south (+)
+- **Upper front (7 bays, 2–3–2)**: window centres **X = −6.13, −3.84, −1.56, 0, +1.56, +3.84,
+  +6.13**. 2nd floor: opening **0.90 × 1.75**, sill 4.82, segmental head (rise 0.15) crown 6.57;
+  3rd floor: **0.90 × 1.55**, sill 7.85, crown 9.40. Both: **raised brick segmental hood** 0.14 wide,
+  0.05 proud, 0.15 above the opening, with a pale stone **keystone** 0.18 × 0.28; stone sill
+  1.15 × 0.10, 0.06 proud; 2/2 sash in a trim frame set 0.12 in; **open louvred shutters**
+  (2 leaves 0.45 × opening height, 0.03 off the wall, louvres from the atlas).
+- **Main entablature (front)**: brick frieze 9.75–10.40 with a pale moulded band and **dentil
+  course 10.40–10.55** (atlas strip on a 0.04-proud band); cornice (trim) 10.55–11.00 projecting
+  **0.85** (bed moulding, flat soffit, corona, cap). **4 pairs of large scroll brackets** under
+  it at **X ±7.60 and ±2.35** (pair = 2 brackets 0.20 wide, 0.25 apart; 0.80 tall 9.75–10.55,
+  0.75 deep; one 10-point side profile extruded, with a drop pendant).
+- **Oval window** in the tympanum: centre (0, 10.45), **0.82 wide × 0.90 tall**, 16-sided, dark
+  glass set 0.10 in; pale stone surround 0.12 wide with 4 small keystones (N/E/S/W). The 1874
+  "initials" round it are not modelled.
+- **Arch moulding**: pale trim; dentils on the inner edge (atlas strip, 0.15 tall).
+- **Ground storey, side shops** (48: X −7.62 … −2.60; 52: X +2.60 … +7.62, clear 5.02 m):
+  painted wood/cast-iron (trim) shop fronts between **pilasters 0.35 wide, 0.06 proud** at
+  X ±7.795 and ±2.425 (panelled shafts, small console caps 3.80–3.95). Each shop, symmetric:
+  **display window 1.75 wide** each side on a panelled bulkhead 0.60–1.10, glass 1.10 → 3.15 with
+  a **segmental/round-cornered head to 3.35**; centre **recessed entrance 1.50 wide × 0.90 deep**,
+  glazed double doors 2 × 0.70 × 2.40 (0.60 → 3.00), transom 3.05–3.30; **sign band 3.40–3.95**
+  (52: "JEWELER" board; 48: plain); recess floor at 0.60.
+- **Ground storey, middle section** (X −2.25 … +2.25, 50 and the stair hall): **pale rusticated
+  stucco** (trim material, horizontal 0.02-deep channels every 0.40 m, modelled as 0.02-proud
+  bands) on a stone plinth 0 → 0.60. **Three round arches 1.00 wide at X −1.45, 0, +1.45**,
+  springing 2.90, crown 3.40, plain stucco archivolt 0.15, 0.03 proud, stone keystone:
+  north arch = **glazed door** 0.90 × 2.30 (0.60 → 2.90) + fanlight (cobbler); middle arch =
+  **window**, sill 1.20, 2/2 sash, arched top sash; south arch = **panelled door** with glazed upper
+  panels + fanlight (stair hall). Small dark board **"SHOES REPAIRED"** 1.10 × 0.30 at 3.45 over the
+  north arch (guess).
+- **Shop entablature**, full front width (+0.35 m return on the Bloomfield side):
+  architrave 3.95–4.10, frieze 4.10–4.45, cornice 4.45–4.70 projecting 0.30; small console over
+  each pilaster.
+- **Steps** (stone): along the whole front, **4 risers × 0.15, treads 0.30, y −1.20 … 0** (top
+  step = landing at 0.60, running into the shop recesses); **stone cheek blocks** 0.30 wide,
+  sloped top 0.75 → 0.30, at X −7.80, −2.42, +2.42, +7.80. All step blocks skirt to −0.20.
+- **Awnings**: 48 and 52 only, full shop width (X −7.55 … −2.65, +2.65 … +7.55): roller bar at
+  **3.35** on the wall, sloping to **2.65 at y −2.20**, **valance 0.25 (bottom 2.40)**, cloth side
+  cheeks, 2 iron arms each. 48 plain cream with **scalloped valance "GREEN'S APOTHECARY"**; 52
+  red/cream stripes, plain scalloped valance.
+- **Bloomfield (south) side**, main block (x +7.97, y 0 … 15.20): window bays at **y 2.30, 6.60,
+  8.56, 12.86** (pediment over the middle pair); upper windows as the front (same sizes, hoods,
+  keystones, sills, shutters); **ground floor windows 0.95 × 2.40** (sill 1.20) with shutters at the
+  same y; stone water table 0 → 0.60 (skirt to −0.20). Entablature, dentil band and cornice as the
+  front, **bracket pair at the SW corner and at y 5.10 / 10.10** (flanking the side pediment),
+  single brackets at y 13.6. The front shop entablature returns 0.35 m.
+- **Flats (Bloomfield face y 15.20 … 23.07)**: same cornice and frieze (single brackets at 2.4 m),
+  windows (no shutters, no keystones) at **y 16.60 and 19.70** on all floors, a **door** 0.95 × 2.30
+  with one stone step at y 21.80; east face: 2 windows per floor; north (yard) face: 2 windows per
+  floor, plain; chamfered NE corner plain.
+- **North wall** (x −7.97, passage side): common brick, cornice and frieze continue (brackets only
+  at the NW corner pair); upper windows at y 3.0, 7.6, 12.2 (no shutters); ground floor: 2 small
+  high windows (sill 2.0) at y 5.0 and 10.0.
+- **Main-block rear wall** (y 15.20, X −7.97 … −0.96, above the yard): plain, 2 windows per floor.
+- Not modelled: gutters, downpipes, telephone/electric drops, the 1906–07 upper-window awnings,
+  the frame rear porches, interiors.
+
+**Materials & colours (1920)** — **5 materials** (merged into one draw call by `baked-lighting`)
+1. `brick` — walls, hoods, frieze, tympanum, chimney. Red-brown pressed brick ≈ #8A4030 (1908
+   cards). Reuse **`polyhaven/red_brick.jpg`**, tile 1.4 m.
+2. `trim` — cornices, brackets, arch mouldings, pilasters, shop fronts, bulkheads, sign band,
+   window frames, sash, shutter frames, keystones and sills (pale stone and paint read alike in
+   every card), rusticated middle section, cupola. **Pale drab ≈ #B5AC98**; reuse
+   **`county-offices/trim_paint_drab.jpg`**, tile 2.0 m. **Bake tint** on the cupola
+   (1.00, 0.96, 0.80) → cream-yellow (1908 cards).
+3. `stone` — steps, cheek blocks, plinths, water table, Flats door step. Reuse
+   **`lovells-restaurant/stone_bluestone.jpg`** (#8E8C86), tile 2.0 m.
+4. `dark` — plain colour, no texture: glass (≈ #1E2226), door leaves (dark varnish ≈ #3A2A1F via
+   vertex/bake tint), roofs and barrel roofs (tin grey ≈ #4A4C50 via bake tint), iron arms, pole.
+5. `signs` — **new locally generated atlas `assets/textures/rea-building/signs_atlas.jpg`, 1024²**
+   (Pillow script `tools/prepare_rea_textures.py`, own work, logged in SOURCES.md), cells:
+   plain cream canvas (#E2DACA, faint weave); scalloped valance strip "GREEN'S APOTHECARY" (dark
+   brown serif capitals on cream); red/cream stripe canvas + plain striped valance (resampled from
+   `bank-building/awning_stripes.jpg`); **clock dial** (white face, black Roman numerals and
+   minute ring, black hands at about 4:50); **louvre pattern** for shutters (pale drab slats with
+   shadow lines); **dentil strip**; "JEWELER" board (gold-cream letters on black); "SHOES
+   REPAIRED" board (cream on dark green).
+- **New for asset-scout: none.** One **2K lightmap** `assets/textures/rea-building-lightmap.jpg`
+  (front, Bloomfield side and cupola weighted up; north, rear and roofs down).
+
+**Weathering**: 46 years old, well kept (repainted 1895): soot under the main cornice and
+pediment moulding; dark streaks under sills, keystones and bracket feet; brick darker on the
+shaded north wall and in the passage; grime and splash on the bottom 0.4 m and on the step treads
+(worn darker in front of the doors); cupola paint slightly chalky, darker under its cornice; tin
+roofs dull; soot on the chimney top; awnings sun-bleached on top.
+
+**Budget**: **ordinary building, hard cap 10k triangles, target ~9k**: walls with openings ~1.5k;
+~50 windows (frames, sash, glass, segmental heads ≤ 60 tris) ~2.6k; hoods + keystones + sills
+~0.7k; 64 shutter leaves as boxes ~0.8k; ~30 brackets ~1.0k; cornices, frieze, returns ~0.5k;
+2 pediment arches + barrel roofs + oval ~0.5k; cupola with 4 clock gables and dials ~0.8k; shop
+fronts, arches, doors ~0.7k; steps and cheeks ~0.2k; awnings ~0.3k; roofs, chimney, pole ~0.2k.
+If over: drop the north/rear/Flats window sash detail to flat inset panels, then the north-side
+shutters (none planned), then single brackets on the Flats. Textures: 3 reused 1K maps + 1
+generated 1K atlas, one 2K lightmap. Files: `tools/blender/rea_building.py` +
+`rea_building_bake.py` (+ `_preview.py`), `assets/models/source/rea_building.blend`,
+`assets/models/rea-building.glb` (≤ 5 MB, expect ~1.8 MB), previews
+`assets/models/previews/rea-building-*.png` (incl. a frontal one to compare with the modern
+frontal photo, one from the NW sidewalk at eye height to compare with the 1907 card, one from the
+SW across Bloomfield to compare with `flmngtnpoandnatbank08.jpg`).
+
+**Acceptance checks for the reviewer**
+1. Main block 15.94 × 15.20 m + Flats 8.91 × 7.87 m behind it on the Bloomfield side; origin at
+   the centre of the front wall face at sidewalk level, front −Y, **+X = south**; cornice top
+   11.0 ± 0.2 m all round.
+2. Front upper floors: **7 bays grouped 2–3–2** on both floors, segmental heads with raised brick
+   hoods and pale keystones, open louvred shutters.
+3. **Segmental arched pediment over the middle three bays, broken at the bottom**, crown ≈ 12.1 m,
+   with an **oval window** in the brick tympanum; a smaller arch on the Bloomfield side.
+4. Bracketed cornice with a dentil band; **four pairs of large brackets** on the front (corners and
+   flanking the pediment).
+5. **Square cream cupola** centred on the roof, one tall window per face, and a **clock dial in a
+   segmental gable on each of the four faces**; thin pole on top (≈ 18.7 m).
+6. Ground floor, N→S: **shop (48) with "GREEN'S APOTHECARY" awning – pale rusticated section with
+   three round arches (door, window, door) – shop (52) with striped awning**; shop floors 0.60 m up,
+   **stone steps along the whole front** with cheek blocks, reaching ≤ 1.2 m out.
+7. Bloomfield side: 4 window bays on the main block (pair under the side arch), shutters, chimney
+   behind the side arch; Flats with 2 bays and a door; nothing crosses z −89.82 except the cornice
+   overhang (≤ 0.85 m).
+8. ≤ 10k triangles, **≤ 5 materials**, GLB ≤ 5 MB, TEXCOORD_0 + 1, 1K colour maps, 2K lightmap;
+   cupola reads cream against red brick; roofs grey.
+9. With the WSW sun the front is sunlit (bracket, hood, awning and step shadows), the Bloomfield
+   side grazed, the north wall in shade; no floating at the Bloomfield and passage edges.
+
+**Integrator notes (scene, not the model)**
+- Replace `#bldg-48-52-main` with the GLB at **(10.85, 0.15, −97.79)**, rotation 0 −90 0,
+  `baked-lighting` with the bake's LIGHTMAP_SCALE; keep the id.
+- No paving box (the steps cover the 0.55 m strip); `#bank-forecourt` unchanged.
+- Check the steps against the sidewalk-east box edge at x 10.30 (no gap or z-fighting) and the
+  south wall against the Bloomfield Ave plane.
+
+**Photos vs 1920**: the 1906–08 cards are the closest views and set the ground floor, steps,
+awnings, shutters and cupola colour; the modern photos set the exact upper-floor layout, pediment,
+cornice and cupola form, which match the old cards. Left out as later: today's green shop fronts,
+level entrances (no steps) and teal clock dials. Left out as earlier: "P.O." lettering and the
+sign over the stair-hall door (P.O. gone by 1921), upper-window awnings.
+
+**Pure guesses (owner to check)**
+1. Height 11.0 m (Sanborn 36') rather than the ~12.5 m the stretched modern photo suggests.
+2. Arch uses in the middle section (cobbler door / window / stair door) and the "SHOES REPAIRED"
+   and "JEWELER" boards (1921 tenants, wording invented); Green's awning lettering still in 1920.
+3. Shop-front details (arched-head display windows, recessed doors) from the 1880s and 1906 views.
+4. Colours: shutters and cupola pale (tinted cards), white clock dials, red-brown brick, pale trim.
+5. Cupola size (3.3 m) and heights; the pole; low hipped roof form.
+6. Bloomfield-side bay positions (perspective-measured on the 2016 photo), side pediment size,
+   chimney position; north, rear and Flats walls entirely guessed.
+7. Steps continuous along the whole front (1906–07 cards) and 4 risers.
+
 ## Constraints
 
 - A-Frame from a CDN, plain HTML/JS. No build tools or frameworks.
@@ -1870,6 +2161,11 @@ Order agreed with the owner: finish 65 Main → **one test person** → 68 Main 
 - Pipeline: same agents. The planner writes a character spec (who, where, clothes, lines), the
   asset-scout finds a CC0 base character + animations, the builder restyles it in Blender, the
   reviewer checks it, and the integrator adds the animation (aframe-extras), routes and dialogue.
+
+- **Voice quality (owner, 2026-11-04):** Pickell's Piper voice is "ok, kinda roboty". Later:
+  try a more natural voice (e.g. a newer open TTS model, or a paid service such as ElevenLabs
+  if the owner accepts the cost), or record a real person. Clips + timings.json are swappable
+  via `tools/make_voice_pickell.py` without touching the scene code.
 
 **B. Roads, sidewalks and background**
 - Rework the road, sidewalks, curbs, lawns and side streets (Court St, Bloomfield Ave) to the
@@ -2637,3 +2933,7 @@ Check licensing for every asset and note the source in the progress log.
 | 2026-11-04 | scene-integrator: Street ambiance pass 1, **street props** integrated: 15 wooden poles (7 with bracket lamps) along both curbs with sagging overhead wires, 2 arc lamps on span wires over the Court St and Bloomfield crossings, the horse fountain before the County Offices, 4 hitching posts, 2 carriage steps, 2 hydrants, 3 shop-goods groups, 2 sandwich boards, 2 bicycles, the curb gas pump (34 placements, 17.2k triangles). New `street-props` component in `js/components.js` (reuses `mergeGeometries` from `js/kit.js`): 3 merged z-band meshes + 1 wire mesh = +4 draw calls at the start view (69 → 73), +3 further north (one band culled). Fountain moved 0.25 m back from the road, shop goods at 66 Main moved 3 m north off the stoop, bicycles turned to lean on their posts. |
 | 2026-11-04 | voice: Mr. Pickell's 11 dialogue lines voiced offline with Piper TTS 1.8.0 (scratch venv), model `en_US-libritts-high` speaker 595 (LibriTTS CC BY 4.0, trained from scratch; `libritts_r` skipped as a fine-tune of the restrictively licensed lessac voice), length_scale 1.15. `assets/audio/voices/pickell/<node-id>.ogg` (5.4–18.4 s, 1.29 MB total, −18 LUFS) + `timings.json` (per-word times from Piper's phoneme alignment); script `tools/make_voice_pickell.py`; SOURCES.md has the attribution. Next: scene-integrator (play clips, word reveal, credits line). |
 | 2026-11-04 | scene-integrator: Mr. Pickell **voiced in scene**: each line's clip plays from his head (shared Web Audio of `js/ambience.js`, M mutes it, walla/town bed −4 dB while he speaks), text revealed word by word from `timings.json` (0–20 ms off), replies after the line or on Space/click/trigger, Talk for the clip length, fade-out on reply/walking away, text-only fallback if a clip fails; CC BY 4.0 voice credit on the page. No jaw (model has no jaw bone or morphs). No extra draw calls. |
+| 2026-11-04 | planner: Rea Building / "Clock Tower Building" (48–52 Main, 1874 Italianate brick block on the NE corner of Bloomfield Ave; Post Office from 1899 to before 1921; 1921 tenants Green's drugs, cobbler, jeweler/club rooms) spec written, **awaiting owner approval**. Sanborn sheet 2: 3 storeys, 36', main block 15.94 × 15.20 m + 3-storey "Flats" wing 7.87 × 8.91 m on Bloomfield Ave, front 0.55 m behind the property line → entity (10.85, 0.15, −97.79). Upper floors and roofline measured on a modern frontal photo (Goodspeed Histories): 7 bays 2–3–2, segmental arched pediment with oval window, bracketed cornice, square cupola with 4 clock dials; ground floor from the 1906–07 cards (raised shops, steps along the front, 3 round arches). Ordinary (target ~9k tris), 5 materials, no downloads (1 generated sign/clock atlas), 2K lightmap. |
+| 2026-11-04 | blender-builder: Rea Building / Clock Tower Building (48–52 Main) **built** at landmark detail: `tools/blender/rea_building.py` + `_bake.py` + `_preview.py`, `tools/prepare_rea_textures.py` (sign/clock/louvre/dentil atlas). 14,593 tris after hidden-face removal, 5 materials, GLB 1.89 MB, 2K lightmap, LIGHTMAP_SCALE 1.1735. 7 bays 2–3–2 with hoods, keystones, louvred shutters; segmental pediments (front with oval window, Bloomfield side), 20 scroll brackets, dentil course; cupola with 4 clock gables and dials, pole to 18.7 m; shop fronts 48/52, rusticated arches, steps along the front, Green's and striped awnings; Flats wing. Previews: front, three-quarter, cupola, detail, match-flmngtnpoandnatbank08, match-flmngtnpobankunionhtl07. Next: reviewer. |
+| 2026-11-04 | reviewer: Rea Building / Clock Tower Building (48–52 Main) round 1: **PASS**. GLB 1.89 MB, 14,593 tris (≤ 15k landmark cap), 5 materials, 4 × 1K JPEG + 2K lightmap, TEXCOORD_0/1; viewer loads with no errors. Matches the 1907/1908 cards and spec: 7 bays 2–3–2 with hoods, keystones and shutters, broken segmental pediment with oval window, paired brackets and dentils, cupola with 4 clock gables and pole to 18.7 m, rusticated arches (door, window, door), steps, Green's and striped awnings, Bloomfield side with side arch, chimney and Flats. Optional: warmer cream cupola; Flats door step projects 0.40 m onto Bloomfield Ave. |
+| 2026-11-04 | scene-integrator: Rea Building / Clock Tower Building (48–52 Main) **in scene** at (10.85, 0.15, −97.79), rotation 0 −90 0, replacing the placeholder `#bldg-48-52-main` (id kept); `baked-lighting` intensity 1.1735, merged 5 materials → 1 call. Draw calls / triangles (looking north): start 73 → 70 / 125.7k → 140.3k; z −60: 56 → 53 / 39.1k → 53.7k; z −90: 41 → 38 / 7.2k → 21.8k (placeholder used 4 calls). Steps stand on the sidewalk to x 9.65, clear of pole E5 and hydrant Y2; no props or trees moved; `#bank-forecourt` unchanged; 2.0 m passage to the 40–46 placeholder; Flats door step (0.40 m onto Bloomfield Ave) looks fine. No console errors. Also added HISTORY-SOURCES.md (register of historical claims and sources). |

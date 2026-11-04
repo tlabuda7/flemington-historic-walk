@@ -353,8 +353,18 @@
          ============================================================ -->
 
     <!-- North of Bloomfield Ave, east side -->
-    <a-entity id="bldg-48-52-main" position="10.3 0 -98.3" rotation="0 -90 0"
-      building="width: 15.7; height: 11; depth: 14; stories: 3; color: #7a3b2e; wall: brick; photo: "></a-entity>
+    <!-- Rea Building / "Clock Tower Building", the old Post Office block (48–52 Main, 1874
+         3-storey brick Italianate block with an arched pediment and a clock cupola; 1921: drugs,
+         cobbler, jeweler / club rooms): Blender model with generated sign/clock atlas and baked
+         late-afternoon light. Built by tools/blender/rea_building.py + rea_building_bake.py
+         (textures: tools/prepare_rea_textures.py). Position = centre of the front wall face at
+         sidewalk level, 0.55 m behind the property line; the steps along the front stand on the
+         sidewalk to x 9.65 and cover the strip behind it, so no paving box is needed. North wall
+         z -105.76 (2 m passage to 40–46), south wall z -89.82 on Bloomfield Ave; the "Flats"
+         wing runs back along Bloomfield to x 33.92. Walls skirt 0.2 m below the sidewalk top. -->
+    <a-entity id="bldg-48-52-main" position="10.85 0.15 -97.79" rotation="0 -90 0"
+      gltf-model="url(assets/models/rea-building.glb)"
+      baked-lighting="lightmap: assets/textures/rea-building-lightmap.jpg; intensity: 1.1735"></a-entity>
     <a-entity id="bldg-40-46-main" position="10.3 0 -115.8" rotation="0 -90 0"
       building="width: 16; height: 7.5; depth: 12; stories: 2; color: #bfa77c; wall: wood; photo: "></a-entity>
     <a-entity id="bldg-32-38-main" position="10.3 0 -130.7" rotation="0 -90 0"
