@@ -161,11 +161,72 @@ tinted by a colour factor in the GLB (listed above). One re-coloured copy, made 
 |------|------------------|-----|---------|----------|
 | `clapboard_cream.jpg` | Brown Planks 05 (`brown_planks_05`, via `courthouse/brown_planks_05.jpg`), recoloured warm cream #E6DFCC at 35% contrast | https://polyhaven.com/a/brown_planks_05 | CC0 | clapboard walls (tile 1.6 m, 0.18 m laps) and all painted trim (UVs squeezed onto one board) |
 
+### Lovell's Restaurant, 68 Main St (`assets/textures/lovells-restaurant/`)
+
+Nothing new downloaded. The building reuses, unchanged, `house-65-main/clapboard_cream.jpg`
+(Poly Haven `brown_planks_05`, CC0; clapboard and all smooth paint, tile 1.6 m) (listed above).
+Two textures made by `tools/prepare_lovells_textures.py`:
+
+| File | Source | URL | Licence | Used for |
+|------|--------|-----|---------|----------|
+| `signs_atlas.jpg` | none: drawn by `tools/prepare_lovells_textures.py` with Pillow (original work, no download). Lettering set in fonts installed with Windows and rendered into the image (no font file is shipped): Bookman Old Style (`BOOKOS.TTF`, valance), Georgia Bold (`georgiab.ttf`, RESTAURANT board), Arial Bold (`arialbd.ttf`, LOVELL'S and ICE CREAM boards) | — | original work | awning canvas, valance "LOVELL'S RESTAURANT.", "RESTAURANT", "LOVELL'S" and "ICE CREAM" sign boards (1024², one material) |
+| `stone_bluestone.jpg` | Concrete Floor Worn 001 (`concrete_floor_worn_001`, via `polyhaven/concrete_floor_worn_001.jpg`), lightened to mean #8E8C86 at 85% contrast | https://polyhaven.com/a/concrete_floor_worn_001 | CC0 | steps, stone course, kitchen step; roof and coping tinted tin grey in the bake (tile 2.0 m) |
+
+`assets/textures/lovells-restaurant-lightmap.jpg` is baked in Blender by `tools/blender/lovells_restaurant_bake.py` (original work).
+Reference photos viewed only (Goodspeed Histories, not saved in the project): see PLAN.md, Lovell's Restaurant, Sources.
+
 `assets/textures/union-hotel-lightmap.jpg` is baked in Blender by
 `tools/blender/union_hotel_bake.py` (original work).
 `assets/textures/courthouse-lightmap.jpg` is baked in Blender by `tools/blender/courthouse_bake.py` (original work).
 `assets/textures/wurts-law-office-lightmap.jpg` is baked in Blender by `tools/blender/wurts_law_office_bake.py` (original work).
 `assets/textures/house-65-main-lightmap.jpg` is baked in Blender by `tools/blender/house_65_main_bake.py` (original work).
+
+### Test person 1: John B. Pickell (`assets/textures/npc-pickell/`)
+
+1K Diffuse JPGs from Poly Haven, baked by the builder into the character's one atlas (not loaded
+by the scene). Tinted copies made with the `tint` function of `tools/prepare_textures.py`.
+
+| File | Poly Haven asset | URL | Licence | Used for |
+|------|------------------|-----|---------|----------|
+| `poly_wool_herringbone.jpg` | Poly Wool Herringbone (`poly_wool_herringbone`), 0.27 m | https://polyhaven.com/a/poly_wool_herringbone | CC0 | source of the suit cloth |
+| `suit_charcoal_herringbone.jpg` | same, tinted #3B3A3C | https://polyhaven.com/a/poly_wool_herringbone | CC0 | jacket, waistcoat, trousers |
+| `stretch_poplin.jpg` | Stretch Poplin (`stretch_poplin`), 0.29 m | https://polyhaven.com/a/stretch_poplin | CC0 | source of the shirting |
+| `shirt_white_poplin.jpg` | same, tinted #F0ECE2 | https://polyhaven.com/a/stretch_poplin | CC0 | shirt, collar, cuffs, handkerchief |
+| `brown_leather.jpg` | Brown Leather (`brown_leather`), 0.40 m | https://polyhaven.com/a/brown_leather | CC0 | source of the shoe leather |
+| `shoe_black_calf.jpg` | same, tinted #1C1714 | https://polyhaven.com/a/brown_leather | CC0 | black calf oxfords |
+
+## Characters (`assets/characters/source/`, local only)
+
+Raw packs for building people in Blender. The folder is gitignored (~600 MB); re-download from
+these URLs. Only the finished `assets/models/npc-*.glb` files are committed. Each pack's licence
+text is copied next to its files.
+
+| File / folder | Asset | URL | Licence | Used for |
+|---------------|-------|-----|---------|----------|
+| `quaternius_ual_standard/` (`UAL1_Standard.glb`, `UAL1_Standard_RM.glb`, FBX copies, `License.txt`) | Universal Animation Library [Standard] v3.0 (16 Jun 2026), by Quaternius; free tier, 43 clips | https://quaternius.itch.io/universal-animation-library (also https://quaternius.com/packs/universalanimationlibrary.html) | CC0 | rig (65 bones) and the Idle / Talk / Walk clips for NPCs |
+| `quaternius_ubc_standard/` (`Superhero_Male_FullBody.gltf` etc., hair, `License_Standard.txt`) | Universal Base Characters [Standard], by Quaternius; free tier = Superhero male + female, 8 hair/eyebrow meshes | https://quaternius.itch.io/universal-base-characters (also https://quaternius.com/packs/universalbasecharacters.html) | CC0 | fallback body / weight donor on the same rig |
+| `_zips/makehuman_system_assets_cc0.zip`, `makehuman_system_assets_cc0_subset/` (skins, eyes, eyebrows, eyelashes, short hair, elegant suit, `LICENSE.txt`) | MakeHuman system assets (94 assets, all marked CC0 in the pack JSON) | https://static.makehumancommunity.org/assets/assetpacks/makehuman_system_assets.html | CC0 | realistic head, skin, eyes and hair via MPFB |
+| `_zips/add-on-mpfb-v2.0.18.zip` | MPFB 2.0.18 Blender extension (Joel Palmius / MakeHuman Community), sha256 c075b3e9…2dad | https://extensions.blender.org/add-ons/mpfb/ | code GPL-3.0-or-later; characters made with it CC0 (https://static.makehumancommunity.org/about/license.html) | tool only, never shipped (installed into Blender 5.2 "User Default" repo on 2026-11-03 with the owner's approval; the CC0 system-asset zip loaded with MPFB "Load pack") |
+
+MakeHuman CC0 items used for `npc-pickell.glb` (all from the system-asset pack above, CC0): MakeHuman
+base mesh (male, age 0.62, weight 0.6, height 0.45, proportions 0.6, caucasian 1.0) with the
+`game_engine` rig weights; skin `skins/middleage_caucasian_male` (`middleage_lightskinned_male_diffuse.png`);
+eyes `eyes/low-poly` with `eyes/materials/brownlight_eye.png` (darkened); eyebrows
+`eyebrows/eyebrow001` (its texture painted into the atlas); hair `hair/short02` (only as the thickness
+guide of a scalp-grown hair shell; its texture is not used). No CC-BY pack items were used.
+
+| Output | Made by | Licence |
+|--------|---------|---------|
+| `assets/models/npc-pickell.glb` | `tools/blender/npc_pickell.py` + `npc_pickell_bake.py` (original work on the CC0 UAL rig/clips, MakeHuman and Poly Haven sources above) | original work; sources CC0 |
+| `assets/textures/npc-pickell-atlas.jpg` (2048², also embedded in the GLB) | baked by `tools/blender/npc_pickell_bake.py` (Poly Haven cloth maps from `assets/textures/npc-pickell/`, MakeHuman skin/eye/eyebrow maps, procedural hair, tie, tape, moustache) | original work; sources CC0 |
+| `data/dialogue/pickell.json` | his lines, written for this project from the web sources listed per node in the file (facts only, no quoted text) | original work |
+
+## Code libraries (loaded from CDNs, not stored in the repo)
+
+| Library | Version | URL | Licence | Used for |
+|---------|---------|-----|---------|----------|
+| A-Frame | 1.6.0 | https://aframe.io/releases/1.6.0/aframe.min.js | MIT | the WebXR scene |
+| aframe-extras, loaders bundle | 7.7.0 (pinned) | https://cdn.jsdelivr.net/npm/aframe-extras@7.7.0/dist/aframe-extras.loaders.min.js (https://github.com/c-frame/aframe-extras) | MIT | `animation-mixer`: plays the people's Idle / Talk clips |
 
 ## Maps (`assets/maps/`)
 

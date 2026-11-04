@@ -26,3 +26,7 @@ assets/**/raw/
 *.blend1
 *.tif
 *.tiff
+
+# Raw character packs (Quaternius UAL/UBC, MakeHuman system assets, MPFB zip; ~600 MB).
+# Re-download from the URLs in SOURCES.md; only the finished GLB in assets/models/ is committed.
+assets/characters/source/

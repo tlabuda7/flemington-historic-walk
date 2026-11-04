@@ -7,10 +7,15 @@
 
   <!-- A-Frame (WebXR framework), loaded from its official CDN. -->
   <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
-  <!-- Our own code: shared components, the building kit, and the modelled landmarks. -->
+  <!-- aframe-extras 7.7.0 (pinned), loaders bundle only: provides `animation-mixer`,
+       which plays the people's animation clips (Idle, Talk). -->
+  <script src="https://cdn.jsdelivr.net/npm/aframe-extras@7.7.0/dist/aframe-extras.loaders.min.js"></script>
+  <!-- Our own code: shared components, the building kit, the modelled landmarks,
+       and the townspeople you can talk to. -->
   <script src="js/components.js"></script>
   <script src="js/kit.js"></script>
   <script src="js/landmarks.js"></script>
+  <script src="js/people.js"></script>
 
   <style>
     /* On-screen help for desktop. Not visible inside the headset. */
@@ -29,7 +34,10 @@
     <b>Flemington Main Street, c. 1920</b><br>
     Click the scene to look with the mouse (Esc to release).<br>
     W A S D / arrows to walk, Shift to walk faster.<br>
-    In VR: left stick walks (hold left trigger to walk faster), right stick snap-turns.
+    In VR: left stick walks (hold left trigger to walk faster), right stick snap-turns.<br>
+    <b>Talking to people:</b> walk up to someone (within a few steps) and they speak.
+    Pick a reply with 1 / 2 / 3 or a mouse click; in VR point the right controller at it
+    and pull the right trigger. Walk away to end the conversation.
   </div>
 
   <!--
@@ -229,6 +237,21 @@
       baked-lighting="lightmap: assets/textures/nevius-store-lightmap.jpg; intensity: 1.1072"></a-entity>
 
     <!-- ============================================================
+         PEOPLE (js/people.js; lines in data/dialogue/<id>.json)
+         ============================================================ -->
+    <!-- John B. Pickell, clerk at the Nevius store since 1895 (aged about 41 in 1920), on the
+         sidewalk in front of the store's north display window, just north of the recessed
+         door, under the awning. Built by tools/blender/npc_pickell.py + npc_pickell_bake.py.
+         Lit by the scene's lights (no lightmap: he moves); his texture has baked shading.
+         Faces across the street, turned 30° toward the start point; turns to face you
+         while you talk. Remove `blob-shadow` first if the draw-call budget gets tight. -->
+    <a-entity id="npc-pickell" position="9.5 0.15 -8.45" rotation="0 -60 0"
+      gltf-model="url(assets/models/npc-pickell.glb)"
+      animation-mixer="clip: Idle; crossFadeDuration: 0.4"
+      npc="dialogue: data/dialogue/pickell.json; radius: 2.5; closeRadius: 4"
+      blob-shadow="width: 0.9; depth: 0.6; opacity: 0.6"></a-entity>
+
+    <!-- ============================================================
          BEYOND THE STARTER BLOCK: simple placeholders.
          East-side widths and storeys follow the map; the rest are rough.
          ============================================================ -->
@@ -290,6 +313,12 @@
            (the newer name meta-touch-controls does not exist in this version). -->
       <a-entity id="left-hand" oculus-touch-controls="hand: left"></a-entity>
       <a-entity id="right-hand" oculus-touch-controls="hand: right"></a-entity>
+      <!-- Right-controller laser for picking replies when someone talks to you (js/people.js).
+           Off and hidden until a conversation opens; the right trigger picks.
+           model: false = no second controller model (#right-hand already shows one). -->
+      <a-entity id="right-laser" laser-controls="hand: right; model: false"
+        raycaster="objects: .dialogue-hit; far: 4; enabled: false; lineColor: #f3e3c0"
+        visible="false"></a-entity>
     </a-entity>
 
   </a-scene>
