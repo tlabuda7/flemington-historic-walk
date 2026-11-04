@@ -242,6 +242,68 @@
       <a-entity id="tree-west-4"  position="-7.5 0.175 -33"   rotation="0 180 0" scale="1.05 1.1 1.05" ></a-entity>
       <a-entity id="tree-west-5"  position="-7.5 0.175 -60"   rotation="0 270 0" scale="1 1 1"        ></a-entity>
     </a-entity>
+    <!-- ============================================================
+         STREET PROPS (tools/blender/street_props.py + street_props_bake.py
+         → assets/models/street-props.glb; PLAN.md "Street ambiance", pass 1)
+         Wooden utility poles along both curbs (1905–1910 cards), bracket lamps, two arc
+         lamps hung over the Court St and Bloomfield crossings, the granite horse fountain
+         in front of the County Offices, hitching posts, carriage steps, the two Sanborn
+         hydrants, shop goods, sandwich boards, bicycles and a curb gasoline pump.
+         Each child is one placement; data-prop = the kit node(s) to put there. West side
+         rotation="0 90 0", east side "0 -90 0" (front faces the street).
+         `street-props` (js/components.js) bakes them all into 3 meshes (z bands) and draws
+         the overhead wires between neighbouring poles plus the arc lamps' span wires
+         (data-span) as one line mesh: 4 draw calls in total. Lit by the scene lights.
+         ============================================================ -->
+    <a-entity id="street-props" street-props="src: url(assets/models/street-props.glb)">
+      <!-- Poles, west curb (S to N); W1, W2, W3, W5 carry a bracket lamp -->
+      <a-entity id="pole-W0" data-prop="pole"           position="-6.9 0.15 28"    rotation="0 90 0"></a-entity>
+      <a-entity id="pole-W1" data-prop="pole pole_lamp" position="-6.9 0.15 -0.6"  rotation="0 90 0"></a-entity>
+      <a-entity id="pole-W2" data-prop="pole pole_lamp" position="-6.9 0.15 -21.5" rotation="0 90 0"></a-entity>
+      <a-entity id="pole-W3" data-prop="pole pole_lamp" position="-6.9 0.15 -55"   rotation="0 90 0"></a-entity>
+      <a-entity id="pole-W4" data-prop="pole"           position="-6.9 0.15 -86"   rotation="0 90 0"></a-entity>
+      <a-entity id="pole-W5" data-prop="pole pole_lamp" position="-6.9 0.15 -118"  rotation="0 90 0"></a-entity>
+      <a-entity id="pole-W6" data-prop="pole"           position="-6.9 0.15 -150"  rotation="0 90 0"></a-entity>
+      <!-- Poles, east curb (S to N); E1 is the pole in the 1907 card, E4 the 1906 PO card's -->
+      <a-entity id="pole-E0" data-prop="pole"           position="6.9 0.15 34"     rotation="0 -90 0"></a-entity>
+      <a-entity id="pole-E1" data-prop="pole pole_lamp" position="6.9 0.15 3"      rotation="0 -90 0"></a-entity>
+      <a-entity id="pole-E2" data-prop="pole"           position="6.9 0.15 -15.5"  rotation="0 -90 0"></a-entity>
+      <a-entity id="pole-E3" data-prop="pole pole_lamp" position="6.9 0.15 -46.5"  rotation="0 -90 0"></a-entity>
+      <a-entity id="pole-E4" data-prop="pole"           position="6.9 0.15 -76.5"  rotation="0 -90 0"></a-entity>
+      <a-entity id="pole-E5" data-prop="pole"           position="6.9 0.15 -92.5"  rotation="0 -90 0"></a-entity>
+      <a-entity id="pole-E6" data-prop="pole pole_lamp" position="6.9 0.15 -124"   rotation="0 -90 0"></a-entity>
+      <a-entity id="pole-E7" data-prop="pole"           position="6.9 0.15 -156"   rotation="0 -90 0"></a-entity>
+      <!-- Arc lamps (1910 colour card), hook on a span wire between two poles; globe bottom ~7.3 m -->
+      <a-entity id="arc-A1" data-prop="arc_lamp" data-span="pole-W1 pole-E1" position="0 8.35 1.2"></a-entity>
+      <a-entity id="arc-A2" data-prop="arc_lamp" data-span="pole-W4 pole-E4" position="0 8.35 -81.25"></a-entity>
+      <!-- Horse fountain (c. 1910 photo) in front of the County Offices; bowl front at the curb, x -6.38 -->
+      <a-entity id="fountain-F1" data-prop="fountain" position="-7.7 0.15 -29.8" rotation="0 90 0"></a-entity>
+      <!-- Hitching posts (1908 cards): courthouse and County Offices -->
+      <a-entity id="hitch-H1" data-prop="hitching_post" position="-6.8 0.15 -9.4"  rotation="0 90 0"></a-entity>
+      <a-entity id="hitch-H2" data-prop="hitching_post" position="-6.8 0.15 -14.6" rotation="0 90 0"></a-entity>
+      <a-entity id="hitch-H3" data-prop="hitching_post" position="-6.8 0.15 -26.2" rotation="0 90 0"></a-entity>
+      <a-entity id="hitch-H4" data-prop="hitching_post" position="-6.8 0.15 -35"   rotation="0 90 0"></a-entity>
+      <!-- Granite carriage steps (1907 card): in front of Nevius and by pole E1 -->
+      <a-entity id="step-C1" data-prop="carriage_step" position="6.89 0.15 -7.3" rotation="0 -90 0"></a-entity>
+      <a-entity id="step-C2" data-prop="carriage_step" position="6.89 0.15 1.6"  rotation="0 -90 0"></a-entity>
+      <!-- Hydrants: the two "T.H." on the 1921 Sanborn map -->
+      <a-entity id="hydrant-Y1" data-prop="hydrant" position="-6.85 0.15 -4.4" rotation="0 90 0"></a-entity>
+      <a-entity id="hydrant-Y2" data-prop="hydrant" position="6.85 0.15 -90.9" rotation="0 -90 0"></a-entity>
+      <!-- Crates and a barrel at shop fronts: Nevius, 66 Main (confectionery: under the window
+           just north of its stoop, which spans z -57.57 … -56.17), 84 Main (grocer) -->
+      <a-entity id="goods-G1" data-prop="shop_goods" position="9.95 0.15 -4"  rotation="0 -90 0"></a-entity>
+      <a-entity id="goods-G2" data-prop="shop_goods" position="11.9 0.15 -59" rotation="0 -90 0"></a-entity>
+      <a-entity id="goods-G3" data-prop="shop_goods" position="9.95 0.15 11"  rotation="0 -90 0"></a-entity>
+      <!-- Sandwich boards at the curb, faces along the walk -->
+      <a-entity id="board-S1" data-prop="sandwich_board_groceries" position="7.25 0.15 12.5"></a-entity>
+      <a-entity id="board-S2" data-prop="sandwich_board_icecream"  position="7.25 0.15 -58"></a-entity>
+      <!-- Bicycles leaning on hitching post H2 (1909 card) and pole E4 (1907 card) -->
+      <a-entity id="bicycle-B1" data-prop="bicycle" position="-7.12 0.15 -14.6" rotation="0 180 0"></a-entity>
+      <a-entity id="bicycle-B2" data-prop="bicycle" position="7.25 0.15 -76.5"></a-entity>
+      <!-- Curb gasoline pump at 100–102 Main (Sanborn sheet 3: buried 500 gal tank) -->
+      <a-entity id="pump-P1" data-prop="gas_pump" position="6.95 0.15 47.2" rotation="0 -90 0"></a-entity>
+    </a-entity>
+
     <!-- Nevius Store / Fulper's Dry Goods Building (78 Main, 3-storey brick Italianate store,
          front c. 1880): Blender model with Poly Haven textures and baked late-afternoon light.
          Built by tools/blender/nevius_store.py + nevius_store_bake.py.

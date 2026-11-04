@@ -932,6 +932,154 @@ AFRAME.registerComponent('instanced-trees', {
 });
 
 /* ------------------------------------------------------------------ */
+/* street-props                                                        */
+/* ------------------------------------------------------------------ */
+/*
+ * Street furniture from one kit model (assets/models/street-props.glb: one node per
+ * prop, all at the origin, one shared material). Each child entity is one placement;
+ * `data-prop` names the node(s) to stamp there (several separated by spaces):
+ *
+ *   <a-entity street-props="src: url(assets/models/street-props.glb)">
+ *     <a-entity id="pole-W1" data-prop="pole pole_lamp" position="-6.9 0.15 -0.6" rotation="0 90 0"></a-entity>
+ *     <a-entity id="arc-A1" data-prop="arc_lamp" data-span="pole-W1 pole-E1" position="0 8.35 1.2"></a-entity>
+ *   </a-entity>
+ *
+ * All placements are baked into a few static meshes, one per z band (`bands` = the z
+ * values where a new band starts), so the whole kit costs one draw call per band and
+ * bands behind you are culled. The props keep the model's own lit material (no lightmap).
+ *
+ * It also draws the overhead wires (one more draw call): 6 sagging wires between each
+ * pair of neighbouring poles on the same side of the street (from the insulators), and
+ * for each placement with `data-span`, a span wire from one pole's eye bolt to the lamp's
+ * hook and on to the other pole.
+ */
+const POLE_WIRES = [   // insulator wire grooves on the pole node (glTF local, metres)
+  [0.148, 10.325, -1.05], [0.148, 10.325, -0.40], [0.148, 10.325, 0.40], [0.148, 10.325, 1.05],
+  [0.151, 9.625, -1.05], [0.151, 9.625, 1.05]
+];
+const POLE_EYE = [0, 8.6, 0.18];   // eye bolt for cross-street span wires
+
+AFRAME.registerComponent('street-props', {
+  schema: {
+    src:      { type: 'model' },
+    bands:    { default: '-20, -60' },   // band edges along z (north = -z)
+    sag:      { default: 0.012 },        // wire sag as a fraction of the span
+    segments: { default: 12 },           // straight pieces per wire span
+    wireColor: { type: 'color', default: '#1e1a17' }
+  },
+
+  init() {
+    new THREE.GLTFLoader().load(this.data.src, (gltf) => this.build(gltf.scene),
+      undefined, (err) => console.error('street-props: could not load', this.data.src, err));
+  },
+
+  build(model) {
+    model.updateMatrixWorld(true);
+    const nodes = new Map();
+    let material = null;
+    model.traverse((obj) => {
+      if (!obj.isMesh) return;
+      nodes.set(obj.name, obj);
+      material = material || obj.material;
+    });
+
+    const edges = this.data.bands.split(',').map(Number).filter((n) => !isNaN(n)).sort((a, b) => b - a);
+    const bands = edges.map(() => []).concat([[]]);   // one list of geometries per band
+    const bandOf = (z) => { const i = edges.findIndex((e) => z > e); return i < 0 ? edges.length : i; };
+
+    const places = Array.from(this.el.children).filter((c) => c.object3D && c.dataset.prop);
+    const poles = [];
+    let tris = 0;
+    for (const c of places) {
+      c.object3D.updateMatrix();
+      const mx = c.object3D.matrix;
+      for (const name of c.dataset.prop.trim().split(/\s+/)) {
+        const node = nodes.get(name);
+        if (!node) { console.warn('street-props: no node', name, 'for', c.id); continue; }
+        const geo = node.geometry.clone().applyMatrix4(new THREE.Matrix4().multiplyMatrices(mx, node.matrixWorld));
+        bands[bandOf(c.object3D.position.z)].push(geo);
+        tris += (geo.index ? geo.index.count : geo.attributes.position.count) / 3;
+        if (name === 'pole') poles.push(c);
+      }
+    }
+
+    const group = new THREE.Group();
+    bands.forEach((list, i) => {
+      if (!list.length) return;
+      const geo = mergeGeometries(list);   // js/kit.js
+      geo.computeBoundingSphere();
+      const mesh = new THREE.Mesh(geo, material);
+      mesh.name = `street-props-band-${i}`;
+      group.add(mesh);
+    });
+    nodes.forEach((n) => n.geometry.dispose());
+
+    const wires = this.buildWires(poles, places);
+    if (wires) group.add(wires);
+    this.el.setObject3D('mesh', group);
+    console.info(`street-props: ${places.length} placements, ${Math.round(tris)} triangles in ` +
+      `${group.children.length - (wires ? 1 : 0)} meshes + wires`);
+  },
+
+  // Points along a hanging wire from a to b (a parabola, lowest by `sag` metres mid-span).
+  wire(out, a, b, sag) {
+    const n = this.data.segments;
+    let prev = a;
+    for (let i = 1; i <= n; i++) {
+      const t = i / n;
+      const p = new THREE.Vector3().lerpVectors(a, b, t);
+      p.y -= 4 * sag * t * (1 - t);
+      out.push(prev.x, prev.y, prev.z, p.x, p.y, p.z);
+      prev = p;
+    }
+  },
+
+  buildWires(poles, places) {
+    const pts = [];
+    const at = (c, local) => new THREE.Vector3(...local).applyMatrix4(c.object3D.matrix);
+    // Along each side of the street: neighbouring poles, sorted north to south.
+    for (const side of [-1, 1]) {
+      const line = poles.filter((c) => Math.sign(c.object3D.position.x) === side)
+        .sort((p, q) => p.object3D.position.z - q.object3D.position.z);
+      for (let i = 0; i + 1 < line.length; i++) {
+        for (const w of POLE_WIRES) {
+          const a = at(line[i], w);
+          const b = at(line[i + 1], w);
+          this.wire(pts, a, b, this.data.sag * a.distanceTo(b));
+        }
+      }
+    }
+    // Span wires across the street, pulled down to the lamp hook in the middle.
+    for (const c of places) {
+      if (!c.dataset.span) continue;
+      const hook = c.object3D.position.clone();
+      for (const id of c.dataset.span.trim().split(/\s+/)) {
+        const pole = document.getElementById(id);
+        if (!pole) { console.warn('street-props: no pole', id, 'for', c.id); continue; }
+        const eye = at(pole, POLE_EYE);
+        this.wire(pts, eye, hook, this.data.sag * eye.distanceTo(hook));
+      }
+    }
+    if (!pts.length) return null;
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3));
+    geo.computeBoundingSphere();
+    const lines = new THREE.LineSegments(geo, new THREE.LineBasicMaterial({ color: this.data.wireColor }));
+    lines.name = 'street-props-wires';
+    return lines;
+  },
+
+  remove() {
+    const group = this.el.getObject3D('mesh');
+    if (!group) return;
+    const mats = new Set();
+    group.children.forEach((m) => { m.geometry.dispose(); mats.add(m.material); });
+    mats.forEach((m) => { if (m.map) m.map.dispose(); m.dispose(); });
+    this.el.removeObject3D('mesh');
+  }
+});
+
+/* ------------------------------------------------------------------ */
 /* stick-debug (temporary)                                             */
 /* ------------------------------------------------------------------ */
 /*
