@@ -101,6 +101,9 @@ Cite them by filename. Saved 2026-11-01 (7) and 2026-11-02 (25). Captions are co
 | [P34] | `flmngtncountyhotel08.jpg` | The County Hotel – 1908 — viewed online, not saved locally |
 | [P35] | `flmngtnmainstrtcountyhtlvu06.jpg` | Main Street – County Hotel – 1906 (looking south) — viewed online, not saved locally |
 | [P36] | `flmngntnmainstcountyhtl08.jpg` | Main Street and County Hotel – 1908 (looking north) — viewed online, not saved locally |
+| [P37] | `flemington_-_main_street_north_from_bloomfield_avenue_-_flemington_garage_-_c_1910.jpg` | Main Street North from Bloomfield Avenue – Flemington Garage – c 1910 (Rea Building from the SW, "Flemington Garage Co." arrow sign on its Bloomfield side) — viewed online 2026-11-04, not saved locally |
+| [P38] | `flmngntnmainstandbloomfieldaveview09.jpg` | Main Street and Bloomfield Avenue – 1909 (same view as P37, sharper) — viewed online, not saved locally |
+| [P39] | `flmingtngarage09.jpg` | Flemington Garage – 1909 (1-storey concrete-block garage on a corner; not on Main St) — viewed online, not saved locally |
 
 ### 1.4 Web photographs (looked at only, not saved to the project)
 
@@ -478,6 +481,21 @@ block** for it: its historical basis is **source not recorded** beyond the photo
 | CY-19 | Ground-floor openings (display window and door in the south bay, double main door in bay 3), 2nd-floor door/window pattern, north and rear walls, roof form, chimney positions, wing details. | Guess / artistic (partly Inferred from G9) | G9 (partial) | |
 | CY-20 | No local reference photo or HABS photo shows the hotel. | Documented (search result) | P01–P32, H1–H3 checked | |
 
+### 2.13 Block at 40–46 Main St ("Auto Sales" and "Shoe Shine & Fruits") — spec written, awaiting owner approval
+
+| ID | Claim | Grade | Sources | Method / note |
+|----|-------|-------|---------|---------------|
+| BK-1 | In September 1921, 40–42 was a 3-storey frame building, 30 ft, used for "Auto Sales"; 44–46 a 2-storey frame building, 20 ft, used for "Shoe Shine & Fruits". | Documented (map) | M1 | Labels, storey numbers, height notes, yellow = frame. |
+| BK-2 | Footprints: 40–42 main 9.12 m along the street × 9.22 m deep, with a 2-storey rear wing 5.0 × 7.45 m; 44–46 5.78 × 17.45 m with a 1-storey rear part 3.9 m deep. Block z −124.00 … −109.10. | Measured | M1 (px x 3955–4460, y 4515–4830) | ±0.1 m. |
+| BK-3 | 44–46 stood on the street line, about 2.3 m in front of the Rea Building's front wall; 40–42's front wall was about 2 m behind it. | Measured | M1 | The scene places it map-true at x 8.60 (owner may choose to shift it to the scene property line). |
+| BK-4 | A 3.3 m open passage between 44–46 and the Rea Building (lot line 1.1 m from 44–46). | Measured | M1 | Corrects the Rea spec's "2.0–2.3 m", which took the lot line as the wall. |
+| BK-5 | Two 2nd-storey projections ("2d only") on 44–46's south wall over the passage, 0.63 m deep; modelled as box bay windows. | Documented (map) / Inferred (form) | M1 | |
+| BK-6 | No. 40 was an arched drive-through under the 3-storey building to the yard behind. | Inferred | M1 | Half-circle marks at the front and rear walls of the 3.1 m wide unit, open yard behind; Sanborn gives no label. |
+| BK-7 | 42 had a 1-storey porch with a canted show window under it. | Documented (map) / Inferred (window) | M1 | |
+| BK-8 | No photo of the fronts and no written history of these buildings was found; names of the 1920 dealer and of the shoe-shine/fruit business are not known. | Documented (search result) | P01–P39, H1–H3, W7, W16, W17 | Searched 2026-11-04. P37/P38 show only a lower building beyond the Rea's north wall behind a curb tree. |
+| BK-9 | The "Flemington Garage" (1909 card; "Flemington Garage Co." sign on the Rea Building) was a different, 1-storey concrete-block building, not 40–42. | Inferred | P37, P38, P39 | Arrow sign points along Bloomfield Ave; the garage is 1-storey block, 40–42 is 3-storey frame. |
+| BK-10 | Façades: window counts and sizes, shutters, bracketed cornices, flat/shed roofs, shop fronts, porch posts, the drive-through doors, colours (buff and cream clapboard, off-white trim, dark green shutters, striped awning), sign wording ("AUTO SALES", "SHOES SHINED", "FRUITS"), storey heights. | Guess / artistic | — | Period-typical for frame commercial buildings on Main St (cf. P-card `flmgtnmainststores.jpg`). |
+
 ---
 
 ## 3. Known uncertainties / questions for the Historical Society
@@ -525,6 +543,9 @@ Ordered roughly by how much the answer would change the walk.
 16. **County Hotel, 1920.** Who ran it in 1920 (after the 1907 sale)? Were the walls painted, red
     brick, or sheathed in sheet iron (Sanborn 1921 "Ir. Cl.")? Did the lamp standard still stand,
     and what did the lantern say? Are there photos of it from 1910–1930?
+17. **40–46 Main St, 1920.** Who sold cars at 40–42 and who ran the shoe shine and fruit store at
+    44–46? Any photo of these two frame buildings? Was no. 40 an arched drive-through? Did 44–46
+    really stand forward on the street line?
 
 ### Internal inconsistencies noted while compiling (for the project, not the Society)
 
@@ -535,3 +556,4 @@ Ordered roughly by how much the answer would change the walk.
   them (CH-22).
 - [P17] is captioned "c 1910" in the gallery but called "c. 1908" in PLAN.md.
 - The HABS number for the Union Hotel (NJ-732 in PLAN.md) has not been checked.
+- The Rea Building spec gives a 2.0–2.3 m passage to 40–46; the 1921 map gives 3.3 m wall to wall (BK-4).

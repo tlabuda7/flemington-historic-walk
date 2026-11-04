@@ -202,6 +202,19 @@ Nothing new downloaded. Reused unchanged: `courthouse/paint_white.jpg` (trim, da
 `assets/textures/county-hotel-lightmap.jpg` is baked in Blender by `tools/blender/county_hotel_bake.py` (original work).
 Reference photos viewed only (Goodspeed Histories, West Jersey History; not saved in the project): see PLAN.md, County Hotel, Sources.
 
+### Block at 40–46 Main St (`assets/textures/block-40-46/`)
+
+Nothing new downloaded. Reused unchanged: `house-65-main/clapboard_cream.jpg` (both clapboard colours, by colour
+factors), `polyhaven/trim_paint_cream.jpg` (trim), `polyhaven/door_paint_green.jpg` (shutters' frames, doors, shop front),
+`county-offices/roof_tin_redbrown.jpg` (roofs), `lovells-restaurant/stone_bluestone.jpg` (apron, porch deck, thresholds)
+(all listed above).
+
+| File | Source | URL | Licence | Used for |
+|------|--------|-----|---------|----------|
+| `signs_atlas.jpg` | none: drawn by `tools/prepare_block_40_46_textures.py` with Pillow (original work, no download); stripes resampled from the generated `bank-building/awning_stripes.jpg`. Lettering set in Georgia Bold (`georgiab.ttf`, installed with Windows; rendered into the image, no font file is shipped) | — | original work | red/cream awning stripes and valance, dark green shutter louvres, "AUTO SALES", "SHOES SHINED" and "FRUITS" boards (1024², one material) |
+
+`assets/textures/block-40-46-lightmap.jpg` is baked in Blender by `tools/blender/block_40_46_bake.py` (original work).
+
 `assets/textures/union-hotel-lightmap.jpg` is baked in Blender by
 `tools/blender/union_hotel_bake.py` (original work).
 `assets/textures/courthouse-lightmap.jpg` is baked in Blender by `tools/blender/courthouse_bake.py` (original work).

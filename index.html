@@ -309,6 +309,8 @@
       <a-entity id="goods-G1" data-prop="shop_goods" position="9.95 0.15 -4"  rotation="0 -90 0"></a-entity>
       <a-entity id="goods-G2" data-prop="shop_goods" position="11.9 0.15 -59" rotation="0 -90 0"></a-entity>
       <a-entity id="goods-G3" data-prop="shop_goods" position="9.95 0.15 11"  rotation="0 -90 0"></a-entity>
+      <!-- Fruit stand under the 44–46 awning (front x 8.60), clear of its doors -->
+      <a-entity id="goods-G4" data-prop="shop_goods" position="8.05 0.15 -112.6" rotation="0 -90 0"></a-entity>
       <!-- Sandwich boards at the curb, faces along the walk -->
       <a-entity id="board-S1" data-prop="sandwich_board_groceries" position="7.25 0.15 12.5"></a-entity>
       <a-entity id="board-S2" data-prop="sandwich_board_icecream"  position="7.25 0.15 -58"></a-entity>
@@ -365,10 +367,19 @@
     <a-entity id="bldg-48-52-main" position="10.85 0.15 -97.79" rotation="0 -90 0"
       gltf-model="url(assets/models/rea-building.glb)"
       baked-lighting="lightmap: assets/textures/rea-building-lightmap.jpg; intensity: 1.1735"></a-entity>
-    <a-entity id="bldg-40-46-main" position="10.3 0 -115.8" rotation="0 -90 0"
-      building="width: 16; height: 7.5; depth: 12; stories: 2; color: #bfa77c; wall: wood; photo: "></a-entity>
-    <a-entity id="bldg-32-38-main" position="10.3 0 -130.7" rotation="0 -90 0"
-      building="width: 13.8; height: 7.5; depth: 12; stories: 2; color: #c8b48a; wall: wood; photo: "></a-entity>
+    <!-- Frame block at 40–46 Main (1921 Sanborn: 40–42 3-storey "Auto Sales" with an arched
+         drive-through and porch; 44–46 2-storey "Shoe Shine & Fruits"): Blender model with a
+         generated sign atlas and baked late-afternoon light. Built by tools/blender/block_40_46.py
+         + block_40_46_bake.py (textures: tools/prepare_block_40_46_textures.py). Map-true:
+         44–46's front stands on the 1921 street line at x 8.60 (sidewalk narrows to ~2.1 m),
+         40–42 is 1.98 m further back. Apron slab is in the model. North wall z -124.05; the
+         40–42 north wall below 6.10 m is left open and hidden by the 32–38 placeholder. -->
+    <a-entity id="bldg-40-46-main" position="8.60 0.15 -116.55" rotation="0 -90 0"
+      gltf-model="url(assets/models/block-40-46.glb)"
+      baked-lighting="lightmap: assets/textures/block-40-46-lightmap.jpg; intensity: 1.2152"></a-entity>
+    <!-- 32–38 placeholder: z -137.6 … -124.05 (trimmed to meet 40–46's north wall) -->
+    <a-entity id="bldg-32-38-main" position="10.3 0 -130.825" rotation="0 -90 0"
+      building="width: 13.55; height: 7.5; depth: 12; stories: 2; color: #c8b48a; wall: wood; photo: "></a-entity>
     <a-entity id="bldg-24-30-main" position="10.3 0 -149.1" rotation="0 -90 0"
       building="width: 16.4; height: 7.5; depth: 12; stories: 2; color: #b59a72; wall: wood; photo: "></a-entity>
 

@@ -45,6 +45,7 @@ Decisions (2026-11-02):
 | Lovell's Restaurant (68 Main) | written, auto-approved (owner away) | reused + 2 generated (asset-scout skipped; clapboard_cream reused; signs_atlas + stone_bluestone (lightened concrete_floor_worn_001) made by the builder) | done, round-1 fixes applied (4.75k tris, 4 materials, 0.77 MB, 2K lightmap, LIGHTMAP_SCALE 1.2462) | round 2: PASS (round 1: awning raised/shortened, glazed doors, lighter stone; LIGHTMAP_SCALE now 1.2462) | yes (2026-11-04) at (12.66, 0.15, −52.13); bank forecourt extended over its front strip |
 | Rea Building / Clock Tower Building, old Post Office block (48–52 Main) | approved by owner 2026-11-04, **landmark** detail (≤ 15k tris) | — | done (14.6k tris, 5 materials, 1.89 MB, 2K lightmap, LIGHTMAP_SCALE 1.1735) | round 1: PASS | yes (2026-11-04) at (10.85, 0.15, −97.79); 1 draw call |
 | County Hotel (47–49 Main) | approved by owner 2026-11-04: pale painted walls, **landmark** detail (≤ 15k tris) | — | done (10.2k tris, 8 materials, 1.81 MB, 2K lightmap, LIGHTMAP_SCALE 1.1087) | round 1: PASS | in scene 2026-11-04 (−10.30, 0.15, −112.07), 1 draw call |
+| Block at 40–46 Main (40–42 "Auto Sales", 44–46 "Shoe Shine & Fruits") | approved by owner 2026-11-04: map-true placement, ordinary (≤ 10k tris) | — | done (4.8k tris, 8 materials, 1.43 MB, 2K lightmap, LIGHTMAP_SCALE 1.2152) | **PASS** round 1 (2026-11-04) | **in scene** 2026-11-04 (8.60, 0.15, −116.55), 1 draw call |
 | Test person 1: John B. Pickell, clerk at the Nevius store (78 Main) | written, auto-approved (owner away) | done (Quaternius UAL Standard rig + clips incl. Idle_Talking_Loop; UBC Standard = Superhero bodies only, no Regular; MakeHuman system assets + MPFB 2.0.18 zip, not installed; 3 Poly Haven cloth/leather maps + 3 tinted) | done, round-1 fixes applied (12.8k tris, 65 bones, 1 mesh / 1 material / 1 2K atlas, 1.25 MB; Idle 6 s, Talk 3 s, Walk 1.33 s; MPFB head + hands) | round 2: PASS (round 1 FIXES: moustache, stance/crotch, shoulder and collar, jacket fronts, cuffs, gaze, chain) | **yes** (9.50, 0.15, −8.45), talks with a voice (js/people.js) |
 | Street ambiance pass 1: sound + street props (`street-props.glb`, `assets/audio/`) | written, auto-approved (owner away) | done (3 Poly Haven maps + 3 recoloured, 3 reused; 16 audio clips, 1.96 MB / 250 s; bed = #0659 instead of #1911) | props done, round-1 fixes applied (4.75k tris, 12 nodes, 1 material / 1 2K atlas colour × AO, 0.83 MB) | props round 2: PASS (round 1 FIXES: horse-head relief, pump globe lettering seam) | sound: yes (2026-11-04, `js/ambience.js`); props: yes (2026-11-04, `street-props` in `js/components.js`: 34 placements in 3 z-band meshes + 1 wire mesh, +4 draw calls) |
 
@@ -2354,6 +2355,229 @@ which the model does not show (no evidence of its pattern).
 6. Window count 12 on the 3rd floor (±1) and the bracket spacing (≈ 1 m) from one photo.
 7. The 1920 proprietor (unknown; nothing in the model depends on it).
 
+### Block at 40–46 Main St: "Auto Sales" (40–42) and "Shoe Shine & Fruits" (44–46)
+
+**Status:** Spec approved by the owner (2026-11-04): **map-true** placement (44–46 on the 1921 street line, sidewalk narrows to 2.1 m), ordinary building (≤ 10k tris). Asset-scout skipped (no downloads needed). blender-builder 2026-11-04: **built** `assets/models/block-40-46.glb` (4,821 tris, 8 materials, 1.43 MB, 2K lightmap, LIGHTMAP_SCALE 1.2152), previews `assets/models/previews/block-40-46-{front,three-quarter,detail}.png`.. reviewer 2026-11-04: **PASS (round 1)** — loads with no errors (4,821 tris, 8 materials, UV2), cornices 9.15 / 6.10, 1.98 m step, 2.6 m arch, signs legible, clean lightmap. **In scene (scene-integrator, 2026-11-04)** at (8.60, 0.15, −116.55), rotation 0 −90 0, replacing `#bldg-40-46-main` (id kept); faces Main St, 44–46 1.98 m in front of 40–42; merged 8 materials → 1 draw call; `#bldg-32-38-main` trimmed to z −137.6 … −124.05 (width 13.55, height 7.5 and depth 12 kept, hides 40–42's open north wall, no gap from the street); passage to the Rea open; no props moved (pole-E6 at z −124 and wires clear of the awning); fruit stand `goods-G4` (shop_goods) at (8.05, 0.15, −112.6) leaves ~1.2 m of walk; screenshots `assets/models/previews/block-40-46-scene-{street,sidewalk}.png`.
+
+**What it is**: the row of **frame (wooden) buildings just north of the Rea Building**, across a
+3.3 m passage. The 1921 Sanborn shows **two buildings**: **40–42, a 3-storey frame building
+(30 ft) used for "Auto Sales"**, with an arched drive-through at no. 40 and a 1-storey porch with a
+canted show window at no. 42; and **44–46, a 2-storey frame building (20 ft) used for "Shoe Shine
+& Fruits"**, standing right on the street line, with two 2nd-floor bay windows over the passage.
+**No history of either building was found** (Goodspeed Histories, HCHS and West Jersey History
+searched 2026-11-04); the names of the 1920 dealer and the shoe-shine/fruit man are not known.
+The "Flemington Garage Co." sign with an arrow on the Rea Building's Bloomfield side (1909 card)
+and the 1909 "Flemington Garage" card (a 1-storey concrete-block garage on a corner) are a
+**different business and building**, not this one.
+
+**Planner decisions** (owner to confirm)
+1. **One model, "block-40-46", in 3 clearly separate parts**: (A) 40–42, 3-storey frame;
+   (B) 42's 2-storey rear wing; (C) 44–46, 2-storey frame with a 1-storey rear part. Different
+   clapboard colours and cornices so they read as separate buildings.
+2. **Placement true to the map**: 44–46 stands **on the map's street line, 2.25 m in front of the
+   Rea Building's front wall** (scene x 8.60), so here the sidewalk narrows to 2.1 m. The scene's
+   property line (x 10.30) is a simplification; on the 1921 map the east street line runs at
+   scene x ≈ 8.5 here. Alternative (b) in the guesses below.
+3. **Ordinary building: cap 10k triangles, target ~7k; 8 materials; no downloads** (1 generated
+   sign/awning atlas).
+4. No period photo shows the fronts. **Form and all façade details are period-typical guesses**
+   for small-town frame commercial buildings (cf. the frame block beside the Nevius store in
+   `flmgtnmainststores.jpg`): flat roofs behind bracketed cornices, 2/2 sash windows, shutters.
+
+**Sources**
+- Map: 1921 Sanborn **sheet 2** [M1], pixel box **x 3955–4460, y 4515–4830**; all yellow (frame),
+  "o" (slate/metal roof) marks. Lines: **east street line x ≈ 3960** (thick); **40–42 front wall
+  x 4000**, rear wall x 4177; **north wall y 4520** (shared with 36–38 "Meats", 2-storey frame);
+  **40|42 partition y 4577** (door at x 4085–4105); **42|44 wall y 4697**; **44–46 south wall
+  y 4806**; lot line y 4827; Rea north wall y 4868. Labels: 40 "3" with a **half-circle at the
+  front (x 4000) and rear (x 4177) walls, y 4522–4572** (read as arched openings; no label);
+  42 "3", **"30'"**, "AUTO SALES"; 42 porch "1", x 3966–4000, y 4580–4697, with a canted bay
+  x 3978–4000, y 4600–4665 (flat front y 4612–4650); 42 rear wing "2", x 4177–4320,
+  y 4587–4683; 44–46 "2", **"20'"**, "Shoe Shine & Fruits", x 3961–4297, y 4697–4806, front on
+  the street line; **two boxes on the south wall marked "2d only"** (2nd-storey projections)
+  x 4058–4115 and x 4232–4297, y 4806–4818; 44–46 rear: 1-storey x 4297–4372 with a slanting
+  south wall (4297, 4806) → (4372, 4785), frame porch "1" x 4372–4397 and a 1-storey shed
+  x 4397–4460, y 4688–4712 (not modelled). Yard behind 40 (white) to a dashed fence at x 4560.
+- Photos: **no reference photo shows the fronts.** Seen:
+  - `flemington_-_main_street_north_from_bloomfield_avenue_-_flemington_garage_-_c_1910.jpg`
+    [P37] and `flmngntnmainstandbloomfieldaveview09.jpg` [P38] (West Jersey History, viewed
+    online, not saved): Rea Building from the SW; beyond its north wall a lower building with a
+    roof/wall-top line running parallel to the street, half hidden by a large tree at the east
+    curb. Only proves something lower stood there; no details.
+  - `flmingtngarage09.jpg` [P39] (viewed online, not saved): the Flemington Garage, a 1-storey
+    rock-faced concrete-block building with a stepped parapet; not on this lot (see above).
+  - Checked, not showing it: all local `assets/photos/reference/*.jpg` incl. the 1906–08 PO cards
+    (taken from in front of this block looking south) and `flmngtnbankandpovu08.jpg`; no HABS.
+- Web: Goodspeed Histories roof-arch series [W7] and Clock Tower article [W17] (no mention of
+  40–46); West Jersey History index [W16]. Searches for 40/42/44/46 Main and a 1920 Flemington
+  auto dealer found nothing.
+
+**Placement** (east side, front faces west onto Main St)
+- Entity position = centre of the block's front line at sidewalk level: **(8.60, 0.15, −116.55)**,
+  `rotation="0 -90 0"`; replaces the placeholder `#bldg-40-46-main` at (10.3, 0, −115.8) (keep
+  the id).
+- **Blender local frame** (as the Rea Building): front −Y, origin at world (8.60, 0.15, −116.55),
+  **+X = south**, Y = depth (world x − 8.60), z 0 = sidewalk top. Map → local:
+  X = (py − 4806) × 0.0521 + 7.45, Y = (px − 3961) × 0.0521.
+- Scene lines: block **z −124.00 … −109.10** (14.90 m); 44–46 front x 8.60; 40–42 front wall
+  x 10.58 (0.27 m in front of the Rea front at 10.85); 42 porch front x 8.81.
+- **Neighbours**: Rea Building north wall z −105.76 → **3.34 m open passage** (the Rea spec's
+  "2.0–2.3 m" took the lot line at y 4827 as this wall); the 2nd-floor bays reach z −108.47.
+  North: 36–38 "Meats" (2-storey frame), placeholder `#bldg-32-38-main` (z −137.6 … −123.8)
+  overlaps by 0.2 m: the integrator trims it to end at z ≤ −124.05.
+- Props/trees: pole-E6 (6.9, −124) is clear (1.7 m from the front); no trees or other props
+  here. The awning stops at x 7.00 (curb x 6.52).
+- Sun "to sun" **(0.40, −0.90, 0.36)**. **Bake occluders (not exported)**: Rea Building box
+  X +10.79 … +26.70, Y 2.25 … 17.45, Z 0 … 11.0 (shades the passage wall); 36–38 box
+  X −20 … −7.45, Y 0.4 … 18, Z 0 … 6.1.
+
+**Massing** (footprints = Sanborn; heights = Sanborn eave heights taken as cornice tops, as for
+the County Hotel; storey splits are guesses)
+
+| Part | Local X (N → S) | Local Y | Storeys / height | Roof |
+|------|-----------------|---------|------------------|------|
+| A. 40–42 main | −7.45 … +1.67 (9.12 m) | 1.98 … 11.20 (9.22 m) | 3, cornice top **9.15** (30') | flat tin, 2° back slope, deck 8.95 |
+| A1. 40 archway (inside A) | −7.45 … −4.51 | 1.98 … 11.20 | tunnel through the ground storey | — |
+| A2. 42 porch | −4.51 … +1.67 | 0.21 … 1.98 | 1, roof 3.55 → 3.30 | shed, tin |
+| B. 42 rear wing | −3.95 … +1.05 | 11.20 … 18.65 | 2, cornice top 6.10 (guess) | flat tin |
+| C. 44–46 main | +1.67 … +7.45 (5.78 m) | 0 … 17.45 (17.45 m) | 2, cornice top **6.10** (20') | low shed roof falling to the rear, tin (guess) |
+| C1. 2nd-floor bays (south) | +7.45 … +8.08 | 5.00 … 7.97 and 14.06 … 17.45 | 2nd storey only, 3.55 … 5.85 | hipped tin cap |
+| C2. 44–46 rear | +1.67 … +7.45 → +6.36 (slanting S wall) | 17.45 … 21.36 | 1, 3.30 | shed |
+
+- A levels: ground storey 0 … 3.60 (2nd floor 3.75), 3rd floor 6.45, frieze 8.40–8.85, cornice
+  8.85–9.15 projecting 0.55. C levels: ground 0 … 3.40 (2nd floor 3.55), frieze 5.40–5.80,
+  cornice 5.80–6.10 projecting 0.45. All walls skirt to −0.20; the passage and yard are at
+  world y 0.
+- **Apron slab** (stone, top 0.0, skirt −0.20) under A1/A2: X −7.45 … +1.67, Y 0 … 1.98
+  (fills the strip in front of 40 and under the porch; the sidewalk box ends at x 10.30).
+- Exposed side walls: A's north wall above 6.10 (36–38 is 2-storey) and A's south wall above
+  6.10 (over C); C's south wall full length on the passage.
+
+**Elevation details (1920 state; guesses unless marked "map")**
+- **A, 40 (archway)**: front **round-arched opening 2.60 wide** (map), centred X −5.98, springing
+  2.25, crown 3.55; plain board archivolt 0.20 with a keyblock. Tunnel: board walls, plank
+  ceiling at 3.60, floor stone material darkened with **oil stains**; **rear arch** the same with
+  **closed plank double doors** (so the yard need not be modelled). Over the arch: one window per
+  upper floor at X −5.98.
+- **A, 42 ground (behind the porch)**: **canted show window** (map): flat front 1.98 wide at
+  Y 0.85, X −2.65 … −0.67, sides back to the wall at X −3.28 and +0.11; bulkhead 0.15–0.75,
+  plate glass 0.75–2.90, small cornice to 3.10. **Shop door** X +0.90, 1.00 × 2.30 glazed +
+  transom (sale-room entrance); **stair door** X −3.90, 0.90 × 2.30 panelled (upper floors).
+- **A2 porch**: deck 0.15 (one step up from the apron; stone step 0.30 deep along the front),
+  4 square chamfered posts 0.14 at X −4.40, −2.80, +0.05, +1.56 on Y 0.30; plain fascia 0.30
+  carrying an **"AUTO SALES" board** (atlas; wording from the Sanborn label, the sign itself a
+  guess); shed roof tin.
+- **A upper floors**: **4 bays**: X −5.98 (over 40) and −3.40, −1.42, +0.56 (over 42). 2nd floor
+  windows 0.85 × 1.65, sill 4.35; 3rd floor 0.85 × 1.50, sill 7.00; 2/2 sash, cased trim 0.12
+  with a small cap cornice; **open louvred shutters, dark green**. Corner boards 0.15 at both
+  ends.
+- **A cornice**: frieze 8.40–8.85, cornice 8.85–9.15 projecting 0.55, **scroll brackets in pairs
+  at both corners + singles at ~1.5 m** (8 on the front), returns 0.55 on both sides. North wall
+  above 6.10: 2 windows on the 3rd floor at Y 4.5, 8.5; south wall above 6.10: 2 windows at the
+  same Y; rear wall: 2 windows per floor, plain.
+- **B rear wing**: plain clapboard, 2 windows per floor on its north and rear faces, a plank door
+  on the north (yard) face; simple cornice board. Low detail (seen only from the passage/yard).
+- **C, 44–46 front** (5.78 m): ground: **shop front** between corner pilasters 0.25: two doors
+  (44 north at X +2.30, 46 south at X +6.80), each 0.90 × 2.30 glazed + transom, recessed 0.40;
+  between them a **display window** X +2.90 … +6.20 on a bulkhead 0.15–0.70, glass to 2.85; sign
+  band 2.95–3.40 with two boards **"SHOES SHINED"** (north half) and **"FRUITS"** (south half)
+  (wording guess); shop cornice 3.40–3.55. **Striped awning** X +1.85 … +7.30: roller at 2.95,
+  out to **Y −1.60 at 2.35**, valance 0.20, 2 iron arms. 2nd floor: **2 windows** at X +3.25,
+  +5.85, 0.80 × 1.45, sill 3.90, shutters as A.
+- **C cornice**: frieze 5.40–5.80, cornice 5.80–6.10 projecting 0.45, 4 brackets (corners and
+  thirds); returns 0.45.
+- **C south (passage) wall**: ground floor 3 windows (0.80 × 1.50, sill 1.00) at Y 3.0, 9.5,
+  12.5 and a side door 0.90 × 2.20 at Y 11.0; **two box bays on the 2nd floor only** (map C1):
+  0.63 out, floor apron at 3.55 on 3 small brackets each, **2 windows on each south face**
+  (0.75 × 1.40, sill 3.90), plain ends, hipped tin cap 5.85 → 6.05; one plain window at Y 11.0
+  between them. North wall (above A2/B, mostly hidden): plain. C2 rear: 1 window, plain.
+- Not modelled: gutters/downpipes, wires, the 44–46 rear porch and shed, interiors (except the
+  dark tunnel and a dark back panel behind the show window), goods: the integrator can place a
+  street-props **`shop_goods`** group before the 44–46 display window (crates and a barrel read
+  as the fruit stand).
+
+**Materials & colours (1920, all guesses: no colour evidence)** — 8 materials, merged to one
+draw call by `baked-lighting`
+1. `clap_a` (A, B): clapboard, **pale buff-grey ≈ #B9AE96**; reuse
+   **`courthouse/clapboard_buff.jpg`**, tiled as on 65 Main (≈ 0.11 m board exposure).
+2. `clap_b` (C): clapboard, **cream-white ≈ #DCD6C4**; reuse **`house-65-main/clapboard_cream.jpg`**
+   (bake tint lighter if needed), same tiling.
+3. `trim`: cornices, brackets, corner boards, window frames, sash, porch posts, archivolt:
+   **off-white ≈ #E4DFD2**; reuse **`polyhaven/trim_paint_cream.jpg`**, tile 2.0 m.
+4. `green`: shutters, doors, 44–46 shop-front pilasters and bulkhead, the arch's rear doors:
+   **dark green ≈ #2F4A36**; reuse **`polyhaven/door_paint_green.jpg`**, tile 0.8 m.
+5. `roof`: porch, bay caps, all roofs: reuse **`county-offices/roof_tin_redbrown.jpg`**, tile
+   2.0 m (main roofs bake-tinted greyer; barely visible).
+6. `stone`: apron, porch step, door sills, tunnel floor: reuse
+   **`lovells-restaurant/stone_bluestone.jpg`**, tile 2.0 m.
+7. `dark`: glass ≈ #1E2226, tunnel interior, awning arms; plain colour.
+8. `signs`: **new generated atlas `assets/textures/block-40-46/signs_atlas.jpg`, 1024²** (Pillow,
+   `tools/prepare_block_40_46_textures.py`, own work, log in SOURCES.md): "AUTO SALES" board
+   (cream on dark green), "SHOES SHINED" and "FRUITS" boards (dark on cream), **red/cream
+   striped canvas + valance** (resampled from `bank-building/awning_stripes.jpg`), louvre strip
+   (as in the Rea atlas).
+- **New for asset-scout: none.** One 2K lightmap `assets/textures/block-40-46-lightmap.jpg`
+  (fronts weighted up; passage wall, tunnel and rear down).
+
+**Weathering**: frame buildings repainted every few years: light chalking, darker paint under
+cornices and sills, soot on cornice tops; grime and splash on the bottom 0.4 m; **dark oil and
+tyre stains on the tunnel floor and apron** (auto sales); the passage (south) wall of 44–46
+greyer and darker (in the Rea's shadow); awning sun-bleached; tin roofs dull, rust at the edges.
+
+**Budget**: **ordinary, cap 10k, target ~7k**: walls/openings ~1.2k; ~30 windows ~1.6k;
+22 shutter leaves ~0.3k; ~20 brackets ~0.7k; cornices/returns ~0.4k; archway + tunnel ~0.4k;
+porch + show bay ~0.6k; 44–46 shop front + awning ~0.6k; 2 bays ~0.4k; rear parts ~0.3k. If over:
+flat inset panels for the rear/north windows, fewer brackets. Textures: 6 reused 1K maps + 1
+generated 1K atlas, one 2K lightmap. Files: `tools/blender/block_40_46.py` + `_bake.py`
+(+ `_preview.py`), `assets/models/source/block-40-46.blend`, `assets/models/block-40-46.glb`
+(≤ 5 MB, expect ~1.2 MB), previews `assets/models/previews/block-40-46-*.png` (frontal; from the
+SW at the Bloomfield corner as in [P38]; from the north sidewalk at eye height; into the passage).
+
+**Acceptance checks for the reviewer**
+1. Origin = centre of the front line at sidewalk level, world (8.60, 0.15, −116.55); front −Y,
+   **+X = south**; block 14.90 m along the street (X −7.45 … +7.45).
+2. **Two clearly separate buildings**: 40–42 **3 storeys, cornice top 9.15 ± 0.2 m**, buff
+   clapboard, front wall at Y 1.98; 44–46 **2 storeys, cornice top 6.10 ± 0.2 m**, cream
+   clapboard, front at Y 0 (1.98 m in front of 40–42, 2.25 m in front of the Rea).
+3. 40: **round-arched drive-through 2.60 m wide**, a dark tunnel with closed doors at the rear.
+4. 42: 1-storey porch on 4 posts with an "AUTO SALES" board, a **canted show window** under it,
+   shop door south of it, stair door north of it.
+5. 40–42 upper floors: **4 shuttered windows per floor** (1 over the arch, 3 over 42); bracketed
+   cornice with returns.
+6. 44–46: shop front with **two doors and a display window**, "SHOES SHINED" / "FRUITS" boards,
+   **striped awning** reaching Y −1.60 at 2.35 m; 2 shuttered windows upstairs.
+7. 44–46 south (passage) wall: **two box bays on the 2nd floor only**, 0.63 m out, at
+   Y 5.00–7.97 and 14.06–17.45; nothing crosses world z −108.4.
+8. Rear parts present: 42's 2-storey wing to Y 18.65; 44–46's 1-storey rear to Y 21.36 with the
+   slanting south wall.
+9. ≤ 10k triangles, ≤ 8 materials, GLB ≤ 5 MB, TEXCOORD_0 + 1, 1K colour maps, 2K lightmap.
+   With the WSW sun the fronts are lit and the passage wall is in the Rea's shade; nothing floats
+   at the apron, passage or yard edges.
+
+**Integrator notes (scene, not the model)**
+- Replace `#bldg-40-46-main` with the GLB at **(8.60, 0.15, −116.55)**, rotation 0 −90 0,
+  `baked-lighting` with the bake's LIGHTMAP_SCALE; keep the id.
+- Trim `#bldg-32-38-main` to end at z ≤ −124.05.
+- No paving box (apron slab in the model). Optional: a `shop_goods` group at about
+  (8.05, 0.15, −112.6), rotation −90, under the awning, clear of the doors.
+
+**Photos vs 1920**: no photo shows the building. The c. 1909–10 cards only show that something
+lower than the Rea stood here behind a big curb tree.
+
+**Pure guesses (owner to check)**
+1. **Placement**: (a, chosen) map-true, 44–46 on the 1921 street line at scene x 8.60, which
+   narrows the sidewalk to 2.1 m; or (b) shift the whole block +1.70 m so 44–46's front is on
+   the scene property line x 10.30 (then 40–42 sits 1.4 m behind the Rea front and the Rea's
+   steps stick out past 44–46).
+2. The half-circles at no. 40 read as an **arched drive-through**; they could be another Sanborn
+   mark. The rear doors are shown closed.
+3. All façade details: window counts and sizes, shutters, brackets, shop-front layouts, porch
+   posts, show-window glazing, roof forms (flat/shed), rear-wing openings.
+4. All colours (buff and cream clapboard, off-white trim, green shutters, striped awning).
+5. Sign wording ("AUTO SALES", "SHOES SHINED", "FRUITS") follows the Sanborn labels; the real
+   signs and the dealer's car make are unknown.
+6. Storey heights within the Sanborn 30'/20'; the rear wing's height (no map note).
+
 ## Constraints
 
 - A-Frame from a CDN, plain HTML/JS. No build tools or frameworks.
@@ -2437,6 +2661,18 @@ Order agreed with the owner: finish 65 Main → **one test person** → 68 Main 
   try a more natural voice (e.g. a newer open TTS model, or a paid service such as ElevenLabs
   if the owner accepts the cost), or record a real person. Clips + timings.json are swappable
   via `tools/make_voice_pickell.py` without touching the scene code.
+
+**C. Mini map (owner idea, 2026-11-04; design later)**
+- A small map in a top corner of the view (desktop) / on the wrist or a toggle (VR): shows north,
+  where you are and which way you face, building names/addresses, maybe people to talk to.
+  Could be drawn from the 1921 Sanborn sheets or a clean simplified plan. Craft the details with
+  the owner before building.
+
+**D. Sky and distant landscape (owner idea, 2026-11-04)**
+- Better sky (period-appropriate clouds, late-afternoon colour matching the baked sun from the WSW)
+  and a soft, hazy far landscape — distant hills, tree lines, rooftops — so the street's ends and
+  gaps don't look empty. Cheap: a painted/blurred panorama or low-poly silhouettes + fog. Ties in
+  with B's "background" item.
 
 **B. Roads, sidewalks and background**
 - Rework the road, sidewalks, curbs, lawns and side streets (Court St, Bloomfield Ave) to the
@@ -3212,3 +3448,7 @@ Check licensing for every asset and note the source in the progress log.
 | 2026-11-04 | blender-builder: County Hotel (47–49 Main) **built**: `tools/blender/county_hotel.py` + `_bake.py` + `_preview.py`, `tools/prepare_county_hotel_textures.py` (brick_painted_cream.jpg, signs_atlas.jpg). GLB 1.81 MB, 10,234 tris (≤ 15k cap), 8 materials, 2K lightmap, LIGHTMAP_SCALE 1.1087, west-side sun (−0.40, 0.90, 0.36), 39–41 bake occluder 7 m. Changes from spec: north-wall windows only on the 3rd floor (plain, unshuttered; the 2nd floor is hidden by the 7 m neighbour), rear 2nd floor 4 windows (moved clear of the wing roof), main-door transom to 2.92 (under the 3.00 deck ceiling), enclosure windows recessed 0.10. Next: reviewer. |
 | 2026-11-04 | reviewer: County Hotel (47–49 Main) round 1 **PASS**: GLB loads cleanly (10,234 tris, 8 materials, UV2), proportions and veranda/cornice/shutter/lamp detail match the c. 1905 photo, lightmap clean (no blotches, seams or black spots). Builder deviations accepted. Next: owner, then scene-integrator. |
 | 2026-11-04 | scene-integrator: County Hotel (47–49 Main) **in scene** at (−10.30, 0.15, −112.07), 1 draw call; 35–41 placeholder shortened to end at z −124.2; no props moved. Draw calls/tris (looking north): start 70/140k → 67/150k, z −90 38/22k → 35/32k, z −110 37/7k → 34/17k. |
+| 2026-11-04 | planner: Block at 40–46 Main (two frame buildings north of the Rea Building: 40–42 3-storey "Auto Sales" with an arched drive-through, porch and canted show window; 44–46 2-storey "Shoe Shine & Fruits" on the street line with two 2nd-floor bays over a 3.3 m passage) spec written, **awaiting owner approval**. Sanborn sheet 2 (30' / 20', frame); no photo of the fronts and no written history found, so all façade details and colours are labelled guesses; entity (8.60, 0.15, −116.55), rotation 0 −90 0; ordinary (target ~7k tris), 6 reused maps + 1 generated atlas, no downloads. Owner to choose placement (a) map-true street line or (b) on the scene property line. |
+| 2026-11-04 | blender-builder: Block at 40–46 Main **built**: `tools/blender/block_40_46.py` + `_bake.py` + `_preview.py`, `tools/prepare_block_40_46_textures.py` (signs_atlas.jpg). GLB 1.43 MB, 4,821 tris (≤ 10k), 8 materials, 2K lightmap, LIGHTMAP_SCALE 1.2152, east-side sun, bake occluders Rea + 36–38. Changes from spec: clap_a uses clapboard_cream × factor (the buff map cannot be lightened to #B9AE96 by a factor); 40–42 3rd-floor windows sill 6.85 / 1.40 tall and 44–46 2nd-floor sill 3.80 (to clear the friezes); 44–46 doors at X 2.40 / 6.70 (clear of the pilasters); apron top 0.01 (no z-fight with the sidewalk); flat roof decks on A and C2. Next: reviewer. |
+| 2026-11-04 | reviewer: Block at 40–46 Main **PASS (round 1)**. GLB 1.43 MB, 4,821 tris, 8 materials, 1K maps + 1K atlas, 2K lightmap, TEXCOORD_0/1; loads in the viewer with no errors. Two buildings read clearly (3-storey buff / 2-storey cream, cornice tops 9.15 / 6.10, 44–46 1.98 m forward), arch, porch, show window, awning, passage bays all as spec; signs legible; lightmap clean. Note for integrator: A's open north wall below 6.10 is hidden by `#bldg-32-38-main` (7.5 m tall), so keep that placeholder's height when trimming it. |
+| 2026-11-04 | scene-integrator: Block at 40–46 Main **in scene** at (8.60, 0.15, −116.55), 1 draw call; 32–38 placeholder trimmed to z −124.05; fruit stand goods-G4 added; draw calls / triangles start view 63 / 150.7k → 64 / 155.5k, at (0, 0.15, −110) 30 / 17.6k → 31 / 22.5k. |
