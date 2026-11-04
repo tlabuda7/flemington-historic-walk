@@ -361,7 +361,8 @@ AFRAME.registerComponent('gradient-sky', {
  *
  *   Desktop: W/A/S/D or arrow keys to walk, Shift to walk faster.
  *            Mouse looks around (handled by look-controls on the camera).
- *   VR:      Left thumbstick walks in the direction you are looking.
+ *   VR:      Left thumbstick walks in the direction you are looking;
+ *            hold the left trigger to walk faster.
  *            Right thumbstick left/right snap-turns by `snapAngle` degrees.
  */
 AFRAME.registerComponent('locomotion', {
@@ -378,6 +379,7 @@ AFRAME.registerComponent('locomotion', {
     this.keys = new Set();
     this.stick = { x: 0, y: 0 };          // left stick (walk)
     this.turnStick = 0;                   // right stick x (snap turn)
+    this.sprint = false;                  // left trigger held (VR sprint)
     this.inputSource = 'none';            // where the stick values came from (for stick-debug)
     this.turnReady = true;
 
@@ -403,6 +405,9 @@ AFRAME.registerComponent('locomotion', {
       this.stick.y = e.detail.y;
       this.inputSource = 'events';
     });
+    // Hold the left trigger to sprint (double speed), like Shift on the keyboard.
+    this.el.querySelector('#left-hand').addEventListener('triggerdown', () => { this.sprint = true; });
+    this.el.querySelector('#left-hand').addEventListener('triggerup', () => { this.sprint = false; });
     this.el.querySelector('#right-hand').addEventListener('thumbstickmoved', (e) => {
       this.turnStick = e.detail.x;
       this.inputSource = 'events';
@@ -423,6 +428,7 @@ AFRAME.registerComponent('locomotion', {
       if (source.handedness === 'left') {
         this.stick.x = pad.axes[2];
         this.stick.y = pad.axes[3];
+        this.sprint = !!(pad.buttons[0] && pad.buttons[0].pressed); // trigger
         this.inputSource = 'gamepad';
       } else if (source.handedness === 'right') {
         this.turnStick = pad.axes[2];
@@ -466,7 +472,7 @@ AFRAME.registerComponent('locomotion', {
     const sin = Math.sin(this.euler.y);
     const cos = Math.cos(this.euler.y);
 
-    const fast = k.has('ShiftLeft') || k.has('ShiftRight') ? 2 : 1;
+    const fast = k.has('ShiftLeft') || k.has('ShiftRight') || this.sprint ? 2 : 1;
     const step = this.data.speed * fast * dt;
     const pos = this.el.object3D.position;
     // forward = (-sin, -cos), right = (cos, -sin) in the X/Z plane
