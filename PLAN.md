@@ -38,6 +38,7 @@ Decisions (2026-11-02):
 | County Offices / Hall of Records (69–71 Main) | written, auto-approved (owner away) | done (1 new + 3 tinted, 3 reused) | done (8.6k tris, 2.2 MB, LIGHTMAP_SCALE 1.1299) | round 1: PASS | yes (GLB, 2026-11-03) |
 | Wurts Law Office (59 Main) | written, auto-approved (owner away) | reused, none new (asset-scout skipped; 1 grey copy of weathered_planks made locally) | done (7.6k tris, 5 materials, 1.2 MB, 1K lightmap, LIGHTMAP_SCALE 1.1647) | round 1: PASS | yes (GLB, 2026-11-03) |
 | Bank Building / Flemington National Bank (56–66 Main) | written, auto-approved (owner away) | done (1 new: sandstone_blocks_05 greyed → stone_rockfaced; 1 generated: awning_stripes; 3 reused) | done, round-1 fixes applied (8.8k tris, 6 materials, 1.8 MB, 2K lightmap, LIGHTMAP_SCALE 1.1241) | round 2: PASS | yes (GLB at 12.24, 0.15, −66.24) |
+| Nevius Store / Fulper's Dry Goods (78 Main) | written, auto-approved (owner away) | reused, none new (asset-scout skipped; 4 reused maps) | done, round-1 fixes applied (7.0k tris, 5 materials, 1.3 MB, 2K lightmap, LIGHTMAP_SCALE 1.1072) | round 2: PASS (round 1: 3rd-floor windows raised; LIGHTMAP_SCALE now 1.1072) | **yes** (10.30, 0.15, −7.33) |
 
 ## Building specs
 
@@ -987,6 +988,244 @@ out; shop awning lettering is unreadable and omitted; the entrances may have cha
 7. Stoop sizes; railings only on the bank stoop.
 8. Only one chimney.
 
+### Nevius Store / Fulper's Dry Goods Building (78 Main St)
+
+**Status:** **in scene** — scene-integrator placed the GLB at (10.30, 0.15, −7.33), rotation 0 −90 0, intensity 1.1072, replacing the code-built `#bldg-78-main` placeholder (id kept); side gaps show the ground, no floating or overlaps; committed and pushed (scene-integrator, 2026-11-03). Earlier: round-1 fixes applied — asset-scout skipped (no new downloads; reused red_brick, trim_paint_cream, door_varnish_dark, awning_stripes); blender-builder raised the 3rd-floor front windows (spring 8.95, crown ~9.40, hoods and end blocks raised; central section and quoins now to 9.50), tightened the cornice (bed moulding 9.50–9.58, frieze from 9.58; dentils 10.15, top 10.70 unchanged) and put the shop-front cornice on the dark material; re-baked and re-exported `assets/models/nevius-store.glb` (6,954 triangles, 5 materials, 1.3 MB, 2K lightmap, LIGHTMAP_SCALE 1.1072), previews re-rendered (blender-builder, 2026-11-03). Reviewer round 1: FIXES (3rd-floor front windows too short vs the 1909 card). Reviewer round 2: **PASS** — loads cleanly at intensity 1.1072, no console errors, colour factors and lightmap intact; upper floors now match the 1909 card; bracket pendants resting on the pair's hood moulds accepted; next: scene-integrator (reviewer, 2026-11-03).
+
+**What it is**: a tall, narrow (25 ft) **3-storey red-brick Italianate store** on the east side,
+just south of the Union Hotel, opposite the Court House. A store has stood on the lot since
+before 1856; **William H. Fulper's "extensive alterations" of 1880** most likely gave it this front
+(architect C. Pickell: "probably in the 1880's"). Occupants: Fulper (to 1880), Hall, Trewin &
+Rittenhouse (1887–92), W. E. Trewin (1892), **Andrew T. Connet** (1897, d. 1913); the 1909 card
+calls it the **"Nevius Store"** (P. TenBroek Nevius clerked there in the 1890s; the Nevius family
+owned it later as **Nevius Brothers Dry Goods**). The 1921 Sanborn labels it **"Dry Goods"**. The
+front survives today almost unchanged except a 1950s shop front.
+
+**Orchestrator decisions** (settled from the photos/map; owner to check later)
+1. **The placeholder `#bldg-78-main` covers just this one building.** Footprint **8.00 m wide ×
+   32.25 m deep** (Sanborn sheet 3: 153 × 619 px). Sheet 2 repeats the building as an overlap strip
+   159 px (8.31 m) wide; sheet 3 is the detailed, labelled drawing and agrees better with
+   Pickell's "25 feet wide", so its 8.00 m is used.
+2. **Front wall on the property line** (both sheets: the wall is drawn on the Main St line) →
+   entity **(10.30, 0.15, −7.33)**, not the placeholder's (10.3, 0, −9.1). North wall z −11.33
+   (sheet 2 line y 6682.5; 4.4–4.6 m clear of the hotel's south wall on both sheets), south wall
+   z −3.33.
+3. **Upper front = 1 + 2 + 1 windows per floor**: a single window in each outer bay and a **pair in
+   a slightly projecting central section** (1909 card shows the north single and the central
+   pair; Pickell: "a central projecting section"; HABS 1963 shows the same rhythm from the NW).
+   The south single is out of frame in 1909 and assumed symmetric.
+4. **2nd floor: segmental-arched windows with pale cut-stone arches and keystones; 3rd floor:
+   semicircular-arched windows with slim brick hood moulds ending in square blocks, standing on a
+   boldly projecting stone sill band** (Pickell's description; matches the 1909 card, where the
+   2nd-floor heads are flatter with pale arches and the 3rd-floor heads are full round). The
+   diamond/swirl carving on the arches is texture-level, not modelled.
+5. **Brick quoins** on both front corners, full height (Pickell; 1909 and HABS-1 show
+   alternating blocks on the corner piers). Modelled as relief blocks in brick.
+6. **Bracketed cornice with a segmental-arched pediment over the central section** (1909 card:
+   grouped brackets at the corners and at the central section's edges, arched crest above the
+   cornice; HABS-2 shows the same arched crest in 1963). Cornice and pediment painted pale cream
+   like the stone trim (1909 colours) — one `trim` material.
+7. **Cornice height 35 ft = 10.70 m** (Sanborn "35'"); the 1909 card scaled to it gives the floor
+   levels below.
+8. **1920 shop front = the 1909 one**: painted wood front between the corner piers, wide display
+   window on the north, **recessed central double door**, smaller display window south, a plain
+   **street door to the upper floors at the south end** (common on 25-ft fronts; not visible in the
+   1909 card), transom band, shop-front cornice at the 2nd-floor floor line. **One stone step** along
+   the front. The 1950s front (HABS) is not used.
+9. **One extended striped canvas awning with a scalloped valance** across the whole shop front
+   (1909 card) — a model part, reusing the bank's red/cream `awning_stripes.jpg`. **No lettering or
+   signboard** (tenant name not readable in any photo; 1921 just "Dry Goods").
+10. **Side walls plain red common brick** with a plain trim frieze + cornice along their full
+    length (HABS-2 shows the north-side cornice running the visible length), 4 segmental windows
+    per upper floor, ground floor blank on the north, two small high windows on the south (alley).
+    Rubblestone base not modelled (would cost a 6th material; below the sidewalk grade line).
+11. **Only the 3-storey main block is modelled.** The 2-storey brick "FEED HO." (24', 13.6 m) and
+    the further 2-storey block behind it toward Spring St are rear parts (outbuildings on hold).
+12. **5 materials** (brick, trim, glass, dark, awning) = 5 draw calls; **no new textures**.
+    Ordinary building, target ~5.5k triangles (cap 10k). **2K lightmap** (two 32 m side walls).
+
+**Sources**
+- Map: 1921 Sanborn **sheet 3** (primary): pink (brick), **"3"** storeys, **"35'"**, label
+  **"Dry Goods"**, street numbers **78** (new) / **539** (old). Pixel lines (centres): front wall /
+  street line x **4019.5**; rear wall x **4638.5**; north wall y **1063.5**; south wall y **1217**;
+  Union Hotel south wall y 976; 82 Main north wall y 1306.5. Side-wall marks "12 12 16" and "///"
+  on both long walls. Behind: brick "2" storey **"FEED HO."** "24'" x 4638–4900, then another
+  2-storey brick 24' unit beyond x 4900 (not modelled). **Sheet 2** (overlap strip, unlabelled):
+  north wall y 6682.5, south y 6842, front x 3991.5, hotel south wall y 6598. Scene z uses the
+  sheet-2 frame (sheet 3 + 5593 is ~26 px off here; distances to the hotel are measured on sheet 3
+  and agree on both sheets).
+- Photos (local only, never commit):
+  - **Primary: `flmngtnneviusstoreandununionhtl09.jpg`** (1909 tinted card "Union Hotel",
+    West Jersey History title "Nevius Store and Union Hotel"; from the SW on the west sidewalk,
+    looking NNE): right third = 78 Main's front, north single bay + central pair visible:
+    quoined corner, segmental 2nd-floor and round 3rd-floor windows, grouped brackets, arched
+    crest, shop-front cornice, scalloped striped awning, display window and recessed door,
+    stone step. Vertical scale ≈ 85 px/m at 2× zoom (35 ft cornice).
+  - `habs/union-hotel-west-elevation-2.jpg` (HABS NJ-732, 1963, from the NW): right edge = 78's
+    north wall and front, painted light, 1950s shop front with "NEVIUS"-style lettering; shows the
+    1+2+1 rhythm, the arched crest, the cornice running along the north wall. Differs from 1920:
+    painted brick, 1950s front, a ground-floor display window cut into the north wall.
+  - `habs/union-hotel-west-elevation-1.jpg` (1963, from the SW): right edge = 78's NW corner pier
+    with banded quoins and the paired console brackets of the cornice.
+  - Checked, not showing it: all other Union Hotel cards (78 is just out of frame on the right;
+    `flmngtnunionhtlview.jpg` shows only a dark shaded edge), `flmngtnmainstrtunionhtlvu08.jpg`
+    (looks north from the hotel's south end), bank/P.O./courthouse/county views.
+- Web: Goodspeed Histories, "Fulper's Store, or the Gilded Age on Main Street" (2022,
+  https://goodspeedhistories.com/fulpers-store/: occupant list; Fulper's 1880 alterations;
+  Pickell / Friends of Historic Flemington: "local red brick on a rubblestone base… only 25 feet
+  wide… brick quoins on the corners… semicircular and segmental arched wooden one-over-one double
+  hung windows… third floor window heads… slim brick hood mouldings which terminate in square
+  blocks… second floor… stone arches with keystones… third floor sills are boldly projecting
+  stone bands… classic 1950's storefront"); West Jersey History image index
+  (https://westjerseyhistory.org/images/hunterdon/flemington/: "Nevius Store and Union Hotel",
+  1909).
+
+**Placement** (east side, front faces west onto Main St)
+- Entity position = centre of the front wall face at sidewalk level: **(10.30, 0.15, −7.33)**,
+  `rotation="0 -90 0"` (replaces `#bldg-78-main` at (10.3, 0, −9.1), 7.3 × 17 m).
+- Front x 10.30 (on the property line); rear x 42.55; north wall z −11.33; south wall z −3.33.
+- Neighbours: Union Hotel GLB south end z ≈ −15.9 (veranda front x 11.6, i.e. 78 stands 1.3 m
+  further forward) — 4.6 m gap; alley ("80") to the south, 82 Main's north wall z ≈ +1.48 —
+  4.8 m gap. Court House opposite. No street tree in front (east trees end at z −18.8).
+- Projections onto the sidewalk: step to x 10.05, shop-front cornice x 10.0, awning to **x 8.40**,
+  main cornice x 9.75 — all clear of the curb (x 6.52).
+- Blender local frame: front −Y, origin at the centre of the front wall face at sidewalk level,
+  **+X = south**, −X = north (hotel side), z = 0 = sidewalk top. Body x −4.00 … +4.00,
+  y 0 … 32.25. Sun "to sun" vector **(0.40, −0.90, 0.36)** (front sunlit, north side in shade).
+
+**Massing**
+- One brick box 8.00 × 32.25 m, 3 storeys; walls 0.40 (front), 0.35 (sides/rear); skirt to
+  z −0.20.
+- Levels (1909 card scaled to the 35' cornice): shop floor 0.12 (one step); 2nd floor ≈ 4.30;
+  3rd floor ≈ 7.30; **main cornice top 10.70**; **pediment crown 11.95**.
+- Side and rear walls: top 10.20 level, with a plain trim frieze 9.40–10.00 and corona
+  10.00–10.20 (0.20 projection) along both side walls full length; rear wall plain coping 10.20.
+- Roof: flat tin, 9.90 at the front falling to 9.40 at the rear, hidden behind the cornices
+  (dark). Front cornice returns 0.6 m round each front corner into the side cornice.
+- **Chimney**: brick, in the south wall (flush outside), 0.60 (x) × 0.90 (y), centre y 16.0,
+  top 11.40, 0.08 cap course (guess).
+
+**Elevation details (1920 state)** — front, x from north (−) to south (+)
+- **Grid**: corner piers 0.55 wide (x ±3.45 … ±4.00); outer bays x ±1.35 … ±3.45 (2.10);
+  **central section x −1.35 … +1.35**, 0.10 proud of the wall from 4.20 to 9.30, edged by brick
+  pilaster strips 0.35 wide (x ±1.00 … ±1.35).
+- **Quoins**: on both corner piers, z 0.12 → 9.30, 0.30-high courses alternating 0.55 / 0.38 m
+  on the front face (and 0.38 / 0.55 on the side face), 0.03 proud, 0.015 joint gaps; brick
+  material.
+- **Shop front** (z 0 → 4.20, between the corner piers, x −3.45 … +3.45; painted wood, `trim`):
+  - Stone step 0 → 0.12, 0.25 deep (y −0.25 … 0), x −3.45 … +3.45 (`trim`).
+  - North display window x −3.35 … −0.85: panelled bulkhead 0.12–0.70, glass 0.70–2.95 with one
+    central mullion (0.08).
+  - **Recessed entry** x −0.85 … +0.75, 1.2 m deep, floor 0.12; splayed glass side returns;
+    **glazed double door** 1.40 × 2.60 (0.12–2.72, dark varnish, glass upper two-thirds) at the back.
+  - South display window x +0.75 … +2.45, as the north one.
+  - **Upper-floor street door** x +2.50 … +3.35: single panelled door 0.85 × 2.50 (dark), flush
+    in the front plane +0.10 recess.
+  - Transom bar 2.95–3.05 and a band of 6 transom lights 3.05–3.55 across all four parts;
+    fascia 3.55–3.95 (plain, no lettering); shop-front cornice 3.95–4.20, projecting 0.30, with a
+    small bed moulding.
+- **Awning**: striped canvas, x −3.40 … +3.40, hung at z 3.50 on the front, sloping to z 2.70 at
+  **1.90 m out** (y −1.90), scalloped valance 0.25 deep (scallops as alpha-free zigzag geometry,
+  ~0.30 m pitch) down to 2.45; thin side cheeks optional; no iron frame modelled.
+- **2nd floor** (1/1 double-hung, frames `trim`, set 0.15 in): singles 0.90 wide at x ±2.40;
+  pair 0.85 wide at x ±0.575 (brick mullion 0.30). Sill 4.55 (stone sill 0.10 tall, 0.05 proud,
+  0.15 wider each side); jambs to spring 6.45; **segmental head**, rise 0.25 (crown 6.70).
+  **Stone arch** 0.22 deep around the head, 0.03 proud, **keystone** 0.24 wide × 0.40 high,
+  0.05 proud, top 6.95.
+- **Sill band** (3rd floor): stone, z 7.25–7.45, projecting 0.08, continuous from quoin to quoin
+  (breaking forward over the central section).
+- **3rd floor**: same x positions and widths; sill 7.45, spring 8.50, **semicircular head**
+  (crown 8.95 / 8.925). **Brick hood mould** 0.10 wide, 0.05 proud, following the arch, ending in
+  0.20 × 0.20 square blocks at the springing.
+- **Main cornice** (front, `trim`): bed moulding 9.30–9.40; frieze 9.40–10.15 with one flat
+  sunk panel per bay; dentil row 10.15–10.25 (0.06 blocks at 0.12 m); corona 10.25–10.60
+  projecting **0.55**; cap 10.60–10.70. Breaks forward 0.10 over the central section.
+- **Brackets**: 4 groups — over each corner pier (x ±3.725) and each pilaster strip (x ±1.175);
+  each group **2 scroll brackets** 0.12 wide, 0.08 apart, z 9.30–10.25, 0.50 deep at the top
+  tapering to 0.15, small pendant drop 0.15 below. Simple 6–8-point side profile.
+- **Pediment** over the central section: **segmental arch**, chord 3.40 m (x −1.70 … +1.70) on
+  the cornice top 10.70, crown **11.95**; raking moulding 0.25 high, 0.30 proud, following the
+  arc (10–12 segments); flat tympanum set 0.10 back; all `trim`.
+- **North and south walls** (common brick): 2nd and 3rd floors, 4 windows each at
+  **y 7, 14, 21, 28**, 0.85 × 1.90, segmental heads (rise 0.20) with a plain brick arch (relief
+  only), stone sills; 2nd sill 4.70, 3rd sill 7.60. Ground floor: north blank; south two small
+  windows 0.80 × 1.40, sill 1.60, at y 18 and 26.
+- **Rear wall** (x 42.55, not seen): 2 windows per upper floor (as the sides), ground-floor door
+  1.0 × 2.2 and one window.
+- Not modelled: gutters, downpipes, signs, lamps, cellar hatches in the sidewalk.
+
+**Materials & colours (1920)** — **5 materials = 5 draw calls**
+1. `brick` — all walls, quoins, pilaster strips, mullions, hood moulds, chimney. Local red brick
+   ≈ #8E4632 (front), common brick a touch duller on sides/rear (tint only).
+   Reuse **`polyhaven/red_brick.jpg`**, tile 1.4 m.
+2. `trim` — stone arches, keystones, sills, sill band, step, cornice, brackets, dentils, pediment,
+   side cornices, shop front (frames, bulkheads, fascia, transom bars), window frames and sash.
+   Pale cream ≈ #D8CDB4 (1909 card: cornice and arches cream). Reuse
+   **`polyhaven/trim_paint_cream.jpg`**, tile 2.0 m.
+3. `glass` — plain colour, no texture, very dark blue-grey ≈ #1E2226, roughness 0.15.
+4. `dark` — doors, roof surfaces, chimney cap. Dark varnish ≈ #3A2A1F. Reuse
+   **`county-offices/door_varnish_dark.jpg`**, tile 0.8 m.
+5. `awning` — reuse **`bank-building/awning_stripes.jpg`** (red/cream 0.15 m stripes running
+   down the slope), tile 0.6 m across the stripes.
+- **New for asset-scout: none.** Asset-scout can be skipped; the builder confirms the four files.
+
+**Weathering**: moderate (40-year-old commercial front): soot under the cornice corona and
+pediment moulding; dark drip streaks under every keystone, sill and the sill band; grime and
+splash on the bottom 0.5 m of the corner piers and shop-front bulkheads; step worn darker at the
+door; awning faded on top, darker valance; side walls slightly patchy/darker toward the rear,
+north wall cooler and greener at the base (shade); soot round the chimney top.
+
+**Budget**: **ordinary building, target ~5.5k triangles, hard cap 10k**: walls with ~26 openings
+~0.9k; quoins (2 × 30 blocks × 2 faces) ~0.8k; 8 front windows with frames, sash, arches,
+keystones, hoods ~0.9k; 16 side + 4 rear windows ~0.6k; shop front, recess, doors ~0.5k; cornice,
+dentils (~60) and 8 brackets ~0.9k; pediment ~0.3k; awning with scallops ~0.2k; roof, chimney,
+side cornices ~0.2k. **5 materials**, 0 new textures (4 reused 1K maps), one **2K lightmap**
+`assets/textures/nevius-store-lightmap.jpg`. Files: `tools/blender/nevius_store.py` +
+`nevius_store_bake.py` (+ optional `_preview.py`), `assets/models/source/nevius_store.blend`,
+`assets/models/nevius-store.glb` (≤ 5 MB, expect ~1.5 MB), previews
+`assets/models/previews/nevius-store-*.png` (incl. a match to the 1909 card from the SW at eye
+height, ~25 m away on the west sidewalk).
+
+**Acceptance checks for the reviewer**
+1. Box 8.00 × 32.25 m, cornice top 10.70 ± 0.15 m, pediment crown ≈ 11.95; origin at the centre
+   of the front wall face at sidewalk level, front −Y, **+X = south**.
+2. Upper front reads **1 + 2 + 1** on both floors, with the pair in a **slightly projecting
+   central section** edged by pilaster strips; nothing off-centre.
+3. **2nd-floor windows segmental with pale stone arches and keystones; 3rd-floor windows
+   semicircular with thin brick hood moulds**, standing on a continuous pale sill band.
+4. **Brick quoins** visible on both front corners from the sidewalk to the frieze.
+5. Pale bracketed cornice with **4 groups of paired brackets**, a dentil row, and a
+   **segmental-arched pediment** centred over the central section.
+6. Shop front: north display window, **recessed central double door**, smaller south display
+   window, narrow upper-floor door at the south end, transom band, shop-front cornice, one step;
+   **one striped awning with a scalloped valance**, ~1.9 m deep; no lettering.
+7. Side walls plain red brick with 4 segmental windows per upper floor and a plain cornice
+   along their whole length; no roof visible from the sidewalk.
+8. ≤ 10k triangles, **5 materials**, GLB ≤ 5 MB, 1K colour maps, 2K lightmap, TEXCOORD_0 + 1.
+   Front sunlit with clear bracket, keystone, sill-band and awning shadows; the shaded north
+   wall still reads as brick, not black.
+
+**Integrator notes (scene, not the model)**
+- Replace `#bldg-78-main` with the GLB at **(10.30, 0.15, −7.33)**, rotation 0 −90 0,
+  `baked-lighting` with the bake's LIGHTMAP_SCALE. Remove the code-built placeholder.
+- Check the ground in the two side gaps (hotel gap z −15.9 … −11.33, alley z −3.33 … +1.48,
+  from x 10.3 back to ~x 20): it must not show a void; the sidewalk already runs in front.
+- Expected draw calls: placeholder (~6–7) → GLB 5, i.e. −1 to −2.
+- Optional later (budget): the 2-storey "FEED HO." behind (x 42.55 … 56.2), the alley at 80.
+
+**Differences 1909 / 1963 vs 1920** (build 1920): 1963 has the brick painted white, a 1950s shop
+front with lettering, a display window cut into the north wall; the 1909 awning is kept for 1920.
+
+**Pure guesses (owner to check)**
+1. South outer bay (out of frame in 1909): symmetric single windows.
+2. Shop-front layout south of the door and the upper-floor door at the south end.
+3. Which floor has segmental vs semicircular heads (Pickell says they "alternate"; the floors
+   split is read from the blurry 1909 card).
+4. Side-wall window count/spacing, south ground-floor windows, rear wall, roof, chimney.
+5. Pediment height (1.25 m) and chord; frieze panels and dentils.
+6. Colours: cream trim, awning stripes (1909 tint shows a mostly pale awning).
+7. Exact width 8.00 m (sheet 3) vs 7.62 m (Pickell, 25 ft) vs 8.31 m (sheet 2 overlap strip).
+
 ## Constraints
 
 - A-Frame from a CDN, plain HTML/JS. No build tools or frameworks.
@@ -1085,3 +1324,5 @@ Check licensing for every asset and note the source in the progress log.
 | 2026-11-03 | planner: Bank Building / Flemington National Bank (56–66 Main, 1897, SE corner of Bloomfield Ave) spec written and auto-approved (owner away). Sanborn sheet 2: one L-shaped 3-storey brick block, 40', front 22.14 m, 20.3 m deep (56–58) / 11.05 m (62–66), front wall 1.95 m behind the property line → entity (12.24, 0.15, −66.24). 1906–08 cards: one continuous facade, 12 bays, rock-faced stone ground storey, arched 3rd-floor windows, roundels, modillion cornice on front and Bloomfield side, bank entrance + 4 shop fronts with stoops and striped awnings. The Post Office was across Bloomfield Ave (not this building). Ordinary (≤ 10k tris), 6 materials; 1 new Poly Haven texture (rock-faced ashlar) + 1 locally generated awning stripe. Next: asset-scout. |
 | 2026-11-03 | asset-scout + blender-builder + reviewer: Bank Building built and baked (`assets/models/bank-building.glb`, 8,808 triangles, 6 materials, 1.79 MB, 2K lightmap, LIGHTMAP_SCALE 1.1241). Review round 1: FIXES (stone too pale, chimney too low); round 2: PASS. |
 | 2026-11-03 | scene-integrator: Bank Building GLB integrated at (12.24, 0.15, −66.24), rotation 0 −90 0; the code-built placeholder at (10.6, 0, −66.2) is gone. The 1.98 m strip between the sidewalk and the front wall (x 10.30–12.28, z −77.31 … −55.17) is paved with one concrete box flush with the sidewalk top (`#bank-forecourt`, +1 draw call: the patch list is a flat plane in a different colour, so it couldn't be merged). Clear of 68 Main (z ≥ −54.45; the bank's south cornice return at z −54.37 is above 68's 7.5 m roof), Bloomfield Ave and 48–52 Main; walls skirt to y −0.05 so the north side meets the Bloomfield grade without a gap. Tested: no console errors (only the pane's pointer-lock errors), faces Main St, lightmap reads. Draw calls / triangles before → after: start view (0, 0, 18) 162 / 69.0k → 163 / 77.8k; in front on the road (0, −66) facing east 23 / 26.3k → 30 / 35.2k; west sidewalk (−8, −66) facing east 34 / 27.5k → 39 / 37.3k. Screenshot `assets/models/previews/bank-building-in-scene.png`. |
+| 2026-11-03 | planner: Nevius Store / Fulper's Dry Goods (78 Main, 3-storey brick Italianate store, front c. 1880) spec written and auto-approved (owner away). Sanborn sheet 3: "Dry Goods", 3 storeys, 35', 8.00 × 32.25 m, front on the property line → entity (10.30, 0.15, −7.33) (placeholder was at z −9.1 and only 17 m deep); 4.6 m gap to the Union Hotel, 4.8 m alley to 82 Main. Primary photo: 1909 "Nevius Store and Union Hotel" card; HABS 1963 hotel views show its corner and north wall. Goodspeed Histories / Pickell description used for windows (segmental 2nd floor with stone keystone arches, round 3rd floor with brick hoods), quoins and sill band. Ordinary (target ~5.5k tris), 5 materials, no new textures, 2K lightmap. Next: asset-scout (nothing to fetch). |
+| 2026-11-03 | scene-integrator: Nevius Store / Fulper's Dry Goods GLB integrated (`assets/models/nevius-store.glb`, 6,954 triangles, 5 materials, lightmap intensity 1.1072) at (10.30, 0.15, −7.33), rotation 0 −90 0, front on the property line; the code-built placeholder at (10.3, 0, −9.1) is gone (id `bldg-78-main` kept). Walls skirt to y −0.05, so they meet the ground in the 4.6 m gap to the Union Hotel and the alley to 82 Main without floating; the awning (to x 8.39) clears tree-hotel-7 and the 82–84 placeholder (north edge z −0.1). Draw calls / triangles: start view (0, 0, 18) 163 / 77.8k → 164 / 84.7k; facing it from the road 30 / 27.6k → 31 / 34.5k; from the west sidewalk 58 / 42.1k → 59 / 49.0k. Screenshot `assets/models/previews/nevius-store-in-scene.png`. Note: the start view was already over the ~150 draw-call guideline before this building. |

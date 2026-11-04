@@ -209,9 +209,16 @@
       <a-entity id="tree-west-4"  position="-7.5 0.175 -33"   rotation="0 180 0" scale="1.05 1.1 1.05"  gltf-model="url(assets/models/street-tree.glb)" foliage></a-entity>
       <a-entity id="tree-west-5"  position="-7.5 0.175 -60"   rotation="0 270 0" scale="1 1 1"         gltf-model="url(assets/models/street-tree.glb)" foliage></a-entity>
     </a-entity>
-    <!-- 78 Main: dry goods, 3 storeys -->
-    <a-entity id="bldg-78-main" position="10.3 0 -9.1" rotation="0 -90 0"
-      building="width: 7.3; height: 10.7; depth: 17; stories: 3; color: #874434; wall: brick; bays: 3; photo: "></a-entity>
+    <!-- Nevius Store / Fulper's Dry Goods Building (78 Main, 3-storey brick Italianate store,
+         front c. 1880): Blender model with Poly Haven textures and baked late-afternoon light.
+         Built by tools/blender/nevius_store.py + nevius_store_bake.py.
+         Position = centre of the front brick wall face at sidewalk level, on the property line.
+         North wall z -11.33, south wall z -3.33, rear wall x 42.55; the striped awning reaches
+         1.91 m over the sidewalk (bottom 2.45 m). Its walls skirt 0.2 m below the sidewalk top,
+         so they meet the ground (y 0) in the side gaps without floating. -->
+    <a-entity id="bldg-78-main" position="10.3 0.15 -7.33" rotation="0 -90 0"
+      gltf-model="url(assets/models/nevius-store.glb)"
+      baked-lighting="lightmap: assets/textures/nevius-store-lightmap.jpg; intensity: 1.1072"></a-entity>
 
     <!-- ============================================================
          BEYOND THE STARTER BLOCK: simple placeholders.
