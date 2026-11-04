@@ -251,6 +251,15 @@ The kit also reuses, unchanged, `polyhaven/metal_plate_02.jpg` (iron) and
 | `rust_coarse_01.jpg` | Rust Coarse 01 (`rust_coarse_01`), 2.2 m | https://polyhaven.com/a/rust_coarse_01 | CC0 | rusty cast iron: lamp brackets, fountain lamp holder, barrel hoops, rust at edges |
 | `iron_paint_redbrown.jpg` | Metal Plate 02 (`metal_plate_02`, via `polyhaven/metal_plate_02.jpg`), tinted #5A2A22 at 130% contrast | https://polyhaven.com/a/metal_plate_02 | CC0 | hydrant paint (tile 2.0 m; colour is a guess) |
 
+## Sky (`assets/textures/sky/`)
+
+Made by `tools/prepare_sky.py` from the 2K .hdr (not committed): exposure 1.9,
+`--wb 1.10,0.95,0.90 --warm 2.5`, soft-shoulder tonemap, sRGB, 2048 x 1024 equirect JPG q85.
+
+| File | Poly Haven asset | URL | Licence | Used for |
+|------|------------------|-----|---------|----------|
+| `sky-late-afternoon.jpg` | Hilly Terrain 01 (Pure Sky) (`hilly_terrain_01_puresky`), 2K .hdr, by Sergej Majboroda (original) and Jarod Guest (sky edit) | https://polyhaven.com/a/hilly_terrain_01_puresky | CC0 | sky sphere: warm low sun, partly cloudy; sky-only edit, so no ground objects. Sun at u = 0.600, 12 deg up |
+
 ## Characters (`assets/characters/source/`, local only)
 
 Raw packs for building people in Blender. The folder is gitignored (~600 MB); re-download from

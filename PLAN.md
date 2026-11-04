@@ -2684,6 +2684,10 @@ Order agreed with the owner: finish 65 Main → **one test person** → 68 Main 
     NE — verify); (2) tree-line ring + low-detail rooftop/steeple silhouettes at the street ends
     and side streets, fading into fog; (3) a painted panorama cylinder. Recommended: 1 + 2,
     ~3–5 draw calls, < 10k tris, retune fog so the ends dissolve into haze.
+- **Sky built (scene-integrator, 2026-11-04):** option 1. `#sky` sphere (r 400, 48x24 segs) shows
+  `assets/textures/sky/sky-late-afternoon.jpg` (flat, fog off, sRGB), `scale="-1 1 1"`, `rotation="0 60 0"` so the
+  photo's sun sits to the WSW (direction -0.92, 0, +0.38), matching the baked sun. Fog #ebe4cb, density 0.011.
+  `gradient-sky` kept in js/components.js to switch back. Landscape (hills, tree lines) still to do.
 
 **Mini map: options explored (orchestrator, 2026-11-04)**
 - Desktop: an HTML canvas overlay in a top corner (no 3D cost): street plan, "you are here"
@@ -3482,3 +3486,4 @@ Check licensing for every asset and note the source in the progress log.
 | 2026-11-04 | scene-integrator: Block at 40–46 Main **in scene** at (8.60, 0.15, −116.55), 1 draw call; 32–38 placeholder trimmed to z −124.05; fruit stand goods-G4 added; draw calls / triangles start view 63 / 150.7k → 64 / 155.5k, at (0, 0.15, −110) 30 / 17.6k → 31 / 22.5k. |
 | 2026-11-04 | asset-scout: Sky (D, option 1) **asset ready**: `assets/textures/sky/sky-late-afternoon.jpg` (2048 x 1024 equirect, 53 KB) from Poly Haven `hilly_terrain_01_puresky` (CC0, sky-only edit, nothing modern), made by `tools/prepare_sky.py` (exposure 1.9, wb 1.10,0.95,0.90, warm 2.5); horizon ~#ebe4cb, zenith ~#97b3c4; sun at u = 0.600, 12 deg up (lower than the 21 deg baked sun). |
 | 2026-11-04 | scene-integrator: **Mini map built** (1921 Sanborn, style B): js/minimap.js + data/minimap.json + assets/maps/minimap-1921.jpg (tools/prepare_minimap.py). Desktop overlay (N), VR pop-up panel (Y, left controller). Checked at the start view and near the Bank Building: arrow position/turn and tags line up with the Sanborn buildings. VR panel 64 → 65 draw calls (+2 tris) at the start view; desktop overlay is HTML (0 calls). No console errors. |
+| 2026-11-04 | scene-integrator: **Photographed sky in scene** (D, option 1): equirect sky on the `#sky` sphere, yaw 60 deg puts the sun WSW over the west side of the street (east fronts sunlit, as baked); fog #ecdfc4 -> #ebe4cb; still 1 draw call; start view 64 calls / 157.0k tris. No console errors. Previews sky-north-main-st.png, sky-wsw-sun-side.png. |

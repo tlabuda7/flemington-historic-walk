@@ -76,7 +76,7 @@
   -->
   <a-scene
     renderer="antialias: true; foveationLevel: 1"
-    fog="type: exponential; color: #ecdfc4; density: 0.011"
+    fog="type: exponential; color: #ebe4cb; density: 0.011"
     street-ambience>
 
     <!-- Mini map: 1921 Sanborn map + labels (js/minimap.js, data/minimap.json,
@@ -87,11 +87,17 @@
          SKY AND LIGHT
          ============================================================ -->
 
-    <!-- Sky: a large inward-facing sphere with a gradient. Fog is turned off for it. -->
+    <!-- Sky: a large inward-facing sphere with a photographed late-afternoon sky
+         (Poly Haven hilly_terrain_01_puresky, CC0; made by tools/prepare_sky.py).
+         Unlit, fog off. scale -1 1 1 un-mirrors the image when seen from inside.
+         rotation 0 60 0 turns the photo's sun (u = 0.600) to the WSW, where the
+         buildings' baked sunlight comes from.
+         To switch back to the plain gradient: material="shader: flat; side: back; fog: false"
+         plus gradient-sky="top: #a9bfd2; horizon: #ecdfc4" (js/components.js). -->
     <a-entity id="sky"
-      geometry="primitive: sphere; radius: 400; segmentsWidth: 24; segmentsHeight: 16"
-      material="shader: flat; side: back; fog: false"
-      gradient-sky="top: #a9bfd2; horizon: #ecdfc4"></a-entity>
+      geometry="primitive: sphere; radius: 400; segmentsWidth: 48; segmentsHeight: 24"
+      material="shader: flat; side: back; fog: false; src: url(assets/textures/sky/sky-late-afternoon.jpg)"
+      scale="-1 1 1" rotation="0 60 0"></a-entity>
 
     <!-- Soft fill light: warm from above, brown bounce from the ground. -->
     <a-entity light="type: hemisphere; color: #fff0d4; groundColor: #7a5f45; intensity: 1.3"></a-entity>
