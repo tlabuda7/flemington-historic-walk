@@ -26,7 +26,10 @@ Rules:
 - **Only blender-builder may use the Blender MCP tools (`mcp__blender__*`), and only one
   building at a time.** No other agent and not the orchestrator may call them.
 - Update the building's **Status** line in PLAN.md after every step (who did what, result).
-- One building moves through the pipeline at a time.
+- Only one building is in Blender (blender-builder) at a time. The **planner may work one
+  building ahead**: it researches and specs the next building while the current one is being
+  built, reviewed or integrated. Both edit PLAN.md, so each touches only its own building's
+  section, its own Pipeline row and the Progress log.
 - Subagents start without this conversation's history: give them the building name, the
   PLAN.md section, and any reviewer fixes verbatim.
 

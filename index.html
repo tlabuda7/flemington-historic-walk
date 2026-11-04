@@ -95,11 +95,12 @@
     <!-- (The courthouse has a paved forecourt instead: see #courthouse-grounds.) -->
     <!-- All front paths are one mesh (one draw call): "x z width depth" per path.
          County Offices: three 1.6 m walks from the sidewalk to its three stoops (they run
-         0.1 m under the stoop feet at x -15.3 so no gap shows). Then 65 Main and the
+         0.1 m under the stoop feet at x -15.3 so no gap shows). Then 65 Main (1.3 m walk from
+         the sidewalk to under its porch steps) and the
          Wurts law office (1.2 m walk from the sidewalk to 0.1 m under its front step). -->
     <a-entity id="paths" ground-patches="y: 0.03; color: #b9b0a0;
       rects: -12.85 -24.07 5.1 1.6, -12.85 -27.87 5.1 1.6, -12.85 -31.67 5.1 1.6,
-             -11.75 -51.2 2.9 1.4, -12.5 -68.69 4.5 1.2"></a-entity>
+             -12.63 -51.19 4.75 1.3, -12.5 -68.69 4.5 1.2"></a-entity>
 
     <!-- ============================================================
          STARTER BLOCK: Bloomfield Ave to Court St
@@ -122,9 +123,16 @@
     <a-entity id="wurts-law-office" position="-14.95 0.02 -68.69" rotation="0 90 0"
       gltf-model="url(assets/models/wurts-law-office.glb)"
       baked-lighting="lightmap: assets/textures/wurts-law-office-lightmap.jpg; intensity: 1.1647"></a-entity>
-    <!-- 65 Main: 2½-storey frame dwelling. Porch position from the map; style is a guess. -->
-    <a-entity id="house-65-main" position="-16.3 0 -51.2" rotation="0 90 0"
-      kit-building="type: house; width: 8.6; depth: 12; stories: 2; color: #e3dccb; porchWidth: 4.4"></a-entity>
+    <!-- Frame dwelling at 65 Main (old no. 510, 2½ storeys, Sanborn "D"): Blender model with
+         Poly Haven textures and baked late-afternoon light. Built by
+         tools/blender/house_65_main.py + house_65_main_bake.py.
+         Position = centre of the front porch edge at grade, 3.80 m behind the property line
+         (front wall 5.81 m behind it); the porch steps reach 0.84 m further east, to x -13.23.
+         It stands on the lawn (y 0.02); its foundation reaches below grade so it never floats.
+         The old code-built version is still available as kit-building="type: house". -->
+    <a-entity id="house-65-main" position="-14.07 0.02 -51.19" rotation="0 90 0"
+      gltf-model="url(assets/models/house-65-main.glb)"
+      baked-lighting="lightmap: assets/textures/house-65-main-lightmap.jpg; intensity: 1.274"></a-entity>
     <!-- Hunterdon County Offices / Hall of Records (69–71 Main, 1870): Blender model with
          Poly Haven textures and baked late-afternoon light. Built by
          tools/blender/county_offices.py + county_offices_bake.py.

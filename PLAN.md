@@ -28,6 +28,8 @@ Decisions (2026-11-02):
   "Orchestrator decisions" for the owner to check later. Order after the courthouse: county
   offices → Wurts law office → bank building → 78 Main → house at 65 Main → 68 Main.
   A building that fails 3 review rounds is parked and skipped.
+- 2026-11-03: the planner may now work one building ahead (see CLAUDE.md); only one building is
+  in Blender at a time.
 
 ## Pipeline status
 
@@ -39,6 +41,8 @@ Decisions (2026-11-02):
 | Wurts Law Office (59 Main) | written, auto-approved (owner away) | reused, none new (asset-scout skipped; 1 grey copy of weathered_planks made locally) | done (7.6k tris, 5 materials, 1.2 MB, 1K lightmap, LIGHTMAP_SCALE 1.1647) | round 1: PASS | yes (GLB, 2026-11-03) |
 | Bank Building / Flemington National Bank (56–66 Main) | written, auto-approved (owner away) | done (1 new: sandstone_blocks_05 greyed → stone_rockfaced; 1 generated: awning_stripes; 3 reused) | done, round-1 fixes applied (8.8k tris, 6 materials, 1.8 MB, 2K lightmap, LIGHTMAP_SCALE 1.1241) | round 2: PASS | yes (GLB at 12.24, 0.15, −66.24) |
 | Nevius Store / Fulper's Dry Goods (78 Main) | written, auto-approved (owner away) | reused, none new (asset-scout skipped; 4 reused maps) | done, round-1 fixes applied (7.0k tris, 5 materials, 1.3 MB, 2K lightmap, LIGHTMAP_SCALE 1.1072) | round 2: PASS (round 1: 3rd-floor windows raised; LIGHTMAP_SCALE now 1.1072) | **yes** (10.30, 0.15, −7.33) |
+| Frame Dwelling at 65 Main (old no. 510) | written, auto-approved (owner away) | reused, 1 recoloured copy (asset-scout skipped; brown_planks_05 → clapboard_cream made by the builder; roof_slates_03 + red_brick reused) | done (6.3k tris, 4 materials, 1.0 MB, 2K lightmap, LIGHTMAP_SCALE 1.274) | round 1: PASS | yes (GLB, 2026-11-03) |
+| Test person 1: John B. Pickell, clerk at the Nevius store (78 Main) | written, auto-approved (owner away) | — | — | — | no |
 
 ## Building specs
 
@@ -1226,6 +1230,254 @@ front with lettering, a display window cut into the north wall; the 1909 awning 
 6. Colours: cream trim, awning stripes (1909 tint shows a mostly pale awning).
 7. Exact width 8.00 m (sheet 3) vs 7.62 m (Pickell, 25 ft) vs 8.31 m (sheet 2 overlap strip).
 
+### Frame Dwelling "D" at 65 Main St (65 Main St, old no. 510)
+
+**Status:** **in scene** (scene-integrator, 2026-11-03): GLB placed at (−14.07, 0.02, −51.19), rotation 0 90 0, lightmap intensity 1.274; the kit placeholder at (−16.3, 0, −51.2) is gone; front path now `-12.63 -51.19 4.75 1.3` (sidewalk to under the steps). Footprint z −55.89…−45.73, clear of the Hall of Records and the Wurts office. No console errors; draw calls/triangles from the start view 164/84.7k → 159/90.9k, from opposite the house 64/34.0k → 59/40.2k. Fence, tree and side path skipped (draw calls). Screenshot `assets/models/previews/house-65-main-in-scene.png`. Before that: **reviewed, round 1: PASS** (reviewer, 2026-11-03). GLB parse: 6,343 tris, 4 materials, three 1024² JPEGs, TEXCOORD_0 + 1, 1.04 MB; lightmap 2048². Browser viewer: loads, no console errors, colour factors and lightmap (1.274) applied. All 8 acceptance checks met; the 13 builder simplifications are all acceptable. Minor notes, no fix needed: the bay's own hip roof is mostly hidden under the main soffit from street level; the sunlit south wall is only moderately brighter than the shaded front, and the flush shutters cast no shadows. Before that: **built** (blender-builder, 2026-11-03). Asset-scout skipped (nothing to download; the builder made `house-65-main/clapboard_cream.jpg` from `courthouse/brown_planks_05.jpg` with `tools/prepare_house_65_textures.py`, logged in SOURCES.md). `assets/models/house-65-main.glb`: 6,343 triangles, 4 materials (paint, dark, roof, brick), 1.04 MB, TEXCOORD_0 + 1; 2K lightmap `house-65-main-lightmap.jpg`, **LIGHTMAP_SCALE 1.274**. Previews `assets/models/previews/house-65-main-{front,three-quarter-ne,three-quarter-se,detail,match-1909}.png`. Builder deviations: eaves/frieze/soffit 6.48–6.80–6.98 with a 0.35 overhang put the ridge at 10.48 (ell 8.85) instead of 10.25 (8.60); front outer windows at x ±2.95 (not 2.85) so the inner shutters clear the porch pilasters; bay 2nd-floor windows 4.60–6.25 and ell-rear 1st-floor window 1.30–2.90 (under the rear-porch roof); deck/skirt tints made bluer than the spec values so they read grey on the cream paint; roof tile 3.0 m (orchestrator) instead of 2.6. Earlier: spec written, auto-approved (planner, 2026-11-03).
+
+**What it is**: a **2½-storey frame dwelling** (Sanborn "D", yellow = frame, "2½") on the west
+side between the Hall of Records (69–71) and the Wurts Law Office (59). The 1921 map gives an
+**L-shaped plan**: a front block the full 8.6 m width, a narrower rear ell along the north side, a
+small open entrance porch centred on the front, a **2-storey canted bay on the south side**, and an
+open rear porch. Owner, builder and date are not documented on the web (searched the HCHS walking
+tour, the Goodspeed "County House" series, NRHP/HABS); the plan and the "2½" point to a mid-19th-
+century front-gabled house of the kind common on Flemington's Main St. It is **gone today**: the
+HABS law-office photo (1960s–70s) shows a modern flat-roofed multi-storey building on its site.
+
+**Orchestrator decisions** (settled from the map and photos; owner to check later)
+1. **Footprint from Sanborn sheet 2** (the only sheet that shows it): front block **8.60 m wide ×
+   9.72 m deep**; rear ell **4.27 m wide** (flush with the north wall) × **7.24 m** deep; total
+   depth 16.96 m; open rear porch 4.07 × 1.41 m; open front porch **4.00 wide × 2.00 deep**,
+   centred; south bay 3.0 m at the wall, 1.0 m projection. All from pixel lines (see Sources).
+2. **Position: porch front 3.80 m and front wall 5.81 m behind the property line**, centred on
+   z −51.19 → entity **(−14.07, 0.02, −51.19)**, rotation 0 90 0. (The placeholder at x −16.3
+   has its front wall about where the real wall is, but its origin is not the porch front.)
+3. **Front-facing gable (ridge east–west)**. Evidence: in the county-building cards (1908, 1909,
+   1912) the house's south wall shows clapboard right up to a **horizontal eave line that recedes
+   downward to the west** — an eaves wall, not a gable end. A front gable over an 8.6 m front with
+   a "2½" (attic) storey is also the usual Flemington type. The ell has its own lower gable roof,
+   same pitch, ridge also east–west.
+4. **The whole L is one height class ("2½")**: the map draws the ell inside the same outline with
+   no dividing line or own storey number, so the north eave runs continuously at the same height;
+   the narrower ell's ridge comes out lower automatically.
+5. **Walls: painted clapboard, warm cream** (#E6DFCC): the 1909 coloured card shows the south wall
+   pale cream/buff with clearly visible lap lines; the 1912 b/w card shows it pale. Trim painted
+   the same colour (one material; see decision 9).
+6. **Roof: slate, dark grey.** Sanborn "o" (slate or tin) on the house and on the bay; slate from
+   the nearby Pennsylvania quarries was normal on Hunterdon houses of this size. The red-brown
+   wedge in the coloured 1908/1909 cards sits *below* the pale eave band — read as the
+   colourist's tint of the shaded soffit, not a red roof.
+7. **Front: 3 bays, centred door** (the porch is centred on the façade): 1st floor W-D-W, 2nd floor
+   3 windows, **2 attic windows** in the gable. **2/2 sash** (as in the 1870 county building next
+   door in the same cards; also the cheapest in triangles). Dark-green **louvred shutters** on
+   the front and side windows (period norm; the Wurts office next door has them).
+8. **Front porch**: 4 square chamfered posts, low-pitched hipped roof, plain frieze, simple
+   railing with square balusters, **3 steps** centred between the inner posts (map: dashed open
+   porch "1", roof "o"). Porch deck 0.68 m, house floor 0.75 m.
+9. **4 materials = 4 draw calls** (see Materials): `paint` (clapboard texture; trim UVs squeezed
+   onto one board so trim reads as flat paint), `dark` (plain colour: glass, shutters, doors),
+   `roof` (slate: main, ell, bay and porch roofs), `brick` (foundation and chimneys). The porch
+   deck and steps are made grey by an RGB tint in the bake's grime mask (no extra material; the
+   bake already multiplies an RGB grime mask into the lightmap).
+10. **Two brick chimneys** (none visible in any photo): one on the main ridge toward the rear, one
+    on the ell ridge (kitchen).
+11. **Ordinary building, target ~5.5k triangles (cap 10k)**; **2K lightmap** (≈ 550 m² of wall
+    and roof; 1K would blur the shutters and porch).
+
+**Sources**
+- Map: 1921 Sanborn **sheet 2**, yellow (frame), **"2½"**, **"D"**, street numbers **65** (new) /
+  **510** (old). Pixel lines (centres): **front wall x 3488.5**; **north wall y 5835** (straight,
+  front to rear); **south wall y 6000** (front block); front block rear wall **x 3302**; ell south
+  wall **y 5917** (x 3163–3302); **rear wall x 3163**. Front porch (dashed, "1", "o"):
+  **x 3488.5–3527, y 5881–5958**. South bay ("2", "o"): wall span **y 6000, x 3420–3480**, outer
+  face **y 6020, x 3432–3477**. Rear porch (dashed, "1", "o"): **x 3136–3163, y 5832–5913**.
+  Property line x 3600; lot lines y 5787 (north) and 6143 (south). No height note. Sheet 3 does
+  not cover it (blank at sheet-3 y 242–407).
+- Photos (local only, never commit). **No photo shows the front.** The house appears only at the
+  right (north) edge of the county-building cards, seen from the SE across the Hall of Records
+  lawn:
+  - **Primary: `flmngtncountybldnganddentistoffice09.jpg`** (1909 coloured card "County Building";
+    the "dentist" of the title is the DENTIST sign on the Hall of Records, not this house):
+    x ≈ 860–1024: pale cream **clapboard south wall** with wide lap lines, a pale eave band near
+    the top receding to the west, shade trees, a **low post-and-rail fence** along the sidewalk
+    continuing in front of the house.
+  - `flemington_-_county_building_-_1912.jpg` (1912 b/w, same viewpoint): same wall, eave line
+    sloping down to the right (= west), shrubs, fence.
+  - `flmngtnhtncountybldg08.jpg` (1908 coloured, same view as the 1909 card).
+  - `habs/wurts-law-office-east-front.jpg` (HABS NJ-772-1, 1960s–70s): left edge shows the modern
+    building that replaced the house — not used for the model.
+  - Checked, not showing it: all other West Jersey History cards (courthouse views from the SE are
+    blocked by the Hall of Records; `flmgtnhtrdncntycrths2.jpg` is post-1928 and shows only an
+    unclear brick wall beyond; Main St / bank / hotel views look elsewhere); the other HABS photos.
+- Web (no data on this house found): HCHS Flemington walking trail
+  (https://hunterdonhistory.org/wp-content/uploads/2018/08/Flemington-TRAIL-online8-1.pdf: entries
+  for 71 and 59 Main only); Goodspeed Histories "County House" series on the west side of Main St
+  between Court and Capner Sts (https://goodspeedhistories.com/category/countyhouseseries/: no
+  mention of 65); Wikipedia, Flemington Historic District
+  (https://en.wikipedia.org/wiki/Flemington_Historic_District).
+
+**Placement** (west side, front faces east onto Main St)
+- Entity position = centre of the porch front edge at grade: **(−14.07, 0.02, −51.19)**,
+  `rotation="0 90 0"`; y 0.02 = lawn. Replaces `#house-65-main` at (−16.3, 0, −51.2).
+- Scene lines: porch front x −14.07; steps to x −14.91; **front wall x −16.07**; front block rear
+  x −25.79; ell/rear wall x −33.03; rear porch to x −34.44. **North wall z −55.49**; **south wall
+  z −46.89**; bay outer face z −45.85; ell south wall z −51.22.
+- Neighbours: Wurts office south wall z −66.34 (10.9 m clear); Hall of Records north wall
+  z −34.80 (11.0 m clear of the bay). Lot lines z −57.99 / −39.44.
+- **Blender local frame**: front −Y, origin at the porch front edge at grade, **+X = north**,
+  z = 0 = grade. Porch x −2.00 … +2.00, y 0 … 2.00; steps y −0.84 … 0; front block
+  x −4.30 … +4.30, y 2.00 … 11.72; ell x +0.03 … +4.30, y 11.72 … 18.96; rear porch
+  x +0.23 … +4.30, y 18.96 … 20.37; bay on the south wall (x −4.30), centre y 4.00. Sun "to sun"
+  vector **(−0.40, 0.90, 0.36)** (front in shade, south side and bay sunlit).
+
+**Massing** (heights are photo estimate / guess: no height note on the map)
+- Foundation: brick, grade → 0.70 visible, skirt to −0.20; 1st floor 0.75.
+- Floor levels: 1st 0.75; 2nd ≈ 3.95; attic ≈ 6.95. **Wall plate / eave (top of frieze) 7.00**
+  (1912 card: the house eave stands ≈ 0.7 × the Hall of Records' 8.5 m cornice height, and the
+  house is further from the camera → roughly 6.5–7.5 m).
+- **Main roof**: front gable, ridge east–west on x 0, pitch **37° (9/12)** → ridge **10.25**;
+  eave overhang 0.40 (boxed, with soffit), rake overhang 0.25; the roof ends at the rear wall
+  y 11.72 in a gable (the ell abuts its north half).
+- **Ell**: 4.27 wide, same eave 7.00 on the north (continuous with the main block) and on its south
+  wall, same pitch → ridge **8.60** on x +2.17; gable end at the rear (y 18.96).
+- **South bay**: 2 storeys, canted: wall span y 2.50 … 5.50, outer face y 2.90 … 5.10 at
+  x −5.30 (1.0 projection); on the brick foundation; own cornice 6.20–6.45, hipped slate roof
+  rising to 6.85 against the wall (below the main frieze).
+- **Front porch**: deck 0.68, posts to 3.05, frieze 3.05–3.30, low hipped roof (≈ 15°) from the
+  3.35 eave at the front up to 3.85 at the wall (below the 2nd-floor sills at 4.70).
+- **Rear porch**: deck 0.50, 3 posts, shed roof 2.90 → 3.30 at the wall; no railing; low detail.
+- **Chimneys** (brick, guess): A on the main ridge, centre (x 0, y 9.0), 0.55 × 0.80, top
+  **11.20**; B on the ell ridge, centre (x +2.17, y 17.8), 0.50 × 0.65, top **9.50**; each with a
+  0.10 corbel course near the top.
+
+**Elevation details (1920 state)**
+- **Corner boards** 0.15 wide on all corners; **frieze board** 0.35 under the eaves on both sides;
+  boxed cornice 0.25 deep with the 0.40 soffit; **front gable**: raking cornice (0.20 fascia +
+  small crown) and **short cornice returns** 0.60 long at both front corners (Greek-Revival
+  type); the rear gables get the plain rake only.
+- **Windows (all)**: 2/2 double-hung, sash set 0.08 in, meeting rail 0.04, one vertical muntin
+  0.03 per sash; flat casing 0.10 with a small head cap (0.12 tall, 0.04 proud); sill 0.05 proud.
+  Sizes: **1st floor 0.90 × 1.80** (sill 1.45, head 3.25); **2nd floor 0.90 × 1.65** (sill 4.70,
+  head 6.35); **attic 0.70 × 1.15** (sill 7.55, head 8.70).
+- **Shutters**: louvred (louvres as 3–4 shallow grooves, not slats), 2 leaves per window, each
+  half the window width, open flat 0.03 off the wall, on all 1st/2nd-floor windows of the front,
+  north and south walls and the ell; **none** on the bay or attic windows.
+- **Front (east) wall** (y 2.00), x from south (−) to north (+):
+  - 1st floor: windows at **x −2.85 and +2.85**; **door centred**: 0.95 × 2.25 (0.75 → 3.00),
+    4-panel, set 0.10 in, casing 0.12 with head cap; **4-light transom** 0.95 × 0.40 above it
+    (3.08 → 3.48) in the same casing.
+  - 2nd floor: 3 windows at **x −2.85, 0, +2.85**.
+  - Gable: **2 attic windows at x ±0.90**.
+  - Foundation: two small cellar vents 0.6 × 0.3 under the outer windows (dark).
+- **South wall, front block** (x −4.30): the **bay** at y 2.50 … 5.50: per floor one 0.90 window
+  in the 2.2 m outer face and one **0.50 window** in each canted face (same heads/sills as the
+  floor); a flat panel under each 1st-floor bay window; then one window per floor at **y 9.00**.
+- **North wall** (x +4.30, continuous to the rear): windows per floor at **y 4.00, 8.60, 13.80,
+  17.20**.
+- **Ell south wall** (x +0.03): 1st floor **side door** 0.90 × 2.15 at y 14.20 (plain stoop
+  1.0 × 0.8 at 0.50 with one step) and a window at y 17.20; 2nd floor windows at y 14.20 and 17.20.
+- **Rear walls**: main block (y 11.72, x −4.30 … 0): one window per floor at x −2.15, one attic
+  window at x −1.00 (low in the gable, clear of the ell roof); ell rear (y 18.96): door
+  0.90 × 2.15 at x +2.80 onto the rear porch, window at x +1.10; 2nd floor one window at x +2.17.
+- **Front porch**: deck boards (paint + grey tint) with a 0.04 nosing; skirt boards 0 → 0.68
+  (paint, slightly darker tint); **4 square posts 0.15**, chamfered (8-sided mid shaft), small
+  base and cap blocks, centres **x ±1.90, ±0.70** at y 0.15; 2 half-pilasters on the wall at
+  x ±1.90; frieze 0.25 on all three open sides; **railing** between the outer and inner post on
+  each front segment and along both sides: top rail 0.06 × 0.10 at 0.68 + 0.80, bottom rail at
+  0.68 + 0.08, square balusters 0.04 at 0.12 m centres (~9 per front segment, ~15 per side).
+  **Steps**: 3 treads 0.28 deep, risers 0.17 (top at deck 0.68), **1.25 wide** centred
+  (y −0.84 … 0), with plain closed stringers; no handrail.
+- Not modelled: gutters, downpipes, lamps, house number, signs, lightning rods, storm doors.
+
+**Materials & colours (1920)** — **4 materials = 4 draw calls**
+1. `paint` — clapboard walls (real-world box UVs, boards horizontal) **and all painted trim**
+   (corner boards, frieze, cornices, soffits, casings, sash frames, porch posts, rails, balusters,
+   porch frieze, skirt, deck, steps, bay panels). Trim UVs are scaled down (×0.02) and moved onto
+   the middle of one board in the texture so trim reads as flat paint without lap lines; porch-deck
+   UVs rotated so the boards run east–west (along Y). Colour warm cream ≈ **#E6DFCC**.
+   Texture: **new local copy `assets/textures/house-65-main/clapboard_cream.jpg`**, made by the
+   builder from the existing **`courthouse/brown_planks_05.jpg`** (Poly Haven `brown_planks_05`,
+   CC0): desaturate, recolour to #E6DFCC, contrast ≈ 35 % so the lap shadows stay and the grain
+   and knots mostly disappear; 1024². **Tile 1.6 m** (9 boards per tile → **0.18 m exposure**).
+   Made by a small `tools/prepare_house65_textures.py` (pattern: `tools/prepare_wurts_textures.py`)
+   and logged in SOURCES.md.
+   **Bake tints** (RGB multipliers in the grime mask, multiplied into the lightmap): porch deck
+   and steps (0.60, 0.60, 0.58) → worn grey paint; porch skirt (0.80, 0.80, 0.78).
+2. `dark` — plain colour, **no texture**: all glass, shutters, doors, transom bars, cellar vents.
+   Very dark green ≈ **#27322A**, roughness 0.3 (glass reads as dark panes; shutters and doors as
+   dark-green paint).
+3. `roof` — main, ell, bay, porch and rear-porch roofs (and ridge caps). Reuse
+   **`polyhaven/roof_slates_03.jpg`**, **tile 2.6 m** (≈ 22 courses per tile → ~0.12 m exposure),
+   tinted toward cool dark grey ≈ #4C5155; slate rows run horizontally on each slope.
+4. `brick` — foundation (all round, incl. under the bay) and both chimneys. Reuse
+   **`polyhaven/red_brick.jpg`**, **tile 1.4 m**, tint ≈ #87452F; chimney caps in the same brick.
+- **New for asset-scout: none** (no downloads). Asset-scout can be skipped; the builder makes
+  `clapboard_cream.jpg` locally from an existing CC0 map and confirms the other two.
+
+**Weathering**: light to moderate — a lived-in house repainted within the last decade: dirt
+splash on the bottom 0.4 m of the foundation and porch skirt; faint grey streaks under the window
+sills and below the eave soffit; slightly chalky, warmer paint on the sunlit south side and bay;
+porch deck and top step worn darker at the door and down the middle; soot on both chimney tops
+and a faint dark stain on the slate below them; north wall a touch cooler/greener near the ground.
+
+**Budget**: **ordinary building, target ~5.5k triangles, hard cap 10k**: walls with ~40 openings
+(clapboard is texture, not geometry) ~1.0k; ~34 windows with casing, sash, rail, muntin ~1.4k;
+~44 shutter leaves ~0.5k; roofs, cornices, returns, frieze, soffits ~0.7k; bay ~0.3k; porch
+(posts, rails, ~48 balusters, roof, deck, steps) ~0.9k; rear porch, side stoop ~0.2k; chimneys,
+foundation ~0.2k. **4 materials** (draw calls); the placeholder costs ~6–7, so the scene saves
+2–3 calls. Textures: 1 locally recoloured 1K map + 2 reused 1K maps; one **2048² lightmap**
+`assets/textures/house-65-main-lightmap.jpg`. Files: `tools/blender/house_65_main.py` +
+`house_65_main_bake.py` (+ optional `_preview.py`), `assets/models/source/house_65_main.blend`,
+`assets/models/house-65-main.glb` (≤ 5 MB, expect ~1.2 MB), previews
+`assets/models/previews/house-65-main-*.png` (incl. one from the SE at eye height on the Hall of
+Records lawn, ~30 m away, to compare with the 1909/1912 cards, and one straight-on from the east
+sidewalk).
+
+**Acceptance checks for the reviewer**
+1. L-shaped plan: front block 8.60 × 9.72 m, rear ell 4.27 × 7.24 m flush with the **north** wall,
+   open rear porch; origin at the porch front edge at grade, front −Y, **+X = north**.
+2. **Front-facing gable** (ridge east–west), slate roof, ridge ≈ 10.25 m, eaves ≈ 7.0 m, short
+   cornice returns at the front corners; the ell roof is lower (ridge ≈ 8.6 m).
+3. Front reads **3 bays**: W-D-W on the 1st floor (door centred, with a transom), 3 windows on the
+   2nd, **2 attic windows** in the gable; all sash 2/2.
+4. **Centred open porch 4.0 × 2.0 m** with 4 square posts, railing, low hipped roof and **3 steps**
+   centred between the inner posts; the porch roof stays below the 2nd-floor sills.
+5. **2-storey canted bay on the south side** near the front (centre 2.0 m behind the front wall),
+   1.0 m deep, with its own small roof below the main eaves.
+6. Walls cream clapboard with visible ~0.18 m laps; trim the same cream with no lap lines;
+   dark-green louvred shutters on front/side windows (not on bay or attic windows); red-brick
+   foundation and two brick chimneys.
+7. **≤ 4 materials**, ≤ 10k triangles (target ~5.5k), GLB ≤ 5 MB, TEXCOORD_0 + 1, 1K colour maps,
+   2K lightmap. Porch deck and steps read grey (bake tint), not cream.
+8. With the WSW sun the east front is in shade but the shutters, porch posts and door still read
+   (bounce light, not flat grey); the south wall and bay are sunlit with clear shutter, cornice and
+   bay shadows.
+
+**Integrator notes (scene, not the model)**
+- Replace `#house-65-main` (kit placeholder at (−16.3, 0, −51.2)) with the GLB at
+  **(−14.07, 0.02, −51.19)**, rotation 0 90 0, `baked-lighting` with the bake's LIGHTMAP_SCALE;
+  keep the id.
+- Front path (`#paths` ground-patches, "x z width depth"): replace `-11.75 -51.2 2.9 1.4` with
+  **`-12.63 -51.19 4.75 1.3`** (sidewalk x −10.25 to x −15.0, 0.1 m under the bottom step at
+  x −14.91).
+- Optional later (draw-call budget, skip for now): the **low post-and-rail fence** along the
+  property line in front of the Hall of Records and 65 Main (1908/1909/1912 cards), a shade tree
+  in the front yard south of the path, and a side path to the ell door. No outbuildings (on hold).
+
+**Photos vs 1920**: the 1908–1912 cards are the closest dates and are used directly; the HABS
+photos (1960s–70s) show the house already replaced — not used.
+
+**Pure guesses (owner to check)**
+1. Front gable vs side gable (only the receding south eave in two blurry cards supports it).
+2. All heights (eave 7.0, ridge 10.25, floor 0.75, porch 0.68) and the 37° pitch.
+3. The whole front elevation: centred door with transom, 3 bays, 2 attic windows, 2/2 sash,
+   shutters and their colour; no photo shows the front.
+4. Porch details (4 chamfered posts, railing, hipped roof, 3 steps); only its size and position
+   are from the map.
+5. Window positions on the sides, rear and ell; the ell side door and rear-porch details.
+6. Chimney count and positions.
+7. Slate (vs tin) roof and its colour; red-brick (vs stone) foundation.
+8. Cream wall colour (from a hand-coloured card) and same-colour trim.
+
 ## Constraints
 
 - A-Frame from a CDN, plain HTML/JS. No build tools or frameworks.
@@ -1269,6 +1521,34 @@ Buildings are named `bldg-w01`–`bldg-w08` (west side, north to south) and
 10. [ ] Information points: short captions about each building's history.
 11. [ ] Performance pass on the Quest 2 (check draw calls, frame rate, texture sizes).
 12. [ ] Optional: host on HTTPS (e.g. GitHub Pages) to open directly in the Quest browser without Link.
+
+## Later phases (owner's ideas, 2026-11-03)
+
+Order agreed with the owner: finish 65 Main → **one test person** → 68 Main → texture-sheet
+(atlas) pass on all GLB buildings → more people/vehicles/props → streets and background.
+"As realistic as possible" is the target throughout, within the Quest 2 budgets.
+
+**A. People, vehicles and props that talk to you**
+- A mix: standing people (porch, doorways, sidewalk), walkers on fixed routes, a horse and buggy
+  and a Model T on Main St, plus talking props (e.g. a newspaper stand or a notice board).
+- Conversations: walk up to someone → a dialogue box with what they say and 2–4 replies to pick
+  with the controller. Lines are written per character from the sources (who lived/worked here
+  c. 1920), in period voice, and kept historically honest.
+- Stretch goal: an **AI character you can talk to freely** (Claude). Needs a small server
+  (e.g. a Cloudflare Worker) so the API key is never in the public site, a per-chat cost, and a
+  character brief built from PLAN.md/SOURCES.md so it doesn't invent history. Input by voice
+  (speech-to-text) or picked prompts, since typing in VR is awkward. Owner to decide on cost.
+- Realism vs. Quest 2: about 10–20 animated people in view, one material each, mid-detail bodies
+  close up and simpler (or hidden) far away. Period clothing from the reference photos.
+- Pipeline: same agents. The planner writes a character spec (who, where, clothes, lines), the
+  asset-scout finds a CC0 base character + animations, the builder restyles it in Blender, the
+  reviewer checks it, and the integrator adds the animation (aframe-extras), routes and dialogue.
+
+**B. Roads, sidewalks and background**
+- Rework the road, sidewalks, curbs, lawns and side streets (Court St, Bloomfield Ave) to the
+  same standard as the buildings: period surfaces from the photos, gutters, crossings, wear.
+- Background: the rest of the town beyond the walkable street (distant buildings, trees, hills,
+  sky) as cheap low-detail scenery.
 
 ## Asset checklist
 
@@ -1326,3 +1606,5 @@ Check licensing for every asset and note the source in the progress log.
 | 2026-11-03 | scene-integrator: Bank Building GLB integrated at (12.24, 0.15, −66.24), rotation 0 −90 0; the code-built placeholder at (10.6, 0, −66.2) is gone. The 1.98 m strip between the sidewalk and the front wall (x 10.30–12.28, z −77.31 … −55.17) is paved with one concrete box flush with the sidewalk top (`#bank-forecourt`, +1 draw call: the patch list is a flat plane in a different colour, so it couldn't be merged). Clear of 68 Main (z ≥ −54.45; the bank's south cornice return at z −54.37 is above 68's 7.5 m roof), Bloomfield Ave and 48–52 Main; walls skirt to y −0.05 so the north side meets the Bloomfield grade without a gap. Tested: no console errors (only the pane's pointer-lock errors), faces Main St, lightmap reads. Draw calls / triangles before → after: start view (0, 0, 18) 162 / 69.0k → 163 / 77.8k; in front on the road (0, −66) facing east 23 / 26.3k → 30 / 35.2k; west sidewalk (−8, −66) facing east 34 / 27.5k → 39 / 37.3k. Screenshot `assets/models/previews/bank-building-in-scene.png`. |
 | 2026-11-03 | planner: Nevius Store / Fulper's Dry Goods (78 Main, 3-storey brick Italianate store, front c. 1880) spec written and auto-approved (owner away). Sanborn sheet 3: "Dry Goods", 3 storeys, 35', 8.00 × 32.25 m, front on the property line → entity (10.30, 0.15, −7.33) (placeholder was at z −9.1 and only 17 m deep); 4.6 m gap to the Union Hotel, 4.8 m alley to 82 Main. Primary photo: 1909 "Nevius Store and Union Hotel" card; HABS 1963 hotel views show its corner and north wall. Goodspeed Histories / Pickell description used for windows (segmental 2nd floor with stone keystone arches, round 3rd floor with brick hoods), quoins and sill band. Ordinary (target ~5.5k tris), 5 materials, no new textures, 2K lightmap. Next: asset-scout (nothing to fetch). |
 | 2026-11-03 | scene-integrator: Nevius Store / Fulper's Dry Goods GLB integrated (`assets/models/nevius-store.glb`, 6,954 triangles, 5 materials, lightmap intensity 1.1072) at (10.30, 0.15, −7.33), rotation 0 −90 0, front on the property line; the code-built placeholder at (10.3, 0, −9.1) is gone (id `bldg-78-main` kept). Walls skirt to y −0.05, so they meet the ground in the 4.6 m gap to the Union Hotel and the alley to 82 Main without floating; the awning (to x 8.39) clears tree-hotel-7 and the 82–84 placeholder (north edge z −0.1). Draw calls / triangles: start view (0, 0, 18) 163 / 77.8k → 164 / 84.7k; facing it from the road 30 / 27.6k → 31 / 34.5k; from the west sidewalk 58 / 42.1k → 59 / 49.0k. Screenshot `assets/models/previews/nevius-store-in-scene.png`. Note: the start view was already over the ~150 draw-call guideline before this building. |
+| 2026-11-03 | planner: Frame Dwelling at 65 Main (old no. 510) spec written and auto-approved (owner away). Sanborn sheet 2: 2½-storey frame dwelling, L-plan (front block 8.60 × 9.72 m, rear ell 4.27 × 7.24 m on the north side), centred open front porch 4.0 × 2.0 m, 2-storey canted bay on the south side, open rear porch; front wall 5.81 m behind the property line → entity (−14.07, 0.02, −51.19) at the porch front. No photo shows the front; the 1908/1909/1912 county-building cards show its cream clapboard south wall and receding eave (front gable). No history found on the web; demolished before the HABS photos. Ordinary (target ~5.5k tris), **4 materials** (paint, dark, roof, brick; porch deck greyed by a bake tint), no downloads (one local recolour of brown_planks_05), 2K lightmap. Next: blender-builder. |
+| 2026-11-03 | scene-integrator: Frame Dwelling at 65 Main GLB integrated (`assets/models/house-65-main.glb`, 6,343 triangles, 4 materials, lightmap intensity 1.274) at (−14.07, 0.02, −51.19), rotation 0 90 0; the kit placeholder is gone and the front path is now 1.3 m wide from the sidewalk to under the porch steps. No console errors; draw calls/triangles start view 164/84.7k → 159/90.9k, opposite the house 64/34.0k → 59/40.2k. |
