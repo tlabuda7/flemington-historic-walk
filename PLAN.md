@@ -2673,6 +2673,34 @@ Order agreed with the owner: finish 65 Main → **one test person** → 68 Main 
   and a soft, hazy far landscape — distant hills, tree lines, rooftops — so the street's ends and
   gaps don't look empty. Cheap: a painted/blurred panorama or low-poly silhouettes + fog. Ties in
   with B's "background" item.
+- Options explored (orchestrator, 2026-11-04). Current scene: `gradient-sky` sphere
+  (#a9bfd2 → #ecdfc4), exponential fog #ecdfc4 density 0.011, a 500 m flat ground plane.
+  - Sky: (1) a CC0 Poly Haven late-afternoon HDRI turned into a 2K equirect JPG on the sky
+    sphere (real clouds; pick one with no modern objects; ~11 MB GPU, 1 call) — recommended;
+    (2) a few cloud cards over the gradient (cheapest); (3) procedural cloud shader (risky
+    fill-rate cost on Quest 2).
+  - Landscape: (1) a ring of distant hills built from USGS 3DEP elevation data (public domain)
+    so the real horizon shows (to research: e.g. Sourland Mtn to the SE, Cushetunk Mtn to the
+    NE — verify); (2) tree-line ring + low-detail rooftop/steeple silhouettes at the street ends
+    and side streets, fading into fog; (3) a painted panorama cylinder. Recommended: 1 + 2,
+    ~3–5 draw calls, < 10k tris, retune fog so the ends dissolve into haze.
+
+**Mini map: options explored (orchestrator, 2026-11-04)**
+- Desktop: an HTML canvas overlay in a top corner (no 3D cost): street plan, "you are here"
+  arrow turning with the view, north arrow, building names/addresses, people markers.
+- VR (HTML overlays don't show in WebXR): (a) a wrist map on the left controller that appears
+  when you look at your wrist, or (b) a button (e.g. Y) toggles a floating map panel; one
+  canvas-texture plane, 1 draw call while shown.
+- Style: (1) clean modern plan; (2) the 1921 Sanborn sheet itself (public domain, on theme)
+  with our own labels and the player dot; (3) hybrid tinted Sanborn + clean labels.
+- Data: building positions/names from index.html + a small JSON; later, tap a building to see
+  its history from HISTORY-SOURCES.md.
+- **Owner choices (2026-11-04):** VR map = **pop-up button**; style = **polished 1921 Sanborn**
+  (cleaned up, cream paper tint, our own clean labels + addresses, red "you" arrow, north badge),
+  **final: style B, the "mix"** (faded Sanborn + clean Main St band; labels stand apart from the old map text). Mockup was a scratch
+  image only. Sky = **real photographed sky** (option 1); landscape = **real hills from elevation
+  data + tree lines/rooftop silhouettes** (options 1 + 2). Build after the weekly reset (2026-11-08).
+- **Mini map BUILT (scene-integrator, 2026-11-04):** style B. `tools/prepare_minimap.py` → `assets/maps/minimap-1921.jpg` (sheets 2 + 3, x ±45 m, z −165…+50, 6 px/m) + `data/minimap.json` (bounds, streets, 11 building tags, Mr. Pickell); `js/minimap.js` draws a north-up 60 m window at ≤ 10 Hz. Desktop: top-right overlay, **N** toggles. VR: **Y** (left controller) pops a 0.6 m panel up 0.7 m ahead, 0.22 m below eye; 1 draw call shown, 0 hidden.
 
 **B. Roads, sidewalks and background**
 - Rework the road, sidewalks, curbs, lawns and side streets (Court St, Bloomfield Ave) to the
@@ -3452,3 +3480,5 @@ Check licensing for every asset and note the source in the progress log.
 | 2026-11-04 | blender-builder: Block at 40–46 Main **built**: `tools/blender/block_40_46.py` + `_bake.py` + `_preview.py`, `tools/prepare_block_40_46_textures.py` (signs_atlas.jpg). GLB 1.43 MB, 4,821 tris (≤ 10k), 8 materials, 2K lightmap, LIGHTMAP_SCALE 1.2152, east-side sun, bake occluders Rea + 36–38. Changes from spec: clap_a uses clapboard_cream × factor (the buff map cannot be lightened to #B9AE96 by a factor); 40–42 3rd-floor windows sill 6.85 / 1.40 tall and 44–46 2nd-floor sill 3.80 (to clear the friezes); 44–46 doors at X 2.40 / 6.70 (clear of the pilasters); apron top 0.01 (no z-fight with the sidewalk); flat roof decks on A and C2. Next: reviewer. |
 | 2026-11-04 | reviewer: Block at 40–46 Main **PASS (round 1)**. GLB 1.43 MB, 4,821 tris, 8 materials, 1K maps + 1K atlas, 2K lightmap, TEXCOORD_0/1; loads in the viewer with no errors. Two buildings read clearly (3-storey buff / 2-storey cream, cornice tops 9.15 / 6.10, 44–46 1.98 m forward), arch, porch, show window, awning, passage bays all as spec; signs legible; lightmap clean. Note for integrator: A's open north wall below 6.10 is hidden by `#bldg-32-38-main` (7.5 m tall), so keep that placeholder's height when trimming it. |
 | 2026-11-04 | scene-integrator: Block at 40–46 Main **in scene** at (8.60, 0.15, −116.55), 1 draw call; 32–38 placeholder trimmed to z −124.05; fruit stand goods-G4 added; draw calls / triangles start view 63 / 150.7k → 64 / 155.5k, at (0, 0.15, −110) 30 / 17.6k → 31 / 22.5k. |
+| 2026-11-04 | asset-scout: Sky (D, option 1) **asset ready**: `assets/textures/sky/sky-late-afternoon.jpg` (2048 x 1024 equirect, 53 KB) from Poly Haven `hilly_terrain_01_puresky` (CC0, sky-only edit, nothing modern), made by `tools/prepare_sky.py` (exposure 1.9, wb 1.10,0.95,0.90, warm 2.5); horizon ~#ebe4cb, zenith ~#97b3c4; sun at u = 0.600, 12 deg up (lower than the 21 deg baked sun). |
+| 2026-11-04 | scene-integrator: **Mini map built** (1921 Sanborn, style B): js/minimap.js + data/minimap.json + assets/maps/minimap-1921.jpg (tools/prepare_minimap.py). Desktop overlay (N), VR pop-up panel (Y, left controller). Checked at the start view and near the Bank Building: arrow position/turn and tags line up with the Sanborn buildings. VR panel 64 → 65 draw calls (+2 tris) at the start view; desktop overlay is HTML (0 calls). No console errors. |

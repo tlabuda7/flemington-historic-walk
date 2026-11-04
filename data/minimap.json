@@ -1,0 +1,133 @@
+{
+  "image": "assets/maps/minimap-1921.jpg",
+  "source": "1921 Sanborn Fire Insurance Map, Flemington NJ, sheets 2-3 (LoC, public domain)",
+  "bounds": {
+    "x0": -45.0,
+    "x1": 45.0,
+    "z0": -165.0,
+    "z1": 50.0
+  },
+  "pixelsPerMetre": 6,
+  "streets": [
+    {
+      "name": "MAIN STREET",
+      "x0": -6.4,
+      "x1": 6.4,
+      "z0": -165.0,
+      "z1": 50.0,
+      "vertical": true
+    },
+    {
+      "name": "COURT ST",
+      "x0": -45,
+      "x1": -6.4,
+      "z0": 0,
+      "z1": 12.2
+    },
+    {
+      "name": "BLOOMFIELD AVE",
+      "x0": 6.4,
+      "x1": 45,
+      "z0": -89.8,
+      "z1": -77.6
+    }
+  ],
+  "labels": [
+    {
+      "name": "Court House",
+      "addr": "No. 75",
+      "x": -29.34,
+      "z": -6.85,
+      "atX": -18.34,
+      "atZ": -6.85
+    },
+    {
+      "name": "County Offices",
+      "addr": "No. 69–71",
+      "x": -28.71,
+      "z": -27.87,
+      "atX": -17.71,
+      "atZ": -27.87
+    },
+    {
+      "name": "Frame House",
+      "addr": "No. 65",
+      "x": -25.07,
+      "z": -51.19,
+      "atX": -14.07,
+      "atZ": -51.19
+    },
+    {
+      "name": "Wurts Law Office",
+      "addr": "No. 59",
+      "x": -25.95,
+      "z": -68.69,
+      "atX": -14.95,
+      "atZ": -68.69
+    },
+    {
+      "name": "County Hotel",
+      "addr": "No. 47–49",
+      "x": -21.3,
+      "z": -112.07,
+      "atX": -10.3,
+      "atZ": -112.07
+    },
+    {
+      "name": "Nevius Store",
+      "addr": "No. 78",
+      "x": 21.3,
+      "z": -1.83,
+      "atX": 10.3,
+      "atZ": -7.33
+    },
+    {
+      "name": "Union Hotel",
+      "addr": "No. 70–76",
+      "x": 22.6,
+      "z": -30.75,
+      "atX": 11.6,
+      "atZ": -30.75
+    },
+    {
+      "name": "Lovell's Restaurant",
+      "addr": "No. 68",
+      "x": 23.66,
+      "z": -52.13,
+      "atX": 12.66,
+      "atZ": -52.13
+    },
+    {
+      "name": "Bank Building",
+      "addr": "No. 56–66",
+      "x": 23.24,
+      "z": -66.24,
+      "atX": 12.24,
+      "atZ": -66.24
+    },
+    {
+      "name": "Clock Tower Bldg",
+      "addr": "No. 48–52",
+      "x": 21.85,
+      "z": -97.79,
+      "atX": 10.85,
+      "atZ": -97.79
+    },
+    {
+      "name": "Auto Sales · Shoe Shine",
+      "addr": "No. 40–46",
+      "x": 19.6,
+      "z": -116.55,
+      "atX": 8.6,
+      "atZ": -116.55
+    }
+  ],
+  "people": [
+    {
+      "name": "Mr. Pickell",
+      "note": "talk",
+      "x": 9.5,
+      "z": -8.45
+    }
+  ]
+}

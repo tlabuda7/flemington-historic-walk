@@ -17,6 +17,7 @@
   <script src="js/landmarks.js"></script>
   <script src="js/people.js"></script>
   <script src="js/ambience.js"></script>
+  <script src="js/minimap.js"></script>
 
   <style>
     /* On-screen help for desktop. Not visible inside the headset. */
@@ -36,6 +37,13 @@
       background: rgba(40, 28, 18, 0.6); border-radius: 4px;
     }
     #credits a { color: #f4ead8; }
+    /* Mini map (js/minimap.js), top-right on desktop; N toggles it. */
+    #minimap-box {
+      position: fixed; top: 12px; right: 12px; z-index: 10;
+      border-radius: 14px; box-shadow: 0 2px 10px rgba(40, 28, 18, 0.45);
+      pointer-events: none;
+    }
+    #minimap-box canvas { display: block; }
   </style>
 </head>
 <body>
@@ -43,7 +51,9 @@
     <b>Flemington Main Street, c. 1920</b><br>
     Click the scene to look with the mouse (Esc to release).<br>
     W A S D / arrows to walk, Shift to walk faster.<br>
-    In VR: left stick walks (hold left trigger to walk faster), right stick snap-turns.<br>
+    In VR: left stick walks (hold left trigger to walk faster), right stick snap-turns,
+    Y shows the map.<br>
+    <b>Map</b> (top right, 1921 Sanborn map): N shows / hides it.<br>
     <b>Talking to people:</b> walk up to someone (within a few steps) and they speak.
     Pick a reply with 1 / 2 / 3 or a mouse click; in VR point the right controller at it
     and pull the right trigger (press Space, click or pull the trigger to read ahead while
@@ -68,6 +78,10 @@
     renderer="antialias: true; foveationLevel: 1"
     fog="type: exponential; color: #ecdfc4; density: 0.011"
     street-ambience>
+
+    <!-- Mini map: 1921 Sanborn map + labels (js/minimap.js, data/minimap.json,
+         image from tools/prepare_minimap.py). Desktop overlay (N), VR pop-up panel (Y). -->
+    <a-entity id="minimap" minimap></a-entity>
 
     <!-- ============================================================
          SKY AND LIGHT
