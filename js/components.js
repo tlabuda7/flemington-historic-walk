@@ -1119,3 +1119,79 @@ AFRAME.registerComponent('stick-debug', {
       `input: ${loco.inputSource}`);
   }
 });
+
+
+/* ------------------------------------------------------------------
+   follow-rig: moves this entity in x/z to `factor` × the player rig's
+   position (y stays). Used by the ground disc so its edge always meets
+   the distant landscape ring (see far-landscape). Updates only when the
+   rig has moved.
+   ------------------------------------------------------------------ */
+AFRAME.registerComponent('follow-rig', {
+  schema: { factor: { default: 0.85 }, rig: { default: '#rig' } },
+  init: function () { this.lastX = NaN; this.lastZ = NaN; },
+  tick: function () {
+    var rig = document.querySelector(this.data.rig);
+    if (!rig) return;
+    var p = rig.object3D.position;
+    if (p.x === this.lastX && p.z === this.lastZ) return;
+    this.lastX = p.x; this.lastZ = p.z;
+    this.el.object3D.position.x = p.x * this.data.factor;
+    this.el.object3D.position.z = p.z * this.data.factor;
+  }
+});
+
+/* ------------------------------------------------------------------
+   far-landscape: sets up assets/models/landscape.glb (tools/blender/landscape.py).
+   - node landscape_far (terrain ring + tree lines, distance-compressed, haze baked
+     into vertex colours): unlit, fog off; follows the rig at `factor` (0.85) so the
+     hills do not slide past as you walk.
+   - node landscape_town (house / tree / steeple silhouettes): unlit vertex colours,
+     fog on, fixed in place.
+   Entity sits at 0 0 0, rotation 0 0 0.
+   ------------------------------------------------------------------ */
+AFRAME.registerComponent('far-landscape', {
+  schema: { factor: { default: 0.85 }, rig: { default: '#rig' } },
+  init: function () {
+    this.far = null; this.lastX = NaN; this.lastZ = NaN;
+    this.el.addEventListener('model-loaded', this.setup.bind(this));
+  },
+  setup: function () {
+    var root = this.el.getObject3D('mesh');
+    if (!root) return;
+    var far = root.getObjectByName('landscape_far');
+    var town = root.getObjectByName('landscape_town');
+    function convert(obj, fog) {
+      if (!obj) return;
+      obj.traverse(function (o) {
+        if (!o.isMesh) return;
+        var old = o.material;
+        var opts = { vertexColors: true, fog: fog };
+        if (old && old.map) {
+          opts.map = old.map;
+          opts.alphaTest = 0.5;
+          opts.side = THREE.DoubleSide;
+          old.map.generateMipmaps = true;
+          old.map.minFilter = THREE.LinearMipmapLinearFilter;
+          old.map.needsUpdate = true;
+        }
+        o.material = new THREE.MeshBasicMaterial(opts);
+        if (old && old.dispose) old.dispose();
+      });
+    }
+    convert(far, false);
+    convert(town, true);
+    this.far = far;
+    this.lastX = NaN;
+  },
+  tick: function () {
+    if (!this.far) return;
+    var rig = document.querySelector(this.data.rig);
+    if (!rig) return;
+    var p = rig.object3D.position;
+    if (p.x === this.lastX && p.z === this.lastZ) return;
+    this.lastX = p.x; this.lastZ = p.z;
+    this.far.position.x = p.x * this.data.factor;
+    this.far.position.z = p.z * this.data.factor;
+  }
+});

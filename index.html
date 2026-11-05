@@ -76,7 +76,7 @@
   -->
   <a-scene
     renderer="antialias: true; foveationLevel: 1"
-    fog="type: exponential; color: #ebe4cb; density: 0.011"
+    fog="type: exponential; color: #ebe4cb; density: 0.005"
     street-ambience>
 
     <!-- Mini map: 1921 Sanborn map + labels (js/minimap.js, data/minimap.json,
@@ -95,7 +95,7 @@
          To switch back to the plain gradient: material="shader: flat; side: back; fog: false"
          plus gradient-sky="top: #a9bfd2; horizon: #ecdfc4" (js/components.js). -->
     <a-entity id="sky"
-      geometry="primitive: sphere; radius: 400; segmentsWidth: 48; segmentsHeight: 24"
+      geometry="primitive: sphere; radius: 1200; segmentsWidth: 48; segmentsHeight: 24"
       material="shader: flat; side: back; fog: false; src: url(assets/textures/sky/sky-late-afternoon.jpg)"
       scale="-1 1 1" rotation="0 60 0"></a-entity>
 
@@ -114,9 +114,19 @@
          Cross streets: Bloomfield Ave (east, z -89.8 to -77.6), Court St (west, z 0 to 12.2).
          ============================================================ -->
 
-    <!-- Ground beyond the street (yards, lots). -->
-    <a-plane id="ground" rotation="-90 0 0" width="500" height="500"
-      material="color: #6f6a45; roughness: 1"></a-plane>
+    <!-- Ground beyond the street (yards, lots): a 335 m disc that follows the player rig
+         at 0.85 (follow-rig, js/components.js), like the distant landscape ring, so its
+         edge always meets the ring's inner edge (330 m, sunk to y -0.30) without a gap. -->
+    <a-circle id="ground" rotation="-90 0 0" radius="335" segments="64"
+      material="color: #6f6a45; roughness: 1" follow-rig="factor: 0.85"></a-circle>
+
+    <!-- Distant landscape (assets/models/landscape.glb; built by tools/blender/landscape.py
+         from USGS 3DEP elevation, tools/prepare_landscape_dem.py + prepare_landscape_textures.py).
+         landscape_far = real hills + tree lines, distance-compressed into a 330-800 m ring,
+         haze baked in, no fog, follows the rig at 0.85. landscape_town = fixed, fogged
+         rooftop / steeple / tree silhouettes beyond the modelled blocks. -->
+    <a-entity id="landscape" position="0 0 0" rotation="0 0 0"
+      gltf-model="url(assets/models/landscape.glb)" far-landscape="factor: 0.85"></a-entity>
 
     <!-- Paved roads: pale weathered macadam, as in the 1920s postcards.
          Texture tiles every 3 m (repeat = size / 3). -->
@@ -453,7 +463,7 @@
       <!-- 1.6 m eye height on desktop (1.75 m with the rig offset); in VR the headset
            supplies the real height, plus the rig's 0.15 m. -->
       <!-- stick-debug: temporary VR readout of thumbstick values. Delete it to remove. -->
-      <a-entity id="camera" camera position="0 1.6 0"
+      <a-entity id="camera" camera="near: 0.05; far: 10000" position="0 1.6 0"
         look-controls="pointerLockEnabled: true" stick-debug></a-entity>
       <!-- Quest 2 Touch controllers. A-Frame 1.6.0 calls these oculus-touch-controls
            (the newer name meta-touch-controls does not exist in this version). -->

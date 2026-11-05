@@ -496,6 +496,24 @@ block** for it: its historical basis is **source not recorded** beyond the photo
 | BK-9 | The "Flemington Garage" (1909 card; "Flemington Garage Co." sign on the Rea Building) was a different, 1-storey concrete-block building, not 40–42. | Inferred | P37, P38, P39 | Arrow sign points along Bloomfield Ave; the garage is 1-storey block, 40–42 is 3-storey frame. |
 | BK-10 | Façades: window counts and sizes, shutters, bracketed cornices, flat/shed roofs, shop fronts, porch posts, the drive-through doors, colours (buff and cream clapboard, off-white trim, dark green shutters, striped awning), sign wording ("AUTO SALES", "SHOES SHINED", "FRUITS"), storey heights. | Guess / artistic | — | Period-typical for frame commercial buildings on Main St (cf. P-card `flmgtnmainststores.jpg`). |
 
+### 2.14 Distant landscape, pass 1 (hills, tree lines, town silhouettes) — spec written, not built yet
+
+Sources: USGS 3DEP elevation (public domain; fetched 2026-11-04, see SOURCES.md, Maps) processed by
+`tools/prepare_landscape_dem.py`; OpenStreetMap (street axis); https://en.wikipedia.com/wiki/Cushetunk_Mountain,
+https://topoquest.com/place-detail.php?id=875786, https://en.wikipedia.org/wiki/Rocky_Hill_Ridge,
+https://en.wikipedia.com/wiki/Copper_Hill,_New_Jersey.
+
+| ID | Claim | Grade | Sources | Method / note |
+|----|-------|-------|---------|---------------|
+| LS-1 | Main St (Court St to Bloomfield Ave) runs 5.5 deg west of true north (bearing 354.5 deg); origin 40.5103 N, 74.8589 W. | Measured | OSM way 28039047 | End points of the way; ±1 deg, ±15 m. Sanborn north arrow not checked. |
+| LS-2 | The street is at about 55 m (NAVD88). | Measured | USGS 3DEP | DEM sample at the origin. Modern grade; 1920 grade assumed the same. |
+| LS-3 | The highest skyline seen from Main St is the ridge 1.8–3.4 km W–NNW of town, 120–175 m, 2.0–2.6 deg above eye level (seen down Court St and beyond the north end, left). | Measured | USGS 3DEP | Horizon profile, eye 1.75 m, curvature + refraction. Its name is not known (not Copper Hill, a village). |
+| LS-4 | Cushetunk Mountain (Round Valley ridge, summit ~255 m) shows NNE, 6–12 km, ~1 deg up. | Measured (angle) / Documented (name, height) | USGS 3DEP; Wikipedia; TopoQuest | |
+| LS-5 | The Sourland Mountain ridge shows ESE–S at 10.6–13.7 km, 127–168 m, 0.3–0.5 deg up. | Measured (angle) / Inferred (name for the southern part toward Ringoes) | USGS 3DEP; Wikipedia (Rocky Hill Ridge) | |
+| LS-6 | East (down Bloomfield Ave) the land is flat lowland; no hill on the horizon. | Measured | USGS 3DEP | 57–83 m out to 8 km. |
+| LS-7 | c. 1920 the countryside was open farmland with hedgerows, woodlots and orchards; the diabase ridge crests were wooded. | Inferred | — | Typical for Hunterdon County; not mapped for 1920. |
+| LS-8 | Haze colours, tree heights (8–22 m), summer foliage, the far silhouettes of houses, barns and a church steeple north of the street. | Guess / artistic | — | Number, size and place of silhouettes not checked against Sanborn sheets 1, 4–8. |
+
 ---
 
 ## 3. Known uncertainties / questions for the Historical Society
@@ -546,6 +564,9 @@ Ordered roughly by how much the answer would change the walk.
 17. **40–46 Main St, 1920.** Who sold cars at 40–42 and who ran the shoe shine and fruit store at
     44–46? Any photo of these two frame buildings? Was no. 40 an arched drive-through? Did 44–46
     really stand forward on the street line?
+18. **Country around Flemington, 1920.** What is the ridge 2–3 km west/north-west of town called?
+    Which church steeples could be seen up Main St to the north? Was the view east down Bloomfield
+    Ave open farmland?
 
 ### Internal inconsistencies noted while compiling (for the project, not the Society)
 

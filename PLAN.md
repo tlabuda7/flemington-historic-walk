@@ -48,6 +48,7 @@ Decisions (2026-11-02):
 | Block at 40–46 Main (40–42 "Auto Sales", 44–46 "Shoe Shine & Fruits") | approved by owner 2026-11-04: map-true placement, ordinary (≤ 10k tris) | — | done (4.8k tris, 8 materials, 1.43 MB, 2K lightmap, LIGHTMAP_SCALE 1.2152) | **PASS** round 1 (2026-11-04) | **in scene** 2026-11-04 (8.60, 0.15, −116.55), 1 draw call |
 | Test person 1: John B. Pickell, clerk at the Nevius store (78 Main) | written, auto-approved (owner away) | done (Quaternius UAL Standard rig + clips incl. Idle_Talking_Loop; UBC Standard = Superhero bodies only, no Regular; MakeHuman system assets + MPFB 2.0.18 zip, not installed; 3 Poly Haven cloth/leather maps + 3 tinted) | done, round-1 fixes applied (12.8k tris, 65 bones, 1 mesh / 1 material / 1 2K atlas, 1.25 MB; Idle 6 s, Talk 3 s, Walk 1.33 s; MPFB head + hands) | round 2: PASS (round 1 FIXES: moustache, stance/crotch, shoulder and collar, jacket fronts, cuffs, gaze, chain) | **yes** (9.50, 0.15, −8.45), talks with a voice (js/people.js) |
 | Street ambiance pass 1: sound + street props (`street-props.glb`, `assets/audio/`) | written, auto-approved (owner away) | done (3 Poly Haven maps + 3 recoloured, 3 reused; 16 audio clips, 1.96 MB / 250 s; bed = #0659 instead of #1911) | props done, round-1 fixes applied (4.75k tris, 12 nodes, 1 material / 1 2K atlas colour × AO, 0.83 MB) | props round 2: PASS (round 1 FIXES: horse-head relief, pump globe lettering seam) | sound: yes (2026-11-04, `js/ambience.js`); props: yes (2026-11-04, `street-props` in `js/components.js`: 34 placements in 3 z-band meshes + 1 wire mesh, +4 draw calls) |
+| Distant landscape pass 1 (`landscape.glb`: real hills ring from USGS 3DEP + tree lines + town silhouettes) | written; owner pre-approved the approach, auto-approved within the usage cap (2026-11-04) | not needed (DEM in `assets/maps/`, 1 generated atlas) | done (8.3k tris: far terrain 5,760 + far trees 1,116 + town 1,426; 3 unlit materials, COLOR_0 + 1K RGBA tree atlas, 0.77 MB GLB, no lightmap) | no separate review (integrator sanity check, 2026-11-04) | in scene 2026-11-04: `#landscape` (far ring follows rig at 0.85), ground = 335 m following disc, fog 0.005, sky r 1200, camera near 0.05; +3 draw calls |
 
 ## Building specs
 
@@ -3022,6 +3023,206 @@ atlas, GLB ≤ 2 MB. Draw calls +4 (≤ 10). Audio ≤ 4 MB, ≤ 5 min decoded.
   props (talking notice board, newspaper stand).
 - Awnings and shop signs (already on the buildings).
 
+## Background
+
+(Scenery beyond the walkable street: far hills, tree lines, town silhouettes. Same pipeline.
+Item D, options 1 + 2, chosen by the owner 2026-11-04.)
+
+### Distant landscape (pass 1)
+
+**Status:** Built (blender-builder, 2026-11-04): `assets/models/landscape.glb` 0.77 MB, 8,302 tris, 3 unlit materials (KHR_materials_unlit, vertex colours COLOR_0; trees + 1K RGBA atlas `assets/textures/landscape/tree_silhouettes.png`, alphaMode MASK 0.5, double-sided). Root nodes `landscape_far` (terrain + trees, ring 330–800 m, follows the rig, fog off) and `landscape_town` (fixed, true scale, fog on), both pivots at the origin. EXAG 1.0. Script `tools/blender/landscape.py`, texture `tools/prepare_landscape_textures.py`; previews `assets/models/previews/landscape-{north,west-ridge}.png` (only 2 under the usage cap). Known: thin pale slivers can show along a few crests (coarse 3° azimuth grid); town tree crowns are simple 6-sided lumps. Next: reviewer. **In scene (scene-integrator, 2026-11-04):** `#landscape` entity + `far-landscape` / `follow-rig` components (js/components.js); MeshBasicMaterial vertex colours (far: fog off; town: fog on); `#ground` is now a 335 m `a-circle` following the rig at 0.85; fog density 0.005, sky radius 1200, camera near 0.05 / far 10000. Start view 73 → 76 draw calls, +8.3k tris. Town silhouettes intersect no modelled entity (vertex check). Screenshots `assets/models/previews/landscape-scene-{court-st,north-end,bloomfield}.png`. Noted: at the north end of the walk (z −160) the town blocks/tree lumps are close and read as crude low-poly shapes.
+
+**Sources**
+- Elevation: **USGS 3DEP** (The National Map), `3DEPElevation` ImageServer `exportImage`, no login,
+  public domain (USGS: "U.S. Geological Survey, 3D Elevation Program"). Bare earth (no trees, no
+  buildings). Fetched 2026-11-04: bbox W −75.04, S 40.377, E −74.68, N 40.647 (≈ 30 × 30 km),
+  640 × 480 px float32 (≈ 48 m E–W × 62 m N–S per px). Request URL in the docstring of
+  `tools/prepare_landscape_dem.py`.
+- Project files: `assets/maps/landscape-dem.png` (16-bit grey, value = elevation m × 10, row 0 =
+  north, 640 × 480, 0.3 MB) + `assets/maps/landscape-dem.json` (bounds, encoding, transform,
+  origin elevation 55.3 m, 360° horizon profile). Re-make with
+  `python -I tools/prepare_landscape_dem.py <dem.tif>`.
+- Street axis: OpenStreetMap way 28039047 (Main St, Court St → Bloomfield Ave): bearing **354.5°**
+  (runs 5.5° west of true north going north). Origin = Main St centreline at the Court St line,
+  **40.51030 N, 74.85890 W** (OSM; ±15 m).
+- Hill names: Cushetunk Mountain summit 836 ft / 255 m (https://en.wikipedia.com/wiki/Cushetunk_Mountain,
+  https://topoquest.com/place-detail.php?id=875786); Sourland / Rocky Hill diabase ridges to the
+  SE (https://en.wikipedia.org/wiki/Rocky_Hill_Ridge); Copper Hill is a village in the Amwell
+  Valley, not a hill (https://en.wikipedia.com/wiki/Copper_Hill,_New_Jersey).
+- Scene: `index.html` (fog, `#ground`, `#sky` r 400, camera), Court St z 0…12.2 (west), Bloomfield
+  Ave z −89.8…−77.6 (east), walk range z ≈ +50…−165 (`data/minimap.json`).
+
+**What is really on the horizon (from the DEM, eye 1.75 m above the street at 55.3 m, Earth
+curvature + refraction included; azimuth = true bearing)**
+
+| True bearing | Scene direction (0° = street north, + = clockwise) | Feature | Distance | Top elevation | Elevation angle |
+|---|---|---|---|---|---|
+| 290–345° (WNW–NNW) | −65…−10° (left of north, behind the west side) | **The hills just west of town**: ridge 120–155 m high | 1.8–2.5 km | 155 m | **2.0–2.6°** (highest skyline) |
+| 250–285° (W) | −105…−70° (**down Court St**) | same ridge, western part | 2.1–3.4 km | 135–175 m | 1.4–2.1° |
+| 235–245° (WSW–SW) | −120…−110° | higher ground SW (Amwell Valley edge) | 4.7–5.2 km | 158 m | 1.1–1.2° |
+| 5–25° (NNE) | +10…+30° (right of street north) | **Cushetunk Mountain** (Round Valley ridge) | 6.4–12.5 km | 233–251 m | **0.8–1.0°** |
+| 30–95° (NE–E) | +35…+100° (**down Bloomfield Ave**) | Raritan lowland: flat, no hills | 3–8 km | 57–83 m | ≈ 0° |
+| 100–190° (ESE–S) | +105…+195° (**street south** ≈ +180°) | **Sourland Mountain** ridge (SE), its western end toward Ringoes (S) | 10.6–13.7 km | 127–168 m | 0.3–0.5° |
+| 195–230° (SSW) | +200…+235° | low ground, gentle rises | 6–10 km | 84–127 m | 0.1–0.6° |
+
+So: looking **north up Main St** the skyline is the west ridge (≈1.4° at the left, falling off) with
+Cushetunk Mountain faint beyond to the right; **down Court St** the west ridge fills the view at
+~2°; **down Bloomfield Ave** the land is flat (tree lines only); **looking south** the long, low
+Sourland line sits ~0.3–0.5° up, very hazy. All angles are small (a 2° ridge is ~40 px tall on a
+Quest 2): that is the real Hunterdon skyline. **No vertical exaggeration** (owner asked for real
+hills). The builder keeps an `EXAG` knob (default 1.0); the reviewer may accept ≤ 1.5 for terrain
+**beyond 6 km only** if Cushetunk/Sourland do not read at all, and must note it.
+
+**Geographic → scene transform (true scale)**
+- `E = (lon + 74.85890) × 84 656` m, `N = (lat − 40.51030) × 111 132` m.
+- Street bearing b = −5.5°: `x = 0.9954·E + 0.0958·N`, `z = 0.0958·E − 0.9954·N`,
+  `y = elev − 55.3 − d²/(2·6 371 000)·0.87` (curvature + refraction; d = horizontal distance).
+- Check: Cushetunk summit area (bearing 15°, 10.3 km) → scene ≈ (+3.6 km, −9.7 km); west ridge
+  top (305°, 1.9 km) → (−1.4 km, −1.2 km); Sourland (135°, 11.2 km) → (+7.1 km, +8.6 km).
+
+**Rendering approach: a distance-compressed "3D skybox"** (why: true 12 km geometry would need a
+camera far plane of 13+ km and a 12 km sky sphere, and with a 24-bit depth buffer the ridges,
+tree cards and terrain would z-fight at that range; at true scale the inner ring would also hide
+the town). Build the terrain from true coordinates, then for every vertex at true horizontal
+distance r (from the origin) and relative height y:
+- `r' = 330 + 470 · ln(r / 700) / ln(13000 / 700)` m (r 0.7 km → 330 m, 2 km → 499 m,
+  5 km → 646 m, 11 km → 773 m, 13 km → 800 m), same bearing;
+- `y' = 1.75 + (y − 1.75) · r'/r` (keeps the **elevation angle seen from eye height** exact).
+- Order of ridges along every bearing is kept (r' grows with r), so occlusion is correct.
+- In the scene the landscape group **follows the player rig** in x/z with factor **f = 0.85**
+  (`position = 0.85 × rig position`, y fixed) so walking 200 m does not make hills slide past
+  the way a 500 m object would. Error left: the 2 km west ridge shifts ~1° too little over the
+  walk — acceptable.
+
+**Massing / content (one GLB `assets/models/landscape.glb`, two root nodes)**
+
+Node `Far` (follows the rig; entity at origin, rotation 0 0 0):
+1. **Terrain ring** (1 mesh, 1 material): polar grid around the origin, **120 azimuth segments ×
+   24 radial rings**, rings log-spaced r = 0.70 … 13.0 km (true), sampled bilinearly from
+   `landscape-dem.png` (decimetres → m) and then compressed as above. ≈ 5.8k tris.
+   - **Inner apron:** the first ring (r' 330 m) at y' = −0.30, rising to the sampled terrain by
+     r' ≈ 360 m (hidden under/behind the ground disc edge; see Ground). Clamp any terrain with
+     y' < −0.3 inside r' 400 to −0.3.
+   - **Outer skirt:** one extra ring at r' 800 dropping to y' = −40 so no sky shows under the far
+     edge; its colour = horizon colour.
+   - **Colour = vertex colours (COLOR_0), unlit** (base × simple sun term × haze), no texture,
+     no lightmap:
+     - base: woods `#47512f` where true elevation > 120 m or slope > 8 % (the diabase ridges were
+       wooded c. 1920), else farmland: low-frequency noise mix of `#8a8752` (hay/stubble),
+       `#6f7a3e` (pasture/corn), `#5a6236` (woodlot) — ~25 % woodlot;
+     - sun term `0.78 + 0.22·max(0, n·s)`, s = to-sun in Blender axes `(−0.86, −0.36, 0.36)`
+       normalised (WSW, 21° up; scene sun direction (−0.92, 0, +0.38));
+     - haze by **true** r: `h = 1 − exp(−r / 4500)` (0.7 km 14 %, 2 km 36 %, 5 km 67 %,
+       11 km 91 %); haze colour `#bfc6c2` (cool blue-grey) blended to `#ebe4cb` (sky horizon /
+       fog) for r 8–13 km; final = mix(base·sun, hazeColour, h);
+     - inner seam: from r' 330 to 400 blend toward the **fogged ground colour**
+       mix(`#6f6a45`, `#ebe4cb`, 0.93) so the ground disc edge and ring meet without a line.
+2. **Tree lines** (1 mesh, 1 material, alpha-tested): vertical double-sided quads (not
+   billboards) standing on the terrain, base sunk 1.5 m (true) into it, compressed with the same
+   r'/y' rule (their height scales by r'/r too). ~600 quads ≈ 1.2k tris.
+   - c. 1920 Hunterdon: open farmland with **hedgerows** along field edges, **woodlots** and
+     wooded stream lines, orchards near town, solid woods on the ridge crests.
+   - Band A, true 0.8–1.6 km all round: town-edge trees, orchards, farm groves, 12–22 m tall,
+     dense (this band also hides the inner seam). Band B, 1.6–5 km: hedgerow strips 8–14 m tall
+     and woodlot clumps 15–22 m, ~40 % coverage. Ridge crests (west ridge, Cushetunk, Sourland):
+     a continuous 18–22 m crown fringe along the skyline so the ridge tops look wooded, not bald.
+     Also 4–6 small farmhouse + barn silhouettes in Band B (row 3 of the atlas).
+   - Texture: **one generated 1K RGBA atlas** `assets/textures/landscape/treeline_atlas.png`
+     (no download): 3 rows of soft-edged crown silhouettes (round deciduous crowns, mixed
+     heights, a few pointed cedars), row 3 = farm buildings + windbreaks. Greyscale × vertex
+     colour; vertex colour = foliage `#3f4a2c` (barns `#7d4a36` red, houses `#d8d2c0`) hazed with
+     the same h(r) as the terrain, plus +5 % haze so trees never read darker than the ridge behind.
+     alphaTest 0.5, mipmaps on.
+
+Node `Town` (fixed, true scale, scene fog ON; entity at origin, rotation 0 0 0): low-detail
+**rooftop / steeple / tree silhouettes** where the street opens, beyond the modelled blocks:
+- **North end**: z −175 … −250 both sides of Main St (x ±12 … ±40): 6–8 house/store blocks (2–3
+  storeys, 8–12 m eaves, gable roofs ridge parallel or across), street-tree crowns, and **one
+  church steeple** (~30 m, guess, west side ~z −230).
+- **South end**: z +70 … +140, x ±12 … ±40: 5–6 houses (2–2½ storey, gables), trees.
+- **Court St (west)**: x −60 … −200, z −5 … +20: 4–5 houses along both sides, big shade trees
+  (guess; the jail/courthouse grounds occupy the near part).
+- **Bloomfield Ave (east)**: x +65 … +200, z −95 … −70: 4–5 houses, trees; land falls toward the
+  lowland (flat skyline behind).
+- Simple extruded boxes + gable prisms, tree crowns as 20–40-tri lumps on a trunk-less base;
+  ≈ 1.5k tris; flat vertex colours (walls pale cream / white / red-brown brick `#8a4b3a`, roofs
+  dark slate `#4a4a4e`, trees `#46532f`) with the same simple sun term, no texture. Keep all of it
+  within x ±200, z −250 … +140 (so it is always nearer than the ring's inner edge).
+- Must not intersect any existing entity (check `index.html` placeholders: nothing beyond the
+  street blocks).
+
+**Ground, fog, sky, camera changes (scene-integrator)**
+- **Fog:** keep exponential `#ebe4cb`; density **0.011 → 0.005** (100 m 22 %, 200 m 63 %, 330 m
+  93 %). Street ends still dissolve, town silhouettes read faintly; the `Far` node uses
+  **`fog: false`** (its haze is baked into the vertex colours).
+- **Ground:** replace the fixed 500 m `#ground` plane with a **disc radius 335 m** (64 segments,
+  same colour #6f6a45) inside the following group (f = 0.85), so its edge always meets the ring's
+  inner apron and never shows as a line. The paved streets/lawns stay as they are on top.
+- **Sky sphere:** radius 400 → **1200** (the ring reaches 800 m from the moving origin; worst case
+  ~ 800 + 0.15·170 + 170 < 1200). Keep `fog: false`, same yaw.
+- **Camera:** set `near: 0.05` (default 0.005) — depth precision at 800 m goes from ~8 m to
+  ~0.8 m; far stays 10000. Hands/controllers are never closer than 5 cm.
+- Materials: replace `Far` materials at load with `MeshBasicMaterial({vertexColors: true, fog:
+  false})` (trees: `+ map, alphaTest 0.5, side: DoubleSide`); `Town` with
+  `MeshLambertMaterial({vertexColors: true})` or basic + baked sun (fog on). One small component
+  (e.g. `far-landscape` in `js/components.js`) does both and the rig-follow.
+- Render order: normal opaque; no transparency sorting needed (alpha test only).
+
+**Blender conventions for this asset**
+- Blender X = scene x, Blender Y = **−scene z** (north = +Y), Z up; glTF export turns it into the
+  scene frame directly; entity rotation `0 0 0` (not the building rule).
+- Script `tools/blender/landscape.py` (reads `assets/maps/landscape-dem.png` + `.json` with Pillow
+  or Blender's image API; builds `Far` and `Town`); export with COLOR_0, no lightmap bake (skip
+  the `_bake.py` pattern; this asset is unlit). Source `assets/models/source/landscape.blend`,
+  previews `assets/models/previews/landscape-*.png` from eye height (1.75 m) at the origin
+  looking N, S, W (Court St), E (Bloomfield), and one top view.
+
+**Budget**
+- ≤ **10k tris** (target 8.5k: terrain 5.8k, trees 1.2k, town 1.5k). **3 draw calls**
+  (terrain, trees, town) + the existing ground (now a disc). GLB ≤ 1 MB; 1 texture (1K RGBA atlas).
+  No 2K lightmap.
+
+**Acceptance checks for the reviewer**
+1. From (0, 1.75, 0) looking along true bearing 305° (scene ≈ 50° left of north) the skyline
+   is a wooded ridge at **~2.5° ± 0.5°** elevation; looking down Court St (scene west) it is
+   ~1.5–2°.
+2. Cushetunk Mountain shows as a faint, low, broad hump right of street north (scene +10…+30°)
+   at ~1°, lighter/hazier than the west ridge.
+3. Looking scene south (street south) a long low ridge (Sourland) at ~0.3–0.5°, very pale.
+4. Looking down Bloomfield Ave (scene east) the horizon is flat: only tree lines, no hill.
+5. Colours get steadily lighter and bluer-grey with distance and reach the sky horizon colour
+   at the far edge: **no visible line** where terrain meets sky, and no gap under the far edge.
+6. No visible seam / line / z-fighting where the ground disc meets the ring (test at the start
+   view and at z −165 and z +50 looking out).
+7. Tree lines read as hedgerows/woodlots with soft crowns, never darker than the nearer town
+   silhouettes; no flicker between trees and terrain at 0.05 near plane.
+8. Town silhouettes visible at the north and south street ends and down both side streets,
+   fogged, nothing floating, nothing intersecting modelled buildings.
+9. Walking from z +50 to z −165 the hills do not visibly slide with the player or swim; the
+   ring never cuts through any building or the street.
+10. ≤ 10k tris, 3 draw calls, GLB ≤ 1 MB; start view total stays ≤ ~70 calls / ≤ 170k tris.
+
+**Risks**
+- VR scale: the compressed ring is at 330–800 m; stereo disparity there is already ≈ 0, so it
+  reads as "very far" (true 12 km looks the same). Don't move it nearer than 300 m.
+- z-fighting: apron below the disc edge (−0.3 m) + near 0.05 handle the inner edge; tree bases
+  are sunk, not touching.
+- Draw distance: everything within 1200 m; far plane 10000 is fine.
+- Quest fill-rate: terrain/trees cover only a thin band near the horizon; alpha-tested cards
+  are small on screen.
+- The DEM is modern (lidar): later road cuts, the Round Valley dams (1960s) and quarries are
+  either hidden behind ridges or below 50 m resolution; no effect at this scale.
+
+**Open questions / guesses**
+- Name of the ridge 1.8–3.4 km west/north-west of town: not found (not Copper Hill, which is a
+  village). Labelled "the hills west of town". (Guess.)
+- Season: summer foliage assumed (matches the street trees).
+- Land cover mix c. 1920 (≈ 75 % farmland, woods on ridge crests) is typical for Hunterdon,
+  not mapped. (Inferred.)
+- Town silhouettes: number, heights and the north-end steeple position are guesses (Sanborn
+  sheets 1, 4–8 not checked under the usage cap). A later pass can place real churches.
+- Exact origin ±15 m and bearing ±1° (OSM); the Sanborn north arrow was not measured.
+
 ## People
 
 (Character specs, written by the planner. Same pipeline as the buildings: planner → asset-scout →
@@ -3487,3 +3688,6 @@ Check licensing for every asset and note the source in the progress log.
 | 2026-11-04 | asset-scout: Sky (D, option 1) **asset ready**: `assets/textures/sky/sky-late-afternoon.jpg` (2048 x 1024 equirect, 53 KB) from Poly Haven `hilly_terrain_01_puresky` (CC0, sky-only edit, nothing modern), made by `tools/prepare_sky.py` (exposure 1.9, wb 1.10,0.95,0.90, warm 2.5); horizon ~#ebe4cb, zenith ~#97b3c4; sun at u = 0.600, 12 deg up (lower than the 21 deg baked sun). |
 | 2026-11-04 | scene-integrator: **Mini map built** (1921 Sanborn, style B): js/minimap.js + data/minimap.json + assets/maps/minimap-1921.jpg (tools/prepare_minimap.py). Desktop overlay (N), VR pop-up panel (Y, left controller). Checked at the start view and near the Bank Building: arrow position/turn and tags line up with the Sanborn buildings. VR panel 64 → 65 draw calls (+2 tris) at the start view; desktop overlay is HTML (0 calls). No console errors. |
 | 2026-11-04 | scene-integrator: **Photographed sky in scene** (D, option 1): equirect sky on the `#sky` sphere, yaw 60 deg puts the sun WSW over the west side of the street (east fronts sunlit, as baked); fog #ecdfc4 -> #ebe4cb; still 1 draw call; start view 64 calls / 157.0k tris. No console errors. Previews sky-north-main-st.png, sky-wsw-sun-side.png. |
+| 2026-11-04 | planner: **Distant landscape pass 1** spec written (new `## Background`). USGS 3DEP DEM (public domain) → `assets/maps/landscape-dem.png/.json` via `tools/prepare_landscape_dem.py`; horizon from Main St: west ridge 1.8–3.4 km at 2–2.6° (down Court St, NW of the street end), Cushetunk Mtn NNE ~1°, Sourland SE–S 0.3–0.5°, flat to the east. Plan: distance-compressed ring (330–800 m, angles exact) following the rig at 0.85, tree lines, town silhouettes; ≤ 10k tris, 3 calls; fog 0.011 → 0.005, ground → 335 m following disc, sky r 1200, camera near 0.05. |
+| 2026-11-04 | blender-builder: **Distant landscape pass 1 built**: `landscape.glb` 0.77 MB, 8.3k tris, 3 unlit materials, nodes `landscape_far` (follows rig, fog off) + `landscape_town` (fixed, fog on); generated `tree_silhouettes.png` atlas. |
+| 2026-11-04 | scene-integrator: **Distant landscape in scene**: `#landscape` (far ring follows the rig at 0.85, unlit, fog off; town fixed, fogged), ground → 335 m following disc, fog 0.011 → 0.005, sky r 400 → 1200, camera near 0.05; start view 73 → 76 calls. |
