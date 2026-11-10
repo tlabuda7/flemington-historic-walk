@@ -44,8 +44,32 @@ def sock(socks, name):
     return next(x for x in socks if x.name == name and x.type == "RGBA")
 
 
+def glass_preview(src):
+    """The `glass` material: not lightmapped in the scene; plain dark tint over the
+    window backs at its own alpha (the scene adds the sky reflection later)."""
+    bsdf = next(n for n in src.node_tree.nodes if n.type == "BSDF_PRINCIPLED")
+    mat = bpy.data.materials.new("NVP_" + src.name)
+    mat.use_nodes = True
+    nt = mat.node_tree
+    nt.nodes.clear()
+    N, L = nt.nodes.new, nt.links.new
+    out = N("ShaderNodeOutputMaterial")
+    emit = N("ShaderNodeEmission")
+    emit.inputs["Color"].default_value = bsdf.inputs["Base Color"].default_value
+    tr = N("ShaderNodeBsdfTransparent")
+    mix = N("ShaderNodeMixShader")
+    mix.inputs["Fac"].default_value = bsdf.inputs["Alpha"].default_value
+    L(tr.outputs[0], mix.inputs[1])
+    L(emit.outputs[0], mix.inputs[2])
+    L(mix.outputs[0], out.inputs["Surface"])
+    mat.use_backface_culling = True
+    return mat
+
+
 def preview_material(src):
     """Unlit copy: emission = base colour (texture x tint, or plain) x lightmap x scale."""
+    if src.name == "glass":
+        return glass_preview(src)
     mat = bpy.data.materials.new("NVP_" + src.name)
     mat.use_nodes = True
     nt = mat.node_tree
@@ -158,13 +182,14 @@ VIEWS = {
     "match-1909":         ((6.0, -19.0, 1.6), (-9.0, 2.0, 6.2), 30),       # 1909 card, from the SW, west sidewalk
 }
 VIEWS = globals().get("PREVIEW_VIEWS") or VIEWS     # set PREVIEW_VIEWS before exec() for other views
+PREFIX = globals().get("PREVIEW_PREFIX") or "nevius-store-"   # and PREVIEW_PREFIX for other file names
 written = []
 try:
     for name, (eye, target, lens) in VIEWS.items():
         cam.location = eye
         cam.rotation_euler = (Vector(target) - Vector(eye)).to_track_quat("-Z", "Y").to_euler()
         cam_data.lens = lens
-        scene.render.filepath = PREV + "nevius-store-" + name + ".png"
+        scene.render.filepath = PREV + PREFIX + name + ".png"
         bpy.ops.render.render(write_still=True)
         written.append(scene.render.filepath)
 finally:

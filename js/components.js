@@ -524,6 +524,10 @@ AFRAME.registerComponent('locomotion', {
  * still tiling normally), and all its meshes become one mesh whose vertices remember
  * their texture layer and colour tint. Anything unusual (see mergeProblem) keeps the
  * normal one-material-per-call path. `merge: false` turns it off.
+ *
+ * keep (default "glass"): materials with these names are left exactly as exported
+ * (not lightmapped, not merged), so see-through glass stays transparent. Add the
+ * glass-reflect component to give them a sky reflection.
  */
 const MERGE_SIZE = 1024;   // colour textures must be this size to go into the array
 
@@ -531,7 +535,8 @@ AFRAME.registerComponent('baked-lighting', {
   schema: {
     lightmap:  { default: '' },
     intensity: { default: 1.0 },
-    merge:     { default: true }
+    merge:     { default: true },
+    keep:      { type: 'array', default: ['glass'] }
   },
 
   init() {
@@ -550,7 +555,12 @@ AFRAME.registerComponent('baked-lighting', {
     root.userData.bakedLightingDone = true;
 
     const meshes = [];
-    root.traverse((obj) => { if (obj.isMesh) meshes.push(obj); });
+    const kept = [];
+    root.traverse((obj) => {
+      if (!obj.isMesh) return;
+      if (!Array.isArray(obj.material) && this.data.keep.includes(obj.material.name)) kept.push(obj);
+      else meshes.push(obj);
+    });
 
     let merged = [];
     const skipped = [];
@@ -579,13 +589,15 @@ AFRAME.registerComponent('baked-lighting', {
     const name = this.el.id || 'model';
     if (!merged.length) {
       console.info(`baked-lighting ${name}: not merged` +
-        (this.data.merge ? ` (${skipped.join(', ') || 'too few meshes'})` : ' (merge: false)'));
+        (this.data.merge ? ` (${skipped.join(', ') || 'too few meshes'})` : ' (merge: false)') +
+        (kept.length ? `; left as exported: ${kept.map((m) => m.material.name).join(', ')}` : ''));
       return;
     }
     const nMaterials = new Set(merged.map((m) => m.material)).size;
     this.mergeMeshes(root, merged);
     console.info(`baked-lighting ${name}: merged ${nMaterials} materials → 1 call` +
-      (skipped.length ? `; kept separate: ${skipped.join(', ')}` : ''));
+      (skipped.length ? `; kept separate: ${skipped.join(', ')}` : '') +
+      (kept.length ? `; left as exported: ${kept.map((m) => m.material.name).join(', ')}` : ''));
   },
 
   // Why a mesh can't go into the merged mesh ('' = it can).
@@ -781,6 +793,156 @@ AFRAME.registerComponent('baked-lighting', {
       this.merged.material.userData.arrayMap.dispose();
       this.merged.material.dispose();
     }
+  }
+});
+
+/* ------------------------------------------------------------------ */
+/* glass-reflect                                                       */
+/* ------------------------------------------------------------------ */
+/*
+ * Window glass that reflects the sky photo. Put it on a model entity (next to
+ * baked-lighting, whose `keep` option leaves the "glass" material untouched):
+ *
+ *   <a-entity gltf-model="url(assets/models/nevius-store.glb)"
+ *             baked-lighting="lightmap: ...; intensity: 1.1" glass-reflect>
+ *
+ * Every material named in `materials` (default "glass") becomes a smooth, non-metal
+ * MeshStandardMaterial with the sky as its environment map: reflection is weak when
+ * you look straight at the pane and strong at a glancing angle (Fresnel), like real
+ * glass. The reflection is added on top of what shows through, so the glass keeps
+ * its exported see-through alpha (the window backs behind it stay visible).
+ * Still one draw call per glass mesh; no textures besides the shared environment map.
+ *
+ * The environment map is made ONCE for the whole scene (the glass-reflect system):
+ * a PMREM (pre-blurred cube map) of the same equirectangular photo the #sky sphere
+ * shows, turned to match the sky entity's rotation.
+ */
+AFRAME.registerSystem('glass-reflect', {
+  schema: {
+    sky: { default: '#sky' },                                         // the sky sphere entity
+    src: { default: 'assets/textures/sky/sky-late-afternoon.jpg' }    // used if #sky has no src
+  },
+
+  // Promise of { texture, rotationY } (shared by all glass).
+  getEnvMap() {
+    if (this.envPromise) return this.envPromise;
+    const skyEl = document.querySelector(this.data.sky);
+    let src = this.data.src;
+    let skyRotY = 0;
+    if (skyEl) {
+      const mat = skyEl.getAttribute('material');
+      if (mat && typeof mat.src === 'string' && mat.src) src = mat.src;
+      else if (mat && mat.src && mat.src.src) src = mat.src.src;      // <img> asset
+      skyRotY = skyEl.object3D.rotation.y;
+    }
+    src = src.replace(/^url\((.*)\)$/, '$1');
+    // The sky sphere (scale -1 1 1) puts the photo's u = 0 at azimuth atan2(z, x) = 0;
+    // three.js's equirect lookup puts u = 0.5 there, i.e. half a turn apart. So the
+    // env map is turned by the sky's rotation minus 180 degrees to line the two up.
+    const rotationY = skyRotY - Math.PI;
+    this.envPromise = new Promise((resolve) => {
+      new THREE.TextureLoader().load(src, (tex) => {
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.mapping = THREE.EquirectangularReflectionMapping;
+        const pmrem = new THREE.PMREMGenerator(this.el.renderer);
+        const rt = pmrem.fromEquirectangular(tex);
+        pmrem.dispose();
+        tex.dispose();
+        this.envTarget = rt;
+        resolve({ texture: rt.texture, rotationY });
+      }, undefined, () => {
+        console.warn(`glass-reflect: could not load sky ${src}; glass stays as exported`);
+        resolve(null);
+      });
+    });
+    return this.envPromise;
+  },
+
+  remove() {
+    if (this.envTarget) this.envTarget.dispose();
+  }
+});
+
+AFRAME.registerComponent('glass-reflect', {
+  schema: {
+    materials: { type: 'array', default: ['glass'] },
+    intensity: { default: 1.2 },     // envMapIntensity: strength of the sky reflection (2.5 looked milky; owner 2026-11-10)
+    roughness: { default: 0.05 }
+  },
+
+  init() {
+    this.onLoaded = () => this.apply();
+    this.el.addEventListener('model-loaded', this.onLoaded);
+    if (this.el.getObject3D('mesh')) this.apply();
+  },
+
+  update() {
+    // Live tweaks (e.g. from the console) on glass that is already converted.
+    if (!this.glass) return;
+    for (const m of this.glass) {
+      m.envMapIntensity = this.data.intensity;
+      m.roughness = this.data.roughness;
+    }
+  },
+
+  apply() {
+    const root = this.el.getObject3D('mesh');
+    if (!root) return;
+    const meshes = [];
+    root.traverse((obj) => {
+      if (!obj.isMesh || Array.isArray(obj.material)) return;
+      const mat = obj.material;
+      if (this.data.materials.includes(mat.name) && !mat.userData.glassReflect) meshes.push(obj);
+    });
+    if (!meshes.length) return;
+    meshes.forEach((m) => { m.material.userData.glassReflect = true; });   // only once
+    this.el.sceneEl.systems['glass-reflect'].getEnvMap().then((env) => {
+      if (!env) return;
+      const glassFor = new Map();       // exported material -> glass material
+      for (const obj of meshes) {
+        const old = obj.material;
+        if (!glassFor.has(old)) {
+          let mat = old;
+          if (!old.isMeshStandardMaterial) {    // glTF gives Standard; be safe anyway
+            mat = new THREE.MeshStandardMaterial({ name: old.name, color: old.color,
+              map: old.map || null, opacity: old.opacity, side: old.side });
+          }
+          this.makeGlass(mat, env);
+          glassFor.set(old, mat);
+        }
+        obj.material = glassFor.get(old);
+      }
+      glassFor.forEach((mat, old) => { if (mat !== old) old.dispose(); });
+      this.glass = [...glassFor.values()];
+      console.info(`glass-reflect ${this.el.id || 'model'}: ${this.glass.length} glass material(s), ` +
+        `${meshes.length} mesh(es) reflect the sky`);
+    });
+  },
+
+  makeGlass(mat, env) {
+    mat.userData.glassReflect = true;
+    mat.metalness = 0;
+    mat.roughness = this.data.roughness;
+    mat.envMap = env.texture;
+    mat.envMapIntensity = this.data.intensity;
+    if (mat.envMapRotation) mat.envMapRotation.set(0, env.rotationY, 0);   // three r162+
+    mat.transparent = true;
+    mat.depthWrite = false;
+    // Blending is colour x alpha + behind x (1 - alpha). Dividing the reflected part
+    // by alpha makes it add on top at full strength (real glass reflects regardless of
+    // how much shows through), while the see-through amount stays the exported alpha.
+    mat.onBeforeCompile = (shader) => {
+      shader.fragmentShader = shader.fragmentShader.replace('#include <opaque_fragment>',
+        `#include <opaque_fragment>
+        gl_FragColor.rgb = totalDiffuse + totalEmissiveRadiance +
+          totalSpecular / max(gl_FragColor.a, 0.05);`);
+    };
+    mat.customProgramCacheKey = () => 'glass-reflect';
+    mat.needsUpdate = true;
+  },
+
+  remove() {
+    this.el.removeEventListener('model-loaded', this.onLoaded);
   }
 });
 

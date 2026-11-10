@@ -356,10 +356,13 @@
          Position = centre of the front brick wall face at sidewalk level, on the property line.
          North wall z -11.33, south wall z -3.33, rear wall x 42.55; the striped awning reaches
          1.91 m over the sidewalk (bottom 2.45 m). Its walls skirt 0.2 m below the sidewalk top,
-         so they meet the ground (y 0) in the side gaps without floating. -->
+         so they meet the ground (y 0) in the side gaps without floating.
+         Window pilot: panes have window backs / a shop interior behind them (lightmapped), and the
+         see-through `glass` material reflects the sky (glass-reflect, js/components.js). -->
     <a-entity id="bldg-78-main" position="10.3 0.15 -7.33" rotation="0 -90 0"
       gltf-model="url(assets/models/nevius-store.glb)"
-      baked-lighting="lightmap: assets/textures/nevius-store-lightmap.jpg; intensity: 1.1072"></a-entity>
+      baked-lighting="lightmap: assets/textures/nevius-store-lightmap.jpg; intensity: 1.1076"
+      glass-reflect></a-entity>
 
     <!-- ============================================================
          PEOPLE (js/people.js; lines in data/dialogue/<id>.json)

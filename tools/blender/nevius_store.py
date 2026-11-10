@@ -17,8 +17,15 @@ decisions (1921 Sanborn sheet 3; 1909 "Nevius Store and Union Hotel" card; HABS 
 hood moulds on a stone sill band, brick quoins, bracketed cornice with a segmental pediment,
 painted wood shop front with a recessed double door, one striped scalloped awning.
 
-Only 5 materials (= 5 draw calls), in this slot order on every part:
-    0 Brick, 1 Trim, 2 Glass, 3 Dark, 4 Awning
+Only 6 materials, in this slot order on every part:
+    0 Brick, 1 Trim, 2 Glass, 3 Dark, 4 Awning, 5 WindowBack
+Glass is a thin pane (its own material `glass`, see nevius_store_bake.py) a few cm in front
+of a "window back" (shared atlas assets/textures/shared/window_backs.jpg: blinds, lace,
+curtains, dark rooms); WB_FRAMES records where each back is and which atlas cell it
+shows (PLAN.md "E. Windows that don't read as flat black"). The shop-front panes (display
+windows, door glass, returns, transoms) use cells of the dedicated, sharper
+assets/textures/shared/shop_interior.jpg instead; the bake script moves those faces to a
+seventh material, NVR_ShopInterior.
 Shells and boolean cutters carry a material index per face; the boolean copies the cutter's
 index onto the faces it creates, so reveals, frames and glass need no extra geometry.
 
@@ -56,8 +63,8 @@ S2, SP2, RISE2 = 4.55, 6.45, 0.25          # 2nd floor: sill, spring, segmental 
 BAND0, BAND1 = 7.25, 7.45                  # 3rd floor sill band
 S3, SP3 = 7.45, 8.95                       # 3rd floor: sill, spring (semicircular; crown ~9.40, review round 1)
 
-BRICK, TRIM, GLASS, DARK, AWNING = range(5)
-NAMES = ["Brick", "Trim", "Glass", "Dark", "Awning"]
+BRICK, TRIM, GLASS, DARK, AWNING, WBACK = range(6)
+NAMES = ["Brick", "Trim", "Glass", "Dark", "Awning", "WindowBack"]
 
 # ---------------------------------------------------------------------------
 # Materials (plain stand-ins; nevius_store_bake.py swaps in the textures)
@@ -85,7 +92,7 @@ def plain(name, color, rough=0.8):
     return mat
 
 
-COLOURS = ["#8e4632", "#d8cdb4", "#1e2226", "#3a2a1f", "#b06050"]
+COLOURS = ["#8e4632", "#d8cdb4", "#1e2226", "#3a2a1f", "#b06050", "#3a3028"]
 MATS = [plain("NV_" + n, c) for n, c in zip(NAMES, COLOURS)]
 
 # ---------------------------------------------------------------------------
@@ -135,6 +142,27 @@ class MB:
             f.material_index = ms[i]
             faces.append(f)
         bmesh.ops.recalc_face_normals(bm, faces=faces)
+
+    def face(self, pts, d, axis, outward, mi):
+        """One flat n-gon (outline [(u, v), ...] at depth d) whose normal points along
+        `outward` (+1/-1 on the depth axis)."""
+        f = self.bm.faces.new([self.bm.verts.new(self._pt(axis, u, d, v)) for u, v in pts])
+        f.normal_update()
+        k = {"x": 0, "y": 1, "z": 2}[axis]
+        if f.normal[k] * outward < 0:
+            f.normal_flip()
+        f.material_index = mi
+        return f
+
+    def quad3(self, a, b, z0, z1, outward, mi):
+        """Vertical quad from plan point a to b (x, y), z0..z1, normal toward `outward` (x, y)."""
+        vs = [self.bm.verts.new(p) for p in ((a[0], a[1], z0), (b[0], b[1], z0), (b[0], b[1], z1), (a[0], a[1], z1))]
+        f = self.bm.faces.new(vs)
+        f.normal_update()
+        if f.normal.x * outward[0] + f.normal.y * outward[1] < 0:
+            f.normal_flip()
+        f.material_index = mi
+        return f
 
     def box(self, x0, x1, y0, y1, z0, z1, mi=TRIM):
         self.prism([(x0, z0), (x1, z0), (x1, z1), (x0, z1)], y0, y1, "y", mi)
@@ -248,14 +276,59 @@ CUT.prism([(T_FRONT, ROOF_F), (DEPTH - T_SIDE, ROOF_R), (DEPTH - T_SIDE, 12.0), 
 FR = 0.07          # frame width
 D_FRAME = 0.12     # frame face behind the wall face
 D_GLASS = 0.20     # glass behind the wall face
+BACK_GAP = 0.04    # window back (blind, lace, curtains, interior) this far behind the glass
+
+# Window backs: one entry per pane -> atlas cell. origin (x, y) at the left end of the back
+# as seen from outside, u = unit plan direction along it, length, z0..z1, outward normal
+# (plan), cell name in assets/textures/shared/window_backs.json. Read by the bake script.
+WB_FRAMES = []
+# upper-floor cells, in an order where no two neighbours (side by side or one above the
+# other) repeat; mostly blinds and lace, a few curtains and unscreened dark rooms
+UPPER_CYCLE = ["blind_cream_half", "lace", "blind_green_high", "lace_blind_cream", "blind_cream_low",
+               "curtains_olive", "blind_green_half", "blind_cream_high", "lace_full_blind_cream",
+               "dark_room", "blind_green_low", "lace_blind_green", "blind_cream_full", "curtains_beige",
+               "blind_green_half", "dark_room_frame", "curtains_maroon_blind"]
+_cycle = [0]
 
 
-def framed_opening(wall, outer, inner, wall_mat=BRICK, d_frame=D_FRAME, d_glass=D_GLASS):
+def next_variant():
+    v = UPPER_CYCLE[_cycle[0] % len(UPPER_CYCLE)]
+    _cycle[0] += 1
+    return v
+
+
+def wb_frame(origin, udir, length, z0, z1, outward, cell):
+    n = (udir[1], -udir[0])                      # true plan normal of the back, on the outward side
+    if n[0] * outward[0] + n[1] * outward[1] < 0:
+        n = (-n[0], -n[1])
+    WB_FRAMES.append(dict(origin=origin, u=udir, length=length, z0=z0, z1=z1, n=n, cell=cell))
+
+
+def frame_on_wall(wall, d, u0, u1, z0, z1, cell):
+    """Window back on a wall plane at depth coordinate d, spanning u0..u1 along the wall."""
+    axis, face, out = wall
+    if axis == "y":                    # front / rear: seen from -Y (front) runs +X, from +Y runs -X
+        if out < 0:
+            wb_frame((u0, d), (1, 0), u1 - u0, z0, z1, (0, -1), cell)
+        else:
+            wb_frame((u1, d), (-1, 0), u1 - u0, z0, z1, (0, 1), cell)
+    else:                              # side walls: north (out -1) seen from -X runs -Y ... keep left-to-right
+        if out < 0:
+            wb_frame((d, u1), (0, -1), u1 - u0, z0, z1, (-1, 0), cell)
+        else:
+            wb_frame((d, u0), (0, 1), u1 - u0, z0, z1, (1, 0), cell)
+
+
+def framed_opening(wall, outer, inner, wall_mat=BRICK, d_frame=D_FRAME, d_glass=D_GLASS, cell=None):
     """Two nested cutters: the outer pocket's reveal keeps the wall material and its back
-    becomes the painted frame; the inner pocket's sides are frame, its back is the glass."""
+    becomes the painted frame; the inner pocket's sides are frame and its back is the window
+    back (BACK_GAP behind the glass). The glass is a separate pane in the inner outline."""
     axis, D = Dfun(wall)
     CUT.prism(outer, D(0.25), D(-d_frame), axis, mi=(wall_mat, TRIM, wall_mat))
-    CUT.prism(inner, D(0.25), D(-d_glass), axis, mi=(TRIM, GLASS, TRIM))
+    CUT.prism(inner, D(0.25), D(-d_glass - BACK_GAP), axis, mi=(TRIM, WBACK, TRIM))
+    P.face(inner, D(-d_glass), axis, wall[2], GLASS)
+    us, vs = [p[0] for p in inner], [p[1] for p in inner]
+    frame_on_wall(wall, D(-d_glass - BACK_GAP), min(us), max(us), min(vs), max(vs), cell or next_variant())
 
 
 def meeting_rail(wall, cu, w, z):
@@ -436,7 +509,13 @@ SF = 0.10                      # shop-front plane behind the brick face
 REC = SF + 1.20                # back of the entrance recess
 CUT.prism(rect(-3.45, 3.45, SHOP_FL, 3.95), -0.25, SF, "y", mi=(TRIM, TRIM, [TRIM, BRICK, TRIM, BRICK]))
 CUT.prism([(-0.85, -0.25), (0.75, -0.25), (0.75, SF), (0.65, REC), (-0.75, REC), (-0.85, SF)], SHOP_FL, 2.95, "z",
-          mi=(TRIM, TRIM, [TRIM, TRIM, GLASS, TRIM, GLASS, TRIM]))
+          mi=(TRIM, TRIM, [TRIM, TRIM, WBACK, TRIM, WBACK, TRIM]))
+# the splayed glass returns: shop interior behind, glass on the bulkheads' inner line
+for a, b, inner, out, cell in (((-0.85, SF), (-0.75, REC), ((-0.80, SF), (-0.70, REC)), (1, 0), "return_n"),
+                               ((0.65, REC), (0.75, SF), ((0.60, REC), (0.70, SF)), (-1, 0), "return_s")):
+    wb_frame(a, ((b[0] - a[0]) / math.dist(a, b), (b[1] - a[1]) / math.dist(a, b)), math.dist(a, b), 0.70, 2.85,
+             out, cell)
+    P.quad3(inner[0], inner[1], 0.70, 2.85, out, GLASS)
 CUT.prism(rect(2.50, 3.35, SHOP_FL, SHOP_FL + 2.50), -0.25, SF + 0.10, "y", mi=(TRIM, DARK, TRIM))
 
 # stone step along the front
@@ -447,22 +526,26 @@ for x0, x1 in ((-3.45, -3.35), (-0.93, -0.85), (0.75, 0.83), (2.42, 2.50), (3.35
     P.box(x0, x1, 0.0, SF, SHOP_FL, 2.95, mi=TRIM)
 
 
-def display(x0, x1):
+def display(x0, x1, cell):
     """Display window between x0 and x1: panelled bulkhead, sill rail, glass with one
     central mullion."""
     P.box(x0 + 0.08, x1 - 0.08, SF - 0.02, SF, SHOP_FL + 0.10, 0.60, mi=TRIM)      # raised bulkhead panel
     P.box(x0, x1, SF - 0.05, SF, 0.66, 0.72, mi=TRIM)                              # sill rail
-    P.box(x0, x1, SF - 0.02, SF, 0.72, 2.95, mi=GLASS)                             # display glass
+    P.box(x0, x1, SF - 0.02, SF, 0.72, 2.95, mi=WBACK)                             # shop interior behind the glass
+    wb_frame((x0, SF - 0.02), (1, 0), x1 - x0, 0.72, 2.95, (0, -1), cell)
+    P.face(rect(x0, x1, 0.72, 2.95), SF - 0.045, "y", -1, GLASS)                     # display glass
     xm = (x0 + x1) / 2
     P.box(xm - 0.04, xm + 0.04, SF - 0.05, SF - 0.02, 0.72, 2.95, mi=TRIM)          # mullion
 
 
-display(-3.35, -0.93)
-display(0.83, 2.42)
+display(-3.35, -0.93, "shop_a")
+display(0.83, 2.42, "shop_b")
 
 # transom bar, 6 transom lights, fascia (plain, no lettering)
 P.box(-3.45, 3.45, 0.0, SF, 2.95, 3.05, mi=TRIM)
-P.box(-3.45, 3.45, SF - 0.02, SF, 3.05, 3.55, mi=GLASS)
+P.box(-3.45, 3.45, SF - 0.02, SF, 3.05, 3.55, mi=WBACK)                              # ceiling seen through
+wb_frame((-3.45, SF - 0.02), (1, 0), 6.90, 3.05, 3.55, (0, -1), "transom")
+P.face(rect(-3.45, 3.45, 3.05, 3.55), SF - 0.045, "y", -1, GLASS)                   # transom glass
 for k in range(1, 6):
     xb = -3.45 + 6.90 * k / 6
     P.box(xb - 0.03, xb + 0.03, SF - 0.05, SF - 0.02, 3.05, 3.55, mi=TRIM)
@@ -478,11 +561,15 @@ P.prism([(0.0, 3.92), (-0.08, 3.92), (-0.10, 3.97), (-0.28, 4.05), (-0.30, 4.12)
 for pts in ([(-0.85, SF), (-0.80, SF), (-0.70, REC), (-0.75, REC)], [(0.70, SF), (0.75, SF), (0.65, REC), (0.60, REC)]):
     P.prism(pts, SHOP_FL, 0.70, "z", mi=TRIM)                                       # bulkheads
     P.prism(pts, 2.85, 2.95, "z", mi=TRIM)                                          # head rail
-for x0, x1 in ((-0.75, -0.055), (-0.045, 0.65)):
+for x0, x1, cell in ((-0.75, -0.055, "door_l"), (-0.045, 0.65, "door_r")):
     P.box(x0, x1, REC - 0.05, REC, SHOP_FL, SHOP_FL + 2.60, mi=DARK)               # leaves
-    P.box(x0 + 0.09, x1 - 0.09, REC - 0.065, REC - 0.05, 1.05, 2.58, mi=GLASS)     # glass upper two-thirds
+    P.box(x0 + 0.09, x1 - 0.09, REC - 0.065, REC - 0.05, 1.05, 2.58, mi=WBACK)     # shop seen through the door
+    wb_frame((x0 + 0.09, REC - 0.065), (1, 0), x1 - x0 - 0.18, 1.05, 2.58, (0, -1), cell)
+    P.face(rect(x0 + 0.09, x1 - 0.09, 1.05, 2.58), REC - 0.08, "y", -1, GLASS)       # glass upper two-thirds
     P.box(x0 + 0.09, x1 - 0.09, REC - 0.065, REC - 0.05, 0.25, 0.90, mi=DARK)      # raised lower panel
-P.box(-0.75, 0.65, REC - 0.02, REC, 2.75, 2.92, mi=GLASS)                           # door transom
+P.box(-0.75, 0.65, REC - 0.02, REC, 2.75, 2.92, mi=WBACK)                           # door transom
+wb_frame((-0.75, REC - 0.02), (1, 0), 1.40, 2.75, 2.92, (0, -1), "transom_door")
+P.face(rect(-0.75, 0.65, 2.75, 2.92), REC - 0.04, "y", -1, GLASS)
 
 # upper-floor street door: two raised panels on the door face (0.20 behind the front plane)
 for z0, z1 in ((0.30, 1.20), (1.40, 2.45)):

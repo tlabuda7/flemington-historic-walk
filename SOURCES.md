@@ -263,6 +263,13 @@ The kit also reuses, unchanged, `polyhaven/metal_plate_02.jpg` (iron) and
 | `rust_coarse_01.jpg` | Rust Coarse 01 (`rust_coarse_01`), 2.2 m | https://polyhaven.com/a/rust_coarse_01 | CC0 | rusty cast iron: lamp brackets, fountain lamp holder, barrel hoops, rust at edges |
 | `iron_paint_redbrown.jpg` | Metal Plate 02 (`metal_plate_02`, via `polyhaven/metal_plate_02.jpg`), tinted #5A2A22 at 130% contrast | https://polyhaven.com/a/metal_plate_02 | CC0 | hydrant paint (tile 2.0 m; colour is a guess) |
 
+### Shared window backs (`assets/textures/shared/`)
+
+| File | Source | Licence | Used for |
+|---|---|---|---|
+| `window_backs.jpg` (+ `window_backs.json` cell layout) | none: drawn by `tools/prepare_window_backs.py` with Pillow (original work, no download, no lettering) | own work (CC0) | 1K atlas of what shows behind window glass c. 1920: cream / dark green roller blinds at several heights, lace curtains, plain curtain pairs, dark rooms, dim dry-goods shop interiors, shop ceiling; first used in `nevius-store.glb` (window-backs pilot, 2026-11-10); v2 2026-11-10: darker, reveal shadow per cell, muted colours |
+| `shop_interior.jpg` (+ `shop_interior.json` cell layout) | none: ray-traced from a simple box model of a c. 1920 dry-goods store by `tools/prepare_shop_interior.py` (run inside Blender, numpy; original work, no download, no lettering or signs) | own work (CC0) | 1K texture of the dim store seen through the Nevius Store's shop-front glass (display windows, door glass, splayed returns, transoms): window display of folded cloth, bolts and boxes, side counters, wall shelving, centre tables, pressed-tin ceiling; `nevius-store.glb` material `NVR_ShopInterior` (window realism v2, 2026-11-10) |
+
 ## Sky (`assets/textures/sky/`)
 
 Made by `tools/prepare_sky.py` from the 2K .hdr (not committed): exposure 1.9,
