@@ -227,6 +227,18 @@ stage walls, by a colour factor), `polyhaven/trim_paint_cream.jpg` (trim), `coun
 
 `assets/textures/palace-theatre-lightmap.jpg` is baked in Blender by `tools/blender/palace_theatre_bake.py` (original work).
 
+### Odd Fellows Hall / Hopewell Building, 82–84 Main St (`assets/textures/odd-fellows-hall/`)
+
+Nothing new downloaded. Reused unchanged: `polyhaven/trim_paint_cream.jpg` (front wall and trim, by colour factors),
+`house-65-main/clapboard_cream.jpg` (north wall clapboard), `polyhaven/red_brick.jpg` (brick rear),
+`county-offices/roof_tin_redbrown.jpg` (roof), `polyhaven/door_paint_green.jpg` (shop fronts) (all listed above).
+
+| File | Source | URL | Licence | Used for |
+|------|--------|-----|---------|----------|
+| `awning_faint.jpg` | none: generated in-house by `tools/prepare_odd_fellows_textures.py` with Pillow (original work, no download): the generated `bank-building/awning_stripes.jpg` blended 75% toward its cream stripe colour | — | original work (CC0) | the two pale, faintly striped shop awnings (1024², one material) |
+
+`assets/textures/odd-fellows-hall-lightmap.jpg` is baked in Blender by `tools/blender/odd_fellows_hall_bake.py` (original work).
+
 `assets/textures/union-hotel-lightmap.jpg` is baked in Blender by
 `tools/blender/union_hotel_bake.py` (original work).
 `assets/textures/courthouse-lightmap.jpg` is baked in Blender by `tools/blender/courthouse_bake.py` (original work).

@@ -440,8 +440,15 @@
       building="width: 12.5; height: 9; depth: 20; stories: 2; color: #8f4c3a; wall: brick; photo: "></a-entity>
 
     <!-- South of Court St, east side (sheet 3) -->
-    <a-entity id="bldg-82-84-main" position="10.3 0 7.7" rotation="0 -90 0"
-      building="width: 15.6; height: 10.7; depth: 14; stories: 3; color: #9c5b45; wall: brick; photo: "></a-entity>
+    <!-- Odd Fellows Hall / Hopewell Building (82–84 Main, c. 1881–82, 3-storey frame front with
+         arched crest + brick rear, two shops: jeweler 82, grocer 84), 1907–1910s state, blank
+         signboards. Blender model built by tools/blender/odd_fellows_hall.py +
+         odd_fellows_hall_bake.py. Position = centre of the front at sidewalk level.
+         North wall z 1.33 (4.66 m alley to Nevius), south wall z 16.86, rear x 31.56;
+         awnings reach 1.61 m over the sidewalk. -->
+    <a-entity id="bldg-82-84-main" position="10.3 0.15 9.09" rotation="0 -90 0"
+      gltf-model="url(assets/models/odd-fellows-hall.glb)"
+      baked-lighting="lightmap: assets/textures/odd-fellows-hall-lightmap.jpg; intensity: 1.2485"></a-entity>
     <a-entity id="bldg-90-94-main" position="10.3 0 29.1" rotation="0 -90 0"
       building="width: 20.8; height: 11.5; depth: 15; stories: 3; color: #8a4a38; wall: brick; photo: "></a-entity>
     <a-entity id="bldg-96-98-main" position="10.3 0 42.8" rotation="0 -90 0"
