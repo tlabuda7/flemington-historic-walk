@@ -39,7 +39,7 @@ Decisions (2026-11-02):
 | Hunterdon County Courthouse (75 Main) | approved | done | done, round-1 fixes applied (13.7k tris, 2.6 MB) | round 2: PASS | yes (GLB, 2026-11-03) |
 | County Offices / Hall of Records (69–71 Main) | written, auto-approved (owner away) | done (1 new + 3 tinted, 3 reused) | done (8.6k tris, 2.2 MB, LIGHTMAP_SCALE 1.1299) | round 1: PASS | yes (GLB, 2026-11-03) |
 | Wurts Law Office (59 Main) | written, auto-approved (owner away) | reused, none new (asset-scout skipped; 1 grey copy of weathered_planks made locally) | done (7.6k tris, 5 materials, 1.2 MB, 1K lightmap, LIGHTMAP_SCALE 1.1647) | round 1: PASS | yes (GLB, 2026-11-03) |
-| Bank Building / Flemington National Bank (56–66 Main) | written, auto-approved (owner away) | done (1 new: sandstone_blocks_05 greyed → stone_rockfaced; 1 generated: awning_stripes; 3 reused) | done, round-1 fixes applied (8.8k tris, 6 materials, 1.8 MB, 2K lightmap, LIGHTMAP_SCALE 1.1241) | round 2: PASS | yes (GLB at 12.24, 0.15, −66.24) |
+| Bank Building / Flemington National Bank (56–66 Main) | written, auto-approved (owner away) | done (1 new: sandstone_blocks_05 greyed → stone_rockfaced; 1 generated: awning_stripes; 3 reused) | done, round-1 fixes applied (8.8k tris, 6 materials, 1.8 MB, 2K lightmap, LIGHTMAP_SCALE 1.1241); **windows (E) re-export 2026-11-10: 9,522 tris, 8 materials, 2.05 MB, LIGHTMAP_SCALE 1.1242** | round 2: PASS (windows: not yet reviewed) | yes (GLB at 12.24, 0.15, −66.24); windows re-export not yet integrated |
 | Nevius Store / Fulper's Dry Goods (78 Main) | written, auto-approved (owner away) | reused, none new (asset-scout skipped; 4 reused maps) | done, round-1 fixes applied (7.0k tris, 5 materials, 1.3 MB, 2K lightmap, LIGHTMAP_SCALE 1.1072) | round 2: PASS (round 1: 3rd-floor windows raised; LIGHTMAP_SCALE now 1.1072) | **yes** (10.30, 0.15, −7.33) |
 | Frame Dwelling at 65 Main (old no. 510) | written, auto-approved (owner away) | reused, 1 recoloured copy (asset-scout skipped; brown_planks_05 → clapboard_cream made by the builder; roof_slates_03 + red_brick reused) | done (6.3k tris, 4 materials, 1.0 MB, 2K lightmap, LIGHTMAP_SCALE 1.274) | round 1: PASS | yes (GLB, 2026-11-03) |
 | Lovell's Restaurant (68 Main) | written, auto-approved (owner away) | reused + 2 generated (asset-scout skipped; clapboard_cream reused; signs_atlas + stone_bluestone (lightened concrete_floor_worn_001) made by the builder) | done, round-1 fixes applied (4.75k tris, 4 materials, 0.77 MB, 2K lightmap, LIGHTMAP_SCALE 1.2462) | round 2: PASS (round 1: awning raised/shortened, glazed doors, lighter stone; LIGHTMAP_SCALE now 1.2462) | yes (2026-11-04) at (12.66, 0.15, −52.13); bank forecourt extended over its front strip |
@@ -736,7 +736,7 @@ board, a white door, shrubs and a concrete walk; possibly a raised grade around 
 
 ### Bank Building / Flemington National Bank (56–66 Main St)
 
-**Status:** in scene (scene-integrator, 2026-11-03): GLB placed at (12.24, 0.15, −66.24), rotation 0 −90 0, lightmap intensity 1.1241; code-built placeholder replaced; front strip x 10.30–12.28 paved with one concrete box (`#bank-forecourt`, flush with the sidewalk top). Tested: no console errors, faces Main St, lightmap reads, stoops sit on the strip, north wall meets the Bloomfield Ave grade with no gap. Earlier: review round 2: PASS (reviewer, 2026-11-03): GLB 8,808 tris, 6 materials, 1.79 MB, 5 × 1K JPG, TEXCOORD_0+1; lightmap 2048², LIGHTMAP_SCALE 1.1241; loads in the review viewer with no console errors. Stone now reads mid grey, clearly darker than the pale trim (1908 colour card); chimney now shows above the SW cornice return; no regressions. Next: show the owner, then scene-integrator. Earlier: round-1 fixes applied (blender-builder, 2026-11-03): stone tinted to a mid cool grey (baseColorFactor 0.66/0.68/0.72), chimney raised to 13.20; re-baked and re-exported: 8,808 triangles, 6 materials, 1.79 MB, **LIGHTMAP_SCALE 1.1241**; all previews re-rendered. Next: reviewer round 2. Earlier: review round 1: FIXES (reviewer, 2026-11-03): GLB 8,802 tris, 6 materials, 1.79 MB, 5 × 1K JPG, TEXCOORD_0+1; lightmap 2048²; loads in the review viewer at intensity 1.1249 with no console errors, brick/trim colour factors survive. Proportions, 12 bays, 12.2 m cornice, roundels, bank entrance, shop fronts, awnings and lightmap all good; builder simplifications 1–7 accepted. Fixes: (1) stone ground storey too pale/cream, reads as bright as the trim; darken ~30% and cool it to mid grey (1908 colour card, 1907 card); (2) optional: chimney barely shows above the cornice, raise to ~13.2 m (1908 SW card). Next: blender-builder fixes, then review round 2. Earlier: built (blender-builder, 2026-11-03): `assets/models/bank-building.glb` 8,802 triangles, 6 materials (brick, stone, trim, glass, dark, awning), 1.79 MB, TEXCOORD_0 + TEXCOORD_1, one 2K lightmap `assets/textures/bank-building-lightmap.jpg`, **LIGHTMAP_SCALE 1.1249**; scripts `tools/blender/bank_building.py`, `bank_building_bake.py`, `bank_building_preview.py`; source `assets/models/source/bank_building.blend`; previews `assets/models/previews/bank-building-{front,three-quarter-nw,three-quarter-sw,detail,match-1907,match-1908}.png`. Next: reviewer. Earlier: assets ready (asset-scout, 2026-11-03): new `bank-building/stone_rockfaced.jpg` (Poly Haven `sandstone_blocks_05`, 1K, rock-faced coursed ashlar greyed to #A8A294, tile 3.0 m, ~7 courses of 0.34–0.47 m per tile; untinted source kept as `sandstone_blocks_05.jpg`); generated `bank-building/awning_stripes.jpg` (1K, red #9A4A3E / cream #DDD3BC 0.15 m stripes running along V, canvas weave + fading, seamless, tile 0.6 m across); reused unchanged and confirmed present: `polyhaven/red_brick.jpg` (1.4 m), `county-offices/trim_paint_drab.jpg` (2.0 m), `county-offices/door_varnish_dark.jpg` (0.8 m). Script `tools/prepare_bank_textures.py`; logged in SOURCES.md. Next: blender-builder. Earlier: spec written — auto-approved (owner away) (planner, 2026-11-03).
+**Status:** windows (E) rolled out (blender-builder, 2026-11-10), not integrated, not committed: every pane is one `glass` face (#1A1916, alpha 0.40, roughness 0.05, BLEND, single-sided) ~4 cm in front of a window back; upper floors / rear / courtyard / basement lights / stair door use `BKR_WindowBack` (shared atlas, offices: mostly blinds and dark rooms, a few curtains, no repeats side by side or above/below); bank window, bank door (leaves now really glazed) + fanlight, the 11 Bloomfield Ave banking-room windows and the four shop fronts (display windows, transoms, door lights) use new `BKR_BankHall` = `assets/textures/shared/bank_hall.jpg` (`tools/prepare_bank_hall.py`). 8,808 -> 9,522 tris (cap 10k), 6 -> 8 materials, 1.79 -> 2.05 MB, **LIGHTMAP_SCALE 1.1241 -> 1.1242**. Next: reviewer, then integrator (`#bank-building` intensity 1.1242, add `glass-reflect`). Earlier: in scene (scene-integrator, 2026-11-03): GLB placed at (12.24, 0.15, −66.24), rotation 0 −90 0, lightmap intensity 1.1241; code-built placeholder replaced; front strip x 10.30–12.28 paved with one concrete box (`#bank-forecourt`, flush with the sidewalk top). Tested: no console errors, faces Main St, lightmap reads, stoops sit on the strip, north wall meets the Bloomfield Ave grade with no gap. Earlier: review round 2: PASS (reviewer, 2026-11-03): GLB 8,808 tris, 6 materials, 1.79 MB, 5 × 1K JPG, TEXCOORD_0+1; lightmap 2048², LIGHTMAP_SCALE 1.1241; loads in the review viewer with no console errors. Stone now reads mid grey, clearly darker than the pale trim (1908 colour card); chimney now shows above the SW cornice return; no regressions. Next: show the owner, then scene-integrator. Earlier: round-1 fixes applied (blender-builder, 2026-11-03): stone tinted to a mid cool grey (baseColorFactor 0.66/0.68/0.72), chimney raised to 13.20; re-baked and re-exported: 8,808 triangles, 6 materials, 1.79 MB, **LIGHTMAP_SCALE 1.1241**; all previews re-rendered. Next: reviewer round 2. Earlier: review round 1: FIXES (reviewer, 2026-11-03): GLB 8,802 tris, 6 materials, 1.79 MB, 5 × 1K JPG, TEXCOORD_0+1; lightmap 2048²; loads in the review viewer at intensity 1.1249 with no console errors, brick/trim colour factors survive. Proportions, 12 bays, 12.2 m cornice, roundels, bank entrance, shop fronts, awnings and lightmap all good; builder simplifications 1–7 accepted. Fixes: (1) stone ground storey too pale/cream, reads as bright as the trim; darken ~30% and cool it to mid grey (1908 colour card, 1907 card); (2) optional: chimney barely shows above the cornice, raise to ~13.2 m (1908 SW card). Next: blender-builder fixes, then review round 2. Earlier: built (blender-builder, 2026-11-03): `assets/models/bank-building.glb` 8,802 triangles, 6 materials (brick, stone, trim, glass, dark, awning), 1.79 MB, TEXCOORD_0 + TEXCOORD_1, one 2K lightmap `assets/textures/bank-building-lightmap.jpg`, **LIGHTMAP_SCALE 1.1249**; scripts `tools/blender/bank_building.py`, `bank_building_bake.py`, `bank_building_preview.py`; source `assets/models/source/bank_building.blend`; previews `assets/models/previews/bank-building-{front,three-quarter-nw,three-quarter-sw,detail,match-1907,match-1908}.png`. Next: reviewer. Earlier: assets ready (asset-scout, 2026-11-03): new `bank-building/stone_rockfaced.jpg` (Poly Haven `sandstone_blocks_05`, 1K, rock-faced coursed ashlar greyed to #A8A294, tile 3.0 m, ~7 courses of 0.34–0.47 m per tile; untinted source kept as `sandstone_blocks_05.jpg`); generated `bank-building/awning_stripes.jpg` (1K, red #9A4A3E / cream #DDD3BC 0.15 m stripes running along V, canvas weave + fading, seamless, tile 0.6 m across); reused unchanged and confirmed present: `polyhaven/red_brick.jpg` (1.4 m), `county-offices/trim_paint_drab.jpg` (2.0 m), `county-offices/door_varnish_dark.jpg` (0.8 m). Script `tools/prepare_bank_textures.py`; logged in SOURCES.md. Next: blender-builder. Earlier: spec written — auto-approved (owner away) (planner, 2026-11-03).
 
 **What it is**: the 3-storey brick-and-stone "Bank Building" (also "Richards Building") on the
 **SE corner of Main St and Bloomfield Ave**, built **1897** by William Richards on the site of
@@ -2975,7 +2975,7 @@ may still have used the upper floors in 1920; nothing on the outside shows it, s
 
 ### Block at 35–41 Main St: frame "Gro." (35–37, old no. 517) and brick "Cobbler" (39–41, old no. 516)
 
-**Status:** **assets ready** (asset-scout, 2026-11-10): nothing downloaded; reuse `house-65-main/clapboard_cream.jpg`, `polyhaven/red_brick.jpg`, `county-offices/roof_tin_redbrown.jpg`, `county-offices/door_varnish_dark.jpg`, `polyhaven/sidewalk_concrete.jpg`; new (logged in SOURCES.md, made by `tools/prepare_block_35_41_textures.py`): `block-35-41/trim_stone_grey.jpg` (trim, #A39A88, tile 2.0 m) and `block-35-41/signs_atlas.jpg` (1024²: `stripes` 0,0–768,384 = 42 stripes over the 6.40 m awning; `val_s` 0,384–768,512 and `val_n` 0,512–768,640 = valance south/north halves (3.20 × 0.25 m each) lettered "PRODUCE \| JACOB R. HALL \| GROCER" left→right = south→north, scallop hem period 0.15 m; `louvre` 768,0–1024,640 = County Hotel shutter leaf; `canvas` 0,640–768,1024; `green` 768,640–1024,832). Next: blender-builder. Earlier: spec approved by owner 2026-11-10 (3b, B2); spec written (planner, 2026-11-08; revised 2026-11-10 from the Stryker plate and the c. 1905 County Hotel photo).
+**Status:** **assets ready** (asset-scout, 2026-11-10): nothing downloaded; reuse `house-65-main/clapboard_cream.jpg`, `polyhaven/red_brick.jpg`, `county-offices/roof_tin_redbrown.jpg`, `county-offices/door_varnish_dark.jpg`, `polyhaven/sidewalk_concrete.jpg`; new (logged in SOURCES.md, made by `tools/prepare_block_35_41_textures.py`): `block-35-41/trim_stone_grey.jpg` (trim, #A39A88, tile 2.0 m) and `block-35-41/signs_atlas.jpg` (1024²: `stripes` 0,0–768,384 = 42 stripes over the 6.40 m awning; `val_s` 0,384–768,512 and `val_n` 0,512–768,640 = valance south/north halves (3.20 × 0.25 m each) lettered "PRODUCE \| JACOB R. HALL \| GROCER" left→right = south→north, scallop hem period 0.15 m; `louvre` 768,0–1024,640 = County Hotel shutter leaf; `canvas` 0,640–768,1024; `green` 768,640–1024,832). Next: blender-builder. **Re-checked 2026-11-10 (planner) against the owner's three new postcards (1908 north from the Union Hotel, 1908 south from the Soldiers' Monument, 1914 "looking N."): none shows this block, spec unchanged, the owner's approval stands.** Earlier: spec approved by owner 2026-11-10 (3b, B2); spec written (planner, 2026-11-08; revised 2026-11-10 from the Stryker plate and the c. 1905 County Hotel photo).
 
 **What it is**: **two separate buildings**, 0.44 m apart on the map, between the Palace Theatre alley
 and the County Hotel. North: a **3-storey frame grocery with a two-tier front porch**. South: a
@@ -3077,6 +3077,15 @@ porch and the hotel. Modelled as one GLB (as at 40–46) for one draw call.
   35–37's front wall from x ≈ 2769, porch front ≈ 2886 (behind the tree trunk).
 - `flmngtnmainstrtcountyhtlvu06.jpg` (1906, local only): 4 equal bays, stair, unreadable fascia lettering.
 - Not showing this block: `flmngtnmainstnorth13.jpg`, `flmingtnmainstrtview.jpg`, all other local files, HABS.
+- **Checked 2026-11-10, not showing this block** (owner's new local saves, West Jersey History, never commit):
+  `flmngntnmainstrtnorthfromhtl08.jpg` (1908, camera in front of the **Union Hotel**, z ≈ −20 … −35, looking north;
+  the porch with steps and a lantern on the right is the hotel's own veranda; the pale 2-storey house with shutters,
+  grey roof and white picket fence on the left is most likely the **frame dwelling at 65 Main**, z ≈ −46 … −56; this
+  block is ~95 m further on, lost in trees and haze); `flmngntnmainstreetsouthfrmonument08.jpg` (1908, from the Soldiers'
+  Monument, map z ≈ −313, looking south: residential houses only, this block ~180 m away, invisible);
+  `flmngntnmainststores14.jpg` (1914, camera at the Bank Building, z ≈ −60, looking north: Bank Building right, the
+  Rea Building and cupola beyond; the west side is trees, with only a ~40 px pale blur near the vanishing point that
+  may be the County Hotel or this block, unreadable).
 - Web: HCHS item https://hunterdonhistory.omeka.net/items/show/1740 ; HCHS Collection 238 list
   https://hunterdonhistory.org/wp-content/uploads/2022/06/Collection-238-Container-List.pdf (Wm. H. Hall & Son
   at 9–11 Main; Childs' Cash Grocer); Goodspeed County House series
@@ -3244,7 +3253,7 @@ where it sees, the c. 1906–10 plate elsewhere. Nothing later is known.
 
 ### Block at 32–38 Main St: frame row "Mill'y", "Bakery" and "Meats" (old nos. 557–554)
 
-**Status:** spec written — awaiting user approval (planner, 2026-11-08; re-checked against the owner's newly saved local photos 2026-11-10: nothing changes; Stryker plate c. 1906–10 checked 2026-11-10, see Sources: model unchanged). Not built.
+**Status:** spec written — awaiting user approval (planner, 2026-11-08; re-checked against the owner's newly saved local photos 2026-11-10: nothing changes; Stryker plate c. 1906–10 checked 2026-11-10, see Sources: model unchanged; **the three 1908/1914 postcards checked 2026-11-10: none shows this row, front stays a plain guess, nothing to re-approve**). Not built.
 
 **What it is**: a **row of three small 2-storey frame shops behind one continuous 1-storey open porch**,
 directly north of 40–46. From north to south on the Sept 1921 Sanborn: **millinery ("Mill'y")**,
@@ -3323,13 +3332,21 @@ back building runs behind it. Modelled as one GLB, as at 40–46.
   - Owner's other new local photos (2026-11-10): `palace-theatre-potter-building-card.jpg` (west side only);
     `flmngtnmainstnorth13.jpg` (1913, residential north end by the Soldiers' Monument); `flmingtnmainstrtview.jpg`
     ("Commercial Buildings", inked "Sept. 16, 1905": south end). None shows this row.
-  - The owner got 404 for `flmngtnmainstrtnorthfromhtl08.jpg`, `flmngtnmainstreetsouthfrmonument08.jpg` and
-    `flmngtnmainststores14.jpg`; the names listed above with "flmngntn…" (extra n) are probably the real ones.
-    `flmngntnmainstrtnorthfromhtl08.jpg` (Union Hotel porch, row too far), `flmngtncountyhtl06.jpg`,
+  - **Owner's three new local postcards, checked 2026-11-10 (none shows this row)**:
+    - `flmngntnmainstrtnorthfromhtl08.jpg` (1908, "Main Street, looking North"): camera in front of the **Union Hotel**
+      (z ≈ −20 … −35), looking north. **The long porch with posts, a hanging lantern and steps along its whole front on the
+      right is the Union Hotel's own veranda** (ground tier; its upper tier is hidden by the street trees, which match the
+      scene's `tree-hotel-*` row); it is **neither 32–38 nor 40–46**, which are 80–100 m further north and lost in trees. Beyond
+      the veranda only small shop fronts with awnings (Lovell's / the Bank Building) blur away.
+    - `flmngntnmainstreetsouthfrmonument08.jpg` (1908): from the Soldiers' Monument (map z ≈ −313) looking south: the
+      dwellings at 1–10 Main on the left; this row (~175 m) is invisible in haze.
+    - `flmngntnmainststores14.jpg` (1914, "Main Street looking N."): camera at the Bank Building (56–66, z ≈ −60): Bank Building
+      right, the Rea Building and its cupola beyond. **This row is hidden behind the Rea Building**; a blurred pale frame front
+      just left of the Rea's front (probably 44–46) is all that shows north of it.
+  - Viewed on the West Jersey History site earlier (not saved): `flmngtncountyhtl06.jpg`,
     `flmngtncountyhotel08.jpg` (west side only), `flmngtnmainstnorth13.jpg`, `flmngtnmainstrtviewof06.jpg`,
-    `flmngntnmainststores14.jpg`, `flmingtnmainstrtview.jpg`, `flmngtnmainstrtvu.jpg`, `flmngtnminestrtview08.jpg`,
-    `flmngntnmainstreetsouthfrmonument08.jpg`, `flemngtnmainstatbranchst10.jpg`, `flmngtnmainstmaybe.jpg`:
-    other parts of the street.
+    `flmingtnmainstrtview.jpg`, `flmngtnmainstrtvu.jpg`, `flmngtnminestrtview08.jpg`,
+    `flemngtnmainstatbranchst10.jpg`, `flmngtnmainstmaybe.jpg`: other parts of the street.
 - `HISTORY-SOURCES.md`: nothing on these numbers.
 - Web: Goodspeed, "The Clock Tower Building", https://goodspeedhistories.com/the-clock-tower-building/ (the Smith
   bakery, 1873 and 1889); "Roof Arches, part 1", https://goodspeedhistories.com/roof-arches-part-one/ (nothing on
@@ -3423,7 +3440,7 @@ previews `assets/models/previews/block-32-38-*.png` (frontal; from the NW showin
 **Integrator notes**: replace the placeholder, keep the id, position x moves to 8.54 and y to 0.15. No paving box. Confirm the view of 40–42's north wall once the
 placeholder is gone. If the 24–30 placeholder's south end (z −140.9) looks wrong beside this row, leave it for that building's spec.
 
-**1920 vs earlier**: no photo at any date shows this row; everything is the Sept 1921 map plus a plain stand-in. (The 1906
+**1920 vs earlier**: no photo at any date shows this row (incl. the 1908 and 1914 postcards checked 2026-11-10); everything is the Sept 1921 map plus a plain stand-in. (The 1906
 County Hotel card may show this stretch of the east side, but not in its 1921 form; see Sources.)
 
 **Pure guesses (owner to check)**
@@ -3437,7 +3454,7 @@ County Hotel card may show this stretch of the east side, but not in its 1921 fo
 
 ### Dry goods and clothing store (27 Main St, old nos. 519 A/B)
 
-**Status:** spec written — awaiting user approval (planner, 2026-11-08; re-checked against the owner's newly saved local photos 2026-11-10: confirmed, nothing new). Not built.
+**Status:** spec written — awaiting user approval (planner, 2026-11-08; re-checked against the owner's newly saved local photos 2026-11-10: confirmed, nothing new; **the three 1908/1914 postcards checked 2026-11-10: none shows no. 27, the Palace card stays the only source, nothing to re-approve**). Not built.
 
 **What it is**: **one 2-storey brick store**, 12.35 m (40.5 ft) wide and 24.2 m deep, labelled "D.G. & Clo."
 (dry goods and clothing) on the Sept 1921 Sanborn, directly north of the Palace Theatre. The map shows one
@@ -3504,12 +3521,14 @@ four tall upper windows. Behind it are a 2-storey frame gallery and a 1-storey f
   building is behind it); `flmngtnmainstnorth13.jpg` (1913, "Main St – Soldiers' Monument – Pres. Church":
   the residential north end, houses with porches); `flmingtnmainstrtview.jpg` ("Commercial Buildings", inked
   "Sept. 16, 1905": the south end, a brick building with stoops and a 3-storey brick corner block).
-- **Still not viewed** (404 for the owner): "Main Street South From the Monument" 1908
-  (`flmngtnmainstreetsouthfrmonument08.jpg`), "North From the Hotel" 1908 (`flmngtnmainstrtnorthfromhtl08.jpg`),
-  "Main Street Stores" 1914 (`flmngtnmainststores14.jpg`). The 32–38 spec lists these three spelt
-  "flmngntn…" (extra n), probably the real file names. The 1908 view south from the monument is the one most
-  likely to show this front. The site refuses automated downloads; open by hand at
-  https://westjerseyhistory.org/images/hunterdon/flemington/ .
+- **Viewed 2026-11-10 (owner saved them, local only), none shows no. 27**:
+  `flmngntnmainstreetsouthfrmonument08.jpg` (1908, "looking South from Soldiers' Monument"): the monument stands at
+  map sheet 2 ≈ px (3960, 860), **scene z ≈ −313**, about **150 m north of this store**; the card shows only the
+  residential north end (dwellings with porches on the left = east side, 1–10 Main; Queen Anne houses with towers
+  on the right = west side); the commercial blocks are lost in trees and haze at the vanishing point.
+  `flmngntnmainstrtnorthfromhtl08.jpg` (1908, from the Union Hotel, z ≈ −20 … −35, looking north): no. 27 is
+  ~125 m away behind street trees. `flmngntnmainststores14.jpg` (1914, from the Bank Building, z ≈ −60, looking
+  north): the west side is all trees; no. 27 not visible.
 - Web (nothing on no. 27): https://cinematreasures.org/theaters/15430 ; https://goodspeedhistories.com/category/countyhouseseries/ ;
   https://hunterdonhistory.org/wp-content/uploads/2018/08/Flemington-TRAIL-online8-1.pdf ;
   https://hunterdonhistory.org/wp-content/uploads/2022/06/Collection-238-Container-List.pdf ;
@@ -3610,7 +3629,7 @@ maps, one 2K lightmap weighted to the front and north wall. Files: `tools/blende
 frame, height 7.6) is close enough; it is the Palace builder's to update if wanted (true: its X +6.79 … +19.14).
 
 **1920 vs later**: nothing later is known. The card (called 1920s) is the closest source to 1920 and still the only one
-showing this front (re-checked 2026-11-10 with the owner's new photos).
+showing this front (re-checked 2026-11-10 with the owner's new photos, incl. the 1908 monument, 1908 hotel and 1914 cards).
 
 **Pure guesses (owner to check)**
 1. **The whole ground floor behind the awning**: too dark on the card; kept to two windows and one door.
@@ -3805,6 +3824,25 @@ Order agreed with the owner: finish 65 Main → **one test person** → 68 Main 
   `assets/models/source/union-hotel-before-windows.glb` / `union-hotel-lightmap-before-windows.jpg`. Previews (same
   cameras): `union-hotel-windows-{before,after}.png`, `-{before,after}-detail.png`, plus `-after-north.png`; new
   `tools/blender/union_hotel_preview.py`. Next: integrator (`#union-hotel` intensity 1.214, add `glass-reflect`).
+  3. **Bank Building (56–66 Main): built (blender-builder, 2026-11-10)**: the old glass was the back face of each
+  window's boolean pocket; now the pocket goes 4 cm deeper and its back is the window back, with one `glass` face
+  (#1A1916, alpha 0.40, roughness 0.05, BLEND, single-sided) in front. Upper floors (46), rear and courtyard (23),
+  basement lights (12) and the G6 stair door: `BKR_WindowBack` atlas cells (offices: cream / green blinds at varied
+  heights, plain dark rooms, a few curtains, a little lace; no repeat side by side or above/below). Ground-floor glass:
+  new `BKR_BankHall` with a dedicated 1K `assets/textures/shared/bank_hall.jpg` (+ `.json`, 37 cells), ray-traced per
+  pane by `tools/prepare_bank_hall.py` (run in Blender): the banking room (tiled public space, stand-up writing desk,
+  plain panelled oak counter with a dark bronze grille and teller openings, desks and chairs, filing cabinets, a cross
+  wall with a plain steel vault door and a doorway to a back room) behind the bank window, the bank door (its leaves
+  are now really glazed: rails and stiles round the glass) and fanlight, and the 11 Bloomfield Ave windows (those cells
+  lifted 1.3x, the side is in shade); behind the four shop fronts (display windows now pockets 4 cm deep, transoms,
+  door lights) the 1921 tenants: men's furnishings, drugs (prescription wall), boots & shoes (stock to the ceiling,
+  fitting chairs), confectionery (glass cases, small tables); window displays of plain boxes / jars; no lettering.
+  Hidden-face pass now looks through the glass. 8,808 -> 9,522 tris (ordinary cap 10k; +714, a little over the
+  +600 guide because the old glass cost nothing), 6 -> 8 materials, 1.79 -> 2.05 MB, **LIGHTMAP_SCALE 1.1241 ->
+  1.1242**. Old GLB/lightmap kept as `assets/models/source/bank-building-before-windows.glb` /
+  `bank-building-lightmap-before-windows.jpg`. Previews (same cameras): `bank-building-windows-{before,after}.png`,
+  `-{before,after}-detail.png`, `-{before,after}-nw.png` (Bloomfield Ave side). Next: integrator (`#bank-building`
+  intensity 1.1242, add `glass-reflect`).
 
 **B. Roads, sidewalks and background**
 - Rework the road, sidewalks, curbs, lawns and side streets (Court St, Bloomfield Ave) to the
@@ -4813,3 +4851,5 @@ Check licensing for every asset and note the source in the progress log.
 | 2026-11-10 | blender-builder: **Palace Theatre poster frames now plain and empty** (owner request): atlas regenerated (bare painted backing boards, no figures/lettering), re-baked, `palace-theatre.glb` re-exported (2,688 tris, 1.56 MB, LIGHTMAP_SCALE 0.9901 unchanged, so index.html needs no change). Preview `palace-theatre-posters-plain.png`. Not committed. |
 | 2026-11-10 | blender-builder: **Union Hotel windows (E) rolled out** (not integrated, not committed): window backs from the shared atlas on every upper/side/attic pane, new `hotel_lobby.jpg` (parlour / lobby / dining room, `tools/prepare_hotel_lobby.py`) behind the ground-floor windows and fanlights, transparent `glass` material. 25,565 tris, 13 materials, 3.46 MB, LIGHTMAP_SCALE 1.214 (was 1.2646). Previews `union-hotel-windows-{before,after}[-detail].png`. Next: integrator sets intensity 1.214 and adds `glass-reflect` to `#union-hotel`. |
 | 2026-11-10 | asset-scout: **Block at 35–41 Main assets ready**, nothing downloaded. Reused: clapboard_cream (tile ≈ 1.24 m for the spec's 0.14 m boards), red_brick, roof_tin_redbrown, door_varnish_dark, sidewalk_concrete. Made by `tools/prepare_block_35_41_textures.py` (logged in SOURCES.md): `block-35-41/trim_stone_grey.jpg` (trim_paint_cream re-tinted #A39A88) and `block-35-41/signs_atlas.jpg` (42-stripe awning, valance "PRODUCE \| JACOB R. HALL \| GROCER" in Bookman Old Style Bold split into south/north halves, County Hotel louvre leaf, canvas, green). Next: blender-builder. |
+| 2026-11-10 | planner: **three new owner postcards checked** (local only): 1908 "looking North" = taken in front of the **Union Hotel** (right-hand porch with steps and lantern = the hotel's own veranda; pale house with picket fence on the left = most likely 65 Main); 1908 "looking South from Soldiers' Monument" = residential north end (monument at z ≈ −313); 1914 "looking N." = from the Bank Building (Bank right, Rea Building and cupola beyond). **None shows 35–41, 32–38 or 27**: specs unchanged apart from Sources/Status notes; 35–41 build goes ahead as approved; 32–38 and 27 still await the owner's approval as written. |
+| 2026-11-10 | blender-builder: **Bank Building windows (E) rolled out** (not integrated, not committed): window backs from the shared atlas upstairs/rear/basement, new `bank_hall.jpg` (banking room + the four 1921 shops, `tools/prepare_bank_hall.py`) behind the ground-floor glass, bank door leaves now glazed, transparent `glass` material. 9,522 tris, 8 materials, 2.05 MB, LIGHTMAP_SCALE 1.1242 (was 1.1241). Previews `bank-building-windows-{before,after}{,-detail,-nw}.png`. Next: reviewer, integrator (`glass-reflect`). |
