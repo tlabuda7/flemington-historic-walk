@@ -10,6 +10,16 @@ below and run again.
 Sources: 1921 Sanborn map sheet 2 (footprint, 4 storeys, brick, frame veranda),
 1910s postcard and 1963 HABS photos (elevation details). See SOURCES.md.
 
+Windows (PLAN.md "E. Windows that don't read as flat black", 2026-11-10, same treatment as
+the Nevius Store): every pane is ONE thin glass face (material "Glass" -> exported as `glass`,
+transparent, see union_hotel_bake.py) a few cm in front of a "window back" face that shows
+what is behind the glass. Upper floors, dormers, the pavilion and the side windows use cells
+of the shared atlas assets/textures/shared/window_backs.jpg (blinds, lace, curtains, dark
+rooms; material "WindowBack"); the ground-floor front windows and the door fanlights use the
+dedicated assets/textures/shared/hotel_lobby.jpg (parlour, lobby, dining room seen from the
+sidewalk, made by tools/prepare_hotel_lobby.py; material "Lobby"). The backs get their atlas
+UVs here (layer "UVMap"); the bake script leaves them alone.
+
 Coordinates (metres, Blender Z-up):
     X  along Main Street, centred on the building
     Y  depth: y = 0 is the front edge of the veranda; the brick front wall is at
@@ -18,9 +28,12 @@ Coordinates (metres, Blender Z-up):
 glTF export turns -Y into +Z, which matches the A-Frame scene's "front faces +Z".
 """
 
+import json
 import math
+import random
 import bpy
 import bmesh
+from mathutils import Vector
 
 # ---------------------------------------------------------------------------
 # Dimensions
@@ -115,7 +128,37 @@ MATS = {
     "Stone": plain("UH_Stone", "#a39b8e", 0.9),
     "Sign": plain("UH_Sign", "#2f3a2c", 0.7),
     "Roof": plain("UH_Roof", "#5a5e5d", 0.55),     # flat tin roofs
+    "WindowBack": plain("UH_WindowBack", "#3a332c", 0.9),   # atlas UVs, textured by the bake
+    "Lobby": plain("UH_Lobby", "#2e2822", 0.9),
 }
+
+# ---------------------------------------------------------------------------
+# Window backs: atlas cells
+# ---------------------------------------------------------------------------
+WB_CELLS = json.load(open(PROJECT + r"\assets\textures\shared\window_backs.json"))["cells"]
+HL_CELLS = json.load(open(PROJECT + r"\assets\textures\shared\hotel_lobby.json"))["cells"]
+WB_DEPTH = 0.25        # window back this far behind the wall face (glass at 0.21)
+GLASS_DEPTH = 0.21
+# A hotel: cream roller blinds at varied heights and lace on the upper floors, a few curtains
+# and one or two unscreened rooms; the attic (dormers, pavilion) also gets green blinds.
+UPPER_WEIGHTS = {"blind_cream_high": 3, "blind_cream_half": 3, "blind_cream_low": 2, "blind_cream_full": 1,
+                 "lace": 3, "lace_blind_cream": 4, "lace_full_blind_cream": 3, "curtains_beige": 2,
+                 "curtains_maroon_blind": 1, "curtains_olive": 1, "dark_room_frame": 1}
+ATTIC_WEIGHTS = {"blind_cream_high": 2, "blind_cream_half": 2, "blind_green_high": 2, "blind_green_half": 2,
+                 "blind_green_low": 1, "lace": 2, "lace_blind_green": 1, "dark_room": 1, "dark_room_frame": 1}
+SIDE_GROUND = {"curtains_beige": 2, "curtains_olive": 1, "lace_full_blind_cream": 2, "curtains_maroon_blind": 1}
+_wb_rng = random.Random(1920)
+_wb_grid = {}          # (wall, row) -> {column: cell}, so neighbours (side by side, above/below) differ
+
+
+def pick_cell(weights, wall, row, colm):
+    avoid = {_wb_grid.get((wall, row), {}).get(colm - 1), _wb_grid.get((wall, row - 1), {}).get(colm),
+             _wb_grid.get((wall, row), {}).get(colm + 1)}
+    names = [n for n in weights if n not in avoid]
+    cell = _wb_rng.choices(names, weights=[weights[n] for n in names])[0]
+    _wb_grid.setdefault((wall, row), {})[colm] = cell
+    return cell
+
 
 # ---------------------------------------------------------------------------
 # Mesh builder
@@ -147,6 +190,33 @@ class MB:
             j = (i + 1) % n
             faces.append(bm.faces.new([a[i], a[j], b[j], b[i]]))
         self._closed(faces)
+        return faces
+
+    def face(self, pts, d, axis, out):
+        """One flat face (a glass pane or a window back) with its normal pointing out (+-axis)."""
+        f = self.bm.faces.new([self.bm.verts.new(self._pt(axis, u, d, v)) for u, v in pts])
+        f.normal_update()
+        want = Vector((0, out, 0)) if axis == "y" else Vector((out, 0, 0))
+        if f.normal.dot(want) < 0:
+            f.normal_flip()
+        return [f]
+
+    def atlas_uvs(self, faces, axis, out, cell_uv):
+        """Map the faces' bounding box (across the wall x height) onto an atlas cell, left to
+        right as seen from outside."""
+        uvl = self.bm.loops.layers.uv.get("UVMap") or self.bm.loops.layers.uv.new("UVMap")
+        k = 0 if axis == "y" else 1
+        cos = [v.co for f in faces for v in f.verts]
+        a0, a1 = min(c[k] for c in cos), max(c[k] for c in cos)
+        z0, z1 = min(c.z for c in cos), max(c.z for c in cos)
+        flip = (axis == "y" and out > 0) or (axis == "x" and out < 0)
+        u0, v0, u1, v1 = cell_uv
+        for f in faces:
+            for loop in f.loops:
+                t = (loop.vert.co[k] - a0) / (a1 - a0)
+                t = 1 - t if flip else t
+                s = (loop.vert.co.z - z0) / (z1 - z0)
+                loop[uvl].uv = (u0 + (u1 - u0) * t, v0 + (v1 - v0) * s)
 
     def box(self, x0, x1, y0, y1, z0, z1):
         self.prism([(x0, z0), (x1, z0), (x1, z1), (x0, z1)], y0, y1)
@@ -255,7 +325,16 @@ def rect(u0, u1, v0, v1):
     return [(u0, v0), (u1, v0), (u1, v1), (u0, v1)]
 
 
-def window(wall, cu, w, z_sill, z_spring, door=False):
+def pane(wall, outline, d_glass, d_back, cell):
+    """Glass face at depth d_glass and its window back at d_back (both measured outward from
+    the wall face, so negative = inside), the back UV'd onto `cell` (hotel_lobby or atlas)."""
+    axis, face, out = wall
+    G["Glass"].face(outline, face + out * d_glass, axis, out)
+    key, cells = ("Lobby", HL_CELLS) if cell in HL_CELLS else ("WindowBack", WB_CELLS)
+    G[key].atlas_uvs(G[key].face(outline, face + out * d_back, axis, out), axis, out, cells[cell]["uv"])
+
+
+def window(wall, cu, w, z_sill, z_spring, door=False, cell=None):
     """A round-headed window (or door, see door_leaves): opening, glass, bars, sill, hood."""
     axis, face, out = wall
     D = lambda k: face + out * k        # k > 0 is outside the wall, k < 0 inside
@@ -263,9 +342,9 @@ def window(wall, cu, w, z_sill, z_spring, door=False):
     CUT.prism(arched(cu, w, z_sill, z_spring), D(0.2), D(-WALL - 0.2), axis)
     G["Trim"].ring_arch(cu, z_spring, r + 0.02, r + 0.17, D(0.09), D(-0.02), axis)
     if door:
-        door_leaves(wall, cu, w, z_sill, z_spring)
+        door_leaves(wall, cu, w, z_sill, z_spring, cell)
         return
-    G["Glass"].prism(arched(cu, w, z_sill, z_spring), D(-0.2), D(-0.23), axis)
+    pane(wall, arched(cu, w, z_sill, z_spring), -GLASS_DEPTH, -WB_DEPTH, cell)
     # sash: one meeting rail and a centre bar (two-over-two)
     mid = z_sill + (z_spring - z_sill) * 0.5
     G["Trim"].prism(rect(cu - 0.03, cu + 0.03, z_sill, z_spring + r * 0.95), D(-0.16), D(-0.2), axis)
@@ -274,7 +353,7 @@ def window(wall, cu, w, z_sill, z_spring, door=False):
     G["Trim"].prism(rect(cu - r - 0.12, cu + r + 0.12, z_sill - 0.1, z_sill), D(0.12), D(-0.1), axis)
 
 
-def door_leaves(wall, cu, w, z_sill, z_spring):
+def door_leaves(wall, cu, w, z_sill, z_spring, cell):
     """Doorway as in the 1910s postcards and HABS photo: white frame, glass fanlight
     with radiating bars in the arch, and painted panelled doors below (two leaves if wide)."""
     axis, face, out = wall
@@ -282,8 +361,8 @@ def door_leaves(wall, cu, w, z_sill, z_spring):
     r = w / 2
     f = 0.09                                         # frame width
     # fanlight glass and its radiating bars
-    G["Glass"].prism([(cu + (r - f) * math.cos(math.pi * i / 12), z_spring + (r - f) * math.sin(math.pi * i / 12))
-                      for i in range(13)], D(-0.2), D(-0.23), axis)
+    pane(wall, [(cu + (r - f) * math.cos(math.pi * i / 12), z_spring + (r - f) * math.sin(math.pi * i / 12))
+                for i in range(13)], -GLASS_DEPTH, -WB_DEPTH - 0.01, cell)
     for a in (math.pi / 4, math.pi / 2, 3 * math.pi / 4):
         ca, sa = math.cos(a), math.sin(a)
         nx, nz = -sa * 0.015, ca * 0.015
@@ -321,21 +400,24 @@ WALLS.box(-W / 2, W / 2, FRONT, BACK, 0, WALL_TOP)
 CUT.box(-W / 2 + WALL, W / 2 - WALL, FRONT + WALL, BACK - WALL, -1, WALL_TOP + 1)
 
 bay_x = [-W / 2 + BAY * (i + 0.5) for i in range(BAYS)]
-for x in bay_x:
-    window(FRONT_WALL, x, 1.05, PLINTH + FLOOR + 0.75, PLINTH + FLOOR + 2.5)      # 2nd floor
-    window(FRONT_WALL, x, 1.0, PLINTH + 2 * FLOOR + 0.7, PLINTH + 2 * FLOOR + 2.25)  # 3rd floor
+for c, x in enumerate(bay_x):
+    window(FRONT_WALL, x, 1.05, PLINTH + FLOOR + 0.75, PLINTH + FLOOR + 2.5,           # 2nd floor
+           cell=pick_cell(UPPER_WEIGHTS, "front", 1, c))
+    window(FRONT_WALL, x, 1.0, PLINTH + 2 * FLOOR + 0.7, PLINTH + 2 * FLOOR + 2.25,    # 3rd floor
+           cell=pick_cell(UPPER_WEIGHTS, "front", 2, c))
 for i, x in enumerate(bay_x):                                                    # ground floor
     if i == 5:
-        window(FRONT_WALL, x, 1.6, PLINTH, PLINTH + 2.7, door=True)              # main entrance
+        window(FRONT_WALL, x, 1.6, PLINTH, PLINTH + 2.7, door=True, cell="fan_5")  # main entrance
     elif i in (2, 8):
-        window(FRONT_WALL, x, 1.15, PLINTH, PLINTH + 2.7, door=True)
+        window(FRONT_WALL, x, 1.15, PLINTH, PLINTH + 2.7, door=True, cell="fan_%d" % i)
     else:
-        window(FRONT_WALL, x, 1.1, PLINTH + 0.5, PLINTH + 2.7)
-for wall in (LEFT_WALL, RIGHT_WALL):
-    for y in (5.6, 9.0):
-        window(wall, y, 1.0, PLINTH + 0.5, PLINTH + 2.6)
-        window(wall, y, 1.0, PLINTH + FLOOR + 0.75, PLINTH + FLOOR + 2.5)
-        window(wall, y, 1.0, PLINTH + 2 * FLOOR + 0.7, PLINTH + 2 * FLOOR + 2.25)
+        window(FRONT_WALL, x, 1.1, PLINTH + 0.5, PLINTH + 2.7, cell="lobby_%d" % i)
+for wall, wname in ((LEFT_WALL, "north"), (RIGHT_WALL, "south")):
+    for c, y in enumerate((5.6, 9.0)):
+        window(wall, y, 1.0, PLINTH + 0.5, PLINTH + 2.6, cell=pick_cell(SIDE_GROUND, wname, 0, c))
+        window(wall, y, 1.0, PLINTH + FLOOR + 0.75, PLINTH + FLOOR + 2.5, cell=pick_cell(UPPER_WEIGHTS, wname, 1, c))
+        window(wall, y, 1.0, PLINTH + 2 * FLOOR + 0.7, PLINTH + 2 * FLOOR + 2.25,
+               cell=pick_cell(UPPER_WEIGHTS, wname, 2, c))
 
 # Rear wing (map: offset 2.35 m north of centre, 3 storeys).
 G["Brick"].box(-2.35 - 3.4, -2.35 + 3.4, BACK, BACK + 10.3, 0, 10.8)
@@ -375,12 +457,13 @@ for s in (-1, 1):
     G["Roof"].box(x0 + 0.6, x1 - 0.6, FRONT + 0.6, BACK - 0.6, CORNICE_TOP + 5.15, CORNICE_TOP + 5.25)
 
 
-def dormer(cx, z0, w, h, y_face):
-    """Dormer with an arched window and a round hood, its face at y_face."""
+def dormer(cx, z0, w, h, y_face, cell):
+    """Dormer with an arched window and a round hood, its face at y_face. The window back
+    lies just proud of the frame, the glass 2.5 cm in front of it."""
     zs = z0 + h
     G["Slate"].prism(arched(cx, w + 0.3, z0, zs), y_face, y_face + 1.8)
     G["Trim"].prism(arched(cx, w + 0.16, z0 + 0.05, zs), y_face - 0.04, y_face + 0.02)
-    G["Glass"].prism(arched(cx, w - 0.12, z0 + 0.2, zs), y_face - 0.07, y_face - 0.04)
+    pane(("y", y_face, -1), arched(cx, w - 0.12, z0 + 0.2, zs), 0.07, 0.045, cell)
     G["Trim"].prism([(cx - 0.025, z0 + 0.2), (cx + 0.025, z0 + 0.2), (cx + 0.025, zs + w * 0.4),
                      (cx - 0.025, zs + w * 0.4)], y_face - 0.1, y_face - 0.07)
     G["Trim"].ring_arch(cx, zs, w / 2 + 0.15, w / 2 + 0.32, y_face - 0.2, y_face + 0.3)
@@ -388,9 +471,10 @@ def dormer(cx, z0, w, h, y_face):
 
 
 for i in (1, 2, 3, 7, 8, 9):
-    dormer(bay_x[i], CORNICE_TOP + 0.35, 0.9, 1.25, FRONT + 0.25)
+    dormer(bay_x[i], CORNICE_TOP + 0.35, 0.9, 1.25, FRONT + 0.25, pick_cell(ATTIC_WEIGHTS, "front", 3, i))
 for s in (-1, 1):
-    dormer(s * (W / 2 - TOWER_W / 2), CORNICE_TOP + 1.2, 1.0, 1.6, FRONT + 0.2)
+    dormer(s * (W / 2 - TOWER_W / 2), CORNICE_TOP + 1.2, 1.0, 1.6, FRONT + 0.2,
+           pick_cell(ATTIC_WEIGHTS, "tower", 3, s))
 
 # Central pavilion: straight front, curved top, the hotel's name, paired windows.
 PW, PY0, PY1, PH = 5.0, FRONT + 0.15, FRONT + 4.5, 3.3
@@ -405,8 +489,12 @@ for s in (-1, 1):
 G["Sign"].box(-2.0, 2.0, PY0 - 0.06, PY0, pz - 0.95, pz - 0.35)
 for x in (-0.6, 0.6):
     G["Trim"].prism(arched(x, 0.95, CORNICE_TOP + 0.35, CORNICE_TOP + 1.85), PY0 - 0.05, PY0 + 0.01)
-    G["Glass"].prism(arched(x, 0.75, CORNICE_TOP + 0.45, CORNICE_TOP + 1.85), PY0 - 0.08, PY0 - 0.05)
-G["Glass"].prism(arched(0, 1.6, pz + 0.2, pz + 0.55), PY0 - 0.03, PY0 + 0.02)   # lunette in the arch
+    pane(("y", PY0, -1), arched(x, 0.75, CORNICE_TOP + 0.45, CORNICE_TOP + 1.85), 0.08, 0.055,
+         pick_cell(ATTIC_WEIGHTS, "pavilion", 3, int(x > 0)))
+# lunette in the arch: a thin dark back (1.2 cm, so its edge is closed) with the glass in front
+_lun = arched(0, 1.6, pz + 0.2, pz + 0.55)
+G["WindowBack"].atlas_uvs(G["WindowBack"].prism(_lun, PY0 - 0.012, PY0), "y", -1, WB_CELLS["dark_room"]["uv"])
+G["Glass"].face(_lun, PY0 - 0.035, "y", -1)
 
 for x, y in ((-9.6, 8.5), (-4.2, 9.5), (4.2, 9.5), (9.6, 8.5)):
     G["Brick"].box(x - 0.45, x + 0.45, y - 0.3, y + 0.3, CORNICE_TOP + 2.0, CORNICE_TOP + 5.4)

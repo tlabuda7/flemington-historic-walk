@@ -15,8 +15,21 @@ Steps:
  6. Export the GLB. The lightmap is saved next to it as a JPEG and applied in
     A-Frame by the `baked-lighting` component (unlit material: colour x lightmap),
     which is also the cheapest way to draw it on a Quest 2.
+
+Windows (PLAN.md "E. Windows that don't read as flat black", 2026-11-10; same as the Nevius
+Store): every pane is a thin glass face in its own material named `glass` (warm grey dust
+tint GLASS_RGB, alpha GLASS_ALPHA, roughness 0.05, alpha blend, single-sided) a few cm in
+front of a window back: UHR_WindowBack (shared atlas assets/textures/shared/window_backs.jpg)
+on the upper floors, dormers, pavilion and side walls; UHR_Lobby (assets/textures/shared/
+hotel_lobby.jpg, tools/prepare_hotel_lobby.py) behind the ground-floor front windows and the
+door fanlights. Their atlas UVs come from union_hotel.py. The backs are lightmapped like
+everything else; the glass keeps Lightmap UVs (squeezed to almost nothing) but the scene draws
+it WITHOUT the lightmap, with a sky reflection (`glass-reflect`). During the bake the glass is
+fully transparent so the backs behind it get their light. Other collections are hidden from
+render during the bake (the Preview ground stays: it is the bounce).
 """
 
+import json
 import math
 import bpy
 import numpy as np
@@ -27,7 +40,11 @@ TEX = PROJECT + r"\assets\textures\polyhaven" + "\\"
 GLB = PROJECT + r"\assets\models\union-hotel.glb"
 LIGHTMAP = PROJECT + r"\assets\textures\union-hotel-lightmap.jpg"
 LIGHTMAP_SIZE = 2048
-SAMPLES = 128
+SAMPLES = 256
+SHARED = PROJECT + r"\assets\textures\shared" + "\\"
+GLASS_ALPHA = 0.40
+GLASS_RGB = (0x1A, 0x19, 0x16)       # faint warm grey dust tint (as the Nevius Store)
+KEEP_RENDER = ("UnionHotel", "Collection", "Preview")   # Preview_Ground = the bounce
 
 # 1. Geometry -----------------------------------------------------------------
 exec(open(PROJECT + r"\tools\blender\union_hotel.py").read())
@@ -47,6 +64,8 @@ LOOK = {
     "UH_Door":    ("door_paint_green.jpg", 0.8, 0.7),
     "UH_Sign":    ("sign_paint_green.jpg", 2.0, 0.7),
     "UH_Glass":   None,
+    "UH_WindowBack": ("window_backs.jpg", None, 0.9),     # atlas UVs from union_hotel.py
+    "UH_Lobby":      ("hotel_lobby.jpg", None, 0.9),
 }
 
 
@@ -63,12 +82,20 @@ def textured_material(name, image_file, roughness):
         uv = nt.nodes.new("ShaderNodeUVMap")
         uv.uv_map = "UVMap"
         tex = nt.nodes.new("ShaderNodeTexImage")
-        tex.image = bpy.data.images.load(TEX + image_file, check_existing=True)
+        folder = SHARED if image_file in ("window_backs.jpg", "hotel_lobby.jpg") else TEX
+        tex.image = bpy.data.images.load(folder + image_file, check_existing=True)
         nt.links.new(uv.outputs["UV"], tex.inputs["Vector"])
         nt.links.new(tex.outputs["Color"], bsdf.inputs["Base Color"])
-    else:   # old window glass: very dark, slightly green, glossy
-        bsdf.inputs["Base Color"].default_value = (0.012, 0.016, 0.016, 1)
-        bsdf.inputs["Roughness"].default_value = 0.08
+    else:   # window glass: transparent warm grey tint, drawn with a sky reflection by the scene
+        lin = [(c / 255) / 12.92 if c / 255 <= 0.04045 else ((c / 255 + 0.055) / 1.055) ** 2.4 for c in GLASS_RGB]
+        bsdf.inputs["Base Color"].default_value = (*lin, 1)
+        bsdf.inputs["Roughness"].default_value = 0.05
+        bsdf.inputs["Alpha"].default_value = GLASS_ALPHA
+        mat.use_backface_culling = True
+        if hasattr(mat, "surface_render_method"):
+            mat.surface_render_method = "BLENDED"
+        elif hasattr(mat, "blend_method"):
+            mat.blend_method = "BLEND"
     return mat
 
 
@@ -97,8 +124,12 @@ for obj in parts:
     look = LOOK[obj.name.split(".")[0]]
     image_file, tile, rough = look if look else (None, 1.0, 0.1)
     obj.data.materials.clear()
-    obj.data.materials.append(textured_material("UHR_" + obj.name[3:], image_file, rough))
-    box_uvs(obj, tile)
+    name = "glass" if obj.name == "UH_Glass" else "UHR_" + obj.name[3:]
+    obj.data.materials.append(textured_material(name, image_file, rough))
+    if tile:
+        box_uvs(obj, tile)          # window backs keep their atlas UVs
+    elif look is None:              # glass: a plain UV layer so every part joins with "UVMap"
+        box_uvs(obj, 1.0)
 
 # 3. Join and unwrap the lightmap UVs -------------------------------------------
 hotel = bpy.data.objects["UH_Walls"]
@@ -118,6 +149,22 @@ bpy.ops.object.mode_set(mode="EDIT")
 bpy.ops.mesh.select_all(action="SELECT")
 bpy.ops.uv.smart_project(angle_limit=math.radians(66), island_margin=0.004,
                          area_weight=0.0, correct_aspect=True, scale_to_bounds=False)
+bpy.ops.object.mode_set(mode="OBJECT")
+# Give the lightmap's pixels to what matters: the glass is not lightmapped in the scene, the
+# window backs are dark and small.
+LM_SHRINK = {"glass": 0.03, "UHR_WindowBack": 0.6, "UHR_Lobby": 0.6}
+lm_data = mesh.uv_layers["Lightmap"].data
+mat_names = [m.name for m in mesh.materials]
+for p in mesh.polygons:
+    f = LM_SHRINK.get(mat_names[p.material_index])
+    if f:
+        for li in p.loop_indices:
+            lm_data[li].uv = lm_data[li].uv * f
+bpy.ops.object.mode_set(mode="EDIT")
+bpy.ops.mesh.select_all(action="SELECT")
+bpy.ops.uv.select_all(action="SELECT")
+bpy.ops.uv.pack_islands(rotate=True, rotate_method="ANY", scale=True, margin_method="FRACTION",
+                        margin=0.0015, shape_method="CONCAVE")
 bpy.ops.object.mode_set(mode="OBJECT")
 
 # 4. Light: warm late-afternoon sun from the west-south-west, plus sky ---------
@@ -144,9 +191,28 @@ try:
     scene.render.engine = "CYCLES"
 except TypeError as e:
     print("engine choices:", e)
+prefs = bpy.context.preferences.addons["cycles"].preferences
+for kind in ("OPTIX", "CUDA"):
+    try:
+        prefs.compute_device_type = kind
+        prefs.get_devices()
+        if any(d.type == kind for d in prefs.devices):
+            for d in prefs.devices:
+                d.use = d.type == kind
+            break
+    except TypeError:
+        pass
 scene.cycles.device = "GPU"
 scene.cycles.samples = SAMPLES
 scene.cycles.use_denoising = False
+
+# Hide every other collection from render while baking (other buildings, the street tree).
+render_state = {c.name: c.hide_render for c in bpy.data.collections}
+for c in bpy.data.collections:
+    c.hide_render = c.name not in KEEP_RENDER
+glass_alpha = next(n for n in bpy.data.materials["glass"].node_tree.nodes
+                   if n.type == "BSDF_PRINCIPLED").inputs["Alpha"]
+glass_alpha.default_value = 0.0             # light passes the panes to the window backs
 
 
 def bake_target(name, float_buffer):
@@ -174,7 +240,9 @@ def point_materials_at(img):
 
 light_img = bake_target("UH_Light", True)
 point_materials_at(light_img)
-bpy.ops.object.bake(type="DIFFUSE", pass_filter={"DIRECT", "INDIRECT"}, margin=8, use_clear=True)
+# No bake margin: the fill after the bake covers every empty pixel from its neighbours.
+bpy.ops.object.bake(type="DIFFUSE", pass_filter={"DIRECT", "INDIRECT"}, margin=0, use_clear=True)
+glass_alpha.default_value = GLASS_ALPHA
 print("lighting baked")
 
 # 5. Grime mask: darker near the ground, plus soft blotches of faded paint ------
@@ -218,9 +286,12 @@ nt.nodes.active = target
 saved = list(mesh.materials)
 for i in range(len(mesh.materials)):
     mesh.materials[i] = grime_mat
-bpy.ops.object.bake(type="EMIT", margin=8, use_clear=True)
+bpy.ops.object.bake(type="EMIT", margin=0, use_clear=True)
 for i, mat in enumerate(saved):
     mesh.materials[i] = mat
+for name, state in render_state.items():
+    if bpy.data.collections.get(name):
+        bpy.data.collections[name].hide_render = state
 print("grime baked")
 
 # Combine, normalise and save as an sRGB-encoded JPEG.
@@ -234,6 +305,22 @@ grime = grime.reshape(-1, 4)
 baked = light[:, 3] > 0.5
 combined = light[:, :3] * np.where(baked[:, None], grime[:, :3], 1.0)
 scale = float(np.percentile(combined[baked].max(axis=1), 99.5))
+# Fill every unbaked pixel (gaps between islands) from its baked neighbours.
+img2 = combined.reshape(LIGHTMAP_SIZE, LIGHTMAP_SIZE, 3).copy()
+filled = baked.reshape(LIGHTMAP_SIZE, LIGHTMAP_SIZE).copy()
+for _ in range(96):
+    if filled.all():
+        break
+    acc = np.zeros_like(img2)
+    cnt = np.zeros(filled.shape, dtype=np.float32)
+    for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        f = np.roll(filled, (dy, dx), axis=(0, 1))
+        acc += np.roll(img2, (dy, dx), axis=(0, 1)) * f[..., None]
+        cnt += f
+    grow = (~filled) & (cnt > 0)
+    img2[grow] = acc[grow] / cnt[grow][:, None]
+    filled |= grow
+combined = img2.reshape(-1, 3)
 encoded = np.clip(combined / scale, 0, 1) ** (1 / 2.2)
 rgba = np.ones((px, 4), dtype=np.float32)
 rgba[:, :3] = encoded
@@ -245,7 +332,9 @@ out_img.filepath_raw = LIGHTMAP
 out_img.file_format = "JPEG"
 scene.render.image_settings.quality = 88
 out_img.save()
-print("LIGHTMAP_SCALE =", round(scale, 4), "(use baked-lighting intensity:", round(scale, 4), ")")
+LIGHTMAP_SCALE = round(scale, 4)
+print("lightmap coverage: %.1f%% of pixels baked" % (100 * baked.mean()))
+print("LIGHTMAP_SCALE =", LIGHTMAP_SCALE, "(use baked-lighting intensity:", LIGHTMAP_SCALE, ")")
 
 # The letters are too small to bake reliably, and they sit flat on the sign board,
 # so give them the board's lighting: point all their lightmap UVs at the board's face.
@@ -275,3 +364,4 @@ bpy.ops.export_scene.gltf(filepath=GLB, export_format="GLB", use_selection=True,
                           export_normals=True)
 tris = sum(len(p.vertices) - 2 for p in mesh.polygons)
 print("exported", GLB, "|", tris, "triangles |", len(mesh.materials), "materials")
+hotel["lightmap_scale"] = LIGHTMAP_SCALE            # read by union_hotel_preview.py

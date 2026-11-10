@@ -35,7 +35,7 @@ Decisions (2026-11-02):
 
 | Building | Spec | Assets | Built | Review | In scene |
 |----------|------|--------|-------|--------|----------|
-| Union Hotel (70–76 Main) | done before pipeline | done | done | — | yes |
+| Union Hotel (70–76 Main) | done before pipeline | done | done; **windows (E) rolled out 2026-11-10 by blender-builder**: window backs + lobby texture + `glass`, 25.6k tris, 13 materials, 3.46 MB, LIGHTMAP_SCALE **1.214** (was 1.2646), not yet integrated | — | yes |
 | Hunterdon County Courthouse (75 Main) | approved | done | done, round-1 fixes applied (13.7k tris, 2.6 MB) | round 2: PASS | yes (GLB, 2026-11-03) |
 | County Offices / Hall of Records (69–71 Main) | written, auto-approved (owner away) | done (1 new + 3 tinted, 3 reused) | done (8.6k tris, 2.2 MB, LIGHTMAP_SCALE 1.1299) | round 1: PASS | yes (GLB, 2026-11-03) |
 | Wurts Law Office (59 Main) | written, auto-approved (owner away) | reused, none new (asset-scout skipped; 1 grey copy of weathered_planks made locally) | done (7.6k tris, 5 materials, 1.2 MB, 1K lightmap, LIGHTMAP_SCALE 1.1647) | round 1: PASS | yes (GLB, 2026-11-03) |
@@ -51,7 +51,7 @@ Decisions (2026-11-02):
 | Distant landscape pass 1 (`landscape.glb`: real hills ring from USGS 3DEP + tree lines + town silhouettes) | written; owner pre-approved the approach, auto-approved within the usage cap (2026-11-04) | not needed (DEM in `assets/maps/`, 1 generated atlas) | done (8.3k tris: far terrain 5,760 + far trees 1,116 + town 1,426; 3 unlit materials, COLOR_0 + 1K RGBA tree atlas, 0.77 MB GLB, no lightmap) | no separate review (integrator sanity check, 2026-11-04) | in scene 2026-11-04: `#landscape` (far ring follows rig at 0.85), ground = 335 m following disc, fog 0.005, sky r 1200, camera near 0.05; +3 draw calls |
 | Palace Theatre (31 Main, old no. 518) | approved by owner 2026-11-08: c. 1920, blank parapet panel, ordinary (≤ 10k tris) | reused, none new (asset-scout skipped; 6 reused maps + 1 generated poster atlas, no lettering) | done 2026-11-10 (2.7k tris, 8 materials, 1.58 MB, 2K lightmap, LIGHTMAP_SCALE 0.9901) | **PASS** round 1 (reviewer 2026-11-10) | **yes** (−10.30, 0.15, −145.52) |
 | Odd Fellows Hall / Hopewell Building (82–84 Main, old nos. 537–538) | approved by owner 2026-11-10: blank signboards, ordinary (≤ 10k tris) | reused, none new (asset-scout skipped; 6 reused maps + 1 faded copy of the bank awning stripes) | done 2026-11-10 (4.7k tris, 8 materials, 1.38 MB, 2K lightmap, LIGHTMAP_SCALE 1.2485) | **PASS round 1** (reviewer 2026-11-10) | **in scene** 2026-11-10 at (10.30, 0.15, 9.09) |
-| Block at 35–41 Main (35–37 frame "Gro.", 39–41 brick "Cobbler") | approved by owner 2026-11-10: valance lettered "PRODUCE \| JACOB R. HALL \| GROCER" (3b), stair modelled (B2) | — | — | — | placeholder only |
+| Block at 35–41 Main (35–37 frame "Gro.", 39–41 brick "Cobbler") | approved by owner 2026-11-10: valance lettered "PRODUCE \| JACOB R. HALL \| GROCER" (3b), stair modelled (B2) | done 2026-11-10 (none downloaded; 6 reused maps + 2 made by `tools/prepare_block_35_41_textures.py`: `trim_stone_grey` (#A39A88) and `signs_atlas` (stripes, lettered valance, louvre)) | — | — | placeholder only |
 | Block at 32–38 Main (frame row: "Mill'y", "Bakery", "Meats") | written, awaiting owner approval | — | — | — | placeholder only |
 | Dry goods and clothing store (27 Main, old nos. 519 A/B; "D.G. & Clo.", possibly the "Potter Building") | written, awaiting owner approval | — | — | — | placeholder only |
 
@@ -2975,7 +2975,7 @@ may still have used the upper floors in 1920; nothing on the outside shows it, s
 
 ### Block at 35–41 Main St: frame "Gro." (35–37, old no. 517) and brick "Cobbler" (39–41, old no. 516)
 
-**Status:** spec written — awaiting user approval (planner, 2026-11-08; re-checked 2026-11-10; **revised 2026-11-10 from two new local photos**: Stryker glass plate c. 1906–10 and the c. 1905 County Hotel photo). Not built.
+**Status:** **assets ready** (asset-scout, 2026-11-10): nothing downloaded; reuse `house-65-main/clapboard_cream.jpg`, `polyhaven/red_brick.jpg`, `county-offices/roof_tin_redbrown.jpg`, `county-offices/door_varnish_dark.jpg`, `polyhaven/sidewalk_concrete.jpg`; new (logged in SOURCES.md, made by `tools/prepare_block_35_41_textures.py`): `block-35-41/trim_stone_grey.jpg` (trim, #A39A88, tile 2.0 m) and `block-35-41/signs_atlas.jpg` (1024²: `stripes` 0,0–768,384 = 42 stripes over the 6.40 m awning; `val_s` 0,384–768,512 and `val_n` 0,512–768,640 = valance south/north halves (3.20 × 0.25 m each) lettered "PRODUCE \| JACOB R. HALL \| GROCER" left→right = south→north, scallop hem period 0.15 m; `louvre` 768,0–1024,640 = County Hotel shutter leaf; `canvas` 0,640–768,1024; `green` 768,640–1024,832). Next: blender-builder. Earlier: spec approved by owner 2026-11-10 (3b, B2); spec written (planner, 2026-11-08; revised 2026-11-10 from the Stryker plate and the c. 1905 County Hotel photo).
 
 **What it is**: **two separate buildings**, 0.44 m apart on the map, between the Palace Theatre alley
 and the County Hotel. North: a **3-storey frame grocery with a two-tier front porch**. South: a
@@ -3789,6 +3789,22 @@ Order agreed with the owner: finish 65 Main → **one test person** → 68 Main 
   Draw calls: glass is 1 extra call per building (already separate before). Rollout: export a `glass` material and add
   `glass-reflect` to the entity. Not browser-tested (orchestrator: no browser tools): intensity and env-map orientation
   need a look on screen / in the headset.
+- **Rollout list:** 1. Nevius Store (78 Main): live. 2. **Union Hotel (70–76 Main): built (blender-builder, 2026-11-10)**:
+  every pane is one glass face (`glass`, #1A1916, alpha 0.40, roughness 0.05, BLEND, single-sided) 4 cm in front of a
+  window back (3.5 / 2.5 cm on the dormers and pavilion, where the glass sat proud of the frame). Upper floors, side
+  walls, dormers and pavilion: `UHR_WindowBack` cells of the shared atlas, picked per window with no repeat side by side
+  or above/below (cream blinds at varied heights, lace, lace + blind, a few curtains; attic also green blinds and dark
+  rooms; side ground floor curtains). Ground-floor front windows + 3 door fanlights: new `UHR_Lobby` material with a
+  dedicated 1K `assets/textures/shared/hotel_lobby.jpg` (+ `.json`), ray-traced per pane by `tools/prepare_hotel_lobby.py`
+  (run in Blender): parlour (north, armchairs, centre table, piano, framed pictures, tied-back olive curtains), lobby
+  (plain panelled counter, empty pigeonhole rack, chairs, back doorway) and dining room (south, clothed tables, chairs,
+  sideboard, maroon curtains); wainscot, wallpaper, plain ceiling, unlit pendants; no lettering. Exposure raised so the
+  rooms still read under the 3 m veranda. 26,984 -> 25,565 tris (the old 3 cm glass prisms became single faces),
+  11 -> 13 materials, 3.42 -> 3.46 MB, **LIGHTMAP_SCALE 1.2646 -> 1.214** (bake now 256 samples, glass transparent while
+  baking, lightmap UVs repacked with the glass squeezed, StreetTree collection hidden). Old GLB/lightmap kept as
+  `assets/models/source/union-hotel-before-windows.glb` / `union-hotel-lightmap-before-windows.jpg`. Previews (same
+  cameras): `union-hotel-windows-{before,after}.png`, `-{before,after}-detail.png`, plus `-after-north.png`; new
+  `tools/blender/union_hotel_preview.py`. Next: integrator (`#union-hotel` intensity 1.214, add `glass-reflect`).
 
 **B. Roads, sidewalks and background**
 - Rework the road, sidewalks, curbs, lawns and side streets (Court St, Bloomfield Ave) to the
@@ -4795,3 +4811,5 @@ Check licensing for every asset and note the source in the progress log.
 | 2026-11-10 | scene-integrator: **Nevius window pilot wired into the scene (local, not committed)**: intensity 1.1076; `baked-lighting` `keep` option leaves `glass` as exported; new `glass-reflect` component + system (shared sky PMREM, Fresnel reflection added over the exported 0.40 alpha, envMapIntensity 2.5, depthWrite off). Window backs and shop interior stay lightmapped. +0 draw calls vs. before (glass was already its own call). Checked by code reading and GLB parse only; needs a visual check of reflection strength and orientation. |
 | 2026-11-10 | scene-integrator: **Odd Fellows Hall / Hopewell Building (82–84 Main) in the scene**: `#bldg-82-84-main` = gltf-model `assets/models/odd-fellows-hall.glb` + baked-lighting intensity 1.2485 at (10.30, 0.15, 9.09), rotation 0 −90 0 (sidewalk level). Box placeholder (z 7.7) gone. World bounds (browser): x 8.69 … 31.56, y −0.05 … 13.05, z 0.68 … 17.50 (awnings 1.61 m over the walk): 4.0 m clear of Nevius (z −3.33), 1.2 m clear of the 90–94 placeholder (z 18.7). Props clear: pole E1 (x 6.9, z 3), board S1 (x 7.25), grocer crates G3 (x 9.95, z 11) sit under the 84 awning. Minimap entry added; SOURCES.md lists `awning_faint.jpg`. Browser: loads, faces the street, no console errors (pointer-lock only); 40 calls / 97.7k tris looking at it from the west sidewalk. |
 | 2026-11-10 | blender-builder: **Palace Theatre poster frames now plain and empty** (owner request): atlas regenerated (bare painted backing boards, no figures/lettering), re-baked, `palace-theatre.glb` re-exported (2,688 tris, 1.56 MB, LIGHTMAP_SCALE 0.9901 unchanged, so index.html needs no change). Preview `palace-theatre-posters-plain.png`. Not committed. |
+| 2026-11-10 | blender-builder: **Union Hotel windows (E) rolled out** (not integrated, not committed): window backs from the shared atlas on every upper/side/attic pane, new `hotel_lobby.jpg` (parlour / lobby / dining room, `tools/prepare_hotel_lobby.py`) behind the ground-floor windows and fanlights, transparent `glass` material. 25,565 tris, 13 materials, 3.46 MB, LIGHTMAP_SCALE 1.214 (was 1.2646). Previews `union-hotel-windows-{before,after}[-detail].png`. Next: integrator sets intensity 1.214 and adds `glass-reflect` to `#union-hotel`. |
+| 2026-11-10 | asset-scout: **Block at 35–41 Main assets ready**, nothing downloaded. Reused: clapboard_cream (tile ≈ 1.24 m for the spec's 0.14 m boards), red_brick, roof_tin_redbrown, door_varnish_dark, sidewalk_concrete. Made by `tools/prepare_block_35_41_textures.py` (logged in SOURCES.md): `block-35-41/trim_stone_grey.jpg` (trim_paint_cream re-tinted #A39A88) and `block-35-41/signs_atlas.jpg` (42-stripe awning, valance "PRODUCE \| JACOB R. HALL \| GROCER" in Bookman Old Style Bold split into south/north halves, County Hotel louvre leaf, canvas, green). Next: blender-builder. |

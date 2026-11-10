@@ -239,6 +239,18 @@ Nothing new downloaded. Reused unchanged: `polyhaven/trim_paint_cream.jpg` (fron
 
 `assets/textures/odd-fellows-hall-lightmap.jpg` is baked in Blender by `tools/blender/odd_fellows_hall_bake.py` (original work).
 
+### Block at 35–41 Main St (`assets/textures/block-35-41/`)
+
+Nothing new downloaded. Reused unchanged: `house-65-main/clapboard_cream.jpg` (clapboard), `polyhaven/red_brick.jpg`
+(brick), `county-offices/roof_tin_redbrown.jpg` (roofs), `county-offices/door_varnish_dark.jpg` (shop front, doors, stair
+boards), `polyhaven/sidewalk_concrete.jpg` (paving) (all listed above). Both files below are made by
+`tools/prepare_block_35_41_textures.py`.
+
+| File | Source | URL | Licence | Used for |
+|------|--------|-----|---------|----------|
+| `trim_stone_grey.jpg` | Painted Plaster Wall (`painted_plaster_wall`, via `polyhaven/trim_paint_cream.jpg`), tinted #A39A88 | https://polyhaven.com/a/painted_plaster_wall | CC0 | mid stone-grey trim: columns, rails, spindles, fascia, eave, brackets, frames (tile 2.0 m) |
+| `signs_atlas.jpg` | none: drawn with Pillow (original work, no download); stripes resampled from the generated `bank-building/awning_stripes.jpg`; shutter leaf copied from the generated `county-hotel/signs_atlas.jpg`. Valance lettering set in Bookman Old Style Bold (`BOOKOSB.TTF`, installed with Windows; rendered into the image, no font file is shipped) | — | original work | striped awning (42 stripes over 6.40 m), valance "PRODUCE \| JACOB R. HALL \| GROCER" in two halves, dark green louvred shutter leaf, plain canvas and green (1024², one material) |
+
 `assets/textures/union-hotel-lightmap.jpg` is baked in Blender by
 `tools/blender/union_hotel_bake.py` (original work).
 `assets/textures/courthouse-lightmap.jpg` is baked in Blender by `tools/blender/courthouse_bake.py` (original work).
@@ -281,6 +293,7 @@ The kit also reuses, unchanged, `polyhaven/metal_plate_02.jpg` (iron) and
 |---|---|---|---|
 | `window_backs.jpg` (+ `window_backs.json` cell layout) | none: drawn by `tools/prepare_window_backs.py` with Pillow (original work, no download, no lettering) | own work (CC0) | 1K atlas of what shows behind window glass c. 1920: cream / dark green roller blinds at several heights, lace curtains, plain curtain pairs, dark rooms, dim dry-goods shop interiors, shop ceiling; first used in `nevius-store.glb` (window-backs pilot, 2026-11-10); v2 2026-11-10: darker, reveal shadow per cell, muted colours |
 | `shop_interior.jpg` (+ `shop_interior.json` cell layout) | none: ray-traced from a simple box model of a c. 1920 dry-goods store by `tools/prepare_shop_interior.py` (run inside Blender, numpy; original work, no download, no lettering or signs) | own work (CC0) | 1K texture of the dim store seen through the Nevius Store's shop-front glass (display windows, door glass, splayed returns, transoms): window display of folded cloth, bolts and boxes, side counters, wall shelving, centre tables, pressed-tin ceiling; `nevius-store.glb` material `NVR_ShopInterior` (window realism v2, 2026-11-10) |
+| `hotel_lobby.jpg` (+ `hotel_lobby.json` cell layout) | none: ray-traced from a simple box model of the Union Hotel's ground floor by `tools/prepare_hotel_lobby.py` (run inside Blender, numpy; original work, no download, no lettering or signs) | own work (CC0) | 1K texture of the dim c. 1920 hotel rooms seen through the Union Hotel's ground-floor windows and door fanlights: parlour (armchairs, table, piano, framed pictures, tied-back curtains), lobby (plain counter, empty pigeonhole rack, chairs), dining room (clothed tables, chairs, sideboard); `union-hotel.glb` material `UHR_Lobby` (window realism rollout, 2026-11-10) |
 
 ## Sky (`assets/textures/sky/`)
 
