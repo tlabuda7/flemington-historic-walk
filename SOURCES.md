@@ -329,12 +329,23 @@ CC0 / public-domain alternative turns up.
 
 ### Voice of Mr. Pickell (`assets/audio/voices/pickell/`)
 
-Synthetic speech, made offline on 2026-11-04 by `tools/make_voice_pickell.py` (11 clips
+**Current voice (since 2026-11-10): Kokoro-82M, voice `am_michael`** (the owner's pick).
+Synthetic speech, made offline by `tools/make_voice_pickell_kokoro.py` (11 clips
 `<node-id>.ogg` = his 11 dialogue lines, plus `timings.json` with per-word times). Mono OGG
 Vorbis, 22.05 kHz, 64 kbps, about −18 LUFS (true peak ≤ −1 dBFS). The voice model and the TTS
 program were used only on the PC; neither is stored in the repo.
 
-**Attribution (CC BY 4.0 requires it; shown on the page in `index.html` `#credits`, bottom-left):**
+| File | Source | URL | Licence | Used for |
+|------|--------|-----|---------|----------|
+| `<node-id>.ogg` × 11, `timings.json` | **Kokoro-82M** v1.0 model weights and voice pack **`am_michael`** (hexgrad), downloaded automatically from Hugging Face by the `kokoro` package | https://huggingface.co/hexgrad/Kokoro-82M | **Apache-2.0** (no attribution required) | Mr. Pickell's spoken lines |
+| (tool, not shipped) | `kokoro` 0.9.4 + `misaki` 0.9.4 (hexgrad's TTS runtime and English G2P) from PyPI, in a throwaway virtual environment | https://github.com/hexgrad/kokoro , https://github.com/hexgrad/misaki | **Apache-2.0** | generating the clips |
+| (tool, not shipped) | spaCy 3.8 English model **`en_core_web_sm`** 3.8.0 (Explosion), used by misaki to split and tag the text | https://github.com/explosion/spacy-models/releases/tag/en_core_web_sm-3.8.0 | **MIT** | generating the clips |
+| (tool, not shipped) | espeak-ng via `espeakng-loader` 0.2.4, misaki's fallback for words not in its dictionary | https://github.com/espeak-ng/espeak-ng | **GPL-3.0** (applies to the program; the audio is not covered) | generating the clips |
+
+**Previous voice (2026-11-04 to 2026-11-10, replaced; files only in git history):** Piper TTS,
+made by `tools/make_voice_pickell.py` (kept in the repo).
+
+**Attribution for the previous Piper voice (CC BY 4.0; shown in `index.html` `#credits`):**
 *"Mr. Pickell's voice: synthetic speech made with Piper TTS, voice model en_US-libritts-high
 (speaker 595), trained on the LibriTTS corpus by H. Zen, V. Dang, R. Clark, Y. Zhang, R. J. Weiss,
 Y. Jia, Z. Chen and Y. Wu (2019), CC BY 4.0, http://www.openslr.org/60/. Changes: new text."*

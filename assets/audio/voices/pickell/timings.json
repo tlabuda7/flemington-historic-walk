@@ -1,2025 +1,2023 @@
 {
  "start": {
-  "duration_s": 10.358,
+  "duration_s": 9.531,
   "words": [
    {
     "w": "Good",
-    "start": 0.023,
-    "end": 0.139
+    "start": 0.108,
+    "end": 0.283
    },
    {
     "w": "afternoon!",
-    "start": 0.244,
-    "end": 0.964
+    "start": 0.283,
+    "end": 1.19
    },
    {
     "w": "John",
-    "start": 1.529,
-    "end": 1.901
+    "start": 1.608,
+    "end": 1.996
    },
    {
     "w": "Pickell,",
-    "start": 1.947,
-    "end": 2.4
+    "start": 1.996,
+    "end": 2.408
    },
    {
     "w": "of",
-    "start": 2.806,
-    "end": 2.888
+    "start": 2.458,
+    "end": 2.583
    },
    {
     "w": "the",
-    "start": 2.888,
-    "end": 2.992
+    "start": 2.583,
+    "end": 2.721
    },
    {
     "w": "Nevius",
-    "start": 3.074,
-    "end": 3.55
+    "start": 2.721,
+    "end": 3.221
    },
    {
     "w": "store.",
-    "start": 3.596,
-    "end": 3.991
+    "start": 3.221,
+    "end": 3.81
    },
    {
     "w": "Step",
-    "start": 4.568,
-    "end": 4.777
+    "start": 4.133,
+    "end": 4.483
    },
    {
     "w": "in",
-    "start": 4.812,
-    "end": 4.882
+    "start": 4.483,
+    "end": 4.608
    },
    {
     "w": "out",
-    "start": 4.94,
-    "end": 5.044
+    "start": 4.608,
+    "end": 4.796
    },
    {
     "w": "of",
-    "start": 5.149,
-    "end": 5.207
+    "start": 4.796,
+    "end": 4.883
    },
    {
     "w": "the",
-    "start": 5.23,
-    "end": 5.358
+    "start": 4.883,
+    "end": 5.046
    },
    {
     "w": "sun,",
-    "start": 5.392,
-    "end": 5.81
+    "start": 5.046,
+    "end": 5.408
    },
    {
     "w": "if",
-    "start": 6.228,
-    "end": 6.333
+    "start": 5.446,
+    "end": 5.583
    },
    {
     "w": "you",
-    "start": 6.391,
-    "end": 6.519
+    "start": 5.583,
+    "end": 5.746
    },
    {
     "w": "like",
-    "start": 6.577,
-    "end": 6.82
+    "start": 5.746,
+    "end": 6.12
    },
    {
     "w": "—",
-    "start": 6.82,
-    "end": 6.82
+    "start": 6.12,
+    "end": 6.12
    },
    {
     "w": "the",
-    "start": 6.867,
-    "end": 6.925
+    "start": 6.17,
+    "end": 6.296
    },
    {
     "w": "door's",
-    "start": 7.018,
-    "end": 7.308
+    "start": 6.296,
+    "end": 6.72
    },
    {
     "w": "open.",
-    "start": 7.354,
-    "end": 7.749
+    "start": 6.72,
+    "end": 7.21
    },
    {
     "w": "Is",
-    "start": 8.292,
-    "end": 8.489
+    "start": 7.583,
+    "end": 7.783
    },
    {
     "w": "there",
-    "start": 8.582,
-    "end": 8.872
+    "start": 7.783,
+    "end": 7.97
    },
    {
     "w": "something",
-    "start": 8.895,
-    "end": 9.197
+    "start": 7.97,
+    "end": 8.408
    },
    {
     "w": "I",
-    "start": 9.255,
-    "end": 9.371
+    "start": 8.408,
+    "end": 8.558
    },
    {
     "w": "can",
-    "start": 9.395,
-    "end": 9.569
+    "start": 8.558,
+    "end": 8.796
    },
    {
     "w": "show",
-    "start": 9.615,
-    "end": 9.882
+    "start": 8.796,
+    "end": 9.146
    },
    {
     "w": "you?",
-    "start": 9.998,
-    "end": 10.242
+    "start": 9.146,
+    "end": 9.46
    }
   ]
  },
  "again": {
-  "duration_s": 5.378,
+  "duration_s": 4.424,
   "words": [
    {
     "w": "Back",
-    "start": 0.023,
-    "end": 0.279
+    "start": 0.104,
+    "end": 0.379
    },
    {
     "w": "again?",
-    "start": 0.36,
-    "end": 0.824
+    "start": 0.379,
+    "end": 0.804
    },
    {
     "w": "Always",
-    "start": 1.344,
-    "end": 1.727
+    "start": 0.917,
+    "end": 1.342
    },
    {
     "w": "glad",
-    "start": 1.831,
-    "end": 2.145
+    "start": 1.342,
+    "end": 1.692
    },
    {
     "w": "to",
-    "start": 2.203,
-    "end": 2.261
+    "start": 1.692,
+    "end": 1.804
    },
    {
     "w": "see",
-    "start": 2.377,
-    "end": 2.586
+    "start": 1.804,
+    "end": 1.992
    },
    {
     "w": "a",
-    "start": 2.622,
-    "end": 2.772
+    "start": 1.992,
+    "end": 2.079
    },
    {
     "w": "customer.",
-    "start": 2.772,
-    "end": 3.387
+    "start": 2.079,
+    "end": 2.68
    },
    {
     "w": "What",
-    "start": 3.93,
-    "end": 4.104
+    "start": 3.042,
+    "end": 3.254
    },
    {
     "w": "can",
-    "start": 4.15,
-    "end": 4.231
+    "start": 3.254,
+    "end": 3.367
    },
    {
     "w": "I",
-    "start": 4.266,
-    "end": 4.417
+    "start": 3.367,
+    "end": 3.517
    },
    {
     "w": "do",
-    "start": 4.533,
-    "end": 4.754
+    "start": 3.517,
+    "end": 3.792
    },
    {
     "w": "for",
-    "start": 4.789,
-    "end": 5.091
+    "start": 3.792,
+    "end": 4.017
    },
    {
     "w": "you?",
-    "start": 5.137,
-    "end": 5.288
+    "start": 4.017,
+    "end": 4.35
    }
   ]
  },
  "goods": {
-  "duration_s": 15.715,
+  "duration_s": 16.032,
   "words": [
    {
     "w": "Dry",
-    "start": 0.023,
-    "end": 0.418
+    "start": 0.086,
+    "end": 0.386
    },
    {
     "w": "goods",
-    "start": 0.499,
+    "start": 0.386,
     "end": 0.836
    },
    {
     "w": "and",
-    "start": 0.859,
-    "end": 1.01
+    "start": 0.836,
+    "end": 0.961
    },
    {
     "w": "notions,",
-    "start": 1.057,
-    "end": 1.556
+    "start": 0.961,
+    "end": 1.561
    },
    {
     "w": "as",
-    "start": 1.602,
-    "end": 1.73
+    "start": 1.611,
+    "end": 1.761
    },
    {
     "w": "the",
-    "start": 1.776,
-    "end": 1.823
+    "start": 1.761,
+    "end": 1.936
    },
    {
     "w": "awning",
-    "start": 1.974,
-    "end": 2.31
+    "start": 1.936,
+    "end": 2.349
    },
    {
     "w": "says.",
-    "start": 2.426,
-    "end": 2.879
+    "start": 2.349,
+    "end": 2.86
    },
    {
     "w": "Dress",
-    "start": 3.515,
-    "end": 3.84
+    "start": 3.311,
+    "end": 3.649
    },
    {
     "w": "goods",
-    "start": 3.956,
-    "end": 4.223
+    "start": 3.649,
+    "end": 3.986
    },
    {
     "w": "by",
-    "start": 4.246,
-    "end": 4.432
+    "start": 3.986,
+    "end": 4.161
    },
    {
     "w": "the",
-    "start": 4.455,
-    "end": 4.548
+    "start": 4.161,
+    "end": 4.299
    },
    {
     "w": "yard",
-    "start": 4.606,
-    "end": 5.094
+    "start": 4.299,
+    "end": 4.811
    },
    {
     "w": "—",
-    "start": 5.094,
-    "end": 5.094
+    "start": 4.811,
+    "end": 4.811
    },
    {
     "w": "gingham,",
-    "start": 5.291,
-    "end": 5.593
+    "start": 4.899,
+    "end": 5.436
    },
    {
     "w": "percale,",
-    "start": 5.674,
-    "end": 6.243
+    "start": 5.536,
+    "end": 6.211
    },
    {
     "w": "serge,",
-    "start": 6.324,
-    "end": 6.765
+    "start": 6.286,
+    "end": 6.761
    },
    {
     "w": "silk",
-    "start": 6.858,
-    "end": 7.137
+    "start": 6.861,
+    "end": 7.449
    },
    {
     "w": "—",
-    "start": 7.137,
-    "end": 7.137
+    "start": 7.449,
+    "end": 7.449
    },
    {
     "w": "thread,",
-    "start": 7.218,
-    "end": 7.752
+    "start": 7.561,
+    "end": 8.111
    },
    {
     "w": "buttons,",
-    "start": 8.031,
-    "end": 8.646
+    "start": 8.236,
+    "end": 8.936
    },
    {
     "w": "ribbon,",
-    "start": 8.971,
-    "end": 9.296
+    "start": 9.061,
+    "end": 9.561
    },
    {
     "w": "hosiery,",
-    "start": 9.366,
-    "end": 9.889
+    "start": 9.649,
+    "end": 10.236
    },
    {
     "w": "and",
-    "start": 10.109,
-    "end": 10.33
+    "start": 10.274,
+    "end": 10.386
    },
    {
     "w": "ladies'",
-    "start": 10.388,
-    "end": 10.771
+    "start": 10.386,
+    "end": 10.824
    },
    {
     "w": "coats.",
-    "start": 10.852,
-    "end": 11.235
+    "start": 10.824,
+    "end": 11.36
    },
    {
     "w": "Mind",
-    "start": 11.697,
-    "end": 12.01
+    "start": 11.911,
+    "end": 12.324
    },
    {
     "w": "you,",
-    "start": 12.033,
-    "end": 12.231
+    "start": 12.324,
+    "end": 12.611
    },
    {
     "w": "everything",
-    "start": 12.544,
-    "end": 13.032
+    "start": 12.724,
+    "end": 13.249
    },
    {
     "w": "costs",
-    "start": 13.113,
-    "end": 13.624
+    "start": 13.249,
+    "end": 13.686
    },
    {
     "w": "near",
-    "start": 13.659,
-    "end": 13.833
+    "start": 13.686,
+    "end": 13.924
    },
    {
     "w": "twice",
-    "start": 13.856,
-    "end": 14.181
+    "start": 13.924,
+    "end": 14.386
    },
    {
     "w": "what",
-    "start": 14.239,
-    "end": 14.379
+    "start": 14.386,
+    "end": 14.524
    },
    {
     "w": "it",
-    "start": 14.402,
-    "end": 14.483
+    "start": 14.524,
+    "end": 14.649
    },
    {
     "w": "did",
-    "start": 14.506,
-    "end": 14.68
+    "start": 14.649,
+    "end": 14.936
    },
    {
     "w": "before",
-    "start": 14.704,
-    "end": 15.005
+    "start": 14.936,
+    "end": 15.336
    },
    {
     "w": "the",
-    "start": 15.029,
-    "end": 15.11
+    "start": 15.336,
+    "end": 15.474
    },
    {
     "w": "war.",
-    "start": 15.133,
-    "end": 15.656
+    "start": 15.474,
+    "end": 15.96
    }
   ]
  },
  "prices": {
-  "duration_s": 12.018,
+  "duration_s": 11.498,
   "words": [
    {
     "w": "The",
-    "start": 0.104,
-    "end": 0.232
+    "start": 0.075,
+    "end": 0.2
    },
    {
     "w": "war,",
-    "start": 0.255,
-    "end": 0.546
+    "start": 0.2,
+    "end": 0.55
    },
    {
     "w": "mostly.",
-    "start": 0.662,
-    "end": 1.161
+    "start": 0.6,
+    "end": 1.19
    },
    {
     "w": "Wool",
-    "start": 1.785,
-    "end": 2.11
+    "start": 1.625,
+    "end": 1.875
    },
    {
     "w": "and",
-    "start": 2.145,
-    "end": 2.284
+    "start": 1.875,
+    "end": 2.012
    },
    {
     "w": "cotton",
-    "start": 2.342,
-    "end": 2.679
+    "start": 2.012,
+    "end": 2.425
    },
    {
     "w": "went",
-    "start": 2.725,
-    "end": 2.865
+    "start": 2.425,
+    "end": 2.612
    },
    {
     "w": "sky-high,",
-    "start": 2.899,
-    "end": 4.118
+    "start": 2.612,
+    "end": 3.425
    },
    {
     "w": "and",
-    "start": 4.536,
-    "end": 4.687
+    "start": 3.5,
+    "end": 3.612
    },
    {
     "w": "they",
-    "start": 4.722,
-    "end": 4.827
+    "start": 3.612,
+    "end": 3.75
    },
    {
     "w": "haven't",
-    "start": 4.873,
-    "end": 5.163
+    "start": 3.75,
+    "end": 4.075
    },
    {
     "w": "come",
-    "start": 5.187,
-    "end": 5.419
+    "start": 4.075,
+    "end": 4.325
    },
    {
     "w": "down",
-    "start": 5.454,
-    "end": 5.697
+    "start": 4.325,
+    "end": 4.675
    },
    {
     "w": "yet.",
-    "start": 5.732,
-    "end": 5.988
+    "start": 4.675,
+    "end": 4.95
    },
    {
     "w": "The",
-    "start": 6.635,
-    "end": 6.716
+    "start": 5.412,
+    "end": 5.562
    },
    {
     "w": "papers",
-    "start": 6.751,
-    "end": 7.227
+    "start": 5.562,
+    "end": 6.037
    },
    {
     "w": "say",
-    "start": 7.25,
-    "end": 7.459
+    "start": 6.037,
+    "end": 6.312
    },
    {
     "w": "prices",
-    "start": 7.482,
-    "end": 8.074
+    "start": 6.312,
+    "end": 6.825
    },
    {
     "w": "may",
-    "start": 8.098,
-    "end": 8.272
+    "start": 6.825,
+    "end": 7.037
    },
    {
     "w": "break",
-    "start": 8.318,
-    "end": 8.527
+    "start": 7.037,
+    "end": 7.4
    },
    {
     "w": "before",
-    "start": 8.574,
-    "end": 8.945
+    "start": 7.4,
+    "end": 7.812
    },
    {
     "w": "winter.",
-    "start": 8.968,
-    "end": 9.386
+    "start": 7.812,
+    "end": 8.36
    },
    {
     "w": "I'll",
-    "start": 9.894,
-    "end": 10.056
+    "start": 8.787,
+    "end": 8.975
    },
    {
     "w": "believe",
-    "start": 10.115,
-    "end": 10.382
+    "start": 8.975,
+    "end": 9.425
    },
    {
     "w": "it",
-    "start": 10.405,
-    "end": 10.451
+    "start": 9.425,
+    "end": 9.575
    },
    {
     "w": "when",
-    "start": 10.474,
-    "end": 10.556
+    "start": 9.575,
+    "end": 9.712
    },
    {
     "w": "the",
-    "start": 10.579,
-    "end": 10.637
+    "start": 9.712,
+    "end": 9.837
    },
    {
     "w": "mills'",
-    "start": 10.66,
-    "end": 10.927
+    "start": 9.837,
+    "end": 10.262
    },
    {
     "w": "bills",
-    "start": 10.95,
-    "end": 11.264
+    "start": 10.262,
+    "end": 10.687
    },
    {
     "w": "say",
-    "start": 11.287,
-    "end": 11.554
+    "start": 10.687,
+    "end": 11.0
    },
    {
     "w": "so.",
-    "start": 11.589,
-    "end": 11.937
+    "start": 11.0,
+    "end": 11.43
    }
   ]
  },
  "owner": {
-  "duration_s": 17.105,
+  "duration_s": 18.42,
   "words": [
    {
     "w": "Mr.",
-    "start": 0.035,
-    "end": 0.36
+    "start": 0.097,
+    "end": 0.46
    },
    {
     "w": "Jacob",
-    "start": 0.406,
-    "end": 0.708
+    "start": 0.46,
+    "end": 0.935
    },
    {
     "w": "Nevius.",
-    "start": 0.755,
-    "end": 1.474
+    "start": 0.935,
+    "end": 1.65
    },
    {
     "w": "He",
-    "start": 2.075,
-    "end": 2.238
+    "start": 2.022,
+    "end": 2.172
    },
    {
     "w": "opened",
-    "start": 2.33,
-    "end": 2.586
+    "start": 2.172,
+    "end": 2.485
    },
    {
     "w": "his",
-    "start": 2.656,
-    "end": 2.795
+    "start": 2.485,
+    "end": 2.66
    },
    {
     "w": "first",
-    "start": 2.865,
-    "end": 3.271
+    "start": 2.66,
+    "end": 2.947
    },
    {
     "w": "store",
-    "start": 3.294,
-    "end": 3.573
+    "start": 2.947,
+    "end": 3.322
    },
    {
     "w": "here",
-    "start": 3.619,
-    "end": 3.805
+    "start": 3.322,
+    "end": 3.547
    },
    {
     "w": "in",
-    "start": 3.828,
-    "end": 3.944
+    "start": 3.547,
+    "end": 3.722
    },
    {
     "w": "Flemington",
-    "start": 3.991,
-    "end": 4.618
+    "start": 3.722,
+    "end": 4.322
    },
    {
     "w": "in",
-    "start": 4.664,
-    "end": 4.734
+    "start": 4.322,
+    "end": 4.485
    },
    {
     "w": "1878,",
-    "start": 4.792,
-    "end": 6.057
+    "start": 4.485,
+    "end": 6.097
    },
    {
     "w": "and",
-    "start": 6.22,
-    "end": 6.348
+    "start": 6.172,
+    "end": 6.285
    },
    {
     "w": "he",
-    "start": 6.371,
-    "end": 6.452
+    "start": 6.285,
+    "end": 6.397
    },
    {
     "w": "has",
-    "start": 6.487,
-    "end": 6.603
+    "start": 6.397,
+    "end": 6.647
    },
    {
     "w": "the",
-    "start": 6.684,
-    "end": 6.8
+    "start": 6.647,
+    "end": 6.785
    },
    {
     "w": "store",
-    "start": 6.847,
-    "end": 7.137
+    "start": 6.785,
+    "end": 7.21
    },
    {
     "w": "over",
-    "start": 7.218,
-    "end": 7.392
+    "start": 7.21,
+    "end": 7.622
    },
    {
     "w": "in",
-    "start": 7.52,
-    "end": 7.636
+    "start": 7.622,
+    "end": 7.797
    },
    {
     "w": "Somerville",
-    "start": 7.659,
-    "end": 8.24
+    "start": 7.797,
+    "end": 8.447
    },
    {
     "w": "too.",
-    "start": 8.263,
-    "end": 8.67
+    "start": 8.447,
+    "end": 8.91
    },
    {
     "w": "I",
-    "start": 9.166,
-    "end": 9.363
+    "start": 9.485,
+    "end": 9.672
    },
    {
     "w": "came",
-    "start": 9.433,
-    "end": 9.711
+    "start": 9.672,
+    "end": 9.947
    },
    {
     "w": "to",
-    "start": 9.769,
-    "end": 9.816
+    "start": 9.947,
+    "end": 10.072
    },
    {
     "w": "work",
-    "start": 9.932,
-    "end": 10.176
+    "start": 10.072,
+    "end": 10.347
    },
    {
     "w": "for",
-    "start": 10.199,
-    "end": 10.338
+    "start": 10.347,
+    "end": 10.472
    },
    {
     "w": "him",
-    "start": 10.373,
-    "end": 10.559
+    "start": 10.472,
+    "end": 10.697
    },
    {
     "w": "in",
-    "start": 10.605,
-    "end": 10.698
+    "start": 10.697,
+    "end": 10.847
    },
    {
     "w": "1895,",
-    "start": 10.756,
-    "end": 12.289
+    "start": 10.847,
+    "end": 12.33
    },
    {
     "w": "a",
-    "start": 12.301,
-    "end": 12.451
+    "start": 12.66,
+    "end": 12.785
    },
    {
     "w": "boy",
-    "start": 12.451,
-    "end": 12.707
+    "start": 12.785,
+    "end": 13.197
    },
    {
     "w": "of",
-    "start": 12.765,
-    "end": 12.846
+    "start": 13.197,
+    "end": 13.385
    },
    {
     "w": "sixteen,",
-    "start": 12.892,
-    "end": 13.473
+    "start": 13.385,
+    "end": 14.222
    },
    {
     "w": "rolling",
-    "start": 13.531,
-    "end": 13.879
+    "start": 14.347,
+    "end": 14.91
    },
    {
     "w": "bolts",
-    "start": 13.972,
-    "end": 14.344
+    "start": 14.91,
+    "end": 15.26
    },
    {
     "w": "of",
-    "start": 14.39,
-    "end": 14.483
+    "start": 15.26,
+    "end": 15.385
    },
    {
     "w": "cloth.",
-    "start": 14.564,
-    "end": 14.971
+    "start": 15.385,
+    "end": 16.02
    },
    {
     "w": "Twenty-five",
-    "start": 15.42,
-    "end": 16.001
+    "start": 16.472,
+    "end": 17.235
    },
    {
     "w": "years",
-    "start": 16.059,
-    "end": 16.303
+    "start": 17.235,
+    "end": 17.647
    },
    {
     "w": "this",
-    "start": 16.337,
-    "end": 16.581
+    "start": 17.647,
+    "end": 17.91
    },
    {
     "w": "year.",
-    "start": 16.651,
-    "end": 17.011
+    "start": 17.91,
+    "end": 18.35
    }
   ]
  },
  "building": {
-  "duration_s": 18.373,
+  "duration_s": 18.76,
   "words": [
    {
     "w": "There's",
-    "start": 0.081,
-    "end": 0.279
+    "start": 0.07,
+    "end": 0.27
    },
    {
     "w": "been",
-    "start": 0.337,
-    "end": 0.488
+    "start": 0.27,
+    "end": 0.445
    },
    {
     "w": "a",
-    "start": 0.5,
-    "end": 0.65
+    "start": 0.445,
+    "end": 0.57
    },
    {
     "w": "store",
-    "start": 0.65,
-    "end": 0.964
+    "start": 0.57,
+    "end": 1.007
    },
    {
     "w": "on",
-    "start": 1.022,
-    "end": 1.103
+    "start": 1.007,
+    "end": 1.145
    },
    {
     "w": "this",
-    "start": 1.138,
-    "end": 1.289
+    "start": 1.145,
+    "end": 1.382
    },
    {
     "w": "lot",
-    "start": 1.37,
-    "end": 1.66
+    "start": 1.382,
+    "end": 1.732
    },
    {
     "w": "since",
-    "start": 1.695,
-    "end": 1.904
+    "start": 1.732,
+    "end": 1.97
    },
    {
     "w": "before",
-    "start": 1.939,
-    "end": 2.229
+    "start": 1.97,
+    "end": 2.395
    },
    {
     "w": "the",
-    "start": 2.264,
-    "end": 2.334
+    "start": 2.395,
+    "end": 2.532
    },
    {
     "w": "Civil",
-    "start": 2.392,
-    "end": 2.752
+    "start": 2.532,
+    "end": 2.907
    },
    {
     "w": "War.",
-    "start": 2.833,
-    "end": 3.204
+    "start": 2.907,
+    "end": 3.41
    },
    {
     "w": "Mr.",
-    "start": 3.724,
-    "end": 4.002
+    "start": 3.92,
+    "end": 4.307
    },
    {
     "w": "Fulper",
-    "start": 4.107,
-    "end": 4.467
+    "start": 4.307,
+    "end": 4.732
    },
    {
     "w": "had",
-    "start": 4.525,
-    "end": 4.652
+    "start": 4.732,
+    "end": 4.932
    },
    {
     "w": "it",
-    "start": 4.652,
-    "end": 4.745
+    "start": 4.932,
+    "end": 5.045
    },
    {
     "w": "before",
-    "start": 4.78,
-    "end": 5.187
+    "start": 5.045,
+    "end": 5.545
    },
    {
     "w": "us;",
-    "start": 5.256,
-    "end": 5.616
+    "start": 5.545,
+    "end": 5.93
    },
    {
     "w": "they",
-    "start": 6.104,
-    "end": 6.44
+    "start": 6.307,
+    "end": 6.52
    },
    {
     "w": "say",
-    "start": 6.533,
-    "end": 6.684
+    "start": 6.52,
+    "end": 6.87
    },
    {
     "w": "he",
-    "start": 6.731,
-    "end": 6.905
+    "start": 6.87,
+    "end": 7.032
    },
    {
     "w": "gave",
-    "start": 6.951,
-    "end": 7.195
+    "start": 7.032,
+    "end": 7.282
    },
    {
     "w": "it",
-    "start": 7.23,
-    "end": 7.346
+    "start": 7.282,
+    "end": 7.395
    },
    {
     "w": "this",
-    "start": 7.381,
-    "end": 7.578
+    "start": 7.395,
+    "end": 7.645
    },
    {
     "w": "brick",
-    "start": 7.636,
-    "end": 7.926
+    "start": 7.645,
+    "end": 7.957
    },
    {
     "w": "front",
-    "start": 7.95,
-    "end": 8.182
+    "start": 7.957,
+    "end": 8.27
    },
    {
     "w": "about",
-    "start": 8.205,
-    "end": 8.402
+    "start": 8.27,
+    "end": 8.64
    },
    {
     "w": "1880.",
-    "start": 8.426,
-    "end": 9.331
+    "start": 8.645,
+    "end": 9.71
    },
    {
     "w": "Go",
-    "start": 9.909,
-    "end": 10.06
+    "start": 10.195,
+    "end": 10.42
    },
    {
     "w": "up",
-    "start": 10.234,
-    "end": 10.303
+    "start": 10.42,
+    "end": 10.62
    },
    {
     "w": "to",
-    "start": 10.373,
-    "end": 10.408
+    "start": 10.62,
+    "end": 10.72
    },
    {
     "w": "the",
-    "start": 10.524,
-    "end": 10.628
+    "start": 10.72,
+    "end": 10.87
    },
    {
     "w": "third",
-    "start": 10.698,
-    "end": 11.046
+    "start": 10.87,
+    "end": 11.22
    },
    {
     "w": "floor",
-    "start": 11.116,
-    "end": 11.58
+    "start": 11.22,
+    "end": 11.745
    },
    {
     "w": "and",
-    "start": 11.604,
-    "end": 11.731
+    "start": 11.745,
+    "end": 11.857
    },
    {
     "w": "you'll",
-    "start": 11.778,
-    "end": 11.975
+    "start": 11.857,
+    "end": 12.032
    },
    {
     "w": "find",
-    "start": 12.022,
+    "start": 12.032,
     "end": 12.37
    },
    {
     "w": "my",
-    "start": 12.416,
-    "end": 12.544
+    "start": 12.37,
+    "end": 12.57
    },
    {
     "w": "name",
-    "start": 12.591,
-    "end": 12.753
+    "start": 12.57,
+    "end": 12.982
    },
    {
     "w": "pencilled",
-    "start": 12.776,
-    "end": 13.183
+    "start": 12.982,
+    "end": 13.482
    },
    {
     "w": "on",
-    "start": 13.229,
-    "end": 13.322
+    "start": 13.482,
+    "end": 13.607
    },
    {
     "w": "the",
-    "start": 13.322,
-    "end": 13.415
+    "start": 13.607,
+    "end": 13.745
    },
    {
     "w": "wall",
-    "start": 13.519,
-    "end": 13.821
+    "start": 13.745,
+    "end": 14.27
    },
    {
     "w": "—",
-    "start": 13.821,
-    "end": 13.821
+    "start": 14.27,
+    "end": 14.27
    },
    {
     "w": "January",
-    "start": 13.937,
-    "end": 14.541
+    "start": 14.357,
+    "end": 15.107
    },
    {
     "w": "1896.",
-    "start": 14.878,
-    "end": 16.515
+    "start": 15.107,
+    "end": 16.32
    },
    {
     "w": "Boys",
-    "start": 17.022,
-    "end": 17.429
+    "start": 17.132,
+    "end": 17.645
    },
    {
     "w": "will",
-    "start": 17.487,
-    "end": 17.591
+    "start": 17.645,
+    "end": 17.795
    },
    {
     "w": "be",
-    "start": 17.626,
-    "end": 17.742
+    "start": 17.795,
+    "end": 17.957
    },
    {
     "w": "boys.",
-    "start": 17.8,
-    "end": 18.288
+    "start": 17.957,
+    "end": 18.69
    }
   ]
  },
  "town": {
-  "duration_s": 15.258,
+  "duration_s": 16.841,
   "words": [
    {
     "w": "That's",
-    "start": 0.07,
-    "end": 0.29
+    "start": 0.099,
+    "end": 0.349
    },
    {
     "w": "the",
-    "start": 0.337,
-    "end": 0.395
+    "start": 0.349,
+    "end": 0.486
    },
    {
     "w": "Court",
-    "start": 0.418,
-    "end": 0.673
+    "start": 0.486,
+    "end": 0.824
    },
    {
     "w": "House,",
-    "start": 0.743,
-    "end": 1.057
+    "start": 0.824,
+    "end": 1.41
    },
    {
     "w": "built",
-    "start": 1.138,
-    "end": 1.393
+    "start": 1.511,
+    "end": 1.824
    },
    {
     "w": "in",
-    "start": 1.416,
-    "end": 1.474
+    "start": 1.824,
+    "end": 1.999
    },
    {
     "w": "1828.",
-    "start": 1.509,
-    "end": 3.042
+    "start": 1.999,
+    "end": 3.27
    },
    {
     "w": "The",
-    "start": 3.526,
-    "end": 3.619
+    "start": 3.761,
+    "end": 3.911
    },
    {
     "w": "county",
-    "start": 3.677,
-    "end": 3.979
+    "start": 3.911,
+    "end": 4.374
    },
    {
     "w": "jail",
-    "start": 4.037,
-    "end": 4.409
+    "start": 4.374,
+    "end": 4.849
    },
    {
     "w": "is",
-    "start": 4.432,
-    "end": 4.525
+    "start": 4.849,
+    "end": 4.974
    },
    {
     "w": "on",
-    "start": 4.571,
-    "end": 4.687
+    "start": 4.974,
+    "end": 5.111
    },
    {
     "w": "the",
-    "start": 4.687,
-    "end": 4.769
+    "start": 5.111,
+    "end": 5.211
    },
    {
     "w": "ground",
-    "start": 4.815,
-    "end": 5.128
+    "start": 5.211,
+    "end": 5.724
    },
    {
     "w": "floor,",
-    "start": 5.163,
-    "end": 5.593
+    "start": 5.724,
+    "end": 6.199
    },
    {
     "w": "under",
-    "start": 5.674,
-    "end": 5.883
+    "start": 6.249,
+    "end": 6.461
    },
    {
     "w": "the",
-    "start": 5.918,
-    "end": 6.034
+    "start": 6.461,
+    "end": 6.586
    },
    {
     "w": "courtroom.",
-    "start": 6.069,
-    "end": 6.649
+    "start": 6.586,
+    "end": 7.3
    },
    {
     "w": "The",
-    "start": 7.111,
-    "end": 7.18
+    "start": 7.786,
+    "end": 7.936
    },
    {
     "w": "county",
-    "start": 7.227,
-    "end": 7.529
-   },
-   {
-    "w": "offices",
-    "start": 7.587,
-    "end": 8.063
-   },
-   {
-    "w": "stand",
-    "start": 8.086,
+    "start": 7.936,
     "end": 8.399
    },
    {
+    "w": "offices",
+    "start": 8.399,
+    "end": 9.036
+   },
+   {
+    "w": "stand",
+    "start": 9.036,
+    "end": 9.436
+   },
+   {
     "w": "just",
-    "start": 8.446,
-    "end": 8.713
+    "start": 9.436,
+    "end": 9.699
    },
    {
     "w": "beyond",
-    "start": 8.736,
-    "end": 9.166
+    "start": 9.699,
+    "end": 10.199
    },
    {
     "w": "it.",
-    "start": 9.224,
-    "end": 9.386
+    "start": 10.199,
+    "end": 10.38
    },
    {
     "w": "And",
-    "start": 9.882,
-    "end": 10.01
+    "start": 10.774,
+    "end": 10.949
    },
    {
     "w": "next",
-    "start": 10.056,
-    "end": 10.335
+    "start": 10.949,
+    "end": 11.249
    },
    {
     "w": "door",
-    "start": 10.405,
-    "end": 10.614
+    "start": 11.249,
+    "end": 11.511
    },
    {
     "w": "to",
-    "start": 10.672,
-    "end": 10.707
+    "start": 11.511,
+    "end": 11.699
    },
    {
     "w": "us",
-    "start": 10.788,
-    "end": 10.904
+    "start": 11.699,
+    "end": 11.974
    },
    {
     "w": "is",
-    "start": 10.927,
-    "end": 11.02
+    "start": 11.974,
+    "end": 12.124
    },
    {
     "w": "the",
-    "start": 11.055,
-    "end": 11.101
+    "start": 12.124,
+    "end": 12.274
    },
    {
     "w": "Union",
-    "start": 11.136,
-    "end": 11.531
+    "start": 12.274,
+    "end": 12.699
    },
    {
     "w": "Hotel",
-    "start": 11.577,
-    "end": 12.088
+    "start": 12.699,
+    "end": 13.611
    },
    {
     "w": "—",
-    "start": 12.088,
-    "end": 12.088
+    "start": 13.611,
+    "end": 13.611
    },
    {
     "w": "on",
-    "start": 12.553,
-    "end": 12.645
+    "start": 13.699,
+    "end": 13.911
    },
    {
     "w": "court",
-    "start": 12.715,
-    "end": 12.924
+    "start": 13.911,
+    "end": 14.236
    },
    {
     "w": "days",
-    "start": 12.982,
-    "end": 13.284
+    "start": 14.236,
+    "end": 14.699
    },
    {
     "w": "it's",
-    "start": 13.33,
-    "end": 13.493
+    "start": 14.699,
+    "end": 14.924
    },
    {
     "w": "full",
-    "start": 13.539,
-    "end": 13.772
+    "start": 14.924,
+    "end": 15.249
    },
    {
     "w": "of",
-    "start": 13.818,
-    "end": 13.888
+    "start": 15.249,
+    "end": 15.411
    },
    {
     "w": "lawyers",
-    "start": 13.969,
-    "end": 14.399
+    "start": 15.411,
+    "end": 15.999
    },
    {
     "w": "and",
-    "start": 14.422,
-    "end": 14.55
+    "start": 15.999,
+    "end": 16.149
    },
    {
     "w": "jurymen.",
-    "start": 14.584,
-    "end": 15.2
+    "start": 16.149,
+    "end": 16.77
    }
   ]
  },
  "dry": {
-  "duration_s": 13.121,
+  "duration_s": 14.901,
   "words": [
    {
     "w": "Not",
-    "start": 0.046,
-    "end": 0.36
+    "start": 0.128,
+    "end": 0.415
    },
    {
     "w": "as",
-    "start": 0.453,
-    "end": 0.522
+    "start": 0.415,
+    "end": 0.578
    },
    {
     "w": "it",
-    "start": 0.546,
-    "end": 0.627
+    "start": 0.578,
+    "end": 0.74
    },
    {
     "w": "was.",
-    "start": 0.65,
-    "end": 1.161
+    "start": 0.74,
+    "end": 1.34
    },
    {
     "w": "The",
-    "start": 1.727,
-    "end": 1.785
+    "start": 1.765,
+    "end": 1.878
    },
    {
     "w": "whole",
-    "start": 1.82,
-    "end": 2.029
+    "start": 1.878,
+    "end": 2.14
    },
    {
     "w": "country",
-    "start": 2.063,
-    "end": 2.377
+    "start": 2.14,
+    "end": 2.653
    },
    {
     "w": "went",
-    "start": 2.435,
-    "end": 2.574
+    "start": 2.653,
+    "end": 2.89
    },
    {
     "w": "dry",
-    "start": 2.598,
-    "end": 2.934
+    "start": 2.89,
+    "end": 3.303
    },
    {
     "w": "in",
-    "start": 2.981,
-    "end": 3.085
+    "start": 3.303,
+    "end": 3.465
    },
    {
     "w": "January",
-    "start": 3.143,
-    "end": 3.793
+    "start": 3.465,
+    "end": 4.41
    },
    {
     "w": "—",
-    "start": 3.793,
-    "end": 3.793
+    "start": 4.41,
+    "end": 4.41
    },
    {
     "w": "it's",
-    "start": 4.153,
-    "end": 4.385
+    "start": 4.503,
+    "end": 4.703
    },
    {
     "w": "in",
-    "start": 4.432,
-    "end": 4.502
+    "start": 4.703,
+    "end": 4.815
    },
    {
     "w": "the",
-    "start": 4.502,
-    "end": 4.583
+    "start": 4.815,
+    "end": 4.903
    },
    {
     "w": "Constitution",
-    "start": 4.618,
-    "end": 5.396
+    "start": 4.903,
+    "end": 5.753
    },
    {
     "w": "now.",
-    "start": 5.442,
-    "end": 5.848
+    "start": 5.753,
+    "end": 6.15
    },
    {
     "w": "But",
-    "start": 6.449,
-    "end": 6.623
+    "start": 6.64,
+    "end": 6.803
    },
    {
     "w": "more",
-    "start": 6.669,
-    "end": 6.844
+    "start": 6.803,
+    "end": 7.065
    },
    {
     "w": "folks",
-    "start": 6.902,
-    "end": 7.25
+    "start": 7.065,
+    "end": 7.503
    },
    {
     "w": "come",
-    "start": 7.285,
-    "end": 7.459
+    "start": 7.503,
+    "end": 7.79
    },
    {
     "w": "through",
-    "start": 7.482,
-    "end": 7.621
+    "start": 7.79,
+    "end": 8.053
    },
    {
     "w": "by",
-    "start": 7.645,
-    "end": 7.819
+    "start": 8.053,
+    "end": 8.265
    },
    {
     "w": "motor",
-    "start": 7.877,
-    "end": 8.144
+    "start": 8.265,
+    "end": 8.615
    },
    {
     "w": "car",
-    "start": 8.202,
-    "end": 8.446
+    "start": 8.615,
+    "end": 9.053
    },
    {
     "w": "than",
-    "start": 8.469,
-    "end": 8.597
+    "start": 9.053,
+    "end": 9.253
    },
    {
     "w": "ever;",
-    "start": 8.632,
-    "end": 8.933
+    "start": 9.253,
+    "end": 9.71
    },
    {
     "w": "of",
-    "start": 9.467,
-    "end": 9.537
+    "start": 10.115,
+    "end": 10.24
    },
    {
     "w": "a",
-    "start": 9.538,
-    "end": 9.688
+    "start": 10.24,
+    "end": 10.365
    },
    {
     "w": "Saturday",
-    "start": 9.688,
-    "end": 10.176
+    "start": 10.365,
+    "end": 11.003
    },
    {
     "w": "evening",
-    "start": 10.234,
-    "end": 10.547
+    "start": 11.003,
+    "end": 11.74
    },
    {
     "w": "the",
-    "start": 10.582,
-    "end": 10.663
+    "start": 11.74,
+    "end": 11.89
    },
    {
     "w": "cars",
-    "start": 10.721,
-    "end": 11.058
+    "start": 11.89,
+    "end": 12.403
    },
    {
     "w": "are",
-    "start": 11.093,
-    "end": 11.197
+    "start": 12.403,
+    "end": 12.565
    },
    {
     "w": "lined",
-    "start": 11.255,
-    "end": 11.499
+    "start": 12.565,
+    "end": 12.94
    },
    {
     "w": "up",
-    "start": 11.546,
-    "end": 11.639
+    "start": 12.94,
+    "end": 13.128
    },
    {
     "w": "along",
-    "start": 11.72,
-    "end": 12.022
+    "start": 13.128,
+    "end": 13.528
    },
    {
     "w": "the",
-    "start": 12.068,
-    "end": 12.138
+    "start": 13.528,
+    "end": 13.665
    },
    {
     "w": "curb",
-    "start": 12.173,
-    "end": 12.44
+    "start": 13.665,
+    "end": 14.028
    },
    {
     "w": "out",
-    "start": 12.486,
-    "end": 12.683
+    "start": 14.028,
+    "end": 14.303
    },
    {
     "w": "front.",
-    "start": 12.765,
-    "end": 13.121
+    "start": 14.303,
+    "end": 14.83
    }
   ]
  },
  "sights": {
-  "duration_s": 17.287,
+  "duration_s": 17.217,
   "words": [
    {
     "w": "Come",
-    "start": 0.046,
-    "end": 0.163
+    "start": 0.063,
+    "end": 0.288
    },
    {
     "w": "back",
-    "start": 0.209,
-    "end": 0.476
+    "start": 0.288,
+    "end": 0.588
    },
    {
     "w": "for",
-    "start": 0.511,
-    "end": 0.557
+    "start": 0.588,
+    "end": 0.713
    },
    {
     "w": "the",
-    "start": 0.615,
-    "end": 0.72
+    "start": 0.713,
+    "end": 0.875
    },
    {
     "w": "Fair",
-    "start": 0.743,
-    "end": 0.987
+    "start": 0.875,
+    "end": 1.313
    },
    {
     "w": "at",
-    "start": 1.033,
-    "end": 1.103
+    "start": 1.313,
+    "end": 1.4
    },
    {
     "w": "the",
-    "start": 1.138,
-    "end": 1.184
+    "start": 1.4,
+    "end": 1.55
    },
    {
     "w": "end",
-    "start": 1.324,
-    "end": 1.463
+    "start": 1.55,
+    "end": 1.775
    },
    {
     "w": "of",
-    "start": 1.486,
-    "end": 1.579
+    "start": 1.775,
+    "end": 1.913
    },
    {
     "w": "summer",
-    "start": 1.625,
-    "end": 2.02
+    "start": 1.913,
+    "end": 2.41
    },
    {
     "w": "—",
-    "start": 2.02,
-    "end": 2.02
+    "start": 2.41,
+    "end": 2.41
    },
    {
     "w": "it's",
-    "start": 2.078,
-    "end": 2.206
+    "start": 2.9,
+    "end": 3.113
    },
    {
     "w": "been",
-    "start": 2.264,
-    "end": 2.415
+    "start": 3.113,
+    "end": 3.326
    },
    {
     "w": "held",
-    "start": 2.45,
-    "end": 2.601
+    "start": 3.326,
+    "end": 3.663
    },
    {
     "w": "out",
-    "start": 2.67,
-    "end": 2.798
+    "start": 3.663,
+    "end": 3.888
    },
    {
     "w": "at",
-    "start": 2.821,
-    "end": 2.868
+    "start": 3.888,
+    "end": 3.988
    },
    {
     "w": "the",
-    "start": 2.937,
-    "end": 2.995
+    "start": 3.988,
+    "end": 4.138
    },
    {
     "w": "fairgrounds",
-    "start": 3.03,
-    "end": 3.669
+    "start": 4.138,
+    "end": 4.863
    },
    {
     "w": "since",
-    "start": 3.796,
-    "end": 4.005
+    "start": 4.863,
+    "end": 5.1
    },
    {
     "w": "1856:",
-    "start": 4.029,
-    "end": 5.898
+    "start": 5.1,
+    "end": 6.31
    },
    {
     "w": "trotting",
-    "start": 6.641,
-    "end": 6.966
+    "start": 6.876,
+    "end": 7.313
    },
    {
     "w": "races,",
-    "start": 7.047,
-    "end": 7.512
+    "start": 7.313,
+    "end": 8.238
    },
    {
     "w": "and",
-    "start": 7.79,
-    "end": 7.953
+    "start": 8.338,
+    "end": 8.513
    },
    {
     "w": "automobile",
-    "start": 7.988,
-    "end": 8.661
+    "start": 8.513,
+    "end": 9.2
    },
    {
     "w": "races",
-    "start": 8.731,
-    "end": 9.195
+    "start": 9.2,
+    "end": 9.688
    },
    {
     "w": "these",
-    "start": 9.242,
-    "end": 9.439
+    "start": 9.688,
+    "end": 9.95
    },
    {
     "w": "last",
-    "start": 9.555,
-    "end": 9.88
+    "start": 9.95,
+    "end": 10.388
    },
    {
     "w": "few",
-    "start": 9.973,
-    "end": 10.228
+    "start": 10.388,
+    "end": 10.651
    },
    {
     "w": "years.",
-    "start": 10.252,
-    "end": 10.751
+    "start": 10.651,
+    "end": 11.29
    },
    {
     "w": "And",
-    "start": 11.27,
-    "end": 11.421
+    "start": 11.813,
+    "end": 11.976
    },
    {
     "w": "there's",
-    "start": 11.444,
-    "end": 11.642
+    "start": 11.976,
+    "end": 12.2
    },
    {
     "w": "Fulper's",
-    "start": 11.7,
-    "end": 12.118
+    "start": 12.2,
+    "end": 12.676
    },
    {
     "w": "pottery;",
-    "start": 12.164,
-    "end": 12.71
+    "start": 12.676,
+    "end": 13.33
    },
    {
     "w": "they've",
-    "start": 13.046,
-    "end": 13.221
+    "start": 13.651,
+    "end": 13.913
    },
    {
     "w": "made",
-    "start": 13.255,
-    "end": 13.418
+    "start": 13.913,
+    "end": 14.151
    },
    {
     "w": "pottery",
-    "start": 13.464,
-    "end": 14.068
+    "start": 14.151,
+    "end": 14.663
    },
    {
     "w": "in",
-    "start": 14.637,
-    "end": 14.765
+    "start": 14.663,
+    "end": 14.838
    },
    {
     "w": "Flemington",
-    "start": 14.8,
-    "end": 15.415
+    "start": 14.838,
+    "end": 15.463
    },
    {
     "w": "for",
-    "start": 15.508,
-    "end": 15.705
+    "start": 15.463,
+    "end": 15.638
    },
    {
     "w": "over",
-    "start": 15.752,
-    "end": 15.937
+    "start": 15.638,
+    "end": 15.913
    },
    {
     "w": "a",
-    "start": 15.973,
-    "end": 16.123
+    "start": 15.913,
+    "end": 16.026
    },
    {
     "w": "hundred",
-    "start": 16.123,
-    "end": 16.576
+    "start": 16.026,
+    "end": 16.476
    },
    {
     "w": "years.",
-    "start": 16.657,
-    "end": 17.238
+    "start": 16.476,
+    "end": 17.15
    }
   ]
  },
  "news": {
-  "duration_s": 13.12,
+  "duration_s": 14.813,
   "words": [
    {
     "w": "Why,",
-    "start": 0.058,
-    "end": 0.569
+    "start": 0.119,
+    "end": 0.519
    },
    {
     "w": "the",
-    "start": 0.673,
-    "end": 0.813
+    "start": 0.594,
+    "end": 0.732
    },
    {
     "w": "ladies",
-    "start": 0.871,
-    "end": 1.207
+    "start": 0.732,
+    "end": 1.269
    },
    {
     "w": "have",
-    "start": 1.289,
-    "end": 1.428
+    "start": 1.269,
+    "end": 1.519
    },
    {
     "w": "the",
-    "start": 1.474,
-    "end": 1.672
+    "start": 1.519,
+    "end": 1.657
    },
    {
     "w": "vote!",
-    "start": 1.695,
-    "end": 2.078
+    "start": 1.657,
+    "end": 2.02
    },
    {
     "w": "New",
-    "start": 2.551,
-    "end": 2.911
+    "start": 2.644,
+    "end": 2.894
    },
    {
     "w": "Jersey",
-    "start": 2.981,
-    "end": 3.306
+    "start": 2.894,
+    "end": 3.407
    },
    {
     "w": "ratified",
-    "start": 3.364,
-    "end": 4.037
+    "start": 3.407,
+    "end": 4.032
    },
    {
     "w": "the",
-    "start": 4.107,
-    "end": 4.142
+    "start": 4.032,
+    "end": 4.169
    },
    {
     "w": "amendment",
-    "start": 4.223,
-    "end": 4.652
+    "start": 4.169,
+    "end": 4.669
    },
    {
     "w": "back",
-    "start": 4.687,
-    "end": 4.966
+    "start": 4.669,
+    "end": 4.994
    },
    {
     "w": "in",
-    "start": 5.001,
-    "end": 5.117
+    "start": 4.994,
+    "end": 5.169
    },
    {
     "w": "February,",
-    "start": 5.152,
-    "end": 5.767
+    "start": 5.169,
+    "end": 5.9
    },
    {
     "w": "and",
-    "start": 6.08,
-    "end": 6.324
+    "start": 6.232,
+    "end": 6.382
    },
    {
     "w": "now",
     "start": 6.382,
-    "end": 6.638
+    "end": 6.89
    },
    {
     "w": "it's",
-    "start": 6.661,
-    "end": 6.8
+    "start": 6.882,
+    "end": 7.094
    },
    {
     "w": "the",
-    "start": 6.858,
-    "end": 6.963
+    "start": 7.094,
+    "end": 7.232
    },
    {
     "w": "law",
-    "start": 7.056,
-    "end": 7.3
+    "start": 7.232,
+    "end": 7.594
    },
    {
     "w": "of",
-    "start": 7.369,
-    "end": 7.45
+    "start": 7.594,
+    "end": 7.719
    },
    {
     "w": "the",
-    "start": 7.45,
-    "end": 7.543
+    "start": 7.719,
+    "end": 7.857
    },
    {
     "w": "land.",
-    "start": 7.601,
-    "end": 8.043
+    "start": 7.857,
+    "end": 8.44
    },
    {
     "w": "Come",
-    "start": 8.481,
-    "end": 8.655
+    "start": 9.019,
+    "end": 9.294
    },
    {
     "w": "November",
-    "start": 8.701,
-    "end": 9.108
+    "start": 9.294,
+    "end": 9.94
    },
    {
     "w": "every",
-    "start": 9.189,
-    "end": 9.479
+    "start": 9.969,
+    "end": 10.369
    },
    {
     "w": "woman",
-    "start": 9.526,
-    "end": 9.723
+    "start": 10.369,
+    "end": 10.744
    },
    {
     "w": "in",
-    "start": 9.746,
-    "end": 9.851
+    "start": 10.744,
+    "end": 10.894
    },
    {
     "w": "Hunterdon",
-    "start": 9.909,
-    "end": 10.303
+    "start": 10.894,
+    "end": 11.407
    },
    {
     "w": "County",
-    "start": 10.338,
-    "end": 10.71
+    "start": 11.407,
+    "end": 11.869
    },
    {
     "w": "can",
-    "start": 10.756,
-    "end": 10.896
+    "start": 11.869,
+    "end": 12.082
    },
    {
     "w": "vote",
-    "start": 10.93,
-    "end": 11.139
+    "start": 12.082,
+    "end": 12.394
    },
    {
     "w": "for",
-    "start": 11.174,
-    "end": 11.325
+    "start": 12.394,
+    "end": 12.557
    },
    {
     "w": "President",
-    "start": 11.348,
-    "end": 11.848
+    "start": 12.557,
+    "end": 13.16
    },
    {
     "w": "—",
-    "start": 11.848,
-    "end": 11.848
+    "start": 13.16,
+    "end": 13.16
    },
    {
     "w": "Harding",
-    "start": 11.906,
-    "end": 12.196
+    "start": 13.307,
+    "end": 13.882
    },
    {
     "w": "or",
-    "start": 12.219,
-    "end": 12.335
+    "start": 13.882,
+    "end": 14.057
    },
    {
     "w": "Cox.",
-    "start": 12.393,
-    "end": 13.032
+    "start": 14.057,
+    "end": 14.47
    }
   ]
  },
  "bye": {
-  "duration_s": 7.501,
+  "duration_s": 8.113,
   "words": [
    {
     "w": "Good",
-    "start": 0.023,
-    "end": 0.267
+    "start": 0.112,
+    "end": 0.349
    },
    {
     "w": "day",
-    "start": 0.302,
-    "end": 0.418
+    "start": 0.349,
+    "end": 0.674
    },
    {
     "w": "to",
-    "start": 0.476,
-    "end": 0.499
+    "start": 0.674,
+    "end": 0.849
    },
    {
     "w": "you.",
-    "start": 0.569,
-    "end": 0.72
+    "start": 0.849,
+    "end": 1.17
    },
    {
     "w": "And",
-    "start": 1.193,
-    "end": 1.297
+    "start": 1.537,
+    "end": 1.712
    },
    {
     "w": "mind",
-    "start": 1.32,
-    "end": 1.564
+    "start": 1.712,
+    "end": 2.049
    },
    {
     "w": "the",
-    "start": 1.611,
-    "end": 1.669
+    "start": 2.049,
+    "end": 2.174
    },
    {
     "w": "motor",
-    "start": 1.727,
-    "end": 1.994
+    "start": 2.174,
+    "end": 2.574
    },
    {
     "w": "cars",
-    "start": 2.098,
-    "end": 2.598
+    "start": 2.574,
+    "end": 3.112
    },
    {
     "w": "at",
-    "start": 2.644,
-    "end": 2.714
+    "start": 3.112,
+    "end": 3.199
    },
    {
     "w": "the",
-    "start": 2.748,
-    "end": 2.818
+    "start": 3.199,
+    "end": 3.324
    },
    {
     "w": "Court",
-    "start": 2.876,
-    "end": 3.259
+    "start": 3.324,
+    "end": 3.637
    },
    {
     "w": "Street",
-    "start": 3.317,
-    "end": 3.642
+    "start": 3.637,
+    "end": 3.974
    },
    {
     "w": "corner",
-    "start": 3.7,
-    "end": 4.165
+    "start": 3.974,
+    "end": 4.5
    },
    {
     "w": "—",
-    "start": 4.165,
-    "end": 4.165
+    "start": 4.5,
+    "end": 4.5
    },
    {
     "w": "some",
-    "start": 4.618,
-    "end": 4.873
+    "start": 4.924,
+    "end": 5.124
    },
    {
     "w": "of",
-    "start": 4.896,
-    "end": 4.966
+    "start": 5.124,
+    "end": 5.212
    },
    {
     "w": "these",
-    "start": 5.024,
-    "end": 5.21
+    "start": 5.212,
+    "end": 5.524
    },
    {
     "w": "fellows",
-    "start": 5.279,
-    "end": 5.744
+    "start": 5.524,
+    "end": 6.012
    },
    {
     "w": "drive",
-    "start": 5.779,
-    "end": 6.08
+    "start": 6.012,
+    "end": 6.449
    },
    {
     "w": "faster",
-    "start": 6.104,
-    "end": 6.51
+    "start": 6.449,
+    "end": 7.012
    },
    {
     "w": "than",
-    "start": 6.568,
-    "end": 6.719
+    "start": 7.012,
+    "end": 7.162
    },
    {
     "w": "any",
-    "start": 6.765,
-    "end": 6.94
+    "start": 7.162,
+    "end": 7.424
    },
    {
     "w": "horse.",
-    "start": 6.974,
-    "end": 7.416
+    "start": 7.424,
+    "end": 8.04
    }
   ]
  },
  "_meta": {
-  "model": "en_US-libritts-high.onnx",
-  "speaker_id": 595,
-  "length_scale": 1.15,
-  "noise_scale": 0.667,
-  "noise_w_scale": 0.8,
+  "model": "hexgrad/Kokoro-82M",
+  "voice": "am_michael",
+  "speed": 0.9,
   "sample_rate": 22050,
   "note": "words = on-screen tokens in order; times in seconds from clip start"
  }
