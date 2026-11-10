@@ -61,10 +61,9 @@
     <b>Sound</b> starts with your first click or key press (or Enter VR); M mutes / unmutes.
   </div>
   <div id="credits">
-    Mr. Pickell's voice: synthetic speech (Piper TTS, model en_US-libritts-high, speaker 595),
-    trained on LibriTTS by H. Zen et al. (2019),
-    <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>,
-    <a href="http://www.openslr.org/60/" target="_blank" rel="noopener">openslr.org/60</a>. Changes: new text.
+    Mr. Pickell's voice: synthetic speech (Kokoro-82M, voice am_michael),
+    <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener">Apache-2.0</a>,
+    <a href="https://huggingface.co/hexgrad/Kokoro-82M" target="_blank" rel="noopener">huggingface.co/hexgrad/Kokoro-82M</a>.
   </div>
 
   <!--
@@ -427,10 +426,15 @@
     <!-- 35–41 placeholder: z -135.6 … -124.2, trim to -124.05 (stops short of the County Hotel's north wall) -->
     <a-entity id="bldg-35-41-main" position="-10.3 0 -129.9" rotation="0 90 0"
       building="width: 11.4; height: 7; depth: 12; stories: 2; color: #b8a07a; wall: wood; photo: "></a-entity>
-    <a-entity id="palace-theatre" position="-10.3 0 -145.7" rotation="0 90 0"
-      building="width: 12.7; height: 9; depth: 30; stories: 2; color: #7b4030; wall: brick; photo: "></a-entity>
-    <a-entity id="bldg-27-main" position="-10.3 0 -159.5" rotation="0 90 0"
-      building="width: 10.4; height: 9; depth: 20; stories: 2; color: #8f4c3a; wall: brick; photo: "></a-entity>
+    <!-- Palace Theatre (31 Main, old no. 518): tools/blender/palace_theatre.py + palace_theatre_bake.py.
+         Position = centre of the front on the property line at sidewalk level. Front block z -151.82 … -139.22,
+         auditorium and stage back to x -73.08; 3.5 m open alley to no. 35 on the south. -->
+    <a-entity id="palace-theatre" position="-10.3 0.15 -145.52" rotation="0 90 0"
+      gltf-model="url(assets/models/palace-theatre.glb)"
+      baked-lighting="lightmap: assets/textures/palace-theatre-lightmap.jpg; intensity: 0.9901"></a-entity>
+    <!-- 27 placeholder: z -164.7 … -152.2, extended south to cover the Palace's dark north wall (map gap ~0.4 m) -->
+    <a-entity id="bldg-27-main" position="-10.3 0 -158.45" rotation="0 90 0"
+      building="width: 12.5; height: 9; depth: 20; stories: 2; color: #8f4c3a; wall: brick; photo: "></a-entity>
 
     <!-- South of Court St, east side (sheet 3) -->
     <a-entity id="bldg-82-84-main" position="10.3 0 7.7" rotation="0 -90 0"

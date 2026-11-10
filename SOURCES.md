@@ -215,6 +215,18 @@ factors), `polyhaven/trim_paint_cream.jpg` (trim), `polyhaven/door_paint_green.j
 
 `assets/textures/block-40-46-lightmap.jpg` is baked in Blender by `tools/blender/block_40_46_bake.py` (original work).
 
+### Palace Theatre, 31 Main St (`assets/textures/palace-theatre/`)
+
+Nothing new downloaded. Reused unchanged: `polyhaven/red_brick.jpg` (brick), `courthouse/stucco_cream.jpg` (auditorium and
+stage walls, by a colour factor), `polyhaven/trim_paint_cream.jpg` (trim), `county-offices/stone_buff.jpg` (stone),
+`county-offices/roof_tin_redbrown.jpg` (roofs), `polyhaven/door_paint_green.jpg` (doors) (all listed above).
+
+| File | Source | URL | Licence | Used for |
+|------|--------|-----|---------|----------|
+| `signs_atlas.jpg` | none: drawn by `tools/prepare_palace_theatre_textures.py` with Pillow (original work, no download, no fonts, no lettering) | — | original work | two generic poster faces (plain shapes and grey bars, no titles) in the frames beside the entrance (1024², one material) |
+
+`assets/textures/palace-theatre-lightmap.jpg` is baked in Blender by `tools/blender/palace_theatre_bake.py` (original work).
+
 `assets/textures/union-hotel-lightmap.jpg` is baked in Blender by
 `tools/blender/union_hotel_bake.py` (original work).
 `assets/textures/courthouse-lightmap.jpg` is baked in Blender by `tools/blender/courthouse_bake.py` (original work).

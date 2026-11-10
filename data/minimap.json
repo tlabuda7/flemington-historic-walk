@@ -74,6 +74,14 @@
       "atZ": -112.07
     },
     {
+      "name": "Palace Theatre",
+      "addr": "No. 31",
+      "x": -21.3,
+      "z": -145.52,
+      "atX": -10.3,
+      "atZ": -145.52
+    },
+    {
       "name": "Nevius Store",
       "addr": "No. 78",
       "x": 21.3,
