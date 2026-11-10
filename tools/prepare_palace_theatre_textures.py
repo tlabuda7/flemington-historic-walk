@@ -4,20 +4,21 @@ prepare_palace_theatre_textures.py - the one generated texture for the Palace Th
 Usage:  python tools/prepare_palace_theatre_textures.py
 Output: assets/textures/palace-theatre/signs_atlas.jpg (1024 x 1024, quality 88)
 
-Nothing is downloaded: the atlas is drawn here with Pillow (original work). Owner decision
-2026-11-08: only two GENERIC poster frames, with no invented film titles and no lettering at all.
-Each poster is a faded one-sheet layout: a coloured border, a pictorial panel of plain shapes
-and grey bars standing in for print (unreadable at any distance, no letters).
+Nothing is downloaded: the atlas is drawn here with Pillow (original work).
+Owner decisions: 2026-11-08 no invented film titles and no lettering at all; 2026-11-10 the two
+poster frames are PLAIN and EMPTY (realism). Each frame therefore holds only a bare backing
+board: dark green-grey paint over three vertical boards, worn and sun-faded, with a few old
+tack holes and paler rectangles where earlier bills were pasted. No figures, no print, no text.
 
 Layout (pixels from the top-left; tools/blender/palace_theatre_bake.py maps the UVs to these
 boxes, REGIONS below is the single source of truth):
-  poster1  generic poster in the frame on the pier south of the entrance (0.56 x 0.94 m)
-  poster2  generic poster in the frame on the north corner pier (0.56 x 0.94 m)
-  spare    plain paper
+  poster1  empty backing board in the frame on the pier south of the entrance (0.56 x 0.94 m)
+  poster2  empty backing board in the frame on the north corner pier (0.56 x 0.94 m)
+  spare    plain paint
 """
 import random
 from pathlib import Path
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image, ImageDraw, ImageFilter, ImageChops
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "assets" / "textures" / "palace-theatre"
@@ -36,72 +37,73 @@ def rgb(c):
     return tuple(int(c[i:i + 2], 16) for i in (1, 3, 5))
 
 
-def paper(w, h, base):
-    img = Image.new("RGB", (w, h), rgb(base))
-    px = img.load()
-    for y in range(h):
+def noise_layer(w, h, cell, blur):
+    """Low-frequency random field 0-255 (blotchy fading)."""
+    small = Image.new("L", (w // cell + 2, h // cell + 2))
+    sp = small.load()
+    for y in range(small.height):
+        for x in range(small.width):
+            sp[x, y] = rnd.randint(0, 255)
+    return small.resize((w, h), Image.BICUBIC).filter(ImageFilter.GaussianBlur(blur))
+
+
+def grain(img, amount, stretch_y=6):
+    """Fine grain, stretched vertically like brushed paint on upright boards."""
+    w, h = img.size
+    g = Image.new("L", (w, h // stretch_y + 1))
+    gp = g.load()
+    for y in range(g.height):
         for x in range(w):
-            n = rnd.randint(-7, 7)
-            r, g, b = px[x, y]
-            px[x, y] = (max(0, r + n), max(0, g + n), max(0, b + n))
-    # low-frequency fading / soiling
-    blot = Image.new("L", (w // 16 + 1, h // 16 + 1))
-    bp = blot.load()
-    for y in range(blot.height):
-        for x in range(blot.width):
-            bp[x, y] = rnd.randint(0, 255)
-    blot = blot.resize((w, h), Image.BICUBIC).filter(ImageFilter.GaussianBlur(18))
-    dark = Image.new("RGB", (w, h), (120, 105, 80))
-    return Image.composite(dark, img, blot.point(lambda v: int(max(0, v - 150) * 0.5)))
+            gp[x, y] = 128 + rnd.randint(-amount, amount)
+    g = g.resize((w, h), Image.BILINEAR)
+    return ImageChops.subtract(img, Image.merge("RGB", [g] * 3), 1, 128)   # img - (g - 128)
 
 
-def bars(d, x0, x1, y, h, n, gap, colour, rag=True):
-    """Grey bars standing in for lines of print (no letters)."""
-    for i in range(n):
-        w = x1 - x0
-        if rag:
-            cut = rnd.randint(0, w // 5)
-            a, b = x0 + cut // 2, x1 - cut // 2
-        else:
-            a, b = x0, x1
-        d.rectangle([a, y + i * (h + gap), b, y + i * (h + gap) + h], fill=colour)
-
-
-def poster(w, h, scheme):
-    border, field, ink, accent, sky = scheme
-    img = paper(w, h, field)
+def board(w, h, base, faded):
+    """Plain painted backing board: three vertical boards, fading, wear, old tack holes."""
+    img = Image.new("RGB", (w, h), rgb(base))
+    # sun-faded, chalky patches
+    img = Image.composite(Image.new("RGB", (w, h), rgb(faded)), img,
+                          noise_layer(w, h, 40, 30).point(lambda v: int(max(0, v - 110) * 1.1)))
+    # faint paler rectangles where old bills were pasted and torn off (blank, no print)
+    ghost = Image.new("L", (w, h), 0)
+    gd = ImageDraw.Draw(ghost)
+    for _ in range(2):
+        x0 = rnd.randint(20, 70)
+        y0 = rnd.randint(30, 160)
+        gd.rectangle([x0, y0, w - rnd.randint(20, 70), y0 + rnd.randint(420, 600)], fill=26)
+    ghost = ghost.filter(ImageFilter.GaussianBlur(6))
+    ghost = ImageChops.multiply(ghost, noise_layer(w, h, 24, 10).point(lambda v: min(255, v + 80)))
+    img = Image.composite(Image.new("RGB", (w, h), rgb(faded)), img, ghost)
+    img = grain(img, 9)
     d = ImageDraw.Draw(img)
-    m = 26
-    d.rectangle([m, m, w - m, h - m], outline=rgb(border), width=14)
-    # head band: a solid colour block (where a title would be) left blank
-    d.rectangle([m + 30, m + 34, w - m - 30, m + 120], fill=rgb(accent))
-    bars(d, m + 90, w - m - 90, m + 140, 14, 1, 0, rgb(ink), rag=False)
-    # pictorial panel: plain shapes (sky, hills, two figures as silhouettes)
-    px0, py0, px1, py1 = m + 40, m + 185, w - m - 40, h - m - 230
-    d.rectangle([px0, py0, px1, py1], fill=rgb(sky))
-    d.polygon([(px0, py1 - 120), (px0 + 140, py1 - 210), (px0 + 260, py1 - 150), (px1, py1 - 230),
-               (px1, py1), (px0, py1)], fill=rgb(border))
-    for cx, s in ((px0 + 150, 1.0), (px0 + 270, 0.9)):
-        d.ellipse([cx - 22 * s, py1 - 300 * s, cx + 22 * s, py1 - 256 * s], fill=rgb(ink))
-        d.polygon([(cx - 40 * s, py1 - 40), (cx - 28 * s, py1 - 250 * s), (cx + 28 * s, py1 - 250 * s),
-                   (cx + 40 * s, py1 - 40)], fill=rgb(ink))
-    d.rectangle([px0, py0, px1, py1], outline=rgb(ink), width=4)
-    # lower print block
-    bars(d, m + 60, w - m - 60, py1 + 36, 22, 2, 18, rgb(accent))
-    bars(d, m + 90, w - m - 90, py1 + 120, 10, 4, 12, rgb(ink))
-    return img.filter(ImageFilter.GaussianBlur(0.8))
+    # board joints (dark V-groove with a lit edge)
+    for k in (1, 2):
+        x = int(w * k / 3) + rnd.randint(-4, 4)
+        d.line([(x, 0), (x, h)], fill=(18, 20, 18), width=4)
+        d.line([(x + 3, 0), (x + 3, h)], fill=tuple(min(255, c + 14) for c in rgb(base)), width=1)
+    # old tack / nail holes
+    for _ in range(26):
+        x, y = rnd.randint(14, w - 14), rnd.randint(14, h - 14)
+        d.ellipse([x - 2, y - 2, x + 2, y + 2], fill=(22, 22, 20))
+    # grime gathering toward the bottom and the frame edges
+    vy = Image.linear_gradient("L").resize((w, h)).point(lambda v: int(max(0, v - 150) * 0.9))
+    edge = Image.new("L", (w, h), 0)
+    ImageDraw.Draw(edge).rectangle([0, 0, w - 1, h - 1], outline=110, width=18)
+    edge = edge.filter(ImageFilter.GaussianBlur(14))
+    img = Image.composite(Image.new("RGB", (w, h), (20, 20, 18)), img, ImageChops.lighter(vy, edge))
+    return img.filter(ImageFilter.GaussianBlur(0.7))
 
 
+# (base paint, faded paint) per frame: dark green-grey, one a touch browner
 SCHEMES = {
-    "poster1": ("#5B2A22", "#E4D8B8", "#2C2622", "#A0442E", "#C9B48A"),
-    "poster2": ("#2F3F55", "#E2DAC0", "#26292C", "#3E5E7A", "#B7B49A"),
+    "poster1": ("#33392F", "#55594C"),
+    "poster2": ("#30362F", "#504F45"),
 }
 
-atlas = Image.new("RGB", (SIZE, SIZE), rgb("#D8CDB4"))
+atlas = Image.new("RGB", (SIZE, SIZE), rgb("#33392F"))
 for name, (c0, r0, c1, r1) in REGIONS.items():
-    if name in SCHEMES:
-        atlas.paste(poster(c1 - c0, r1 - r0, SCHEMES[name]), (c0, r0))
-    else:
-        atlas.paste(paper(c1 - c0, r1 - r0, "#D8CDB4"), (c0, r0))
+    base, faded = SCHEMES.get(name, ("#33392F", "#55594C"))
+    atlas.paste(board(c1 - c0, r1 - r0, base, faded), (c0, r0))
 atlas.save(OUT / "signs_atlas.jpg", quality=88)
 print("wrote", OUT / "signs_atlas.jpg", "| regions:", REGIONS)

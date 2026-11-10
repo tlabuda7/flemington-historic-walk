@@ -427,7 +427,7 @@ TK0, TK1 = 2.72, 3.20
 T.box(TK0 - 0.06, TK1 + 0.06, LDY - 0.04, LDY, 1.00, 1.62)
 GL.box(TK0, TK1, LDY - 0.05, LDY - 0.035, 1.06, 1.56)
 ST.box(TK0 - 0.08, TK1 + 0.08, LDY - 0.20, LDY, 1.00, 1.05)
-# two poster frames on the piers beside the entrance (artistic): dark frame, generic poster
+# two poster frames on the piers beside the entrance (artistic): dark frame, plain empty backing board
 for i, pc in enumerate(((SHOP_DOOR[1] + ENTR[0]) / 2, (ENTR[1] + AX1) / 2)):
     DR.box(pc - 0.33, pc + 0.33, -0.05, 0.01, 0.90, 1.98)
     atlas_rec(region="poster%d" % (i + 1), mode="rect", wall=wall_rec(FRONT),

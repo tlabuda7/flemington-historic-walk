@@ -20,7 +20,7 @@ Steps (pattern: block_40_46_bake.py / union_hotel_bake.py):
                    (fire doors darker by a bake tint)
       dark         plain #1E2226 (glass, lobby lining, iron)
       signs        palace-theatre/signs_atlas.jpg (tools/prepare_palace_theatre_textures.py):
-                   two generic posters, no lettering
+                   two plain, empty poster-frame backing boards (no figures, no lettering)
  3. Split wall faces where other parts cover them, join, delete the faces nobody can see,
     unwrap "Lightmap" (front and south wall weighted up; B/C, rear and roofs down).
  4. Bake warm late-afternoon sun + sky into one 2K lightmap with Cycles. West side of Main St
