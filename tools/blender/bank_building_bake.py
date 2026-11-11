@@ -7,10 +7,11 @@ Run inside Blender:
 
 Steps (pattern: county_offices_bake.py / wurts_law_office_bake.py):
  1. Rebuild the geometry (bank_building.py).
- 2. Give every surface a CC0 colour texture tiled in real-world metres (box UVs). Six
-    materials only (= six draw calls): brick, stone, trim, glass, dark, awning. The brick
-    texture is too light and orange and the trim paint a shade too light, so both are
-    multiplied by a constant colour that the glTF exporter writes as baseColorFactor.
+ 2. Give every surface a CC0 colour texture tiled in real-world metres (box UVs). Nine
+    materials (= nine draw calls): brick (buff), stone (brown), trim, glass, dark, awning,
+    window backs, bank hall and terra cotta ornament (atlas UVs from bank_building.py). The
+    trim paint is a shade too light, so it is multiplied by a constant colour that the glTF
+    exporter writes as baseColorFactor.
     The awning stripes run down the slope (U along the front, V down the canvas).
  3. Join the parts into one object, cut it along the wall planes and delete the faces
     nobody can see (inside walls, behind bands and stoops), then unwrap "Lightmap".
@@ -53,7 +54,7 @@ SAMPLES = 384
 SHARED = PROJECT + r"\assets\textures\shared" + "\\"
 GLASS_ALPHA = 0.40
 GLASS_RGB = (0x1A, 0x19, 0x16)       # faint warm grey dust tint (as the Nevius Store, Union Hotel)
-ATLAS = ("WindowBack", "BankHall")   # keep the atlas UVs made by bank_building.py
+ATLAS = ("WindowBack", "BankHall", "Ornament")   # keep the atlas UVs made by bank_building.py
 TO_SUN = (0.40, -0.90, 0.36)          # east-side building (front faces west)
 COLL, RIG, PREFIX = "BankBuilding", "BK_BakeRig", "BK_"
 
@@ -75,14 +76,17 @@ def tint(avg, target):
 
 # part -> (texture file, metres per repeat, roughness, plain colour (linear) or None, tint or None)
 LOOK = {
-    "Brick":  (PH + "red_brick.jpg", 1.4, 0.9, None, tint((142, 103, 80), (0x8A, 0x40, 0x30))),
-    "Stone":  (BB + "stone_rockfaced.jpg", 3.4, 0.95, None, (0.66, 0.68, 0.72)),   # mid, slightly cool grey (review round 1)
+    # colour fix 2026-11-11: unpainted buff brick and brown rock-faced stone (modern photo + NRHP);
+    # the colours are in the textures (tools/prepare_bank_colour.py), no tint
+    "Brick":  (BB + "brick_buff.jpg", 1.4, 0.9, None, None),
+    "Stone":  (BB + "stone_brown.jpg", 3.4, 0.95, None, None),
     "Trim":   (CO + "trim_paint_drab.jpg", 2.0, 0.7, None, tint((0xBD, 0xB4, 0xA0), (0xB5, 0xAC, 0x98))),
     "Glass":  (None, 1.0, 0.05, tuple(srgb_to_lin(c) for c in GLASS_RGB), None),
     "Dark":   (CO + "door_varnish_dark.jpg", 0.8, 0.5, None, None),
     "Awning": (BB + "awning_stripes.jpg", 0.6, 0.9, None, None),
     "WindowBack": (SHARED + "window_backs.jpg", None, 0.9, None, None),
     "BankHall":   (SHARED + "bank_hall.jpg", None, 0.9, None, None),
+    "Ornament":   (BB + "terracotta_ornament.jpg", None, 0.85, None, None),   # terra cotta frieze, roundels, keystones
 }
 
 

@@ -17,8 +17,16 @@ bank entrance with stoop and railings, four shop fronts with awnings), stone bel
 windows with pale lintels, round-arched 3rd-floor windows, roundels), panelled frieze and
 modillion cornice.
 
-8 materials (= 8 draw calls), in this slot order on every part:
-    0 Brick, 1 Stone, 2 Trim, 3 Glass, 4 Dark, 5 Awning, 6 WindowBack, 7 BankHall
+9 materials (= 9 draw calls), in this slot order on every part:
+    0 Brick, 1 Stone, 2 Trim, 3 Glass, 4 Dark, 5 Awning, 6 WindowBack, 7 BankHall, 8 Ornament
+
+Colour fix 2026-11-11 (PLAN.md Progress log 2026-11-10 "Bank Building colour CONFIRMED wrong";
+modern photo + 1980 NRHP text): buff brick, brown rock-faced stone, and terra cotta (material
+Ornament, atlas assets/textures/bank-building/terracotta_ornament.jpg by
+tools/prepare_bank_colour.py) on the frieze (anthemion + a roundel over every pilaster, painted
+in the texture; the old flat frieze panels are gone), the pilaster roundels (rosette) and the
+keystones over the arched 3rd-floor windows (leaf ornament). Their atlas UVs are set at the end
+of this file (assign_ornament_uvs).
 Shells and boolean cutters carry a material index per face; the boolean copies the cutter's
 index onto the faces it creates, so reveals, frames and window backs need no extra geometry.
 
@@ -77,8 +85,8 @@ W2, S2, H2 = 0.95, 5.00, 6.95                    # 2nd floor windows
 W3, S3, SP3 = 0.95, 7.75, 9.30                   # 3rd floor arched windows (crown 9.775)
 ROUNDEL_Z = 10.15
 
-BRICK, STONE, TRIM, GLASS, DARK, AWNING, WBACK, HALL = range(8)
-NAMES = ["Brick", "Stone", "Trim", "Glass", "Dark", "Awning", "WindowBack", "BankHall"]
+BRICK, STONE, TRIM, GLASS, DARK, AWNING, WBACK, HALL, ORN = range(9)
+NAMES = ["Brick", "Stone", "Trim", "Glass", "Dark", "Awning", "WindowBack", "BankHall", "Ornament"]
 
 # ---------------------------------------------------------------------------
 # Materials (plain stand-ins; bank_building_bake.py swaps in the textures)
@@ -106,7 +114,7 @@ def plain(name, color, rough=0.8):
     return mat
 
 
-COLOURS = ["#8a4030", "#a8a294", "#b5ac98", "#1e2226", "#3a2a1f", "#9a4a3e", "#3a332c", "#2e2822"]
+COLOURS = ["#c29a66", "#786050", "#b5ac98", "#1e2226", "#3a2a1f", "#9a4a3e", "#3a332c", "#2e2822", "#d6b088"]
 MATS = [plain("BK_" + n, c) for n, c in zip(NAMES, COLOURS)]
 
 # ---------------------------------------------------------------------------
@@ -426,11 +434,11 @@ def arched_window(wall, cu, w=W3, z0=S3, zs=SP3, segs=6, cell="dark_room"):
     zm = (z0 + zs) / 2 + 0.05
     P.prism(rect(cu - r + FR, cu + r - FR, zm - 0.03, zm + 0.03), D(-0.10), D(-D_GLASS), axis, mi=TRIM)
     sill(wall, cu, w, z0)
-    # brick hood ring 0.15 wide, 0.05 proud, and a small pale keystone
+    # brick hood ring 0.15 wide, 0.05 proud, and a small terra cotta keystone (leaf ornament)
     P.arc_band(cu, zs, r, r + 0.15, 0.0, math.pi, D(0.05), D(0.0), axis, segs=segs, mi=BRICK)
     crown = zs + r
     P.prism([(cu - 0.08, crown - 0.04), (cu + 0.08, crown - 0.04), (cu + 0.10, crown + 0.26), (cu - 0.10, crown + 0.26)],
-            D(0.075), D(0.0), axis, mi=TRIM)
+            D(0.075), D(0.0), axis, mi=ORN)
 
 
 def simple_opening(wall, cu, w, z0, z1, side_mat, back, depth=0.15, cell=None):
@@ -471,11 +479,11 @@ P.box(10.19, HW, -0.12, 0.0, PIL_TOP, CAP_TOP, mi=BRICK)
 P.prism(rect(BN - 0.60, BN, BELT1, PIL_TOP), -HW - 0.08, -HW, axis="x", mi=BRICK)
 P.prism(rect(BN - 0.68, BN, PIL_TOP, CAP_TOP), -HW - 0.12, -HW, axis="x", mi=BRICK)
 
-# roundels (8-sided pale discs) on the pilaster faces, one centred over each ground bay
+# roundels (8-sided terra cotta rosette discs) on the pilaster faces, one centred over each ground bay
 for x in (-8.560, -5.136, -1.712, 1.712, 5.136, 8.560):
-    P.prism(circle(x, ROUNDEL_Z, 0.275), -0.14, -0.08, "y", mi=TRIM)
+    P.prism(circle(x, ROUNDEL_Z, 0.275), -0.14, -0.08, "y", mi=ORN)
 for k in (0, 2, 4, 6, 8):
-    P.prism(circle(SIDE_PIL[k], ROUNDEL_Z, 0.275), -HW - 0.14, -HW - 0.08, "x", mi=TRIM)
+    P.prism(circle(SIDE_PIL[k], ROUNDEL_Z, 0.275), -HW - 0.14, -HW - 0.08, "x", mi=ORN)
 
 # ---------------------------------------------------------------------------
 # Belt course, frieze, cornice (plan bands on the front + full north side, with returns
@@ -490,20 +498,15 @@ def band(p, ret=0.8):
 
 P.prism([(-HW - 0.12, -0.12), (HW, -0.12), (HW, 0.0), (-HW, 0.0), (-HW, BN), (-HW - 0.12, BN)],
         BELT0, BELT1, axis="z", mi=STONE)                        # belt course, ends flush
-P.prism(band(0.10), FRIEZE0, FRIEZE1, axis="z", mi=TRIM)         # frieze
+# frieze: terra cotta on the street faces (front, SW return end, north side, NE return)
+P.prism(band(0.10), FRIEZE0, FRIEZE1, axis="z",
+        mi=(TRIM, TRIM, [ORN, ORN, TRIM, TRIM, TRIM, TRIM, TRIM, ORN, ORN, ORN]))
 P.prism(band(0.22), FRIEZE1, FRIEZE1 + 0.10, axis="z", mi=TRIM)  # bed moulding
 P.prism(band(0.16), FRIEZE1 + 0.10, 11.75, axis="z", mi=TRIM)    # band behind the modillions
 P.prism(band(0.75), 11.75, 12.12, axis="z", mi=TRIM)             # corona
 P.prism(band(0.80), 12.12, CORN_TOP, axis="z", mi=TRIM)          # cap moulding
 
-# frieze panels: two per bay, 0.35 x 0.45, 0.02 proud
-FZ = (FRIEZE0 + FRIEZE1) / 2
-for x in FRONT_WIN:
-    for s in (-0.428, 0.428):
-        P.box(x + s - 0.175, x + s + 0.175, -0.12, -0.10, FZ - 0.225, FZ + 0.225, mi=TRIM)
-for y in SIDE_WIN:
-    for s in (-0.43, 0.43):
-        P.prism(rect(y + s - 0.175, y + s + 0.175, FZ - 0.225, FZ + 0.225), -HW - 0.12, -HW - 0.10, "x", mi=TRIM)
+# (the frieze's anthemion and roundels are in the terra cotta texture: no panel boxes)
 
 # modillions: 0.12 w x 0.20 h x 0.40 deep, 0.57 m centres (3 per bay) under the corona
 MZ0, MZ1 = 11.55, 11.75
@@ -751,7 +754,57 @@ for p in ground.data.polygons:
 upper = cut_shell(UPPER, CUT_U, "BK_Upper")
 assign_atlas_uvs(ground)
 assign_atlas_uvs(upper)
-P.to_object("BK_Parts", col)
+parts_obj = P.to_object("BK_Parts", col)
+
+
+def assign_ornament_uvs(obj):
+    """Terra cotta atlas (terracotta_ornament.jpg): frieze faces -> the top half, which wraps in U
+    (one tile = one bay, a roundel over every pilaster); roundel fronts -> the rosette (bottom
+    left); keystone fronts -> the leaf ornament; every other Ornament face -> plain terra cotta."""
+    me = obj.data
+    uvl = me.uv_layers.get("UVMap") or me.uv_layers.new(name="UVMap")
+    for p in me.polygons:
+        if p.material_index != ORN:
+            continue
+        n = p.normal
+        cos = [me.vertices[me.loops[li].vertex_index].co for li in p.loop_indices]
+        zs = [c.z for c in cos]
+        if min(zs) > FRIEZE0 - 1e-3 and max(zs) < FRIEZE1 + 1e-3 and abs(n.z) < 0.1:
+            for li, c in zip(p.loop_indices, cos):
+                if n.y < -0.5:
+                    u = c.x / BAY + 0.5                       # front: roundel over x = k * BAY
+                elif n.x < -0.5:
+                    u = -(c.y - 0.80) / SBAY + 0.5            # north side: over y = 0.80 + k * SBAY
+                elif n.x > 0.5:
+                    u = c.y / BAY                             # SW return end
+                else:
+                    u = -c.x / BAY                            # NE return
+                v = 0.502 + 0.496 * (c.z - FRIEZE0) / (FRIEZE1 - FRIEZE0)
+                uvl.data[li].uv = (u, v)
+            continue
+        k = 1 if abs(n.y) > 0.9 else (0 if abs(n.x) > 0.9 else None)
+        if k is None:                                 # sides and edges: plain terra cotta
+            for li in p.loop_indices:
+                uvl.data[li].uv = (0.88, 0.25)
+            continue
+        us = [(c.x if k == 1 else c.y) for c in cos]
+        u0, u1, z0, z1 = min(us), max(us), min(zs), max(zs)
+        if u1 - u0 > 0.4:                             # roundel (0.55 m) -> rosette cell
+            U0, V0, U1, V1 = 0.0, 0.0, 0.5, 0.5
+            # the octagon's bbox is its flats; the drawn disc fills the cell: scale to match
+            cu, cz, r = (u0 + u1) / 2, (z0 + z1) / 2, (u1 - u0) / 2 / math.cos(math.pi / 8)
+            u0, u1, z0, z1 = cu - r, cu + r, cz - r, cz + r
+        else:                                         # keystone 0.20 x 0.30 -> leaf cell
+            U0, V0, U1, V1 = 0.5, 1 - 896 / 1024, 0.75, 0.5
+        flip = n[k] > 0 if k == 1 else n[k] < 0       # left to right as seen from outside
+        for li, c in zip(p.loop_indices, cos):
+            t = ((c.x if k == 1 else c.y) - u0) / (u1 - u0)
+            t = 1 - t if flip else t
+            s = (c.z - z0) / (z1 - z0)
+            uvl.data[li].uv = (U0 + (U1 - U0) * t, V0 + (V1 - V0) * s)
+
+
+assign_ornament_uvs(parts_obj)
 
 tris = sum(len(p.vertices) - 2 for o in col.objects for p in o.data.polygons)
 print("Bank Building built:", len(col.objects), "objects,", tris, "triangles (before hidden-face removal)")
