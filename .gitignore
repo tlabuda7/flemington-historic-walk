@@ -18,6 +18,7 @@ node_modules/
 # unconfirmed (listed with links in SOURCES.md). The public-domain HABS photos in
 # assets/photos/reference/habs/ are committed.
 assets/photos/reference/*.jpg
+assets/photos/reference/elsewhere/
 
 # Raw, uncompressed source assets: keep originals out of git,
 # commit only the optimized versions used by the scene.
