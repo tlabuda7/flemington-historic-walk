@@ -477,8 +477,12 @@
       gltf-model="url(assets/models/democrat-building.glb)"
       baked-lighting="lightmap: assets/textures/democrat-building-lightmap.jpg; intensity: 1.1571"
       glass-reflect></a-entity>
-    <a-entity id="bldg-100-102-main" position="10.3 0 50.05" rotation="0 -90 0"
-      building="width: 9.7; height: 10; depth: 14; stories: 3; color: #a0604a; wall: brick; photo: "></a-entity>
+    <!-- Auto supplies store (100–102 Main; plain guessed front: shop + two open gallery tiers):
+         tools/blender/store_100_102.py + store_100_102_bake.py. -->
+    <a-entity id="bldg-100-102-main" position="10.30 0.15 52.01" rotation="0 -90 0"
+      gltf-model="url(assets/models/store-100-102.glb)"
+      baked-lighting="lightmap: assets/textures/store-100-102-lightmap.jpg; intensity: 1.1366"
+      glass-reflect></a-entity>
     <a-entity id="bldg-106-main" position="10.3 0 57.65" rotation="0 -90 0"
       building="width: 5.5; height: 10; depth: 12; stories: 3; color: #b8a07a; wall: wood; photo: "></a-entity>
 
