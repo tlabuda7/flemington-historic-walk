@@ -19,6 +19,21 @@ Sources: PLAN.md "Block at 40-46 Main St" spec (1921 Sanborn sheet 2 footprints 
 no photo shows the fronts, so all facade detail is a period-typical guess). Owner decision
 2026-11-04: map-true placement (44-46 on the 1921 street line), ordinary building <= 10k tris.
 
+Addendum 2026-11-11 (owner-approved; HCHS Stryker plate c. 1906-10 + NRHP 1980 + 1921 Sanborn):
+  - a canted two-storey bay hangs from 42's 2nd and 3rd floors (centred X -1.66, 3.10 m wide at
+    the wall, front face 1.40 m, 0.85 m out), bracketed band and pent roof between the storeys,
+    paired brackets at the top; as in the plate, the north side face is panelled and the front
+    and south faces carry 1/1 windows. 42's other two window columns move to X -3.96 / +0.64 and
+    lose their shutters; the middle column is gone.
+  - decision 1: the 42 porch gets a flat tin deck with a railing of sawn (cut-out) flat balusters.
+  - decision 2: 40-42 gets a hipped roof (35 deg, flat deck on top) over its bracketed eave; the
+    eave wraps round the bay and the bay carries its own canted hip rising into the main roof,
+    with a turned finial spike at its peak (as in the plate). 44-46 keeps its shed roof.
+  - decision 3 + section E: every pane is ONE glass face (builder Glass -> material `glass`)
+    4 cm in front of a window back (builder WBack: shared/window_backs.jpg cells, no repeats
+    side by side or above/below; builder Shop: shared/shop_interior.jpg cells for the 44-46 shop).
+    The 42 show window and sale-room door look into a plain dark room.
+
 Coordinates (metres, Blender Z-up), origin = scene (8.60, 0.15, -116.55), rotation 0 -90 0:
     X  along the street, +X = south (passage / Rea Building), -X = north (36-38)
     Y  depth: y = 0 is the 44-46 front wall (street line); 40-42 front wall at 1.98,
@@ -27,9 +42,13 @@ Coordinates (metres, Blender Z-up), origin = scene (8.60, 0.15, -116.55), rotati
 glTF export turns -Y into +Z, which matches the A-Frame scene's "front faces +Z".
 """
 
+import json
 import math
+import random
 import bpy
 import bmesh
+
+PROJECT = r"C:\Users\Tarik\AppFactory\Flemington Historic Walk"
 
 # ---------------------------------------------------------------------------
 # Dimensions (PLAN.md massing table)
@@ -77,11 +96,14 @@ def plain(name, color, rough=0.8):
 
 
 COLOURS = {"ClapA": "#B9AE96", "ClapB": "#DCD6C4", "Trim": "#E4DFD2", "Green": "#2F4A36",
-           "Roof": "#5A3D34", "Stone": "#8E8C86", "Dark": "#1E2226", "Signs": "#E2DACA"}
+           "Roof": "#5A3D34", "Stone": "#8E8C86", "Glass": "#1A1916", "Signs": "#E2DACA",
+           "WBack": "#2A2420", "Shop": "#2A2420"}
 MATS = {k: plain("BK_" + k, c) for k, c in COLOURS.items()}
-# builder -> material (the bake gives every builder its own UVs and tint)
+# builder -> material (the bake gives every builder its own UVs and tint). The tunnel lining
+# and the awning iron take one dark texel of the window-back atlas (no separate material).
 BUILDER_MAT = {"ClapA": "ClapA", "ClapB": "ClapB", "Trim": "Trim", "Green": "Green", "Roof": "Roof",
-               "Stone": "Stone", "Glass": "Dark", "Iron": "Dark", "Tunnel": "Dark", "Atlas": "Signs"}
+               "Stone": "Stone", "Glass": "Glass", "Iron": "WBack", "Tunnel": "WBack", "Atlas": "Signs",
+               "WBack": "WBack", "Shop": "Shop"}
 
 # ---------------------------------------------------------------------------
 # Mesh builder (as rea_building.py)
@@ -170,6 +192,40 @@ class MB:
         vs = [self.bm.verts.new(c) for c in cos]
         self._closed([self.bm.faces.new([vs[i] for i in f]) for f in faces_idx])
 
+    def quad(self, wall, u0, u1, z0, z1, d):
+        """ONE single-sided face on a wall plane (d out from the wall face), facing outward."""
+        vs = [self.bm.verts.new(wall.pt(u, z, d)) for u, z in ((u0, z0), (u1, z0), (u1, z1), (u0, z1))]
+        f = self.bm.faces.new(vs)
+        f[self.rid_layer] = self.rid
+        return f
+
+    def flat(self, pts, z, up=True):
+        """ONE horizontal single-sided face (plan outline), facing up or down."""
+        vs = [self.bm.verts.new((x, y, z)) for x, y in pts]
+        f = self.bm.faces.new(vs)
+        f.normal_update()
+        if (f.normal.z > 0) != up:
+            f.normal_flip()
+        f[self.rid_layer] = self.rid
+        return f
+
+    def sweep(self, line, profile, closed=False):
+        """Profile [(p, z), ...] (p = out from the wall line, mitred) swept along a plan
+        polyline that has the outside on its right; closed loops need no end caps."""
+        off = offset_closed if closed else offset_line
+        rings = [[self.bm.verts.new((x, y, z)) for x, y in off(line, p)] for p, z in profile]
+        n, m = len(line), len(profile)
+        faces = []
+        for j in range(m):
+            r0, r1 = rings[j], rings[(j + 1) % m]
+            for i in range(n if closed else n - 1):
+                i2 = (i + 1) % n
+                faces.append(self.bm.faces.new([r0[i], r0[i2], r1[i2], r1[i]]))
+        if not closed:
+            faces.append(self.bm.faces.new([r[0] for r in rings]))
+            faces.append(self.bm.faces.new([r[-1] for r in reversed(rings)]))
+        self._closed(faces)
+
     def to_object(self, name, mat, col):
         mesh = bpy.data.meshes.new(name)
         self.bm.to_mesh(mesh)
@@ -218,6 +274,22 @@ def offset_line(poly, p):
     return out
 
 
+def offset_closed(poly, p):
+    """Closed plan loop (outside on the right), offset outward by p (mitred at every corner)."""
+    n = len(poly)
+    norms = []
+    for i in range(n):
+        (xa, ya), (xb, yb) = poly[i], poly[(i + 1) % n]
+        L = math.hypot(xb - xa, yb - ya)
+        norms.append(((yb - ya) / L, -(xb - xa) / L))
+    out = []
+    for i, (x, y) in enumerate(poly):
+        a, b = norms[i - 1], norms[i]
+        k = 1 + a[0] * b[0] + a[1] * b[1]
+        out.append((x + p * (a[0] + b[0]) / k, y + p * (a[1] + b[1]) / k))
+    return out
+
+
 def plan_band(line, p, z0, z1, mb, p_in=0.0):
     """Band along an open wall polyline: outer edge offset p, inner edge p_in (negative = into the wall)."""
     outer = offset_line(line, p)
@@ -244,13 +316,68 @@ def fresh_collection(name):
 
 col = fresh_collection("Block4046")
 G = {k: MB() for k in BUILDER_MAT}
-CA, CB, T, GR, R, ST, GL, IR, TU, AT = (G[k] for k in ("ClapA", "ClapB", "Trim", "Green", "Roof", "Stone",
-                                                       "Glass", "Iron", "Tunnel", "Atlas"))
+CA, CB, T, GR, R, ST, GL, IR, TU, AT, WB, SH = (G[k] for k in ("ClapA", "ClapB", "Trim", "Green", "Roof", "Stone",
+                                                               "Glass", "Iron", "Tunnel", "Atlas", "WBack", "Shop"))
 # wall shells (closed solids) and their cutters: name -> (shell, cutter, material)
 SHELLS = {k: (MB(), MB(), m) for k, m in (("ShellA", "ClapA"), ("ShellB", "ClapA"), ("ShellC", "ClapB"),
-                                          ("ShellC2", "ClapB"), ("Bay1", "ClapB"), ("Bay2", "ClapB"))}
-SA, SB, SC, SC2, SY1, SY2 = (SHELLS[k][0] for k in SHELLS)
-KA, KB, KC, KC2, KY1, KY2 = (SHELLS[k][1] for k in SHELLS)
+                                          ("ShellC2", "ClapB"), ("Bay1", "ClapB"), ("Bay2", "ClapB"),
+                                          ("Bay42", "ClapA"))}
+SA, SB, SC, SC2, SY1, SY2, SH42 = (SHELLS[k][0] for k in SHELLS)
+KA, KB, KC, KC2, KY1, KY2, K42 = (SHELLS[k][1] for k in SHELLS)
+
+# ---------------------------------------------------------------------------
+# Window backs (section E): cells of the shared atlases, picked so that no two windows side
+# by side or above/below show the same cell. BACKREC[rid] -> UV record (read by the bake).
+# ---------------------------------------------------------------------------
+WB_CELLS = json.load(open(PROJECT + r"\assets\textures\shared\window_backs.json"))["cells"]
+SHOP_CELLS = json.load(open(PROJECT + r"\assets\textures\shared\shop_interior.json"))["cells"]
+GAP = 0.04                      # window back this far behind the glass
+OFFICE = {"blind_cream_high": 3, "blind_cream_half": 3, "blind_cream_low": 2, "blind_green_high": 2,
+          "blind_green_half": 2, "blind_green_low": 1, "dark_room": 2, "dark_room_frame": 2}
+ROOMS = {"lace": 2, "lace_blind_cream": 2, "lace_blind_green": 2, "lace_full_blind_cream": 1,
+         "curtains_beige": 2, "curtains_olive": 1, "curtains_maroon_blind": 1, "blind_cream_half": 1}
+BACKSIDE = {"blind_cream_high": 2, "blind_cream_half": 2, "blind_green_half": 1, "blind_green_low": 1,
+            "dark_room": 3, "dark_room_frame": 3}
+_wb_rng = random.Random(4042)
+_wb_grid = {}
+BACKREC = {}
+
+
+def pick(weights, wall, row, colm):
+    g = _wb_grid.setdefault(wall, {})
+    avoid = {g.get((row, colm - 1)), g.get((row, colm + 1)), g.get((row - 1, colm)), g.get((row + 1, colm))}
+    names = [n for n in weights if n not in avoid]
+    cell = _wb_rng.choices(names, weights=[weights[n] for n in names])[0]
+    g[(row, colm)] = cell
+    return cell
+
+
+def back(wall, u0, u1, z0, z1, d, cell):
+    """Window back: one face on the wall plane at depth d (negative = into the wall)."""
+    shop = cell in SHOP_CELLS
+    mb = SH if shop else WB
+    rid = len(BACKREC) + 1
+    BACKREC[rid] = dict(wall=(wall.p0, wall.n), u0=u0, u1=u1, z0=z0, z1=z1,
+                        uv=(SHOP_CELLS if shop else WB_CELLS)[cell]["uv"])
+    mb.rid = rid
+    mb.quad(wall, u0, u1, z0, z1, d)
+    mb.rid = 0
+
+
+def dark_flat(pts, z, up):
+    """Floor / ceiling of the dark sale room behind the show window (one dark texel)."""
+    rid = len(BACKREC) + 1
+    u0, v0, u1, v1 = WB_CELLS["dark_room_frame"]["uv"]
+    BACKREC[rid] = dict(const=((u0 + u1) / 2, v0 + 0.2 * (v1 - v0)))
+    WB.rid = rid
+    WB.flat(pts, z, up)
+    WB.rid = 0
+
+
+def pane(wall, u0, u1, z0, z1, d_glass, cell):
+    """Glass face at depth d_glass with its window back GAP behind it."""
+    back(wall, u0, u1, z0, z1, d_glass - GAP, cell)
+    GL.quad(wall, u0, u1, z0, z1, d_glass)
 
 ATLAS = {}                      # rid -> record (read by block_40_46_bake.py)
 
@@ -305,13 +432,14 @@ def shutters(wall, cu, half, z0, z1, leaf=0.40):
     AT.rid = 0
 
 
-def window(wall, cu, z0, w, h, shut=0.40, full=True, cut=None):
-    """2/2 sash window in a 0.25 recess: dark glass, sash rails and muntin, cased trim 0.12
-    with a small cap cornice (full) or plain casing, sill, optional open louvred shutters."""
+def window(wall, cu, z0, w, h, cell, shut=0.40, full=True, cut=None, muntin=True):
+    """2/2 (or 1/1) sash window in a 0.25 recess: one glass face 4 cm in front of a window
+    back (section E), sash rails and muntin, cased trim 0.12 with a small cap cornice (full)
+    or plain casing 0.09, sill, optional open louvred shutters."""
     hw = w / 2
     z1 = z0 + h
     (cut or wall.cut).wbox(wall, cu - hw, cu + hw, z0, z1, -RECESS, 0.25)
-    GL.wbox(wall, cu - hw, cu + hw, z0, z1, -0.17, -0.15)
+    pane(wall, cu - hw, cu + hw, z0, z1, -0.17, cell)
     zm = z0 + h / 2
     s = 0.05
     if full:
@@ -320,7 +448,8 @@ def window(wall, cu, z0, w, h, shut=0.40, full=True, cut=None):
         for a in (cu - hw, cu + hw - s):
             T.wbox(wall, a, a + s, z0 + 0.07, z1 - s, -0.15, -0.09)              # stiles
     T.wbox(wall, cu - hw, cu + hw, zm - 0.03, zm + 0.03, -0.15, -0.10)           # meeting rail
-    T.wbox(wall, cu - 0.016, cu + 0.016, z0, z1, -0.15, -0.12)                   # muntin
+    if muntin:
+        T.wbox(wall, cu - 0.016, cu + 0.016, z0, z1, -0.15, -0.12)               # muntin
     c = 0.12 if full else 0.09
     T.wbox(wall, cu - hw - c, cu - hw, z0, z1 + c, -0.02, 0.03)                  # casing
     T.wbox(wall, cu + hw, cu + hw + c, z0, z1 + c, -0.02, 0.03)
@@ -332,42 +461,53 @@ def window(wall, cu, z0, w, h, shut=0.40, full=True, cut=None):
         shutters(wall, cu, hw, z0, z1, leaf=shut)
 
 
-def panel_door(wall, cu, w, z0, z1, mb, d=-0.14, glazed_from=None, cut=True, transom=0.0):
-    """Door leaf (green) in a recess: stiles/rails, raised panels or a glazed upper half;
-    optional transom light above; plain casing on the wall."""
+def panel_door(wall, cu, w, z0, z1, mb, d=-0.14, glazed_from=None, cut=True, transom=0.0, cells=None):
+    """Door leaf (green) in a recess: stiles/rails, raised panels or a glazed upper half
+    (glass face with a window back in the leaf's thickness); optional transom light above;
+    plain casing on the wall."""
     hw = w / 2
     if cut:
         wall.cut.wbox(wall, cu - hw, cu + hw, z0, z1 + transom, -RECESS, 0.25)
-    mb.wbox(wall, cu - hw, cu + hw, z0, z1, d - 0.05, d)
     top = z1 - 0.12
     if glazed_from:
-        GL.wbox(wall, cu - hw + 0.11, cu + hw - 0.11, glazed_from, top, d - 0.04, d + 0.005)
+        g0, g1 = cu - hw + 0.11, cu + hw - 0.11
+        mb.wbox(wall, cu - hw, g0, z0, z1, d - 0.05, d)                            # stiles
+        mb.wbox(wall, g1, cu + hw, z0, z1, d - 0.05, d)
+        mb.wbox(wall, g0, g1, z0, glazed_from, d - 0.05, d)                        # lower half
+        mb.wbox(wall, g0, g1, top, z1, d - 0.05, d)                                # top rail
+        pane(wall, g0, g1, glazed_from, top, d - 0.008, cells[0])
         mb.wbox(wall, cu - hw + 0.14, cu + hw - 0.14, z0 + 0.22, glazed_from - 0.14, d, d + 0.015)
     else:
+        mb.wbox(wall, cu - hw, cu + hw, z0, z1, d - 0.05, d)
         for ua, ub in ((cu - hw + 0.12, cu - 0.04), (cu + 0.04, cu + hw - 0.12)):
             for za, zb in ((z0 + 0.20, z0 + (z1 - z0) * 0.42), (z0 + (z1 - z0) * 0.50, top)):
                 mb.wbox(wall, ua, ub, za, zb, d, d + 0.015)
     if transom:
         T.wbox(wall, cu - hw, cu + hw, z1, z1 + 0.05, d - 0.05, d + 0.02)          # transom bar
-        GL.wbox(wall, cu - hw, cu + hw, z1 + 0.05, z1 + transom, d - 0.04, d - 0.02)
+        pane(wall, cu - hw, cu + hw, z1 + 0.05, z1 + transom, d - 0.03, cells[1])
     T.wbox(wall, cu - hw - 0.10, cu - hw, z0, z1 + transom + 0.10, -0.02, 0.03)    # casing
     T.wbox(wall, cu + hw, cu + hw + 0.10, z0, z1 + transom + 0.10, -0.02, 0.03)
     T.wbox(wall, cu - hw, cu + hw, z1 + transom, z1 + transom + 0.10, -0.02, 0.03)
 
 
-# --- A (40-42) upper floors: 4 bays, shuttered ---------------------------------
-A_BAYS = (-5.98, -3.40, -1.42, 0.56)
+# --- A (40-42) upper floors: 40's column shuttered; 42's two columns beside the bay -----
+A_BAYS = (-5.98, -3.96, 0.64)                    # 42's middle column gave way to the hanging bay
 A_FLOORS = ((4.35, 1.65), (6.85, 1.40))          # (sill, height); 3rd floor fits under the frieze
+A_COLS = {-5.98: 0, -3.96: 1, 0.64: 4}           # window-back grid columns (bay = 2, 3)
 for x in A_BAYS:
-    for sill, h in A_FLOORS:
-        window(A_FRONT, x, sill, 0.85, h)
+    for row, (sill, h) in enumerate(A_FLOORS):
+        cell = pick(OFFICE if row == 0 else ROOMS, "A_FRONT", row, A_COLS[x])
+        if x < -5:
+            window(A_FRONT, x, sill, 0.85, h, cell)
+        else:
+            window(A_FRONT, x, sill, 0.80, h, cell, shut=0)
 # side walls above 44-46 / 36-38 (3rd floor only), rear wall
-for y in (4.5, 8.5):
-    window(A_NORTH, -y, 6.85, 0.85, 1.40, shut=0, full=False)
-    window(A_SOUTH, y, 6.85, 0.85, 1.40, shut=0, full=False)
-window(A_REAR, 5.98, 4.35, 0.85, 1.65, shut=0, full=False)
+for i, y in enumerate((4.5, 8.5)):
+    window(A_NORTH, -y, 6.85, 0.85, 1.40, pick(BACKSIDE, "A_NORTH", 0, i), shut=0, full=False)
+    window(A_SOUTH, y, 6.85, 0.85, 1.40, pick(BACKSIDE, "A_SOUTH", 0, i), shut=0, full=False)
+window(A_REAR, 5.98, 4.35, 0.85, 1.65, pick(BACKSIDE, "A_REAR", 0, 1), shut=0, full=False)
 for x in (-5.98, -1.42):
-    window(A_REAR, -x, 6.85, 0.85, 1.40, shut=0, full=False)
+    window(A_REAR, -x, 6.85, 0.85, 1.40, pick(BACKSIDE, "A_REAR", 1, 1 if x < -5 else 0), shut=0, full=False)
 
 # corner boards 0.15 (front, both ends; side faces where exposed above 6.10)
 for x0 in (AX0, AX1 - 0.15):
@@ -375,7 +515,54 @@ for x0 in (AX0, AX1 - 0.15):
 for wall, u0 in ((A_NORTH, -AY0 - 0.15), (A_SOUTH, AY0)):
     T.wbox(wall, u0, u0 + 0.15, 6.0, 8.40, -0.01, 0.03)
 for wall, u0 in ((A_NORTH, -AY1), (A_SOUTH, AY1 - 0.15)):
-    T.wbox(wall, u0, u0 + 0.15, 6.0, 8.80, -0.01, 0.03)
+    T.wbox(wall, u0, u0 + 0.15, 6.0, 8.40, -0.01, 0.03)
+
+# --- 42: canted two-storey bay hanging from the 2nd and 3rd floors ----------------------
+# Plan at the wall X -3.21 ... -0.11, front face X -2.36 ... -0.96 at Y 1.13 (0.85 out), sides
+# at 45 deg. The plan lines run on into the wall (Y 2.40) so every sweep ends inside it.
+BAY_Z0, BAY_TOP = 3.70, 9.10
+BAY_IN = [(-3.21, AY0), (-2.36, 1.13), (-0.96, 1.13), (-0.11, AY0)]
+BAY_LINE = [(-3.63, 2.40), (-2.36, 1.13), (-0.96, 1.13), (0.31, 2.40)]
+SH42.prism(BAY_LINE, BAY_Z0, BAY_TOP, axis="z")
+F_N = Wall(BAY_IN[0], (-math.sqrt(0.5), -math.sqrt(0.5)), K42)    # north face, u 0 (wall) ... 1.20 (angle)
+F_F = Wall(BAY_IN[1], (0.0, -1.0), K42)                             # front face, u 0 ... 1.40
+F_S = Wall(BAY_IN[2], (math.sqrt(0.5), -math.sqrt(0.5)), K42)      # south face, u 0 (angle) ... 1.20
+LS = math.hypot(0.85, 0.85)                                         # side face length 1.20
+BAY_LOW, BAY_UP = (4.35, 1.50), (6.85, 1.40)                        # (sill, height) per storey
+for row, (sill, h) in enumerate((BAY_LOW, BAY_UP)):
+    w_ = OFFICE if row == 0 else ROOMS
+    window(F_F, 0.70, sill, 0.90, h, pick(w_, "A_FRONT", row, 2), shut=0, full=False, muntin=False)
+    window(F_S, LS / 2, sill, 0.55, h, pick(w_, "A_FRONT", row, 3), shut=0, full=False, muntin=False)
+
+
+def panel(wall, u0, u1, z0, z1):
+    """Flat panel: a board with a smaller raised board on it (reads as a moulded panel)."""
+    T.wbox(wall, u0, u1, z0, z1, -0.01, 0.015)
+    T.wbox(wall, u0 + 0.05, u1 - 0.05, z0 + 0.05, z1 - 0.05, 0.0, 0.03)
+
+
+panel(F_F, 0.36, 1.04, 3.92, 4.24)                                   # under the windows
+panel(F_S, 0.24, LS - 0.24, 3.92, 4.24)
+panel(F_F, 0.36, 1.04, 6.60, 6.78)
+panel(F_S, 0.24, LS - 0.24, 6.60, 6.78)
+panel(F_N, 0.30, LS - 0.30, 3.92, 4.24)                              # north face: panels only (plate)
+panel(F_N, 0.30, LS - 0.30, 4.35, 5.85)
+panel(F_N, 0.30, LS - 0.30, 6.60, 6.78)
+panel(F_N, 0.30, LS - 0.30, 6.85, 8.25)
+for x, y in BAY_IN[1:3]:                                             # corner posts at the angles
+    T.lathe(x, y, [(0.07, BAY_Z0 + 0.15), (0.07, 8.40)], sides=8, rot=0.0)
+# moulded skirt at the bottom, bracketed band and pent roof between the storeys
+T.sweep(BAY_LINE, [(-0.05, BAY_Z0), (0.05, BAY_Z0), (0.05, BAY_Z0 + 0.15), (-0.05, BAY_Z0 + 0.15)])
+T.sweep(BAY_LINE, [(-0.05, 5.95), (0.03, 5.95), (0.03, 6.22), (-0.05, 6.22)])
+R.sweep(BAY_LINE, [(-0.05, 6.20), (0.32, 6.20), (0.32, 6.27), (-0.05, 6.62)])
+BRACKET_M = [(0.0, 6.20), (0.26, 6.20), (0.26, 6.16), (0.18, 6.11), (0.10, 6.05), (0.05, 5.95), (0.0, 5.95)]
+for wall, u in ((F_F, 0.10), (F_F, 1.30), (F_N, 0.12), (F_S, LS - 0.12)):
+    T.oprism(wall, BRACKET_M, u - 0.045, u + 0.045)
+# two small corbels under the front angles, standing on the porch deck
+CORBEL = [(-0.28, BAY_Z0), (0.02, BAY_Z0), (0.02, BAY_Z0 - 0.06), (-0.06, BAY_Z0 - 0.14),
+          (-0.10, 3.48), (-0.28, 3.48)]
+for u in (0.12, 1.28):
+    T.oprism(F_F, CORBEL, u - 0.05, u + 0.05)
 
 # --- 40: drive-through arch, tunnel, rear doors ----------------------------------
 arch = round_outline(ARCH_C, ARCH_W, -0.30, ARCH_SPR, 12)
@@ -410,7 +597,19 @@ ST.box(TUN_X0, TUN_X1, AY1 - 0.15, AY1 + 0.25, SKIRT, 0.0)
 PORCH_X0, PORCH_X1, PORCH_Y0 = -4.51, AX1, 0.21
 BAY_PLAN = [(-3.28, AY0 + 0.02), (-2.65, 0.85), (-0.67, 0.85), (0.11, AY0 + 0.02)]
 T.prism(BAY_PLAN, DECK, 0.75, axis="z")                                        # bulkhead
-GL.prism(offset_line(BAY_PLAN, -0.04), 0.75, 2.90, axis="z")                     # plate glass
+# plate glass: one face per side 0.04 inside the outline, the plain dark sale room behind it
+# (decision 3): window backs 0.04 further in, a dark floor and ceiling
+SW_G, SW_B = offset_line(BAY_PLAN, -0.04), offset_line(BAY_PLAN, -0.08)
+for i, cell in enumerate(("dark_room", "dark_room_frame", "dark_room")):
+    (xa, ya), (xb, yb) = SW_G[i], SW_G[i + 1]
+    L_ = math.hypot(xb - xa, yb - ya)
+    side = Wall((xa, ya), ((yb - ya) / L_, -(xb - xa) / L_))
+    GL.quad(side, 0.0, L_, 0.78, 2.86, 0.0)
+    (xa, ya), (xb, yb) = SW_B[i], SW_B[i + 1]
+    L_ = math.hypot(xb - xa, yb - ya)
+    back(Wall((xa, ya), ((yb - ya) / L_, -(xb - xa) / L_)), 0.0, L_, 0.78, 2.86, 0.0, cell)
+dark_flat(SW_B, 0.782, True)
+dark_flat(SW_B, 2.858, False)
 T.prism(offset_line(BAY_PLAN, 0.03), 0.72, 0.78, axis="z")                       # sill rail
 T.prism(offset_line(BAY_PLAN, 0.02), 2.86, 2.98, axis="z")                       # head
 T.prism(offset_line(BAY_PLAN, 0.08), 2.98, 3.10, axis="z")                       # small cornice
@@ -421,7 +620,8 @@ for (xa, ya), (xb, yb) in zip(BAY_PLAN, BAY_PLAN[1:]):                          
     nx, ny = (yb - ya) / L, -(xb - xa) / L
     side = Wall((xa, ya), (nx, ny))
     T.wbox(side, 0.14, L - 0.14, DECK + 0.12, 0.62, -0.01, 0.015)
-panel_door(A_FRONT, 0.90, 1.00, DECK, 2.45, GR, glazed_from=1.20, transom=0.40)  # sale-room door
+panel_door(A_FRONT, 0.90, 1.00, DECK, 2.45, GR, glazed_from=1.20, transom=0.40,
+           cells=("dark_room_frame", "dark_room"))                               # sale-room door
 panel_door(A_FRONT, -3.90, 0.90, DECK, 2.45, GR)                                 # stair door
 
 # --- 42 porch: stone deck, 4 chamfered posts, fascia, "AUTO SALES" board, shed roof ---
@@ -434,32 +634,91 @@ for x in (-4.40, -2.80, 0.05, 1.56):
 T.box(PORCH_X0, PORCH_X1, PORCH_Y0, 0.36, 3.00, 3.30)                            # front fascia / beam
 T.box(PORCH_X0, PORCH_X0 + 0.08, PORCH_Y0, AY0, 3.00, 3.30)                      # north fascia
 T.box(PORCH_X0, PORCH_X1, 0.36, AY0, 3.24, 3.27)                                 # porch ceiling boards
-R.prism([(PORCH_Y0, 3.29), (AY0, 3.55), (AY0, 3.60), (PORCH_Y0, 3.34)],
-        PORCH_X0 - 0.06, PORCH_X1, axis="x")                                     # shed roof (tin)
+# flat tin deck (decision 1): 3.45 at the front, 3.55 at the wall, under the hanging bay
+DECK_F, DECK_W = 3.45, 3.55
+R.prism([(PORCH_Y0 - 0.02, 3.29), (AY0, 3.29), (AY0, DECK_W), (PORCH_Y0 - 0.02, DECK_F)],
+        PORCH_X0 - 0.06, PORCH_X1, axis="x")
 AUTO = (-3.66, 0.34, 2.98, 3.48)
 atlas_rec(region="auto", mode="rect", wall=wall_rec(A_FRONT), u0=AUTO[0], u1=AUTO[1], z0=AUTO[2], z1=AUTO[3])
 AT.box(AUTO[0], AUTO[1], PORCH_Y0 - 0.04, PORCH_Y0, AUTO[2], AUTO[3])
 AT.rid = 0
 
-# --- A cornice: frieze, bracketed cornice, returns 0.55; cap board elsewhere -------
-A_LINE = [(AX0, AY0 + 0.55), (AX0, AY0), (AX1, AY0), (AX1, AY0 + 0.55)]
-for p, z0, z1 in ((0.035, 8.40, 8.85), (0.12, 8.85, 8.92), (0.50, 8.92, 9.06), (0.55, 9.06, 9.15)):
-    plan_band(A_LINE, p, z0, z1, T, p_in=-0.30)
-plan_band([(AX1, AY0 + 0.55), (AX1, AY1), (AX0, AY1), (AX0, AY0 + 0.55)], 0.05, 8.80, 9.00, T, p_in=-0.20)
-R.box(AX0 + 0.10, AX1 - 0.10, AY0 + 0.20, AY1 - 0.10, A_TOP - 0.05, A_TOP + 0.02)   # flat tin deck
+# --- 42 porch railing: posts over the porch posts, rails, sawn (cut-out) flat balusters ---
+# (Stryker plate: flat boards whose shaped edges leave round-headed openings between them)
+RAIL_Y = 0.30
+RZ = DECK_F + 0.005                                  # rail base at the front of the deck
+BAL = [(0.045, 0.0), (0.045, 0.07), (0.026, 0.30), (0.045, 0.45), (0.084, 0.55), (0.084, 0.62)]
+BAL = BAL + [(-u, v) for u, v in reversed(BAL)]
+PITCH = 0.17
+
+
+def balusters(wall, u0, u1, z0):
+    n = max(1, int(round((u1 - u0) / PITCH)))
+    step = (u1 - u0) / n
+    for k in range(n):
+        uc = u0 + (k + 0.5) * step
+        T.wprism(wall, [(uc + u, z0 + v) for u, v in BAL], -0.0125, 0.0125)
+
+
+R_FRONT = Wall((0.0, RAIL_Y), (0, -1))
+R_NORTH = Wall((PORCH_X0 + 0.06, 0.0), (-1, 0))
+for x in (-4.40, -2.80, 0.05, 1.56):                                              # newel posts
+    T.lathe(x, RAIL_Y, [(0.085, DECK_F - 0.02), (0.085, RZ + 0.86), (0.11, RZ + 0.86), (0.11, RZ + 0.92)], sides=4)
+T.lathe(PORCH_X0 + 0.06, AY0 - 0.06, [(0.085, DECK_W - 0.02), (0.085, RZ + 0.86), (0.11, RZ + 0.86),
+                                      (0.11, RZ + 0.92)], sides=4)
+for wall, u0, u1 in ((R_FRONT, -4.40, 1.56), (R_NORTH, -(AY0 - 0.06), -RAIL_Y)):
+    T.wbox(wall, u0, u1, RZ + 0.06, RZ + 0.12, -0.03, 0.03)                       # bottom rail
+    T.wbox(wall, u0, u1, RZ + 0.74, RZ + 0.80, -0.025, 0.025)                     # sub rail
+    T.wbox(wall, u0, u1, RZ + 0.80, RZ + 0.86, -0.05, 0.05)                       # top rail (cap)
+for a, b in ((-4.40, -2.80), (-2.80, 0.05), (0.05, 1.56)):
+    balusters(R_FRONT, a + 0.06, b - 0.06, RZ + 0.12)
+balusters(R_NORTH, -(AY0 - 0.12), -(RAIL_Y + 0.06), RZ + 0.12)
+
+# --- A eave (frieze, bracketed cornice) all round, wrapping round the bay ---------------
+A_LOOP = [(AX0, AY0)] + BAY_IN + [(AX1, AY0), (AX1, AY1), (AX0, AY1)]
+EAVE = [(-0.30, 8.40), (0.035, 8.40), (0.035, 8.85), (0.12, 8.85), (0.12, 8.92), (0.50, 8.92),
+        (0.50, 9.06), (0.55, 9.06), (0.55, 9.15), (-0.30, 9.15)]
+T.sweep(A_LOOP, EAVE, closed=True)
 
 BRACKET_A = [(0.0, 8.92), (0.45, 8.92), (0.45, 8.86), (0.36, 8.79), (0.24, 8.73), (0.15, 8.62),
              (0.10, 8.50), (0.08, 8.40), (0.0, 8.40)]
-for x in (-7.33, -7.11, -5.43, -3.73, -2.03, -0.33, 1.33, 1.55):
+for x in (-7.33, -7.11, -5.43, -4.56, -3.33, 0.03, 1.33, 1.55):
     T.oprism(A_FRONT, BRACKET_A, x - 0.06, x + 0.06)
+# on the bay: paired at the two front angles, single where it meets the wall
+for wall, u in ((F_N, 0.14), (F_N, LS - 0.12), (F_F, 0.12), (F_F, 1.28), (F_S, 0.12), (F_S, LS - 0.14)):
+    T.oprism(wall, BRACKET_A, u - 0.055, u + 0.055)
+
+# --- A roof (decision 2): hipped, 35 deg, flat deck on top; the bay's own canted hip rises
+# into it, with a turned finial spike at its peak (Stryker plate) -------------------------
+EAVE_Z0, EAVE_Z1 = 9.15, 9.22
+ROOF_RISE = 1.25
+ROOF_IN = ROOF_RISE / math.tan(math.radians(35))
+RX0, RX1, RY0, RY1 = AX0 - 0.55, AX1 + 0.55, AY0 - 0.55, AY1 + 0.55
+TOP_Z = EAVE_Z1 + ROOF_RISE
+rect_b = [(RX0, RY0), (RX1, RY0), (RX1, RY1), (RX0, RY1)]
+rect_t = [(RX0 + ROOF_IN, RY0 + ROOF_IN), (RX1 - ROOF_IN, RY0 + ROOF_IN),
+          (RX1 - ROOF_IN, RY1 - ROOF_IN), (RX0 + ROOF_IN, RY1 - ROOF_IN)]
+R.solid([(x, y, EAVE_Z0) for x, y in rect_b] + [(x, y, EAVE_Z1) for x, y in rect_b] +
+        [(x, y, TOP_Z) for x, y in rect_t],
+        [(3, 2, 1, 0), (0, 1, 5, 4), (1, 2, 6, 5), (2, 3, 7, 6), (3, 0, 4, 7),
+         (4, 5, 9, 8), (5, 6, 10, 9), (6, 7, 11, 10), (7, 4, 8, 11), (8, 9, 10, 11)])
+eave_pts = offset_closed(A_LOOP, 0.55)[1:5]          # W_L, F_L, F_R, W_R (W on the main eave line)
+PEAK = ((eave_pts[0][0] + eave_pts[3][0]) / 2, RY0 + ROOF_IN, TOP_Z)
+R.solid([(x, y, EAVE_Z0) for x, y in eave_pts] + [(x, y, EAVE_Z1) for x, y in eave_pts] + [PEAK],
+        [(3, 2, 1, 0), (0, 1, 5, 4), (1, 2, 6, 5), (2, 3, 7, 6), (3, 0, 4, 7),
+         (4, 5, 8), (5, 6, 8), (6, 7, 8), (7, 4, 8)])
+px, py, pz = PEAK
+R.lathe(px, py, [(0.10, pz - 0.06), (0.10, pz + 0.10), (0.06, pz + 0.13), (0.06, pz + 0.22),
+                 (0.08, pz + 0.27), (0.045, pz + 0.33), (0.035, pz + 0.42), (0.05, pz + 0.47),
+                 (0.012, pz + 0.80)], sides=8)
 
 # --- B rear wing ----------------------------------------------------------------
-for y in (13.0, 16.8):
-    window(B_NORTH, -y, 1.00, 0.80, 1.50, shut=0, full=False)
-    window(B_NORTH, -y, 4.00, 0.80, 1.45, shut=0, full=False)
-for x in (-2.60, -0.30):
-    window(B_REAR, -x, 1.00, 0.80, 1.50, shut=0, full=False)
-    window(B_REAR, -x, 4.00, 0.80, 1.45, shut=0, full=False)
+for i, y in enumerate((13.0, 16.8)):
+    window(B_NORTH, -y, 1.00, 0.80, 1.50, pick(BACKSIDE, "B_NORTH", 0, 1 - i), shut=0, full=False)
+    window(B_NORTH, -y, 4.00, 0.80, 1.45, pick(BACKSIDE, "B_NORTH", 1, 1 - i), shut=0, full=False)
+for i, x in enumerate((-2.60, -0.30)):
+    window(B_REAR, -x, 1.00, 0.80, 1.50, pick(BACKSIDE, "B_REAR", 0, 1 - i), shut=0, full=False)
+    window(B_REAR, -x, 4.00, 0.80, 1.45, pick(BACKSIDE, "B_REAR", 1, 1 - i), shut=0, full=False)
 panel_door(B_NORTH, -15.0, 0.90, 0.0, 2.15, GR)
 ST.box(BX0 - 0.35, BX0, 14.45, 15.55, SKIRT, 0.0)
 plan_band([(BX1, AY1), (BX1, BY1), (BX0, BY1), (BX0, AY1)], 0.06, 5.80, 6.08, T, p_in=-0.20)
@@ -480,7 +739,7 @@ DISP = (2.90, 6.20)
 GR.box(DISP[0], DISP[1], 0.06, 0.20, 0.0, 0.70)
 GR.box(DISP[0] + 0.12, DISP[1] - 0.12, 0.045, 0.06, 0.14, 0.58)
 T.box(DISP[0] - 0.02, DISP[1] + 0.02, 0.0, 0.20, 0.68, 0.74)
-GL.box(DISP[0], DISP[1], 0.12, 0.14, 0.74, 2.85)
+pane(C_FRONT, DISP[0], DISP[1], 0.74, 2.85, -0.12, "shop_a")         # the fruit shop behind the glass
 T.box(DISP[0], DISP[1], 0.06, 0.20, 2.85, SF_TOP)
 T.box((DISP[0] + DISP[1]) / 2 - 0.03, (DISP[0] + DISP[1]) / 2 + 0.03, 0.08, 0.12, 0.74, 2.85)   # mullion
 # posts between the doors and the window, and beside the doors
@@ -493,11 +752,15 @@ for xc in DOORS_C:
     x0, x1 = xc - DW / 2, xc + DW / 2
     KC.box(x0, x1, -0.25, 0.42, 0.0, SF_TOP)
     ST.box(x0, x1, -0.01, 0.42, SKIRT, 0.15)
-    GR.box(x0, x1, 0.35, 0.40, 0.15, 2.45)
-    GL.box(x0 + 0.11, x1 - 0.11, 0.345, 0.37, 1.15, 2.33)
+    g0, g1 = x0 + 0.11, x1 - 0.11
+    GR.box(x0, g0, 0.35, 0.40, 0.15, 2.45)                                       # leaf: stiles
+    GR.box(g1, x1, 0.35, 0.40, 0.15, 2.45)
+    GR.box(g0, g1, 0.35, 0.40, 0.15, 1.15)                                       # lower half, top rail
+    GR.box(g0, g1, 0.35, 0.40, 2.33, 2.45)
+    pane(C_FRONT, g0, g1, 1.15, 2.33, -0.357, "door_l" if xc < 4 else "door_r")
     GR.box(x0 + 0.14, x1 - 0.14, 0.335, 0.35, 0.37, 1.01)
     T.box(x0, x1, 0.34, 0.42, 2.45, 2.50)                                        # transom bar
-    GL.box(x0, x1, 0.37, 0.39, 2.50, SF_TOP)
+    pane(C_FRONT, x0, x1, 2.50, SF_TOP, -0.37, "transom_door")
 # sign band 2.95-3.40 (green fascia) with two lettered boards, shop cornice 3.40-3.55
 GR.box(CX0, CX1, -0.03, 0.0, SF_TOP, 3.40)
 for name, u0, u1 in (("shoes", 1.92, 4.37), ("fruits", 4.75, 7.20)):
@@ -541,7 +804,7 @@ for x in (AW0 + 0.10, AW1 - 0.10):                                              
 
 # --- C upper floor, cornice, roof -------------------------------------------------
 for x in (3.25, 5.85):
-    window(C_FRONT, x, 3.80, 0.80, 1.45)
+    window(C_FRONT, x, 3.80, 0.80, 1.45, pick(ROOMS, "C_FRONT", 0, 0 if x < 4 else 1))
 C_LINE = [(CX0, 0.45), (CX0, 0.0), (CX1, 0.0), (CX1, 0.45)]
 for p, z0, z1 in ((0.035, 5.40, 5.80), (0.10, 5.80, 5.86), (0.40, 5.86, 6.02), (0.45, 6.02, 6.10)):
     plan_band(C_LINE, p, z0, z1, T, p_in=-0.30)
@@ -557,17 +820,18 @@ T.wprism(C_SOUTH, [(0.45, C_TOP_F - 0.45 * slope - 0.22), (CY1, C_TOP_R - 0.22),
                    (CY1, C_TOP_R + 0.01), (0.45, C_TOP_F - 0.45 * slope + 0.01)], -0.01, 0.04)
 
 # --- C passage (south) wall: ground windows, side door, 2nd-floor box bays ---------
-for y in (3.0, 9.5, 12.5):
-    window(C_SOUTH, y, 1.00, 0.80, 1.50, shut=0, full=False)
+for i, y in enumerate((3.0, 9.5, 12.5)):
+    window(C_SOUTH, y, 1.00, 0.80, 1.50, pick(BACKSIDE, "C_SOUTH", 0, (0, 2, 4)[i]), shut=0, full=False)
 panel_door(C_SOUTH, 11.0, 0.90, 0.0, 2.20, GR)
 ST.box(CX1, CX1 + 0.35, 10.45, 11.55, SKIRT, 0.0)
-window(C_SOUTH, 11.0, 3.90, 0.75, 1.40, shut=0, full=False)
+window(C_SOUTH, 11.0, 3.90, 0.75, 1.40, pick(ROOMS, "C_SOUTH", 1, 3), shut=0, full=False)
 BAY_WIN = ((5.85, 7.12), (14.95, 16.55))
 BRACKET_BAY = [(0.0, 3.45), (0.58, 3.45), (0.50, 3.38), (0.30, 3.25), (0.12, 3.10), (0.0, 3.05)]
 for (y0, y1, sh, cut), wins in zip(BAYS, BAY_WIN):
     face = Wall((CX1 + BAY_OUT, 0.0), (1, 0), cut)
     for y in wins:
-        window(face, y, 3.90, 0.75, 1.40, shut=0, full=False)
+        colm = {5.85: 1, 7.12: 2, 14.95: 5, 16.55: 6}[y]
+        window(face, y, 3.90, 0.75, 1.40, pick(ROOMS, "C_SOUTH", 1, colm), shut=0, full=False)
     T.box(CX1, CX1 + BAY_OUT + 0.04, y0 - 0.04, y1 + 0.04, 3.45, BAY_Z0)         # floor apron
     T.box(CX1 + BAY_OUT, CX1 + BAY_OUT + 0.03, y0, y1, 5.65, BAY_Z1)               # frieze board
     for y in (y0 + 0.25, (y0 + y1) / 2, y1 - 0.25):
@@ -579,8 +843,8 @@ for (y0, y1, sh, cut), wins in zip(BAYS, BAY_WIN):
             [(3, 2, 1, 0), (1, 2, 5, 4), (0, 1, 4), (2, 3, 5), (3, 0, 4, 5)])
 
 # --- C rear wall above C2, C2 rear part ---------------------------------------------
-window(C_REAR, -4.50, 3.90, 0.75, 1.20, shut=0, full=False)
-window(C2_REAR, -3.60, 1.00, 0.80, 1.40, shut=0, full=False)
+window(C_REAR, -4.50, 3.90, 0.75, 1.20, pick(BACKSIDE, "C_REAR", 1, 0), shut=0, full=False)
+window(C2_REAR, -3.60, 1.00, 0.80, 1.40, pick(BACKSIDE, "C_REAR", 0, 0), shut=0, full=False)
 c2_plan = [(CX0 - 0.05, CY1), (CX1 + 0.08, CY1), (C2_SX + 0.06, C2_Y1 + 0.08), (CX0 - 0.05, C2_Y1 + 0.08)]
 R.prism(c2_plan, C2_TOP - 0.03, C2_TOP + 0.05, axis="z")
 T.prism(c2_plan, C2_TOP - 0.15, C2_TOP - 0.03, axis="z")                         # fascia
@@ -623,5 +887,5 @@ for key, builder in G.items():
 
 tris = sum(len(p.vertices) - 2 for o in col.objects for p in o.data.polygons)
 print("Block 40-46 built:", len(col.objects), "objects,", tris, "triangles (before hidden-face removal)",
-      "| atlas records", len(ATLAS))
+      "| atlas records", len(ATLAS), "| window backs", len(BACKREC))
 # Materials, baked lighting and GLB export: run block_40_46_bake.py (it runs this file first).

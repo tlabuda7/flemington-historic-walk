@@ -7,7 +7,7 @@ Run inside Blender:
 
 Steps (pattern: rea_building_bake.py / county_hotel_bake.py):
  1. Rebuild the geometry (block_40_46.py).
- 2. Eight materials (merged into one draw call by `baked-lighting`):
+ 2. Ten materials (merged into one draw call by `baked-lighting`):
       clap_a  house-65-main/clapboard_cream.jpg, tile 1.0 m (0.11 m boards), x factor -> pale
               buff-grey #B9AE96 (40-42 and its rear wing)
       clap_b  the same texture, x factor -> cream #D6D0BE (44-46; spec #DCD6C4, a shade down so
@@ -16,8 +16,13 @@ Steps (pattern: rea_building_bake.py / county_hotel_bake.py):
       green   polyhaven/door_paint_green.jpg, tile 0.8 m, x factor -> dark green #2F4A36
       roof    county-offices/roof_tin_redbrown.jpg, tile 2.0 m (bake tint a touch greyer)
       stone   lovells-restaurant/stone_bluestone.jpg, tile 2.0 m (apron, porch deck, sills)
-      dark    plain #1E2226 (glass); tunnel planks and awning iron by bake tints
       signs   block-40-46/signs_atlas.jpg (tools/prepare_block_40_46_textures.py)
+      WindowBack   shared/window_backs.jpg cells (blinds, lace, curtains, dark rooms; the 42
+              show window and sale-room door look into a plain dark room)
+      ShopInterior shared/shop_interior.jpg cells (44-46 display window, door lights, transoms)
+      glass   plain #1A1916, alpha 0.40, BLEND, single-sided; not lightmapped in the scene
+              (`glass-reflect`); fully transparent during the bake, ignored by the hidden-face pass
+    The tunnel lining and the awning iron use one dark-brown texel of the window-back atlas.
  3. Split the wall faces where other parts cover them, join, delete the faces nobody can see
     (and A's north wall below 6.10, which stands against 36-38), unwrap "Lightmap" (fronts
     weighted up; passage wall, tunnel, rear and roofs down).
@@ -65,7 +70,9 @@ def ratio(target, base):
     return tuple(srgb_to_lin(t) / srgb_to_lin(b) for t, b in zip(target, base))
 
 
-DARK_BASE = (0x1E, 0x22, 0x26)        # glass
+GLASS_ALPHA = 0.40
+GLASS_RGB = (0x1A, 0x19, 0x16)        # faint warm grey dust tint (as the Bank Building, Nevius Store)
+SHARED = TX + "shared" + "\\"
 CLAP = (229, 223, 204)                # clapboard_cream.jpg average (sRGB)
 # material -> (texture file, metres per repeat, roughness, plain colour (linear) or None, factor or None)
 LOOK = {
@@ -75,11 +82,14 @@ LOOK = {
     "Green": (TX + r"polyhaven\door_paint_green.jpg", 0.8, 0.6, None, tint((93, 107, 92), (0x2F, 0x4A, 0x36))),
     "Roof":  (TX + r"county-offices\roof_tin_redbrown.jpg", 2.0, 0.6, None, None),
     "Stone": (TX + r"lovells-restaurant\stone_bluestone.jpg", 2.0, 0.9, None, None),
-    "Dark":  (None, 1.0, 0.3, tuple(srgb_to_lin(c) for c in DARK_BASE), None),
     "Signs": (TX + r"block-40-46\signs_atlas.jpg", 1.0, 0.85, None, None),
+    "WBack": (SHARED + "window_backs.jpg", 1.0, 0.9, None, None),
+    "Shop":  (SHARED + "shop_interior.jpg", 1.0, 0.9, None, None),
+    "Glass": (None, 1.0, 0.05, tuple(srgb_to_lin(c) for c in GLASS_RGB), None),
 }
 FINAL_NAMES = {"ClapA": "clap_a", "ClapB": "clap_b", "Trim": "trim", "Green": "green", "Roof": "roof",
-               "Stone": "stone", "Dark": "dark", "Signs": "signs"}
+               "Stone": "stone", "Signs": "signs", "WBack": "WindowBack", "Shop": "ShopInterior",
+               "Glass": "glass"}
 
 def textured_material(name, image_file, roughness, colour, factor):
     mat = bpy.data.materials.get(name) or bpy.data.materials.new(name)
@@ -110,17 +120,25 @@ def textured_material(name, image_file, roughness, colour, factor):
             nt.links.new(tex.outputs["Color"], bsdf.inputs["Base Color"])
     else:
         bsdf.inputs["Base Color"].default_value = (*colour, 1)
+    if name == "glass":   # transparent, drawn with a sky reflection by the scene
+        bsdf.inputs["Alpha"].default_value = GLASS_ALPHA
+        mat.use_backface_culling = True
+        if hasattr(mat, "surface_render_method"):
+            mat.surface_render_method = "BLENDED"
+        elif hasattr(mat, "blend_method"):
+            mat.blend_method = "BLEND"
     return mat
 
 
 FINAL = {k: textured_material(FINAL_NAMES[k], LOOK[k][0], *LOOK[k][2:]) for k in LOOK}
 
 # Bake tints per builder (multiplied into the lightmap through the grime mask)
-TINTS = {"Tunnel": ratio((0x3A, 0x30, 0x26), DARK_BASE),
-         "Iron": ratio((0x2A, 0x2A, 0x2B), DARK_BASE),
+# the dark texel (sRGB ~#140F0C) lifted to plank brown / iron grey (grey tints survive the shade warming)
+TINTS = {"Tunnel": (2.6, 2.6, 2.6),
+         "Iron": (1.8, 1.8, 1.9),
          "Roof": (0.90, 0.92, 0.96)}
 OBJ_MAT = {"ShellA": "ClapA", "ShellB": "ClapA", "ShellC": "ClapB", "ShellC2": "ClapB",
-           "Bay1": "ClapB", "Bay2": "ClapB"}
+           "Bay1": "ClapB", "Bay2": "ClapB", "Bay42": "ClapA"}
 
 # Atlas boxes (pixels from the top-left; must match tools/prepare_block_40_46_textures.py)
 REGIONS = {"stripes": (0, 0, 512, 384), "louvre": (512, 0, 704, 384), "canvas": (704, 0, 1024, 384),
@@ -194,6 +212,25 @@ def set_uvs(obj, kind):
     rid_attr = mesh.attributes.get("rid")
     for poly in mesh.polygons:
         n = poly.normal
+        if kind in ("Tunnel", "Iron"):                   # one dark texel of the window-back atlas
+            u0, v0, u1, v1 = WB_CELLS["dark_room_frame"]["uv"]
+            for li in poly.loop_indices:
+                uv.data[li].uv = ((u0 + u1) / 2, v0 + 0.2 * (v1 - v0))
+            continue
+        if kind in ("WBack", "Shop"):                    # window backs: their atlas cell
+            rec = BACKREC.get(rid_attr.data[poly.index].value)
+            for li in poly.loop_indices:
+                co = mesh.vertices[mesh.loops[li].vertex_index].co
+                if "const" in rec:
+                    uv.data[li].uv = rec["const"]
+                    continue
+                (px, py), (nx, ny) = rec["wall"]
+                u = (co.x - px) * -ny + (co.y - py) * nx
+                fu = (u - rec["u0"]) / (rec["u1"] - rec["u0"])
+                fz = (co.z - rec["z0"]) / (rec["z1"] - rec["z0"])
+                U0, V0, U1, V1 = rec["uv"]
+                uv.data[li].uv = (U0 + (U1 - U0) * fu, V0 + (V1 - V0) * fz)
+            continue
         if kind == "Atlas":
             rid = rid_attr.data[poly.index].value if rid_attr else 0
             rec = ATLAS.get(rid)
@@ -237,10 +274,18 @@ slope_c = (C_TOP_F - C_TOP_R) / CY1
 SPLITS = {
     # name: [(select, cuts)]
     "ShellA": [(lambda f: f.normal.x < -0.99 and abs(f.calc_center_median().x - AX0) < 0.01, [((0, 0, 6.10), (0, 0, 1))]),
+               # the front wall behind the hanging bay becomes its own (hidden) piece
+               (lambda f: f.normal.y < -0.99 and abs(f.calc_center_median().y - AY0) < 0.01,
+                [((-3.21, 0, 0), (1, 0, 0)), ((-0.11, 0, 0), (1, 0, 0)), ((0, 0, BAY_Z0), (0, 0, 1))]),
                (lambda f: f.normal.x > 0.99 and abs(f.calc_center_median().x - AX1) < 0.01,
                 [((AX1, 0, C_TOP_F), (0, slope_c, 1))]),
                (lambda f: f.normal.y > 0.99 and abs(f.calc_center_median().y - AY1) < 0.01,
                 [((BX0, 0, 0), (1, 0, 0)), ((BX1, 0, 0), (1, 0, 0)), ((0, 0, B_TOP), (0, 0, 1))])],
+    "Bay42": [(lambda f: abs(f.normal.z) < 0.1, [((0, AY0, 0), (0, 1, 0))])],
+    "Roof": [(lambda f: abs(f.normal.z) < 0.99 and -3.9 < f.calc_center_median().x < 0.6
+              and 6.1 < f.calc_center_median().z < 6.7, [((0, AY0, 0), (0, 1, 0))])],
+    "Trim": [(lambda f: -3.9 < f.calc_center_median().x < 0.6 and 1.0 < f.calc_center_median().y < 2.5
+              and 3.6 < f.calc_center_median().z < 6.3, [((0, AY0, 0), (0, 1, 0))])],
     "ShellC": [(lambda f: f.normal.x < -0.99 and abs(f.calc_center_median().x - CX0) < 0.01,
                 [((0, AY0, 0), (0, 1, 0)), ((0, AY1, 0), (0, 1, 0))]),
                (lambda f: f.normal.x > 0.99 and abs(f.calc_center_median().x - CX1) < 0.01,
@@ -328,7 +373,11 @@ def remove_hidden_faces(obj, rays=120):
     bm = bmesh.new()
     bm.from_mesh(obj.data)
     bm.normal_update()
-    bvh = BVHTree.FromBMesh(bm)
+    # the glass does not block the view: rays pass it to reach (or leave) the window backs
+    glass_i = [i for i, m in enumerate(obj.data.materials) if m.name == "glass"]
+    bm.verts.index_update()
+    bvh = BVHTree.FromPolygons([v.co for v in bm.verts],
+                               [[v.index for v in f.verts] for f in bm.faces if f.material_index not in glass_i])
     dirs = fibonacci(rays)
     face_tris = {}
     for t in bm.calc_loop_triangles():
@@ -393,7 +442,9 @@ for p in mesh.polygons:
     f = 1.0
     c, n = p.center, p.normal
     m = mat_names[p.material_index]
-    if m == "dark":
+    if m == "glass":
+        f *= 0.03                                  # not lightmapped in the scene
+    elif m in ("WindowBack", "ShopInterior"):
         f *= 0.6
     if n.z < -0.5:
         f *= 0.7                                   # soffits, awning underside
@@ -407,8 +458,10 @@ for p in mesh.polygons:
         f *= 0.55                                  # north faces (yard, slot)
     if n.y > 0.7:
         f *= 0.5                                   # rear walls
-    if m == "roof" and n.z > 0.5:
-        f *= 0.4                                   # roofs
+    if m == "roof" and n.z > 0.97:
+        f *= 0.4                                   # flat roofs and decks
+    elif m == "roof" and n.z > 0.5 and c.x > CX0 + 0.1:
+        f *= 0.5                                   # 44-46 shed roof (barely seen)
     if f != 1.0:
         for li in p.loop_indices:
             lm_data[li].uv = lm_data[li].uv * f
@@ -542,6 +595,8 @@ def point_materials_at(img):
 for o in bpy.context.view_layer.objects:
     o.select_set(o == r_obj)
 bpy.context.view_layer.objects.active = r_obj
+glass_alpha = next(n for n in FINAL["Glass"].node_tree.nodes if n.type == "BSDF_PRINCIPLED").inputs["Alpha"]
+glass_alpha.default_value = 0.0             # light passes the panes to the window backs
 try:
     light_img = bake_target("BK_Light", True)
     point_materials_at(light_img)
@@ -695,6 +750,7 @@ try:
         mesh.materials[i] = mat
     print("grime baked")
 finally:
+    glass_alpha.default_value = GLASS_ALPHA
     for name, state in render_state.items():
         if bpy.data.collections.get(name):
             bpy.data.collections[name].hide_render = state
