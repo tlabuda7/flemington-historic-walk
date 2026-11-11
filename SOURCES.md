@@ -188,6 +188,7 @@ Nothing new downloaded. Reused unchanged: `polyhaven/red_brick.jpg` (brick), `co
 | `signs_atlas.jpg` | none: drawn by `tools/prepare_rea_textures.py` with Pillow (original work, no download); stripes resampled from the generated `bank-building/awning_stripes.jpg`. Lettering set in fonts installed with Windows and rendered into the image (no font file is shipped): Bookman Old Style (`BOOKOS.TTF`, valance), Georgia Bold (`georgiab.ttf`, JEWELER and SHOES REPAIRED boards), Times New Roman (`times.ttf`, clock numerals) | — | original work | awning canvas and stripes, valance "GREEN'S APOTHECARY", striped valance, clock dial, shutter louvres, dentil strip, sign boards (1024², one material) |
 
 `assets/textures/rea-building-lightmap.jpg` is baked in Blender by `tools/blender/rea_building_bake.py` (original work).
+Since 2026-11-11 the model also uses `shared/window_backs.jpg` and `shared/shop_interior.jpg` (window backs; both listed under the shared textures, original work, no new download).
 Reference photos viewed only (Goodspeed Histories, not saved in the project): see PLAN.md, Rea Building, Sources.
 
 ### County Hotel, 47–49 Main St (`assets/textures/county-hotel/`)

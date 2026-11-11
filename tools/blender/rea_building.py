@@ -23,14 +23,31 @@ Coordinates (metres, Blender Z-up):
     Z  up from the sidewalk top; walls skirt down to -0.20; shop floors 0.60
 glTF export turns -Y into +Z, which matches the A-Frame scene's "front faces +Z".
 
-Five materials (draw calls): brick, trim, stone, dark, signs. Every builder below has one
-material plus a bake tint (cupola cream, door varnish, glass, iron); faces of the "Atlas"
-builder carry a face attribute "rid" that tells the bake which atlas box they show.
+Eight materials: brick, trim, stone, dark, signs, WindowBack, ShopInterior (lightmapped, merged
+into one draw call by the scene) and glass. Every builder below has one material plus a bake
+tint (cupola cream, door varnish, iron); faces of the "Atlas" builder carry a face attribute
+"rid" that tells the bake which atlas box they show.
+
+Windows (PLAN.md "E. Windows that don't read as flat black", rolled out here 2026-11-11, same
+method as the Bank Building and 40-46 Main): every pane is ONE outward glass face (builder
+Glass -> material `glass`, transparent, see rea_building_bake.py) 4 cm in front of a window
+back: ONE rectangular face (the pane's bounding box; its corners beyond an arched head sit
+inside the solid wall, where nobody sees them). Builder WBack shows cells of the shared atlas
+assets/textures/shared/window_backs.jpg (upper floors: blinds, lace, curtains, dark rooms, no
+two alike side by side or above/below; plain dark rooms behind the cobbler's door, the stair
+door, the fanlights, the oval window and the cupola windows); builder Shop shows cells of
+assets/textures/shared/shop_interior.jpg behind the display windows, door lights and door
+transoms of the two shops (48 drugs; 52 jeweler, the old post-office front: the same cells
+mirrored). BACKREC[rid] tells the bake which atlas rectangle each back shows.
 """
 
 import math
+import json
+import random
 import bpy
 import bmesh
+
+PROJECT = r"C:\Users\Tarik\AppFactory\Flemington Historic Walk"
 
 # ---------------------------------------------------------------------------
 # Dimensions (PLAN.md)
@@ -78,11 +95,13 @@ def plain(name, color, rough=0.8):
     return mat
 
 
-COLOURS = {"Brick": "#8a4030", "Trim": "#b5ac98", "Stone": "#8e8c86", "Dark": "#4a4c50", "Signs": "#e2daca"}
+COLOURS = {"Brick": "#8a4030", "Trim": "#b5ac98", "Stone": "#8e8c86", "Dark": "#4a4c50", "Signs": "#e2daca",
+           "Glass": "#1a1916", "WBack": "#2a2420", "Shop": "#2a2420"}
 MATS = {k: plain("RB_" + k, c) for k, c in COLOURS.items()}
 # builder -> material (the bake gives every builder its own UVs and tint)
 BUILDER_MAT = {"Brick": "Brick", "Trim": "Trim", "Cupola": "Trim", "Stone": "Stone",
-               "Roof": "Dark", "Glass": "Dark", "Door": "Dark", "Iron": "Dark", "Atlas": "Signs"}
+               "Roof": "Dark", "Door": "Dark", "Iron": "Dark", "Atlas": "Signs",
+               "Glass": "Glass", "WBack": "WBack", "Shop": "Shop"}
 
 # ---------------------------------------------------------------------------
 # Mesh builder
@@ -202,6 +221,16 @@ class MB:
                       bm.faces.new([o0[i], o0[j], o1[j], o1[i]]), bm.faces.new([i0[i], i1[i], i1[j], i0[j]])]
         self._closed(faces)
 
+    def face(self, wall, pts, d):
+        """ONE single-sided face (outline [(u, z), ...] on a wall plane, d out from the wall
+        face), facing outward. Used for glass panes and window backs."""
+        f = self.bm.faces.new([self.bm.verts.new(wall.pt(u, z, d)) for u, z in pts])
+        f.normal_update()
+        if f.normal.x * wall.n[0] + f.normal.y * wall.n[1] < 0:
+            f.normal_flip()
+        f[self.rid_layer] = self.rid
+        return f
+
     def to_object(self, name, mat, col):
         mesh = bpy.data.meshes.new(name)
         self.bm.to_mesh(mesh)
@@ -303,7 +332,8 @@ def fresh_collection(name):
 
 col = fresh_collection("ReaBuilding")
 G = {k: MB() for k in BUILDER_MAT}
-B, T, CP, ST, R, GL, DR, IR, AT = (G[k] for k in ("Brick", "Trim", "Cupola", "Stone", "Roof", "Glass", "Door", "Iron", "Atlas"))
+B, T, CP, ST, R, GL, DR, IR, AT, WB, SH = (G[k] for k in ("Brick", "Trim", "Cupola", "Stone", "Roof", "Glass", "Door",
+                                                          "Iron", "Atlas", "WBack", "Shop"))
 SHELL, CUT = MB(), MB()          # brick wall shell (main block + Flats) and its openings
 STUC, CUT_S = MB(), MB()         # rusticated stucco face of the middle ground section
 TYMP, CUT_T = MB(), MB()         # front tympanum (oval window)
@@ -357,6 +387,67 @@ PLAN = [(-HW, 0.0), (HW, 0.0), (HW, FY1), CH_B, CH_A, (FX0, DEPTH), (-HW, DEPTH)
 SHELL.prism(PLAN, SKIRT, TOP, axis="z")
 
 # ---------------------------------------------------------------------------
+# Glass panes and window backs (PLAN.md section E)
+# ---------------------------------------------------------------------------
+WB_CELLS = json.load(open(PROJECT + r"\assets\textures\shared\window_backs.json"))["cells"]
+SHOP_CELLS = json.load(open(PROJECT + r"\assets\textures\shared\shop_interior.json"))["cells"]
+GAP = 0.04                      # window back this far behind the glass
+# upper floors of the main block (offices, club rooms, rooms): blinds, lace, dark rooms
+UPPER = {"blind_cream_high": 3, "blind_cream_half": 3, "blind_cream_low": 2, "blind_green_high": 2,
+         "blind_green_half": 2, "blind_green_low": 1, "lace": 2, "lace_blind_cream": 2,
+         "dark_room": 2, "dark_room_frame": 2, "curtains_beige": 1}
+# the Flats (dwellings)
+ROOMS = {"lace": 2, "lace_blind_cream": 2, "lace_blind_green": 2, "lace_full_blind_cream": 1,
+         "curtains_beige": 2, "curtains_olive": 1, "curtains_maroon_blind": 1, "blind_cream_half": 2,
+         "blind_green_half": 1, "dark_room": 1}
+# north (passage), rear and yard walls
+BACKSIDE = {"blind_cream_high": 2, "blind_cream_half": 2, "blind_green_half": 1, "blind_green_low": 1,
+            "dark_room": 3, "dark_room_frame": 3}
+# ground-floor side windows of the 52 shop room (Bloomfield Ave): plain dim rooms, a blind or two
+SIDE_GROUND = {"dark_room": 3, "dark_room_frame": 3, "blind_cream_high": 2, "blind_green_high": 2}
+_wb_rng = random.Random(1874)
+_wb_grid = {}
+BACKREC = {}                    # rid -> record (read by rea_building_bake.py)
+
+
+def pick(weights, wall, row, colm):
+    """A cell for the window at (row, column) of a wall that differs from its neighbours."""
+    g = _wb_grid.setdefault(wall, {})
+    avoid = {g.get((row, colm - 1)), g.get((row, colm + 1)), g.get((row - 1, colm)), g.get((row + 1, colm))}
+    names = [n for n in weights if n not in avoid]
+    cell = _wb_rng.choices(names, weights=[weights[n] for n in names])[0]
+    g[(row, colm)] = cell
+    return cell
+
+
+def back(wall, u0, u1, z0, z1, d, cell, crop=None, mirror=False):
+    """Window back: one rectangle on the wall plane at depth d (negative = into the wall)
+    showing an atlas cell; crop = (fu0, fu1, fv0, fv1) part of the cell (v up), mirror = flipped
+    left to right."""
+    shop = cell in SHOP_CELLS
+    mb = SH if shop else WB
+    U0, V0, U1, V1 = (SHOP_CELLS if shop else WB_CELLS)[cell]["uv"]
+    if crop:
+        U0, U1, V0, V1 = (U0 + (U1 - U0) * crop[0], U0 + (U1 - U0) * crop[1],
+                          V0 + (V1 - V0) * crop[2], V0 + (V1 - V0) * crop[3])
+    if mirror:
+        U0, U1 = U1, U0
+    rid = len(BACKREC) + 1
+    BACKREC[rid] = dict(wall=(wall.p0, wall.n), u0=u0, u1=u1, z0=z0, z1=z1, uv=(U0, V0, U1, V1))
+    mb.rid = rid
+    mb.face(wall, rect(u0, u1, z0, z1), d)
+    mb.rid = 0
+
+
+def pane(wall, outline, d_glass, cell, grow=0.0, crop=None, mirror=False):
+    """Glass face (the pane's outline) at depth d_glass and its window back GAP behind it: the
+    outline's bounding box, `grow` larger all round where sash or stiles hide its edge."""
+    GL.face(wall, outline, d_glass)
+    us, zs = [p[0] for p in outline], [p[1] for p in outline]
+    back(wall, min(us) - grow, max(us) + grow, min(zs) - grow, max(zs) + grow, d_glass - GAP, cell, crop, mirror)
+
+
+# ---------------------------------------------------------------------------
 # Windows
 # ---------------------------------------------------------------------------
 
@@ -369,8 +460,8 @@ def shutters(wall, cu, half, z0, z1, leaf=0.45, gap=0.02):
         AT.wbox(wall, u0, u1, z0, z1, 0.03, 0.065)
 
 
-def seg_window(wall, cu, z0, crown, w=WIN_W, full=True, keystone=True, shut=0.45, segs=6):
-    """Segmental-headed 2/2 window in a 0.30 recess: dark glass, trim frame set 0.12 in,
+def seg_window(wall, cu, z0, crown, w=WIN_W, full=True, keystone=True, shut=0.45, segs=6, cell="dark_room"):
+    """Segmental-headed 2/2 window in a 0.30 recess: glass with a window back, trim frame set 0.12 in,
     sash rails and muntin, raised brick hood 0.14 wide / 0.05 proud, pale keystone, stone
     sill 0.06 proud, optional open louvred shutters (leaf width `shut`, 0 = none).
     full=False: plainer side/rear window (no frame band, fewer parts)."""
@@ -379,7 +470,7 @@ def seg_window(wall, cu, z0, crown, w=WIN_W, full=True, keystone=True, shut=0.45
     zc, Rr, th = seg_geom(w, zs, RISE)
     outline = seg_outline(cu, w, z0, crown, RISE, segs)
     wall.cut.wprism(wall, outline, -RECESS, 0.25)
-    GL.wprism(wall, outline, -0.23, -0.21)                                    # glass
+    pane(wall, outline, -0.21, cell)                                          # glass + window back
     zm = (z0 + zs) / 2 + 0.05
     if full:
         f = 0.06
@@ -419,41 +510,41 @@ def leaf_widths(centres, edges, w=WIN_W):
 # Front upper floors: 7 bays (2-3-2), shuttered
 FRONT_X = (-6.13, -3.84, -1.56, 0.0, 1.56, 3.84, 6.13)
 FRONT_LEAF = leaf_widths(FRONT_X, (-HW, HW))
-for x, lw in zip(FRONT_X, FRONT_LEAF):
-    for sill, crown in UP_FLOORS:
-        seg_window(FRONT, x, sill, crown, shut=lw)
+for k, (x, lw) in enumerate(zip(FRONT_X, FRONT_LEAF)):
+    for row, (sill, crown) in enumerate(UP_FLOORS, 1):
+        seg_window(FRONT, x, sill, crown, shut=lw, cell=pick(UPPER, "front", row, k))
 
 # Bloomfield (south) side, main block: 4 bays, upper floors as the front, tall ground windows
 SOUTH_Y = (2.30, 6.60, 8.56, 12.86)
 SOUTH_LEAF = leaf_widths(SOUTH_Y, (0.0, DEPTH))
-for y, lw in zip(SOUTH_Y, SOUTH_LEAF):
-    for sill, crown in UP_FLOORS:
-        seg_window(SOUTH, y, sill, crown, shut=lw)
-    seg_window(SOUTH, y, 1.20, 3.60, w=0.95, shut=min(lw, 0.47))
+for k, (y, lw) in enumerate(zip(SOUTH_Y, SOUTH_LEAF)):
+    for row, (sill, crown) in enumerate(UP_FLOORS, 1):
+        seg_window(SOUTH, y, sill, crown, shut=lw, cell=pick(UPPER, "south", row, k))
+    seg_window(SOUTH, y, 1.20, 3.60, w=0.95, shut=min(lw, 0.47), cell=pick(SIDE_GROUND, "south", 0, k))
 
 # Flats, Bloomfield face: 2 bays all floors (no shutters, no keystones), door with a step
-for y in (16.60, 19.70):
-    for sill, crown in UP_FLOORS:
-        seg_window(SOUTH, y, sill, crown, full=False, keystone=False, shut=0)
-    seg_window(SOUTH, y, 1.20, 3.20, full=False, keystone=False, shut=0)
+for k, y in enumerate((16.60, 19.70), 4):
+    for row, (sill, crown) in enumerate(UP_FLOORS, 1):
+        seg_window(SOUTH, y, sill, crown, full=False, keystone=False, shut=0, cell=pick(ROOMS, "south", row, k))
+    seg_window(SOUTH, y, 1.20, 3.20, full=False, keystone=False, shut=0, cell=pick(ROOMS, "south", 0, k))
 # Flats rear (east) face and yard (north) face: 2 windows per floor
 FLOORS_PLAIN = ((1.20, 3.20),) + UP_FLOORS
-for x in (2.25, 6.00):
-    for sill, crown in FLOORS_PLAIN:
-        seg_window(FL_E, -x, sill, crown, full=False, keystone=False, shut=0, segs=4)
-for y in (16.60, 19.60):
-    for sill, crown in FLOORS_PLAIN:
-        seg_window(FL_N, -y, sill, crown, full=False, keystone=False, shut=0, segs=4)
+for k, x in enumerate((2.25, 6.00)):
+    for row, (sill, crown) in enumerate(FLOORS_PLAIN):
+        seg_window(FL_E, -x, sill, crown, full=False, keystone=False, shut=0, segs=4, cell=pick(ROOMS, "fl_e", row, k))
+for k, y in enumerate((16.60, 19.60)):
+    for row, (sill, crown) in enumerate(FLOORS_PLAIN):
+        seg_window(FL_N, -y, sill, crown, full=False, keystone=False, shut=0, segs=4, cell=pick(ROOMS, "fl_n", row, k))
 # North (passage) wall: 3 upper windows per floor, 2 small high ground windows
-for y in (3.0, 7.6, 12.2):
-    for sill, crown in UP_FLOORS:
-        seg_window(NORTH, -y, sill, crown, full=False, shut=0, segs=4)
-for y in (5.0, 10.0):
-    seg_window(NORTH, -y, 2.00, 3.00, full=False, keystone=False, shut=0, segs=4)
+for k, y in enumerate((3.0, 7.6, 12.2)):
+    for row, (sill, crown) in enumerate(UP_FLOORS, 1):
+        seg_window(NORTH, -y, sill, crown, full=False, shut=0, segs=4, cell=pick(BACKSIDE, "north", row, k))
+for y, cell in ((5.0, "dark_room_frame"), (10.0, "dark_room")):
+    seg_window(NORTH, -y, 2.00, 3.00, full=False, keystone=False, shut=0, segs=4, cell=cell)
 # Main-block rear wall above the yard: 2 windows per floor
-for x in (-5.80, -3.10):
-    for sill, crown in FLOORS_PLAIN:
-        seg_window(REAR, -x, sill, crown, full=False, keystone=False, shut=0, segs=4)
+for k, x in enumerate((-5.80, -3.10)):
+    for row, (sill, crown) in enumerate(FLOORS_PLAIN):
+        seg_window(REAR, -x, sill, crown, full=False, keystone=False, shut=0, segs=4, cell=pick(BACKSIDE, "rear", row, k))
 
 # Flats door (Bloomfield face, y 21.80): 4-panel varnished door, transom, hood, one stone step
 DY = 21.80
@@ -463,7 +554,7 @@ for ua, ub in ((DY - 0.38, DY - 0.04), (DY + 0.04, DY + 0.38)):
     for za, zb in ((0.35, 1.05), (1.20, 2.15)):
         DR.wbox(SOUTH, ua, ub, za, zb, -0.16, -0.145)
 T.wbox(SOUTH, DY - 0.475, DY + 0.475, 2.30, 2.38, -0.20, -0.14)                # transom bar
-GL.wprism(SOUTH, seg_outline(DY, 0.95, 2.38, 2.80, RISE, 4), -0.22, -0.20)
+pane(SOUTH, seg_outline(DY, 0.95, 2.38, 2.80, RISE, 4), -0.20, "dark_room", crop=(0, 1, 0.60, 0.85))   # transom light
 zc_d, R_d, _ = seg_geom(0.95, 2.80 - RISE, RISE)
 B.wprism(SOUTH, band(DY, zc_d, R_d + 0.01, R_d + 0.15, math.pi / 2 - 0.75, math.pi / 2 + 0.75, 4), -0.05, 0.05)
 ST.box(HW - 0.01, HW + 0.40, DY - 0.70, DY + 0.70, SKIRT, 0.20)                 # step
@@ -475,12 +566,13 @@ SIGN0, SIGN1 = 3.40, 3.95          # sign band
 SF_Y = 0.14                        # shop-front glass plane (behind the wall face)
 
 
-def display_window(x0, x1):
-    """Panelled bulkhead 0.60-1.10, glass 1.10 -> segmental head 3.35 in a trim frame."""
+def display_window(x0, x1, cell, crop=None, mirror=False):
+    """Panelled bulkhead 0.60-1.10, glass 1.10 -> segmental head 3.35 in a trim frame; the shop
+    behind the glass on a window back (hidden at its edges by the posts and the spandrel)."""
     T.box(x0, x1, 0.02, SF_Y, FL, 1.10)                                       # bulkhead
     T.box(x0 + 0.10, x1 - 0.10, 0.0, 0.02, FL + 0.10, 1.00)                   # raised panel
     T.box(x0 - 0.02, x1 + 0.02, -0.02, SF_Y, 1.06, 1.12)                       # sill rail
-    GL.box(x0, x1, SF_Y, SF_Y + 0.02, 1.10, SIGN0)                             # glass
+    pane(FRONT, rect(x0, x1, 1.10, SIGN0), -SF_Y, cell, crop=crop, mirror=mirror)   # glass, the shop behind
     for a, b in ((x0, x0 + 0.08), (x1 - 0.08, x1)):
         T.box(a, b, 0.0, SF_Y, 1.10, 3.20)                                    # frame posts
     zc, Rr, th = seg_geom(x1 - x0 - 0.16, 3.15, 0.20)
@@ -492,8 +584,9 @@ def display_window(x0, x1):
     T.prism(band(cu, zc, Rr, Rr + 0.04, math.pi / 2 - th, math.pi / 2 + th, 8), 0.0, 0.02, axis="y")  # bead
 
 
-def door_leaf(x0, x1, z0, z1, yf, glass_from):
-    """Glazed door leaf, front face at yf: stiles and rails 0.10, raised lower panel, glass."""
+def door_leaf(x0, x1, z0, z1, yf, glass_from, cell, crop=None, mirror=False):
+    """Glazed door leaf, front face at yf: stiles and rails 0.10, raised lower panel, glass
+    (one face 0.03 into the leaf, the room seen through it on a window back behind the leaf)."""
     yb = yf + 0.05
     DR.box(x0, x0 + 0.10, yf, yb, z0, z1)
     DR.box(x1 - 0.10, x1, yf, yb, z0, z1)
@@ -502,17 +595,28 @@ def door_leaf(x0, x1, z0, z1, yf, glass_from):
     DR.box(x0 + 0.10, x1 - 0.10, yf, yb, z1 - 0.12, z1)
     DR.box(x0 + 0.10, x1 - 0.10, yf + 0.02, yb, z0 + 0.22, glass_from - 0.12)
     DR.box(x0 + 0.16, x1 - 0.16, yf + 0.005, yf + 0.02, z0 + 0.30, glass_from - 0.20)
-    GL.box(x0 + 0.10, x1 - 0.10, yf + 0.03, yf + 0.04, glass_from, z1 - 0.12)
+    pane(FRONT, rect(x0 + 0.10, x1 - 0.10, glass_from, z1 - 0.12), -(yf + 0.03), cell, grow=0.09,
+         crop=crop, mirror=mirror)
 
 
-def shop(x0, x1, sign=None):
+# shop_interior.jpg cells per pane; shop_a is cropped to the display window's proportions.
+# 52 shows the same room mirrored.
+SHOP_A_CROP = (0.0, 0.70, 0.0, 1.0)
+
+
+def shop(x0, x1, sign=None, mirror=False):
     xc = (x0 + x1) / 2
-    CUT.box(x0, x1, -0.25, SF_Y + 0.01, FL, SIGN1)                            # shop-front opening
+    CUT.box(x0, x1, -0.25, SF_Y + GAP + 0.02, FL, SIGN1)                      # shop-front opening
     e0, e1 = xc - 0.75, xc + 0.75
-    CUT.box(e0, e1, -0.25, 0.90, FL - 0.15, SIGN0)                           # entrance recess
+    CUT.box(e0, e1, -0.25, 0.95, FL - 0.15, SIGN0)                           # entrance recess
     ST.box(e0, e1, -0.01, 0.90, FL - 0.15, FL)                               # recess floor (stone)
-    display_window(x0, e0)
-    display_window(e1, x1)
+    disp = [("shop_a", SHOP_A_CROP), ("shop_b", None)]
+    doors = ["door_l", "door_r"]
+    if mirror:
+        disp.reverse()
+        doors.reverse()
+    display_window(x0, e0, disp[0][0], disp[0][1], mirror)
+    display_window(e1, x1, disp[1][0], disp[1][1], mirror)
     for xa, xb in ((e0, e0 + 0.03), (e1 - 0.03, e1)):                         # panelled reveals
         T.box(xa, xb, SF_Y, 0.90, FL, SIGN0)
     T.box(e0, e1, 0.0, 0.90, SIGN0 - 0.03, SIGN0)                             # recess ceiling board
@@ -520,11 +624,11 @@ def shop(x0, x1, sign=None):
     T.box(e0, e1, 0.84, 0.90, 3.00, 3.05)                                     # transom bar
     T.box(e0, e0 + 0.05, 0.84, 0.90, FL, SIGN0)
     T.box(e1 - 0.05, e1, 0.84, 0.90, FL, SIGN0)
-    GL.box(e0 + 0.05, e1 - 0.05, 0.87, 0.88, 3.05, 3.30)
+    pane(FRONT, rect(e0 + 0.05, e1 - 0.05, 3.05, 3.30), -0.87, "transom_door", mirror=mirror)   # transom light
     T.box(e0, e1, 0.84, 0.90, 3.30, SIGN0)
     T.box(xc - 0.015, xc + 0.015, 0.85, 0.87, 3.05, 3.30)
-    door_leaf(xc - 0.70, xc - 0.005, FL, 3.00, 0.80, 1.40)
-    door_leaf(xc + 0.005, xc + 0.70, FL, 3.00, 0.80, 1.40)
+    door_leaf(xc - 0.70, xc - 0.005, FL, 3.00, 0.80, 1.40, doors[0], mirror=mirror)
+    door_leaf(xc + 0.005, xc + 0.70, FL, 3.00, 0.80, 1.40, doors[1], mirror=mirror)
     # sign band and its mouldings
     T.box(x0, x1, -0.02, SF_Y, SIGN0, SIGN1)
     T.box(x0, x1, -0.05, 0.0, SIGN0, SIGN0 + 0.05)
@@ -535,7 +639,7 @@ def shop(x0, x1, sign=None):
 
 
 shop(-7.62, -2.60)
-shop(2.60, 7.62, sign="jeweler")
+shop(2.60, 7.62, sign="jeweler", mirror=True)        # the old post-office front
 
 # Pilasters 0.35 wide, 0.06 proud, panelled shafts, console caps 3.80-3.95
 for xc in (-7.795, -2.425, 2.425, 7.795):
@@ -592,9 +696,10 @@ for ax in ARCH_X:
 T.box(-MX, MX, -0.08, -0.05, FL, FL + 0.08)                                    # base fillet
 
 
-def fanlight(ax, yb):
-    """Half-round fanlight glass with radial bars, a sill bar at the springing."""
-    GL.prism(arc_pts(ax, ARCH_SPR, 0.45, 0.0, math.pi, 8), yb, yb + 0.02, axis="y")
+def fanlight(ax, yb, cell):
+    """Half-round fanlight glass with radial bars, a sill bar at the springing; a plain dark
+    room behind it."""
+    pane(FRONT, arc_pts(ax, ARCH_SPR, 0.45, 0.0, math.pi, 8), -yb, cell, crop=(0, 1, 0.60, 0.80))
     for a in (math.pi / 4, math.pi / 2, 3 * math.pi / 4):
         ca, sa = math.cos(a), math.sin(a)
         nx, nz = -sa * 0.015, ca * 0.015
@@ -608,11 +713,11 @@ DOOR_Y = 0.20                      # door / window plane in the arches (y)
 # north arch: glazed door (cobbler, 50) + fanlight
 ax = ARCH_X[0]
 ST.box(ax - 0.50, ax + 0.50, -0.06, DOOR_Y + 0.05, FL - 0.15, FL)
-door_leaf(ax - 0.45, ax + 0.45, FL, ARCH_SPR - 0.06, DOOR_Y, 1.35)
-fanlight(ax, DOOR_Y + 0.04)
+door_leaf(ax - 0.45, ax + 0.45, FL, ARCH_SPR - 0.06, DOOR_Y, 1.35, "dark_room_frame")   # plain dim room
+fanlight(ax, DOOR_Y + 0.04, "dark_room")
 # middle arch: window, sill 1.20, 2/2 sash, arched top sash
 ax = ARCH_X[1]
-GL.prism(round_outline(ax, 1.0, 1.20, ARCH_SPR, 8), DOOR_Y + 0.02, DOOR_Y + 0.04, axis="y")
+pane(FRONT, round_outline(ax, 1.0, 1.20, ARCH_SPR, 8), -(DOOR_Y + 0.02), "blind_cream_high")
 T.box(ax - 0.62, ax + 0.62, -0.12, DOOR_Y, 1.12, 1.20)                          # sill
 for a, b in ((ax - 0.50, ax - 0.44), (ax + 0.44, ax + 0.50)):
     T.box(a, b, DOOR_Y - 0.05, DOOR_Y + 0.02, 1.20, ARCH_SPR)
@@ -623,11 +728,17 @@ T.box(ax - 0.018, ax + 0.018, DOOR_Y - 0.02, DOOR_Y + 0.02, 1.28, ARCH_SPR + 0.4
 # south arch: panelled stair-hall door with glazed upper panels + fanlight
 ax = ARCH_X[2]
 ST.box(ax - 0.50, ax + 0.50, -0.06, DOOR_Y + 0.05, FL - 0.15, FL)
-DR.box(ax - 0.45, ax + 0.45, DOOR_Y, DOOR_Y + 0.05, FL, ARCH_SPR - 0.06)
+GZ_TOP = ARCH_SPR - 0.20
+DR.box(ax - 0.45, ax + 0.45, DOOR_Y, DOOR_Y + 0.05, FL, 1.55)                   # lower half (solid)
+DR.box(ax - 0.45, ax + 0.45, DOOR_Y, DOOR_Y + 0.05, GZ_TOP, ARCH_SPR - 0.06)    # top rail
+for ua, ub in ((ax - 0.45, ax - 0.37), (ax - 0.04, ax + 0.04), (ax + 0.37, ax + 0.45)):
+    DR.box(ua, ub, DOOR_Y, DOOR_Y + 0.05, 1.55, GZ_TOP)                         # stiles round the two lights
 for ua, ub in ((ax - 0.37, ax - 0.04), (ax + 0.04, ax + 0.37)):
     DR.box(ua, ub, DOOR_Y - 0.015, DOOR_Y, FL + 0.15, 1.40)                     # raised lower panels
-    GL.box(ua, ub, DOOR_Y - 0.01, DOOR_Y, 1.55, ARCH_SPR - 0.20)                # glazed upper panels
-fanlight(ax, DOOR_Y + 0.04)
+    GL.face(FRONT, rect(ua, ub, 1.55, GZ_TOP), -(DOOR_Y + 0.015))               # glazed upper panels
+# one window back behind both lights: the dark stair hall
+back(FRONT, ax - 0.43, ax + 0.43, 1.49, GZ_TOP + 0.06, -(DOOR_Y + 0.015 + GAP), "dark_room", crop=(0, 1, 0.20, 0.80))
+fanlight(ax, DOOR_Y + 0.04, "dark_room_frame")
 # "SHOES REPAIRED" board over the north arch
 atlas_rec(region="shoes", mode="rect", wall=wall_rec(FRONT), u0=ARCH_X[0] - 0.55, u1=ARCH_X[0] + 0.55, z0=3.60, z1=3.90)
 AT.box(ARCH_X[0] - 0.55, ARCH_X[0] + 0.55, -0.12, -0.08, 3.60, 3.90)
@@ -753,7 +864,7 @@ zc_s, r_s = pediment(SIDE_PED, 2.50, 11.95, 1.20, segs=16)
 OV = (0.0, 10.45, 0.41, 0.45)
 TYMP_W = Wall((0.0, 0.0), (0, -1), MultiCut(CUT, CUT_T))
 TYMP_W.cut.wprism(TYMP_W, ellipse(0.0, OV[1], OV[2], OV[3]), -0.16, 0.25)
-GL.wprism(FRONT, ellipse(0.0, OV[1], OV[2], OV[3]), -0.12, -0.10)
+pane(FRONT, ellipse(0.0, OV[1], OV[2], OV[3]), -0.10, "dark_room_frame", crop=(0, 1, 0.30, 0.74))   # attic
 T.wring(FRONT, ellipse(0.0, OV[1], OV[2] + 0.12, OV[3] + 0.12), ellipse(0.0, OV[1], OV[2], OV[3]), -0.02, 0.05)
 for ang in (0, 90, 180, 270):
     c, s = math.cos(math.radians(ang)), math.sin(math.radians(ang))
@@ -797,11 +908,11 @@ CUP_W = [Wall((cx, cy - CB), (0, -1), CUT_C), Wall((cx + CB, cy), (1, 0), CUT_C)
 GZ0, GZS = 14.95, 15.12            # gable base, top of its straight legs
 GR = 0.85                          # gable arc radius (crown 15.97)
 DIAL_Z, DIAL_R = 15.42, 0.50
-for w in CUP_W:
-    # tall window 0.80 x 1.78 (sill 12.60), segmental head, dark glass, sash bars
+for k, w in enumerate(CUP_W):
+    # tall window 0.80 x 1.78 (sill 12.60), segmental head, glass with the dark clock room behind, sash bars
     ol = seg_outline(0.0, 0.80, 12.60, 14.38, 0.10, 6)
-    w.cut.wprism(w, ol, -0.15, 0.25)
-    GL.wprism(w, ol, -0.13, -0.11)
+    w.cut.wprism(w, ol, -0.17, 0.25)
+    pane(w, ol, -0.11, ("dark_room", "dark_room_frame")[k % 2])
     CP.wbox(w, -0.40, 0.40, 13.45, 13.51, -0.11, -0.06)                        # meeting rail
     CP.wbox(w, -0.018, 0.018, 12.60, 14.30, -0.11, -0.07)                      # muntin
     CP.wbox(w, -0.50, 0.50, 12.52, 12.60, -0.12, 0.05)                         # sill
@@ -935,5 +1046,6 @@ for key, builder in G.items():
 
 tris = sum(len(p.vertices) - 2 for o in col.objects for p in o.data.polygons)
 print("Rea Building built:", len(col.objects), "objects,", tris, "triangles (before hidden-face removal)",
-      "| front pediment crown %.2f, side %.2f" % (zc_f + r_f, zc_s + r_s), "| atlas records", len(ATLAS))
+      "| front pediment crown %.2f, side %.2f" % (zc_f + r_f, zc_s + r_s), "| atlas records", len(ATLAS),
+      "| window backs", len(BACKREC))
 # Materials, baked lighting and GLB export: run rea_building_bake.py (it runs this file first).

@@ -7,16 +7,25 @@ Run inside Blender:
 
 Steps (pattern: lovells_restaurant_bake.py / bank_building_bake.py):
  1. Rebuild the geometry (rea_building.py).
- 2. Five materials only (= five draw calls, merged into one by `baked-lighting`):
+ 2. Seven lightmapped materials (merged into one draw call by `baked-lighting`) and glass:
       brick  polyhaven/red_brick.jpg, tile 1.4 m, x factor -> #8A4030 (walls, hoods, tympana, chimney)
       trim   county-offices/trim_paint_drab.jpg, tile 2.0 m, x factor -> #B5AC98 (cornices,
              brackets, mouldings, shop fronts, sash, sills, keystones, stucco, cupola)
       stone  lovells-restaurant/stone_bluestone.jpg, tile 2.0 m (steps, cheeks, water table)
-      dark   plain tin grey #4A4C50 (roofs); glass, door varnish and iron by bake tints
+      dark   plain tin grey #4A4C50 (roofs); door varnish and iron by bake tints
       signs  rea-building/signs_atlas.jpg (tools/prepare_rea_textures.py): awning canvas and
              stripes, valances, clock dials, shutter louvres, dentil strips, sign boards
-    Bake tints (multiplied into the lightmap): cupola cream (1.00, 0.96, 0.80), glass, door
-    varnish, iron.
+      WindowBack   shared/window_backs.jpg cells (blinds, lace, curtains, dark rooms)
+      ShopInterior shared/shop_interior.jpg cells (display windows, door lights, door transoms
+             of the two shops)
+      glass  plain #1A1916, alpha 0.40, BLEND, single-sided; not lightmapped in the scene
+             (`glass-reflect`); fully transparent during the bake, ignored by the hidden-face pass
+    Bake tints (multiplied into the lightmap): cupola cream (1.00, 0.96, 0.80), door varnish,
+    iron.
+    Windows: PLAN.md "E. Windows that don't read as flat black" (rolled out here 2026-11-11, as
+    on the Bank Building): the window backs keep the atlas UVs recorded by rea_building.py
+    (BACKREC) and are lightmapped like everything else; the glass keeps Lightmap UVs (squeezed
+    to almost nothing) but the scene draws it without the lightmap.
  3. Cut the wall shell where the steps, water table, stucco face, pilasters and shop
     entablature cover it, join everything into one object, delete the faces nobody can see,
     unwrap "Lightmap" (front, Bloomfield side and cupola weighted up; north, rear, roofs down).
@@ -45,6 +54,8 @@ LIGHTMAP_SIZE = 2048
 SAMPLES = 384
 TO_SUN = (0.40, -0.90, 0.36)          # east-side building (front faces west)
 COLL, RIG = "ReaBuilding", "RB_BakeRig"
+GLASS_ALPHA = 0.40
+GLASS_RGB = (0x1A, 0x19, 0x16)        # faint warm grey dust tint (as the Bank Building, Nevius Store)
 
 # 1. Geometry -----------------------------------------------------------------
 exec(open(PROJECT + r"\tools\blender\rea_building.py").read())
@@ -74,8 +85,12 @@ LOOK = {
     "Stone": (TX + r"lovells-restaurant\stone_bluestone.jpg", 2.0, 0.9, None, None),
     "Dark":  (None, 1.0, 0.4, tuple(srgb_to_lin(c) for c in DARK_BASE), None),
     "Signs": (TX + r"rea-building\signs_atlas.jpg", 1.0, 0.85, None, None),
+    "WBack": (TX + r"shared\window_backs.jpg", 1.0, 0.9, None, None),
+    "Shop":  (TX + r"shared\shop_interior.jpg", 1.0, 0.9, None, None),
+    "Glass": (None, 1.0, 0.05, tuple(srgb_to_lin(c) for c in GLASS_RGB), None),
 }
-FINAL_NAMES = {"Brick": "brick", "Trim": "trim", "Stone": "stone", "Dark": "dark", "Signs": "signs"}
+FINAL_NAMES = {"Brick": "brick", "Trim": "trim", "Stone": "stone", "Dark": "dark", "Signs": "signs",
+               "WBack": "WindowBack", "Shop": "ShopInterior", "Glass": "glass"}
 
 
 def textured_material(name, image_file, roughness, colour, factor):
@@ -107,6 +122,13 @@ def textured_material(name, image_file, roughness, colour, factor):
             nt.links.new(tex.outputs["Color"], bsdf.inputs["Base Color"])
     else:
         bsdf.inputs["Base Color"].default_value = (*colour, 1)
+    if name == "glass":   # transparent, drawn with a sky reflection by the scene
+        bsdf.inputs["Alpha"].default_value = GLASS_ALPHA
+        mat.use_backface_culling = True
+        if hasattr(mat, "surface_render_method"):
+            mat.surface_render_method = "BLENDED"
+        elif hasattr(mat, "blend_method"):
+            mat.blend_method = "BLEND"
     return mat
 
 
@@ -115,7 +137,6 @@ FINAL = {k: textured_material(FINAL_NAMES[k], LOOK[k][0], *LOOK[k][2:]) for k in
 # Bake tints per builder (multiplied into the lightmap through the grime mask)
 CUPOLA_TINT = (1.00, 0.96, 0.80)
 TINTS = {"Cupola": CUPOLA_TINT, "CupBody": CUPOLA_TINT,
-         "Glass": ratio((0x1E, 0x22, 0x26), DARK_BASE),
          "Door": ratio((0x3A, 0x2A, 0x1F), DARK_BASE),
          "Iron": ratio((0x2A, 0x2A, 0x2B), DARK_BASE)}
 OBJ_MAT = {"Shell": "Brick", "Tymp": "Brick", "Stucco": "Trim", "CupBody": "Trim"}
@@ -194,6 +215,17 @@ def set_uvs(obj, kind):
     rid_attr = mesh.attributes.get("rid")
     for poly in mesh.polygons:
         n = poly.normal
+        if kind in ("WBack", "Shop"):                    # window backs: their atlas cell
+            rec = BACKREC[rid_attr.data[poly.index].value]
+            (px, py), (nx, ny) = rec["wall"]
+            U0, V0, U1, V1 = rec["uv"]
+            for li in poly.loop_indices:
+                co = mesh.vertices[mesh.loops[li].vertex_index].co
+                u = (co.x - px) * -ny + (co.y - py) * nx
+                fu = (u - rec["u0"]) / (rec["u1"] - rec["u0"])
+                fz = (co.z - rec["z0"]) / (rec["z1"] - rec["z0"])
+                uv.data[li].uv = (U0 + (U1 - U0) * fu, V0 + (V1 - V0) * fz)
+            continue
         if kind == "Atlas":
             rid = rid_attr.data[poly.index].value if rid_attr else 0
             rec = ATLAS.get(rid)
@@ -322,7 +354,11 @@ def remove_hidden_faces(obj, rays=120):
     bm = bmesh.new()
     bm.from_mesh(obj.data)
     bm.normal_update()
-    bvh = BVHTree.FromBMesh(bm)
+    # the glass does not block the view: rays pass it to reach (or leave) the window backs
+    glass_i = [i for i, m in enumerate(obj.data.materials) if m.name == "glass"]
+    bm.verts.index_update()
+    bvh = BVHTree.FromPolygons([v.co for v in bm.verts],
+                               [[v.index for v in f.verts] for f in bm.faces if f.material_index not in glass_i])
     dirs = fibonacci(rays)
     face_tris = {}
     for t in bm.calc_loop_triangles():
@@ -377,6 +413,10 @@ for p in mesh.polygons:
     f = 1.0
     c, n = p.center, p.normal
     if mat_names[p.material_index] == "dark":
+        f *= 0.6
+    elif mat_names[p.material_index] == "glass":
+        f *= 0.03                                  # not lightmapped in the scene
+    elif mat_names[p.material_index] in ("WindowBack", "ShopInterior"):
         f *= 0.6
     if n.z < -0.5:
         f *= 0.7                                   # soffits, awning undersides
@@ -521,6 +561,8 @@ def point_materials_at(img):
 for o in bpy.context.view_layer.objects:
     o.select_set(o == r_obj)
 bpy.context.view_layer.objects.active = r_obj
+glass_alpha = next(n for n in FINAL["Glass"].node_tree.nodes if n.type == "BSDF_PRINCIPLED").inputs["Alpha"]
+glass_alpha.default_value = 0.0             # light passes the panes to the window backs
 try:
     light_img = bake_target("RB_Light", True)
     point_materials_at(light_img)
@@ -684,6 +726,7 @@ try:
         mesh.materials[i] = mat
     print("grime baked")
 finally:
+    glass_alpha.default_value = GLASS_ALPHA
     for name, state in render_state.items():
         if bpy.data.collections.get(name):
             bpy.data.collections[name].hide_render = state
