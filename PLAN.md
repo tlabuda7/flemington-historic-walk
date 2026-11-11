@@ -43,8 +43,8 @@ Decisions (2026-11-02):
 | Nevius Store / Fulper's Dry Goods (78 Main) | written, auto-approved (owner away) | reused, none new (asset-scout skipped; 4 reused maps) | done, round-1 fixes applied (7.0k tris, 5 materials, 1.3 MB, 2K lightmap, LIGHTMAP_SCALE 1.1072) | round 2: PASS (round 1: 3rd-floor windows raised; LIGHTMAP_SCALE now 1.1072) | **yes** (10.30, 0.15, −7.33) |
 | Frame Dwelling at 65 Main (old no. 510) | written, auto-approved (owner away) | reused, 1 recoloured copy (asset-scout skipped; brown_planks_05 → clapboard_cream made by the builder; roof_slates_03 + red_brick reused) | done (6.3k tris, 4 materials, 1.0 MB, 2K lightmap, LIGHTMAP_SCALE 1.274) | round 1: PASS | yes (GLB, 2026-11-03) |
 | Lovell's Restaurant (68 Main) | written, auto-approved (owner away) | reused + 2 generated (asset-scout skipped; clapboard_cream reused; signs_atlas + stone_bluestone (lightened concrete_floor_worn_001) made by the builder) | done, round-1 fixes applied (4.75k tris, 4 materials, 0.77 MB, 2K lightmap, LIGHTMAP_SCALE 1.2462); **windows (E) re-export 2026-11-10: 4,814 tris, 7 materials, 0.95 MB, LIGHTMAP_SCALE 1.2468** | round 2: PASS (round 1: awning raised/shortened, glazed doors, lighter stone; LIGHTMAP_SCALE now 1.2462) (windows: not yet reviewed) | yes (2026-11-04) at (12.66, 0.15, −52.13); bank forecourt extended over its front strip; windows re-export not yet integrated |
-| Rea Building / Clock Tower Building, old Post Office block (48–52 Main) | approved by owner 2026-11-04, **landmark** detail (≤ 15k tris) | — | done (14.6k tris, 5 materials, 1.89 MB, 2K lightmap, LIGHTMAP_SCALE 1.1735) | round 1: PASS | yes (2026-11-04) at (10.85, 0.15, −97.79); 1 draw call |
-| County Hotel (47–49 Main) | approved by owner 2026-11-04: pale painted walls, **landmark** detail (≤ 15k tris) | — | done (10.2k tris, 8 materials, 1.81 MB, 2K lightmap, LIGHTMAP_SCALE 1.1087) | round 1: PASS | in scene 2026-11-04 (−10.30, 0.15, −112.07), 1 draw call |
+| Rea Building / Clock Tower Building, old Post Office block (48–52 Main) | approved by owner 2026-11-04, **landmark** detail (≤ 15k tris) | — | done (14.6k tris, 5 materials, 1.89 MB, 2K lightmap, LIGHTMAP_SCALE 1.1735); **section-E windows rebuilt 2026-11-11**: 14,763 tris, 8 materials (brick, trim, stone, dark, signs, WindowBack, ShopInterior, `glass`), 2.09 MB, **LIGHTMAP_SCALE 1.1726** | round 1: PASS (old model); windows rebuild not reviewed yet | yes (2026-11-04) at (10.85, 0.15, −97.79); 1 draw call; **windows rebuild not integrated yet** (needs intensity 1.1726 + `glass-reflect`) |
+| County Hotel (47–49 Main) | approved by owner 2026-11-04: pale painted walls, **landmark** detail (≤ 15k tris) | — | done (10.2k tris, 8 materials, 1.81 MB, 2K lightmap, LIGHTMAP_SCALE 1.1087); **section-E windows rebuilt 2026-11-11**: 10,428 tris, 11 materials (walls, trim, shutters, dark, brick, paving, clapboard, signs, WindowBack, HotelLobby, `glass`), 2.00 MB, **LIGHTMAP_SCALE 1.1088** | round 1: PASS (old model); windows rebuild not reviewed yet | in scene 2026-11-04 (−10.30, 0.15, −112.07), 1 draw call; **windows rebuild not integrated yet** (needs intensity 1.1088 + `glass-reflect`) |
 | Block at 40–46 Main (40–42 "Auto Sales", 44–46 "Shoe Shine & Fruits") | approved by owner 2026-11-04: map-true placement, ordinary (≤ 10k tris) | — | done (4.8k tris, 8 materials, 1.43 MB, 2K lightmap, LIGHTMAP_SCALE 1.2152) | **PASS** round 1 (2026-11-04); **bay rebuild 2026-11-11** (hanging bay, porch railing, hipped roof + finial, section-E windows): 7.3k tris, 10 materials, 1.79 MB, LIGHTMAP_SCALE 1.2093 — **PASS** (bay rebuild, round 1, 2026-11-11) | **in scene** 2026-11-04 (8.60, 0.15, −116.55), 1 draw call (old model; new one not integrated) |
 | Test person 1: John B. Pickell, clerk at the Nevius store (78 Main) | written, auto-approved (owner away) | done (Quaternius UAL Standard rig + clips incl. Idle_Talking_Loop; UBC Standard = Superhero bodies only, no Regular; MakeHuman system assets + MPFB 2.0.18 zip, not installed; 3 Poly Haven cloth/leather maps + 3 tinted) | done, round-1 fixes applied (12.8k tris, 65 bones, 1 mesh / 1 material / 1 2K atlas, 1.25 MB; Idle 6 s, Talk 3 s, Walk 1.33 s; MPFB head + hands) | round 2: PASS (round 1 FIXES: moustache, stance/crotch, shoulder and collar, jacket fronts, cuffs, gaze, chain) | **yes** (9.50, 0.15, −8.45), talks with a voice (js/people.js) |
 | Street ambiance pass 1: sound + street props (`street-props.glb`, `assets/audio/`) | written, auto-approved (owner away) | done (3 Poly Haven maps + 3 recoloured, 3 reused; 16 audio clips, 1.96 MB / 250 s; bed = #0659 instead of #1911) | props done, round-1 fixes applied (4.75k tris, 12 nodes, 1 material / 1 2K atlas colour × AO, 0.83 MB) | props round 2: PASS (round 1 FIXES: horse-head relief, pump globe lettering seam) | sound: yes (2026-11-04, `js/ambience.js`); props: yes (2026-11-04, `street-props` in `js/components.js`: 34 placements in 3 z-band meshes + 1 wire mesh, +4 draw calls) |
@@ -55,6 +55,12 @@ Decisions (2026-11-02):
 | Block at 32–38 Main (frame row: "Mill'y", "Bakery", "Meats") | approved by owner 2026-11-10: plain guessed front (no photo exists; building demolished mid-1900s). Do NOT cite the Stryker plate "continuous porch" (see research/sanborn-and-today-findings.md) | skipped (all reused, none new) | built 2026-11-11: `block-32-38.glb` 1,326 tris, 9 materials incl. section-E `glass`/`WindowBack`/`ShopInterior`, 1.21 MB, 2K lightmap, LIGHTMAP_SCALE 1.1463 | — | placeholder only |
 | Dry goods and clothing store (27 Main, old nos. 519 A/B; "D.G. & Clo.", possibly the "Potter Building") | approved by owner 2026-11-10: plain guessed front (no better photo exists; front built out over the 1910 porch between 1910 and 1921) | skipped (all reused, none new) | built 2026-11-11: `store-27.glb` 1,439 tris, 9 materials incl. section-E `glass`/`WindowBack`/`ShopInterior`, 1.47 MB, 2K lightmap, LIGHTMAP_SCALE 0.8992 | **PASS round 1** (reviewer 2026-11-11) | placeholder only |
 | Masonic Hall / Hunterdon County National Bank (90–94 Main, old nos. 536–534) | approved by owner 2026-11-10: 1921 stone bank front (1), carved bank name + plaque only (2), ordinary 10k (3) | skipped (all reused; 2 stone maps generated) | built 2026-11-10: `masonic-hall.glb` 7,129 tris, 10 mats, 2.26 MB, LIGHTMAP_SCALE 1.1751 | round 1 PASS 2026-11-10 (previews + GLB parse) | placeholder only |
+| Democrat building: cigar store, news stand, printing office (96–98 Main, old no. 533) | written 2026-11-11, **awaiting owner approval** (5 decisions: DEMOCRAT board, cigar advert, News strip, width, no shutters) | none needed (all reused) | — | — | placeholder only |
+| Auto supplies store (100–102 Main, old no. 532) | written 2026-11-11, **awaiting owner approval** (no photo: plain guessed front; decision 1 = open galleries over a shop front, or flat front) | none needed (all reused) | — | — | placeholder only |
+| Corner drugstore (106 Main, old no. 531, Higgins Ave corner) | written 2026-11-11, **awaiting owner approval** (decision 1 = three-tier porch per the 1921 map; 2 = porch 2.24 m out over the sidewalk) | none needed (all reused) | — | — | placeholder only |
+| Street details pass 2 (road, sidewalks, yards, back buildings, filler objects; under "Street ambiance") | written 2026-11-11 by planner, **awaiting owner decisions** (9 questions) | — | — | — | — |
+| Houses and shops at 24–30 Main (24 dwelling, 26 "Mill'y", 28–30 "Conf'y" / "Barber"; old nos. 561–558) | written 2026-11-11, **awaiting owner approval** (plain guessed fronts, no photo exists; one GLB; 26's sidewalk porch ended at the scene curb) | none needed (all reused) | — | — | placeholder only |
+| Brick house with shop fronts (57 Main, old nos. 513–512; "D.G.", "Conf'y", "Gro.", "Cobbler") | written 2026-11-11, **awaiting owner approval** (Sept 1921 state: 3-storey mansard house behind a 2-storey and two 1-storey brick shop fronts) | none needed (all reused, 1 tinted copy) | — | — | placeholder only |
 
 ## Building specs
 
@@ -3980,6 +3986,876 @@ with fascia) and a large blade sign appeared (both undated, before 1938); 1938 a
 5. Side and rear windows' exact positions and the ground-floor forms there; second chimney.
 6. Heights from photo fits (±0.3 m; apex ±0.5 m).
 
+### Democrat building: cigar store, news stand and printing office (96–98 Main St, old no. 533)
+
+**Status:** spec written — awaiting user approval (planner, 2026-11-11). Not built. Placeholder `#bldg-96-98-main`
+(index.html: 4.8 m wide at z 42.8, "wood") is replaced by this spec's numbers.
+
+**What it is**: John C. Hopewell's **2-storey brick building "next to the Bank"**, begun Nov 1875 for Joseph V. Smith's
+tobacco store and the *Hunterdon Democrat* newspaper; sold Feb 1876 to the Democrat's editor R. J. Killgore, with a
+deed clause that nothing taller may be built on the lot. A narrow front (4.96 m): shop front below, **three tall
+segment-headed windows above, and a bracketed cornice with a round arch in the middle** (one of Flemington's "roof
+arches"). Sept 1921 map: **"Cigars"** in the front room, **"Printing, El. Mo."** (electric motor) behind, and a
+**1-storey frame "News" strip** (news stand) along the south side. The Democrat left before 1926; by 1948 the building
+was cut down to one storey (map "ONE S 13'"; Goodspeed: "has lost its second floor", "still standing but
+unrecognizable", today's no. 104).
+
+**What is documented, inferred, guessed**
+- **MAP (Sept 1921)**: brick (pink), "2", front block 4.96 × 22.48 m with a dashed partition 9.35 m back, a newer
+  2-storey brick rear extension 4.19 × 7.74 m (not on the 1910 map), front wall on the building line of the Masonic
+  Hall, a dashed line 0.22 m in front of the wall (shop cornice), 1.20 m slot to the Masonic Hall, the "News" strip
+  1.95 × 9.33 m, 1 storey, frame (yellow), with an opening into the cigar store. **MAP (Nov 1910)**: "2", **"20'"**,
+  "Cigars & Tobacco" / "Printing, Gas Eng., Metal Pot & Gas Furnace"; no News strip (a 2.1 m gap instead); the brick
+  drawn 6.0 m wide (the two photos fit 5.0 m, so 1921 is used).
+- **PHOTO**: whole front, c. 1900 (frontal) and c. 1918 (from the SW): three ground-floor bays (door, show window,
+  door), wooden shop cornice with a console bracket at each end, three upper windows with segmental heads, main
+  cornice on brackets with a round arch over the middle, "DEMOCRAT" board over the north door (both photos), a "JOHN
+  RUSKIN" cigar advertising sign over the show window (c. 1918 only). The 1890s view from the SW shows the same arch
+  and three windows.
+- **Inferred**: heights (map 20' + photo proportions, ±0.25 m); that nothing changed between c. 1918 and 1921; 1-over-1
+  sash and no shutters in 1920 (c. 1918 shows none; c. 1900 had solid lettered shutters).
+- **Pure guess**: the News strip's look (no photo shows it); all colours; roof; side and rear walls.
+
+**Planner decisions** (owner to confirm)
+1. **"DEMOCRAT" board over the north door: yes** (recommended; in both photos, still there c. 1918, and the paper was
+   still here in 1921). Plain dark capitals on a white board 1.05 × 0.24 m. Alternative: blank board.
+2. **"JOHN RUSKIN" cigar sign over the show window** (c. 1918 photo: pale capitals on a dark panel; second line not
+   legible, so only the two words would be lettered): **recommended: no, leave a plain dark transom panel** (a brand
+   advert that may have changed by 1920). Alternative: letter "JOHN RUSKIN" only.
+3. **News strip is modelled as a plain guess** (1-storey frame lean-to, door and one small window, no lettering),
+   because the map is the only source. Alternative: leave it out and keep a 1.95 m gap.
+4. **Brick width 4.96 m (1921 map)**, not 6.0 m (1910 map): the frontal photo's width : cornice-height ratio (0.85)
+   fits 4.96 × 5.9 m, i.e. the 1910 "20'".
+5. **No shutters, no awning** (none in c. 1918).
+
+**Sources**
+- Map: 1921 Sanborn **sheet 3** [M2], pixel box **x 3980–4610, y 2040–2215**. Line centres (darkness profile): heavy
+  street line x 3984.0; dashed line x 4014.3; **front wall x 4018.5**; partition (dashed) x 4198; rear of front block
+  x 4450; rear extension to x 4598.5; **north wall y 2074.5**, **south wall y 2169.7** (with a gap in the line at
+  x 4056–4080 = opening to the News strip); extension north wall y 2090.5, south y 2171; **News strip x 4019–4198,
+  y 2170–2207.5**; Masonic Hall south wall y 2051.5. 1910 Sanborn **sheet 4** (`assets/maps/flemington-1910-sanborn-sheet-04.jpg`),
+  box x 540–1020, y 6940–7070: front wall x 584, dashed line x 578, partition x 741, rear x 1012, walls y 6947 / 7063,
+  "2", "20'".
+- **Photos** (Goodspeed Histories; **view only, do not save in the project**):
+  - **Primary, frontal: `DemocratOffice-copy-scaled.jpg`** ("probably late 19th century", printed with the 1938 bank
+    history; the men's dress suggests c. 1900): https://i0.wp.com/goodspeedhistories.com/wp-content/uploads/2021/06/DemocratOffice-copy-scaled.jpg
+    (on https://goodspeedhistories.com/flemingtons-first-bank-chapter-3/ ). Horizontal fit: building = 4.96 m.
+  - **Primary for 1920, from the SW: `OriginalFacade-ca1918-copy-scaled.jpg`** (right-hand side; "about 1918"):
+    https://i0.wp.com/goodspeedhistories.com/wp-content/uploads/2021/06/OriginalFacade-ca1918-copy-scaled.jpg
+  - `100-110-Main-copy.jpeg` (HCHS collection, 1890s, from the SW; small in the distance: arch, 3 windows, dark south
+    side wall): https://i0.wp.com/goodspeedhistories.com/wp-content/uploads/2022/03/100-110-Main-copy.jpeg
+    (on https://goodspeedhistories.com/hopewells-buildings/ ).
+  - `Men-on-Main-copy.jpg` (printed 1930, taken c. 1890s: the shop front seen along the wall from the south: brick end
+    pier, console bracket, door with transom): https://i0.wp.com/goodspeedhistories.com/wp-content/uploads/2021/06/Men-on-Main-copy.jpg
+  - Local `flmgtnmainststores.jpg` / `flemington_-_some_business_blocks_on_main_street_-_1907.jpg` (1907, from the NW):
+    a low 2-storey block with three tall windows just beyond the Masonic Hall; too small for detail. All other local
+    cards and HABS photos checked: none shows it (`Best-Main-St` "looking S." card on Goodspeed: only its cornice end).
+- Web: Goodspeed, "Hopewell's buildings" (1875 start, Smith + Democrat, 1876 deed, "still standing but
+  unrecognizable"), https://goodspeedhistories.com/hopewells-buildings/ ; "Roof arches, part one" (no. 11 "The
+  original Democrat Building (1875), 104 Main St.", arch lost), https://goodspeedhistories.com/roof-arches-part-one/ ;
+  "Flemington's First Bank, chapter 3" ("has lost its second floor"; now the Borough Police),
+  https://goodspeedhistories.com/flemingtons-first-bank-chapter-3/ . Not in the 1980 NRHP inventory
+  (`research/nrhp-findings.md`; its line "96–98 frame, 100–102 brick" is the wrong way round: the map shows 96–98
+  brick, 100–102 frame).
+
+**Placement** (east side, front faces west)
+- Entity = centre of the brick front at the shop-cornice line, sidewalk level: **(10.08, 0.15, 43.85)**,
+  `rotation="0 -90 0"`, keep id `bldg-96-98-main`.
+- **Blender frame**: front −Y, **+X = south**, world z = 43.85 + X, world x = 10.08 + Y. Map → local:
+  X = (py − 2122.1) × 0.0521, Y = (px − 4014.3) × 0.0521 (same sheet-3 join as the Masonic Hall).
+- Lines: shop cornice face Y 0; **brick wall Y 0.22 (x 10.30)**; partition Y 9.57; rear of front block Y 22.70; rear
+  extension to Y 30.44; **north wall X −2.48 (z 41.37)**, **south wall X +2.48 (z 46.33)**; News strip X +2.48 … +4.43
+  (z 48.28), Y 0.22 … 9.57. "Xn" below = metres from the north wall (Xn = X + 2.48).
+- Neighbours: north, 1.20 m slot to the Masonic Hall (south wall z 40.17); south, the News strip touches 100–102
+  (north wall z 48.29).
+- **Sun** "to sun" **(0.40, −0.90, 0.36)**. **Bake occluders (not exported)**: Masonic Hall box X −22.2 … −3.68,
+  Y 0.2 … 18.5, Z 0 … 11.6 (+ gable to 15.6); 100–102 box X +4.44 … +11.86, Y 0.2 … 18.9, Z 0 … 9.14.
+
+**Massing**
+
+| Part | Local X | Local Y | Height | Roof |
+|------|---------|---------|--------|------|
+| A. Front block, brick, 2 storeys | −2.48 … +2.48 (4.96, map) | 0.22 … 22.70 (22.48, map) | front cornice top **6.10** (1910 map 20'); arch apex **6.85** (photo fit) | low shed falling to the rear (6.0 → 5.4), tin (guess) |
+| B. Rear extension, brick, 2 storeys | −1.65 … +2.55 (map) | 22.70 … 30.44 | 5.4 | flat, tin (guess) |
+| C. News strip, frame, 1 storey | +2.48 … +4.43 (1.95, map) | 0.22 … 9.57 (9.35, map) | front 3.00, rear 2.60 (guess) | shed falling to the rear, tin (guess) |
+
+Floor lines (photo fits ±0.25): shop cornice top **3.15**; 2nd-floor sills **3.40**; window arch tops **5.35**; bracket
+zone 5.45–5.85; cornice top 6.10. Walls skirt to −0.20. Not modelled: interiors, cellar steps at the south pier.
+
+**Elevation details: front** (wall plane Y 0.22; c. 1900 + c. 1918 photos)
+
+| Xn from | Xn to | Ground floor, Z 0 … 3.15 |
+|---------|-------|--------------------------|
+| 0 | 0.24 | brick end pier (full height) |
+| 0.24 | 1.21 | **north door** (to the Democrat office): recessed 0.25, one half-glazed door to Z 2.15, plain transom light 2.20–2.55 |
+| 1.21 | 1.40 | wooden post |
+| 1.40 | 3.34 | **show window**: stall riser panel Z 0 … 0.60, glass 0.60 … 2.25 in 2 × 2 panes (thin bars), transom panel 2.30 … 2.75 (plain dark, Decision 2) |
+| 3.34 | 4.66 | **south door** (cigar store): recessed 0.60, pair of narrow half-glazed doors to 2.15, transom light to 2.55 |
+| 4.66 | 4.96 | brick end pier |
+
+- **Shop cornice**: wooden fascia Z 2.75–3.00 across Xn 0.24–4.66, moulded cornice 3.00–3.15 projecting 0.22 (to Y 0),
+  a **scrolled console bracket** (0.18 wide, 0.45 tall) at each end, on the pier faces.
+- **"DEMOCRAT" board** (Decision 1): white board 1.05 × 0.24 m, dark capitals, centred over the north door
+  (Xn 0.20–1.25, Z 2.50–2.74), 0.04 proud.
+- **Upper floor**: three windows, centres **Xn 0.90, 2.48, 4.06**, opening **0.85 wide**, sill 3.40, spring 5.20, top of
+  the segmental arch **5.35**; 1-over-1 sash set back 0.12; **segmental brick hood** with a pale painted top edge 0.10
+  proud (c. 1918 shows pale heads); pale stone sill 0.10 tall, 0.06 proud. No shutters (Decision 5).
+- **Main cornice**: boxed wooden cornice Z 5.85–6.10 projecting 0.40, panelled frieze 5.45–5.85, **6 brackets**
+  (0.12 wide, 0.40 tall: one pair at each end, two framing the arch at Xn 1.45 and 3.51). Over the middle the cornice
+  **rises in a round arch**: span 2.05 m (Xn 1.45–3.51), apex Z **6.85**, same moulded section, with a recessed plain
+  tympanum (dark, c. 1918) set back 0.15. The arch is a front piece only (0.5 m deep), braced to the roof.
+- **News strip front** (GUESS, plain): vertical-board or clapboard face X +2.48 … +4.43, Z 0 … 3.00, a plain half-
+  glazed door (0.80 × 2.05) at X +2.75 … +3.55 and one 0.60 × 1.00 window (sill 1.00) at X +3.70 … +4.30, flat fascia
+  board 2.80–3.00 projecting 0.10. No lettering.
+- **North wall** (visible along the 1.2 m slot only): plain brick, no openings. **South wall above the News strip**:
+  plain brick, two plain segment-headed windows on the upper floor at Y 13 and Y 19 (map ticks at about those places).
+  Rear: plain.
+
+**Windows the new way (PLAN.md section E)**: each pane = one `glass` face (#1A1916, alpha 0.40, roughness 0.05, BLEND,
+single-sided) 4 cm in front of a window back. Upper three windows: shared `window_backs.jpg` cells (office: a cream
+blind half down, a plain dark room, a green blind), no two alike. Show window and both door lights: shared
+`shop_interior.jpg` cells (dim counter and shelves, no lettering). News window/door: dark-room cells. ≤ +150 tris.
+
+**Materials & colours** (no colour photo: **all colours guesses**; tones from the photos: brick mid-dark, shop front
+dark, window heads and sills pale, cornice mid). Everything is reused; asset-scout can be skipped.
+1. `brick`: unpainted red-brown; `polyhaven/red_brick.jpg`, tile 1.4 m (as the Masonic Hall build).
+2. `trim_dark`: shop front, doors, cornice, brackets: dark green-brown paint ≈ #3A3A2E; `county-offices/door_varnish_dark.jpg`
+   tinted, tile 0.8 m.
+3. `trim_pale`: window sash, hood edges, sills, sign board: cream ≈ #D8D0BC; `polyhaven/trim_paint_cream.jpg`, tile 1.0 m.
+4. `clapboard`: News strip, drab ≈ #9A917C; `house-65-main/clapboard_cream.jpg` tinted, tile 1.0 m (0.11 m boards).
+5. `roof`: `county-offices/roof_tin_redbrown.jpg`, tile 2.0 m.
+6. `WindowBack` (shared `window_backs.jpg`), 7. `ShopInterior` (shared `shop_interior.jpg`), 8. `glass`.
+"DEMOCRAT" lettering (if approved): baked into the lightmap on the board, as the Masonic Hall inscription.
+
+**Weathering**: 45 years old: soot streaks under the cornice, arch and hoods; brick darker in the bottom 0.5 m and in
+the slot; worn paint on the door sills and stall riser; News strip paint faded, rust on its tin roof edge.
+
+**Budget**: **ordinary, cap 10k, target ~2.5k**: arch + cornice + brackets ~700; shop front ~500; 3 windows with
+hoods ~350; shells, roofs, News strip ~400; windows backs + glass ~150. 5 reused 1K maps + 2 shared atlases, one 2K
+lightmap weighted to the front. Files: `tools/blender/democrat_building.py` + `_bake.py`,
+`assets/models/source/democrat-building.blend`, `assets/models/democrat-building.glb` (≤ 5 MB),
+`assets/textures/democrat-building-lightmap.jpg`, previews `assets/models/previews/democrat-building-*.png`
+(frontal matching the c. 1900 photo; from the SW matching c. 1918; with the Masonic Hall beside it).
+
+**Acceptance checks for the reviewer**
+1. Origin at world (10.08, 0.15, 43.85); front −Y, +X = south; brick front 4.96 m wide, wall at Y 0.22, 1.20 m clear
+   of the Masonic Hall.
+2. Two storeys, cornice top about 6.1 m; **the cornice rises in a round arch over the middle third, apex about 6.85 m**.
+3. **Three tall segment-headed windows** upstairs, evenly spaced, pale heads and sills, no shutters.
+4. Ground floor: door, show window, door between two brick end piers, under a wooden shop cornice with a console
+   bracket at each end.
+5. A 1-storey frame lean-to (News) 1.95 m wide on the south side, front flush with the brick wall, plain.
+6. Lettering: only the "DEMOCRAT" board if the owner approves Decision 1; nothing else.
+7. Windows per section E: separate transparent `glass`, varied backs.
+8. ≤ 10k tris (target 2.5k), ≤ 8 materials, GLB ≤ 5 MB, TEXCOORD_0 + 1, 1K maps, 2K lightmap.
+
+**Integrator notes**: replace the placeholder, keep the id, position (10.08, 0.15, 43.85), lightmap intensity =
+LIGHTMAP_SCALE, add `glass-reflect`. The gas pump P1 (6.95, 0.15, 47.2) stays (it stands at the curb opposite the News
+strip, where the map puts the buried tank: circle at px 3905, 2187).
+
+**1920 vs earlier and later**: c. 1900: solid lettered shutters on the upper windows, a multi-pane show window.
+c. 1918: no shutters, cigar advert over the window. After 1926 the Democrat was gone; by 1948 one storey, 13 ft.
+
+**Pure guesses (owner to check)**
+1. The News strip's whole appearance. 2. All colours and the roof. 3. Door and show-window glazing patterns c. 1920
+(c. 1918 is hidden behind a parked car). 4. Side windows and the rear. 5. Heights ±0.25 m.
+
+### Auto supplies store (100–102 Main St, old no. 532)
+
+**Status:** spec written — awaiting user approval (planner, 2026-11-11). Not built. **No photo of this front has been
+found: the front is a plain guess on the map's footprint.** Placeholder `#bldg-100-102-main` (index.html: 9.7 m wide
+at z 50.05, "brick") is replaced by this spec's numbers.
+
+**What it is**: a **3-storey frame store, 30 ft high**, between the Democrat building and the corner drugstore.
+Nov 1910 map: "Variety" store with a **2-storey porch** across the front. Sept 1921 map: **"Auto Supplies"**, the
+front strip now marked **"3"** (built up to three storeys between 1910 and 1921) and the building 1.1 m wider on the
+north side; a **500-gallon gasoline tank buried at the curb** in front (the scene's pump P1). 1948: still a 3-storey
+frame store. Not in the 1980 NRHP inventory or the 2026 HPC list; probably gone.
+
+**What is documented, inferred, guessed**
+- **MAP (Sept 1921)**: frame (yellow); front strip 7.42 × 2.16 m marked "3", solid outline, with a small note read as
+  **"O.P. 2.3"** or "D.R. 2.3" (see Decision 1) and one opening to the main body; main body "3", **"30'"**, 16.52 m
+  deep behind the strip; a 1.56 m bump on the north side behind the News strip; a 2.16 × 7.82 m light court cut into
+  the south-east; a **3-storey open rear porch** (dashed) 1.95 m deep shared with 106. "500 GA. GASOL. TANK BURIED"
+  with a circle in the street. **MAP (1910)**: "3 Variety", 30', front strip "2" (dashed = open porch), body 6.3 m wide.
+- **PHOTO**: none of the front. c. 1918 (Goodspeed `OriginalFacade-ca1918`, extreme right edge, a few millimetres of
+  coarse halftone): something pale and horizontal at upper-floor height just south of the Democrat building, and a
+  window below it; it cannot be read. 1907 card: pale vertical members at two levels beyond the Democrat building
+  (the 1910 porch), no detail.
+- **Inferred**: storey heights from 30'; a shop front on the ground floor (store use).
+- **Pure guess**: everything else on the front: openings, porch form, cornice, colours.
+
+**Planner decisions** (owner to confirm)
+1. **Front form.** The map note is too small to read with certainty.
+   **(a) Recommended: ground floor = shop front built out to the front line; 2nd and 3rd floors = open porches
+   (galleries) over it**, reading the note as "O.P. 2.3" (open porch, 2nd and 3rd). It fits the solid outline, the
+   1910 two-storey porch that stood here before, and the dwelling use upstairs.
+   **(b) A closed, flat 3-storey clapboard front** with three windows on each upper floor (reading "D.R. 2.3"), the
+   same plain treatment as 27 and 32–38 Main. Cheaper and safer if the owner prefers no guessed porches.
+2. **No signs, no lettering, no awning** (owner rule: nothing invented). The gasoline pump at the curb already says
+   what the shop sells.
+3. **Plain guessed details**: square posts, plain square-baluster rails, plain boxed cornice, no brackets.
+4. **Show window shows a plain dim shop** (shared `shop_interior.jpg`), no invented tyres or oil cans. Option: a small
+   plain rack of tyres inside, if the owner wants the trade to show.
+
+**Sources**
+- Map: 1921 Sanborn **sheet 3** [M2], pixel box **x 3980–4420, y 2170–2355**. Line centres: street line x 3984.0;
+  **strip front x 4019.5**; strip/main wall x 4061 (gap in the line at y 2262–2282); rear wall x 4378; rear porch
+  (dashed) x 4415.5; **north wall y 2207.5**; **south wall y 2350** (shared with 106); north bump x 4198–4319.5 out to
+  y 2177.5; light court x 4228–4378, y 2308.5–2350; tank circle centre (3905, 2187). 1910 sheet 4, box x 580–960,
+  y 7080–7230: porch strip x 585–612 (dashed), body x 612–728 × y 7103–7225, rear 2-storey part to x 962.
+- Photos: see above (Goodspeed c. 1918, view only; local 1907 cards). The 1890s HCHS view `100-110-Main-copy.jpeg`
+  does not show a 3-storey building on this lot (the Democrat building's south wall is open to view), so the 30 ft
+  store was probably built between the 1890s and 1910 (not checked on the 1896/1902 maps).
+- Web: nothing found for this address (Goodspeed, NRHP 1980, HPC 2026 searched). `research/sanborn-and-today-findings.md`.
+- **For the owner, optional**: a c. 1915–25 photo of the east side between the bank and Higgins Ave (Chorister
+  Place) would settle Decision 1 here and Decision 1 at 106. Places to ask: Hunterdon County Historical Society photo
+  collection (the 1890s view came from there), and the West Jersey History gallery
+  https://westjerseyhistory.org/images/hunterdon/flemington/ (save by hand; it blocks automated access).
+
+**Placement** (east side, front faces west)
+- Entity = centre of the front line at sidewalk level: **(10.30, 0.15, 52.01)**, `rotation="0 -90 0"`, keep id
+  `bldg-100-102-main`.
+- **Blender frame**: front −Y, **+X = south**, world z = 52.01 + X, world x = 10.30 + Y. Map → local:
+  X = (py − 2278.75) × 0.0521, Y = (px − 4019.5) × 0.0521.
+- Lines: front Y 0 (x 10.30); main wall Y 2.16; rear wall Y 18.68; rear porch to Y 20.63; **north wall X −3.71
+  (z 48.30)**; **south wall X +3.71 (z 55.72)**, a party wall with 106.
+- **Sun** "to sun" **(0.40, −0.90, 0.36)**. **Bake occluders**: Democrat box X −8.64 … −3.71, Y 0 … 22.5, Z 0 … 6.1
+  and News box X −5.66 … −3.71, Y 0 … 9.35, Z 0 … 3.0; 106 box X +3.71 … +9.91, Y −2.24 … 18.7, Z 0 … 9.14.
+
+**Massing**
+
+| Part | Local X | Local Y | Height | Roof |
+|------|---------|---------|--------|------|
+| A. Main body, frame, 3 storeys | −3.71 … +3.71 (7.42, map) | 2.16 … 18.68 | **9.14** (map 30') | low shed falling to the rear (9.14 → 8.5), tin (guess) |
+| A2. North bump | −5.27 … −3.71 | 9.48 … 15.81 | 9.14 | part of A's roof |
+| A3. Light court (cut out of A) | +1.55 … +3.71 | 11.02 … 18.68 | open | — |
+| B. Front strip | −3.71 … +3.71 | 0 … 2.16 | 9.14 | flat tin roof under the cornice |
+| C. Rear porch, 3 tiers | −3.71 … +3.71 | 18.68 … 20.63 | 9.0 | flat; 4 plain posts and 2 decks only (out of view) |
+
+Floor lines (guess from 30'): ground floor 0 … 3.30; 2nd floor deck 3.45; 3rd floor deck 6.30; cornice 8.84–9.14.
+
+**Elevation details: front, Decision 1 (a)** (all GUESS, kept plain)
+- **Ground floor** (face Y 0, Z 0 … 3.30): corner boards 0.15; two show windows X −3.35 … −0.75 and +0.75 … +3.35
+  (riser 0.55, glass to 2.45, plain transom band 2.50–2.90), a centre pair of half-glazed doors X −0.65 … +0.65
+  recessed 0.60, plain fascia 2.95–3.30 projecting 0.10.
+- **2nd and 3rd floors: open galleries** 2.16 m deep: deck slabs 0.20 thick at Z 3.30–3.50 and 6.15–6.35; **four
+  plain square posts 0.14 per tier** at X ±3.60 and ±1.20 (three bays); plain rail at +0.90 above each deck with
+  0.03 square balusters at 0.13 centres (or a flat alpha-free baluster strip if tris run short); clapboard end walls
+  not closed (open ends). Behind, on the main wall (Y 2.16): per floor one door (0.85 × 2.10) at X 0 and two 1-over-1
+  windows (0.85 × 1.70, sill 0.75 above the deck) at X ±2.20.
+- **Cornice**: plain boxed, Z 8.84–9.14, projecting 0.35 at the front (Y −0.35) and returning 0.35 on the north side.
+- **Decision 1 (b) instead**: clapboard face at Y 0 for all three floors, three 1-over-1 windows per upper floor at
+  X 0 and ±2.40 (0.85 × 1.75, sills 4.25 and 7.05), flat head and sill boards, same ground floor and cornice.
+- **North wall** (in view above the News strip and the Democrat building): clapboard, corner boards, two plain
+  windows per upper floor at Y 5 and Y 13 (guess). **South wall**: party wall with 106, not modelled. Rear: plain,
+  3 windows per floor.
+
+**Windows the new way (PLAN.md section E)**: `glass` faces 4 cm in front of window backs; upstairs = shared
+`window_backs.jpg` cells (dwelling rooms: lace, half-drawn cream blinds, one dark room; no two alike side by side);
+show windows and door lights = shared `shop_interior.jpg` cells. ≤ +250 tris.
+
+**Materials & colours** (**all guesses**; reused, asset-scout can be skipped)
+1. `clapboard`: light grey-buff ≈ #B4AC98; `house-65-main/clapboard_cream.jpg` tinted, tile 1.0 m.
+2. `trim`: cream ≈ #D8D0BC (posts, rails, corner boards, sash, cornice); `polyhaven/trim_paint_cream.jpg`, tile 1.0 m.
+3. `shopfront`: dark brown-green ≈ #3A3A2E; `county-offices/door_varnish_dark.jpg` tinted, tile 0.8 m.
+4. `deck`: grey painted boards; `block-35-41/trim_stone_grey.jpg`, tile 2.0 m. 5. `roof`: `county-offices/roof_tin_redbrown.jpg`.
+6. `WindowBack`, 7. `ShopInterior`, 8. `glass`.
+
+**Weathering**: paint chalky and streaked under the cornice and deck edges; dirt splash in the bottom 0.4 m; an oil-
+dark patch on the sidewalk edge near the pump is the scene's job, not the model's.
+
+**Budget**: **ordinary, cap 10k, target ~4k** with (a) (rails ~1.6k, posts and decks ~0.4k, shop front ~0.5k, shell
+and rear ~0.6k, windows ~0.6k, glass + backs ~0.25k); ~1.5k with (b). 4 reused 1K maps + 2 shared atlases, one 2K
+lightmap. Files: `tools/blender/store_100_102.py` + `_bake.py`, `assets/models/source/store-100-102.blend`,
+`assets/models/store-100-102.glb`, `assets/textures/store-100-102-lightmap.jpg`, previews
+`assets/models/previews/store-100-102-*.png` (frontal; from the NW with the Democrat building; from the SW with 106).
+
+**Acceptance checks for the reviewer**
+1. Origin at world (10.30, 0.15, 52.01); front −Y, +X = south; 7.42 m wide; front line at Y 0, main wall at Y 2.16,
+   rear at Y 18.68.
+2. Three storeys, top of cornice 9.14 m, about 3 m taller than the Democrat building beside it.
+3. (a): closed shop front on the ground floor with two show windows and a centre door; **two open gallery tiers
+   above, four plain posts each**, plain rails. (b): flat clapboard front, three windows per upper floor.
+4. Bump on the north side behind the News strip; light court at the south-east; plain 3-tier rear porch.
+5. **No sign, no lettering, no awning, no brackets or fretwork.**
+6. Windows per section E. 7. ≤ 10k tris, ≤ 8 materials, GLB ≤ 5 MB, TEXCOORD_0 + 1, 1K maps, 2K lightmap.
+
+**Integrator notes**: replace the placeholder, keep the id, position (10.30, 0.15, 52.01), `glass-reflect`. Build and
+place together with 106 if possible (shared party wall and rear porch).
+
+**Pure guesses (owner to check)**
+1. The whole front (Decision 1). 2. All colours. 3. Openings, floor heights, cornice. 4. Side and rear windows.
+
+### Corner drugstore (106 Main St, old no. 531, corner of Higgins Ave)
+
+**Status:** spec written — awaiting user approval (planner, 2026-11-11). Not built. Placeholder `#bldg-106-main`
+(index.html: 5.5 m wide at z 57.65) is replaced by this spec's numbers.
+
+**What it is**: a **3-storey frame drugstore, 30 ft high**, on the north corner of Higgins Ave (20 ft wide; today's
+Chorister Place), with its long clapboard side along the avenue. An 1890s photograph shows it: a **pale clapboard
+Italianate front, three windows wide, with a bracketed cornice raised into a small gable (pediment) over the
+middle**, and a one-storey post porch over the sidewalk with a druggist's sign. Nov 1910 map: "Drugs", 1-storey porch.
+Sept 1921 map: "Drugs", and the porch strip is now marked **"3" with a dashed (open) front: a three-storey porch**
+reaching the map's street line, 2.24 m in front of the building line of its neighbours. 1948: "3 Drugs", the same.
+Goodspeed: the "building … with a peaked roofline … is no longer standing".
+
+**What is documented, inferred, guessed**
+- **MAP (Sept 1921)**: frame, main body 6.20 × 18.65 m, "3", **"30'"**; **front porch strip 2.24 m deep, "3", west
+  edge dashed**; the shared 3-storey open rear porch 1.95 m deep; south side on the Higgins Ave line. **MAP (1910)**:
+  the same body ("3 Drugs", 30'), porch strip "1".
+- **PHOTO (1890s, about 25 years early; HCHS via Goodspeed, from the SW)**: pale 3-storey clapboard front, 3 bays;
+  2nd-floor windows tall with shallow arched hoods and louvred blinds; 3rd-floor windows a little shorter; deep
+  cornice on brackets with a low gable over the middle bay; **south side wall darker clapboard, without windows in
+  its front ~8 m**, two bill boards low on it near the corner; ground floor a dark shop front; a 1-storey porch on
+  slim posts with a panelled parapet rail on its roof and a hanging "… DRUGGIST" sign (its exact position against
+  this front and the 100–102 lot is not clear in the photo).
+- **Inferred**: that the 1890s front (windows, cornice, gable) was still there in 1921 behind the taller porch (same
+  footprint and height on the 1910, 1921 and 1948 maps).
+- **Pure guess**: the form of the 3-storey porch; colours; the shop front; side windows towards the rear.
+
+**Planner decisions** (owner to confirm)
+1. **Three-tier open porch as the 1921 map draws it** (recommended): plain square posts and plain rails (guessed
+   parts plain), full width, 2.24 m deep, open on the ground so the sidewalk runs under it. Alternative (b): keep
+   the photographed 1890s one-storey porch (certain form, but the 1921 map says it had been raised).
+2. **The porch stands 2.24 m in front of the neighbours' building line** (map-true, like 44–46 Main): its posts are at
+   scene x 8.06, so the open sidewalk outside them narrows to **1.66 m** (walk under the porch or round it).
+   Alternative: pull the whole building back so the porch front is on x 10.30 (not map-true).
+3. **No lettering**: no druggist's sign and no bill boards (the 1890s signs name earlier owners; nothing shows 1920).
+   Option: a plain blank hanging board under the porch beam.
+4. **Keep the cornice gable** from the 1890s photo above the porch roof (it is the building's one known feature).
+5. **Shop windows show a plain dim shop** (shared `shop_interior.jpg`); no invented show globes or bottles.
+
+**Sources**
+- Map: 1921 Sanborn **sheet 3** [M2], pixel box **x 3970–4420, y 2345–2475**. Line centres: **porch front (dashed)
+  x 3976**; street line x 3984.0 (ends at this building); **main front wall x 4019**; rear wall x 4377; rear porch
+  x 4415; **north wall y 2350**; **south wall y 2468.5** (Higgins Ave line; 108's north wall at y ≈ 2590, 6.3 m
+  across). 1910 sheet 4, box x 540–970, y 7220–7360: porch x 548–585, body x 585–965, y 7225–7352.
+- **Photo, primary (view only, do not save in the project)**: Goodspeed `100-110-Main-copy.jpeg` (Hunterdon County
+  Historical Society collection, shared by Chris Pickell; 1890s: "John M. Hyde Furniture" in the brick block at
+  the right, today's 110 Main; "J. H. Higgins" bill board): https://i0.wp.com/goodspeedhistories.com/wp-content/uploads/2022/03/100-110-Main-copy.jpeg
+  (on https://goodspeedhistories.com/hopewells-buildings/ ). The drugstore is the pale building in the middle, left of
+  the long dark side wall.
+- Local 1907 cards (`flmgtnmainststores.jpg`, `flemington_-_some_business_blocks_on_main_street_-_1907.jpg`): pale
+  fronts with porch posts far beyond the Masonic Hall, behind a tree; no detail. No other local photo or HABS view
+  reaches this corner.
+- Web: Goodspeed "Hopewell's buildings" (the lot history: Hopewell → Joseph H. Higgins 1876 for the corner
+  property; the peaked-roof building gone), https://goodspeedhistories.com/hopewells-buildings/ . Not in the 1980 NRHP
+  inventory (its "#110" is the brick block south of Higgins Ave, not this building) or the 2026 HPC list.
+- **For the owner, optional**: see the note under 100–102 (one photo c. 1915–25 would settle both).
+
+**Placement** (east side, front faces west)
+- Entity = centre of the porch front line at sidewalk level: **(8.06, 0.15, 58.80)**, `rotation="0 -90 0"`, keep id
+  `bldg-106-main`.
+- **Blender frame**: front −Y, **+X = south**, world z = 58.80 + X, world x = 8.06 + Y. Map → local:
+  X = (py − 2409.25) × 0.0521, Y = (px − 3976) × 0.0521.
+- Lines: porch front Y 0 (x 8.06); **main front wall Y 2.24 (x 10.30)**; rear wall Y 20.89; rear porch to Y 22.87;
+  **north wall X −3.09 (z 55.72)**, party wall with 100–102; **south wall X +3.09 (z 61.89)** on Higgins Ave.
+- The scene has no Higgins Ave yet: the integrator leaves the ground south of z 61.9 open for 6.3 m.
+- **Sun** "to sun" **(0.40, −0.90, 0.36)** (the south wall and the porch are in full sun). **Bake occluder**: 100–102
+  box X −10.51 … −3.09, Y 2.24 … 22.9, Z 0 … 9.14.
+
+**Massing**
+
+| Part | Local X | Local Y | Height | Roof |
+|------|---------|---------|--------|------|
+| A. Main body, frame, 3 storeys | −3.09 … +3.09 (6.20, map) | 2.24 … 20.89 (18.65, map) | cornice top **9.14** (map 30'); gable apex **9.75** (photo, ±0.2) | low shed falling to the rear behind the cornice, tin (guess) |
+| B. Front porch, 3 tiers, open | −3.09 … +3.09 | 0 … 2.24 (map) | porch roof top 8.80 | flat tin roof under the main cornice |
+| C. Rear porch, 3 tiers | −3.09 … +3.09 | 20.89 … 22.87 | 9.0 | flat; posts and decks only |
+
+Floor lines (guess from 30' and the photo's proportions): shop front 0 … 3.20; 2nd-floor deck 3.35; 3rd-floor deck
+6.25; frieze 8.35–8.84; cornice 8.84–9.14.
+
+**Elevation details: main front wall** (Y 2.24; upper floors from the 1890s photo, ±0.2 m)
+- **Ground floor** (shop front, GUESS on the photo's dark shop front): corner pilaster boards 0.20; two show windows
+  X −2.75 … −0.70 and +0.70 … +2.75 (riser 0.55, glass to 2.45, transom band to 2.90), centre pair of half-glazed
+  doors X −0.60 … +0.60 recessed 0.50, plain fascia 2.95–3.20.
+- **2nd floor**: three windows at **X −1.95, 0, +1.95**, 0.85 wide, sill 4.20, head 6.05 (tall), a shallow segmental
+  hood board 0.10 proud; **louvred blinds** (shutters 0.42 wide) open flat against the wall, dark green. The middle
+  one is a door to the porch deck in the model (sill at deck level 3.55) (guess; a porch needs a door).
+- **3rd floor**: three windows at the same X, 0.85 wide, sill 7.00, head 8.25, flat head boards, blinds as below; the
+  middle one a door to the deck (guess).
+- **Cornice**: frieze board 8.35–8.84 with **8 brackets** (0.12 wide, 0.45 tall: pairs at the corners, singles
+  between the bays, a pair under the gable feet); boxed cornice 8.84–9.14 projecting 0.45, returning 0.45 along the
+  south side for the first 0.6 m then running plain (0.25) along the avenue. **Centre gable**: the cornice lifts into
+  a low pediment over the middle bay, 2.2 m wide (X ±1.10), apex Z **9.75**, plain boarded tympanum.
+- **South wall, Higgins Ave** (18.65 m, in full view from the corner): darker clapboard, corner boards; **no openings
+  for the first 8 m** (photo); beyond, on each upper floor three plain 1-over-1 windows at Y 11, 14.5 and 18, and on
+  the ground floor a side door at Y 12 and one window at Y 16 (all guess). No bill boards (Decision 3).
+- **Rear**: plain clapboard, 2 windows per floor; rear porch = 4 posts and 2 decks.
+
+**Elevation details: three-tier porch** (Decision 1; MAP for size and height, **form GUESS, plain**)
+- **Four square posts 0.16 per tier** at X ±3.00 and ±1.00 on the front line (Y 0.08), with matching half-posts
+  (0.08 deep) on the wall at Y 2.24; ground tier posts stand on 0.20 stone blocks; the ground tier is open, its floor
+  is the sidewalk (no deck, no step).
+- **Decks** at Z 3.15–3.35 and 6.05–6.25 (board edge fascia 0.20), **roof slab** 8.60–8.80 with a 0.15 projection.
+- **Rails** on tiers 2 and 3: top rail at +0.90, bottom rail at +0.10, 0.03 square balusters at 0.13 centres, on the
+  front and both ends.
+- A plain beam (0.20 deep) under each deck edge between the posts. No brackets, no fretwork, no sign.
+
+**Windows the new way (PLAN.md section E)**: `glass` faces 4 cm in front of window backs; upstairs and side windows =
+shared `window_backs.jpg` cells (dwelling rooms, varied, none repeated side by side or above/below); show windows and
+door lights = shared `shop_interior.jpg` cells. ≤ +350 tris.
+
+**Materials & colours** (front pale, side clearly darker in the 1890s photo; **hues are guesses**; reused, asset-scout
+can be skipped)
+1. `clap_front`: cream-white ≈ #D6D0BE; `house-65-main/clapboard_cream.jpg`, tile 1.0 m.
+2. `clap_side`: weathered drab ≈ #8C8470 (same map tinted darker).
+3. `trim`: cream ≈ #D8D0BC (posts, rails, sash, cornice, brackets); `polyhaven/trim_paint_cream.jpg`, tile 1.0 m.
+4. `shopfront` + blinds: dark green ≈ #2F3A2C; `county-offices/door_varnish_dark.jpg` tinted, tile 0.8 m (blinds may
+   reuse the `louvre` cell of `block-35-41/signs_atlas.jpg` instead of modelled slats).
+5. `deck`: grey boards; `block-35-41/trim_stone_grey.jpg`, tile 2.0 m. 6. `roof`: `county-offices/roof_tin_redbrown.jpg`.
+7. `WindowBack`, 8. `ShopInterior`, 9. `glass`.
+
+**Weathering**: side wall paint thin and streaked, darker under the eave and towards the ground; porch deck edges
+stained; splash zone 0.4 m; front paint cleaner than the side.
+
+**Budget**: **ordinary, cap 10k, target ~5.5k**: porch rails ~2.0k, posts, decks and beams ~0.5k; front windows,
+blinds and doors ~0.8k; cornice, brackets and gable ~0.6k; shop front ~0.4k; side and rear ~0.6k; shell and roofs
+~0.2k; glass + backs ~0.35k. 4 reused 1K maps (2 tints) + 2 shared atlases, one 2K lightmap weighted to the front and
+the south wall. Files: `tools/blender/drugstore_106.py` + `_bake.py`, `assets/models/source/drugstore-106.blend`,
+`assets/models/drugstore-106.glb`, `assets/textures/drugstore-106-lightmap.jpg`, previews
+`assets/models/previews/drugstore-106-*.png` (frontal; from the SW matching the 1890s photo; along the Higgins Ave
+side; with 100–102).
+
+**Acceptance checks for the reviewer**
+1. Origin at world (8.06, 0.15, 58.80); front −Y, +X = south; 6.20 m wide; porch front at Y 0, main wall at Y 2.24,
+   rear wall at Y 20.89.
+2. Three storeys, cornice top 9.14 m; **a low gable in the cornice over the middle bay**, brackets under the cornice.
+3. Front wall: **three windows per upper floor with dark louvred blinds**, 2nd-floor windows taller, shop front below.
+4. **Three-tier open porch across the whole front, four plain square posts per tier, plain rails on the two upper
+   tiers, open and step-free at sidewalk level.**
+5. Long south side wall in darker clapboard, blank for its first 8 m.
+6. **No lettering, no sign, no bill boards.** 7. Windows per section E.
+8. ≤ 10k tris, ≤ 9 materials, GLB ≤ 5 MB, TEXCOORD_0 + 1, 1K maps, 2K lightmap.
+
+**Integrator notes**: replace the placeholder, keep the id, position (8.06, 0.15, 58.80), `glass-reflect`. Check that
+no pole, tree or prop stands in x 8.0 … 10.3, z 55.7 … 61.9 (under the porch) and that the visitor can walk under it
+(posts 2.0 m apart, 3.0 m headroom).
+
+**1920 vs earlier and later**: 1890s–1910: a one-storey porch with a railed roof and a druggist's hanging sign; bill
+boards on the side wall. By Sept 1921: three-storey porch. Later: demolished (date not found).
+
+**Pure guesses (owner to check)**
+1. The porch's whole form (Decision 1) and that it was open on all three levels. 2. That the 1890s windows, blinds and
+gabled cornice survived to 1920. 3. All colours. 4. Shop front, the two porch doors, every side and rear opening.
+5. Floor heights (±0.3 m).
+
+### Houses and shops at 24–30 Main St: dwelling (24), "Mill'y" (26), "Conf'y" and "Barber" (28–30) (old nos. 561–558)
+
+**Status:** spec written — awaiting user approval (planner, 2026-11-11). Not built. Placeholder `#bldg-24-30-main` still in the scene.
+
+**What it is**: the placeholder is really **three frame buildings in two groups**, all 2 storeys, on the east side
+north of the 32–38 row: **no. 24**, a dwelling ("D") with a 1-storey front porch; **no. 26**, a millinery shop
+touching 24, with a bay shop window and a deep 1-storey open porch (wooden awning) over the sidewalk; then a 2.66 m
+gap; then **nos. 28–30**, one block of two shops ("Conf'y" = confectionery, "Barber") behind a narrow two-tier porch.
+**One GLB** (`block-24-30.glb`, one draw call + glass, as at 40–46 and 35–41); the three are small and share one lightmap.
+
+**The flagged problem: 26's front structure "on the roadway" (resolved)**
+- **Not a map-reading error.** Re-measured by brightness profile (sheet 2): a yellow 1-storey structure, labelled "1" and
+  "o", x 3881.5–3964, y 3882.5–3970.5 = **4.30 m deep × 4.58 m wide**, in front of 26's main wall (x 3964). The thick
+  street line (x 3929.5 here) **is interrupted where the structure crosses it** (line ends y 3876, restarts y 3972), so the
+  draughtsman drew it across the line on purpose. It reaches **2.5 m past the street line**.
+- **It is an open porch / wooden sidewalk awning, not a closed shop**: its street side is **dashed** (Sanborn: open), like
+  24's porch and the 32–38 porch. Behind it, on the main wall, a **curved outline 2.5 m wide, 0.85 m deep** (x 3947–3964,
+  y 3897–3945) = a **bay (bow) shop window**; the same curved sign marks the bays at nos. 22 and 40.
+- **New between 1910 and 1921**: the Nov 1910 sheet (sheet 4, x 558–586, y 3040–3175) has only a 1.45 m-deep 1-storey porch
+  across 26 and the south half of 24, 0.55 m **behind** the street line, and no bay.
+- **Why it lands on the scene's road**: the map's street is **narrower here than the scene's**. West line x 3600, east line
+  x 3929 at no. 24 = **17.1 m (56 ft)**, against 20.6 m (66 ft) at Court St; the east line runs steadily in towards the north
+  (x 3951 at no. 38 → 3929 at no. 24). The scene keeps a constant 20.6 m with the east curb at x 6.52, which is almost
+  exactly the **map's property line** here (scene x 6.9). A porch that covered the real sidewalk to the real curb (scene
+  x ≈ 4.4) therefore falls on the scene's roadway.
+- **Decision (planner, owner to confirm, no. 2 below)**: keep the walls map-true (as approved for 40–46 and 32–38) and **end
+  the porch at the scene's curb** (posts at x 6.70), so it covers the walk as the real one did: 2.10 m deep instead of 4.30 m.
+
+**What is documented, inferred, guessed**
+- **Documented (MAP, Sept 1921)**: all footprints; all frame (yellow); storey figures "2" (24 main, 26 main, 28, 30) and "1"
+  (porches, rear parts); trades "D", "Mill'y", "Conf'y", "Barber"; 24's porch (1 storey, open); 26's open front structure and
+  bay; 28–30's porch strip marked **"2"** (two tiers, dashed = open); roof marks "o" (slate or metal) on every part, "x"
+  (wood shingle) on 24's rear porch; numbers 24/561, 26/560, 28/559, 30/558. **No height figure on any part.**
+- **Documented (MAP, Nov 1910)**: same main footprints; "D.", "Mill'y", "Fruit & Candy", "Barber"; 28–30 had **no porch**
+  (front wall 2.0 m behind the line), so its two-tier porch dates from 1910–21.
+- **Inferred**: 2-storey heights by analogy with 44–46 (2-storey frame, marked 20' = 6.10 m) and the built 32–38 row.
+- **Pure GUESS**: **every elevation** (no photo shows any of these fronts at any date), roof shapes, all heights, all
+  colours, all side walls. Kept deliberately plain, as at 32–38.
+- **Tenants c. 1920**: only the map's trades. HCHS Collection 238 lists an undated photo "Alex Zanetti store at 30 Main"
+  (not seen; see the links for the owner). **No names, no lettering on the model.**
+- **Later states, not used**: by the 1948 sheet 24 and 26 were replaced by one building (concrete-block ground floor, frame
+  above) = the stuccoed "#24" of the 1980 National Register text ("early 20th Century … gable roof with modillions") and of
+  the 2024 Wikimedia Commons photo; "#26" in 1980 is a modern 1½-storey building; 28–30 have no 1980 entry. Nothing standing
+  shows the 1920 look.
+
+**Planner decisions** (owner to confirm; the numbered list for the owner is at the end)
+1. One GLB, ordinary, cap 10k, target ~5k.
+2. Map-true walls; 26's porch cut back to the scene curb (see above).
+3. Plain guessed fronts; no signs, lettering, awnings, shutters, brackets, barber pole or chimneys.
+4. 26's bay modelled as a ground-floor shop window (the map does not say which floor).
+
+**Sources**
+- Map: 1921 Sanborn **sheet 2** [M1], pixel box **x 3875–4365, y 3750–4200**; line centres by brightness profile (±1.5 px):
+  - **Street line** x 3928 (y 3770) → 3930 (y 3872); 3936.6 (y 4030) → 3939.8 (y 4185).
+  - **24**: porch front (dashed) x **3937**; front wall x **3963.6**; north wall y **3754.5**; 24 | 26 line y **3883**; front
+    part back to x 4129; narrower rear part (south wall y 3845.5) to x 4284, no partition, so still "2"; rear "1" to x 4362;
+    rear porch (dashed, "1", "x") x 4205–4284, y 3846–3867, with a step symbol east of it.
+  - **26**: front wall x 3964; south wall y **3972** (3971 front, 3975 rear); main "2" back to x 4129; rear "1" x 4129–4204.5,
+    y 3896–3973; second rear "1" x 4204.5–4276.5, y 3913.5–3974.5; an unlabelled cell x 4129–4204.5, y 3845.5–3896 between
+    24 and 26's rear (read as 1 storey: GUESS). Front porch and bay: as above.
+  - **28–30**: porch front (dashed) x **3949.5**; front wall x 3972 (y 4030) → 3976.5 (y 4185), mean **3974.3**; north wall y
+    **4024.5**; 28 | 30 partition y **4111.5**; south wall y **4196.5**; rear wall x **4242**. Inside 30's rear, dashed line x
+    4205: cell "1" y 4111.5–4145.5 and cell "2" y 4145.5–4196.5. Behind 28: "1" x 4242–4313, y 4058.5–4113. A detached "Shed"
+    further back (x > 4390): not modelled.
+  - Gaps: 26 → 28 **2.66 m**; 30 → 32 (north wall y 4262) **3.41 m**. North: 24's wall is the south wall of a small 2-storey
+    bay unit of no. 22 (x 3950–4025, y 3707–3754.5); east of it a 2.5 m open strip.
+- Map: 1910 Sanborn **sheet 4** (`flemington-1910-sanborn-sheet-04.jpg`), box x 540–990, y 2970–3405 (1921 ≈ 1910 + 780 in y).
+- **Photos: none shows these fronts.** Checked 2026-11-11, every file in `assets/photos/reference/` and `habs/`:
+  - `hchs-stryker-main-st-south-from-hall-grocery.jpg` (c. 1906–10, camera ≈ (2.5, −160) looking south): the camera stands
+    level with 24–30, which are beside and behind it. The left edge starts at the 3-storey clapboard front of no. 40 (wall
+    with shutters continuous with 40–42's hanging bay); the porch with awnings below it is 40's. **Not in frame.**
+  - `flmngtnmainstrtcountyhtlvu06.jpg` (1906, camera ≈ z −152, looking south): same; the east side begins at about 40–42.
+  - `flmngntnmainstreetsouthfrmonument08.jpg` (1908, from z ≈ −313 looking south): 24–30 are ~150 m off, lost in trees.
+  - `flmngtnmainstnorth13.jpg` (1913): the Soldiers' Monument end, houses only. `flmngntnmainstrtnorthfromhtl08.jpg` (1908)
+    and `flmngntnmainststores14.jpg` (1914): cameras at the Union Hotel / Bank Building, 90–130 m south; hidden by the Rea
+    Building and trees. `goodspeed-mounts-hotel-c1905-hchs-px333.jpg`, all courthouse, county building, Union Hotel, bank
+    and "business blocks" cards, `palace-theatre-potter-building-card.jpg`, HABS: other places.
+- Web: `research/sanborn-and-today-findings.md`, `research/nrhp-findings.md` (NRHP 1980 text
+  https://npgallery.nps.gov/GetAsset/1397179c-16a7-4dbf-8ec9-e635f23393f9 ; HPC list 2026
+  https://historicflemington.com/government/documents/department-documents/historic/1547-searchable-historic-district/file ;
+  Commons photo https://commons.wikimedia.org/wiki/File:24_Main_Street,_Flemington,_NJ_-_looking_north.jpg ); Sanborn 1910
+  https://www.loc.gov/item/sanborn05479_005/ , 1921 https://www.loc.gov/item/sanborn05479_006/ ; HCHS Collection 238 list
+  https://hunterdonhistory.org/wp-content/uploads/2022/06/Collection-238-Container-List.pdf . Web searches 2026-11-11 for a
+  Zanetti store, the millinery or the barber at these numbers: nothing.
+
+**Placement** (east side, front faces west)
+- Entity = centre of the front line (24's porch front) at sidewalk level: **(7.29, 0.15, −152.365)**, `rotation="0 -90 0"`,
+  keep id `bldg-24-30-main` (replaces the placeholder at (10.3, 0, −149.1)).
+- **Blender frame** (as 32–38): front −Y, **+X = south**, Y = depth, Z 0 = sidewalk top. World x = 7.29 + Y, world
+  z = −152.365 + X. Map → local: X = (py − 3975.5) × 0.0521, Y = (px − 3937) × 0.0521.
+- Scene lines: 24 north wall **z −163.88**; 24 | 26 **z −157.18**; 26 south wall **z −152.55**; 28 north wall **z −149.81**;
+  28 | 30 **z −145.28**; 30 south wall **z −140.85**. 24's porch front x 7.29; 24 and 26 front wall **x 8.70**; 28–30 porch
+  front x 7.94, front wall **x 9.23**; 26's porch: post line x 6.70, roof edge x 6.60 (chosen; map 4.40).
+- Walk left on the scene sidewalk (curb x 6.52): 0.77 m before 24's porch, 1.42 m before 28–30's; under 26's porch the
+  whole walk is covered. Porch decks are flush or one low riser, so a visitor can cross them.
+- **Neighbours**: south, 3.41 m open gap to 32–38 (north wall z −137.46). North: no. 22 is not in the scene.
+- **Props**: **pole-E7 (6.9, −156) stands inside 26's porch**: the integrator moves it to z −151.2 (the gap between 26 and 28).
+- **Sun** "to sun" **(0.40, −0.90, 0.36)** (fronts lit). **Bake occluder (not exported)**: 32–38 box X +14.9 … +28.3,
+  Y 1.25 … 24, Z 0 … 6.1.
+
+**Massing** (X, Y = MAP ±0.1 m; every height is a GUESS, the map writes none)
+
+| Part | Local X | Local Y | Storeys / height | Roof |
+|------|---------|---------|------------------|------|
+| A1. 24 front part | −11.51 … −4.82 (6.69) | 1.41 … 10.00 | 2 (MAP); eave **5.90** (GUESS) | gable end to the street, 30°, ridge 7.83, slate (MAP "o"; form GUESS) |
+| A2. 24 rear part | −11.51 … −6.77 (4.74) | 10.00 … 18.08 | 2 (MAP); eave 5.60 | gable, ridge running back, 6.97, slate |
+| A3. 24 rear 1-storey | −11.51 … −6.77 | 18.08 … 22.14 | 1 (MAP); top 3.00 | shed, tin |
+| A4. 24 front porch | −11.51 … −4.82 | 0 … 1.41 | 1, open (MAP) | shed, 3.35 at the wall → 3.10, tin |
+| A5. 24 rear porch | −6.77 … −5.65 | 13.96 … 18.08 | 1, open (MAP); top 2.80 | shed, wood shingle (MAP "x") |
+| B1. 26 main | −4.82 … −0.18 (4.64) | 1.41 … 10.00 | 2 (MAP); front top **6.10** (GUESS) | low shed falling to the rear, 6.10 → 5.60, tin |
+| B2. 26 rear parts (3 cells) | −6.77 … −0.13 for Y 10.00 … 13.94 (incl. the unlabelled cell); −3.23 … −0.05 for Y 13.94 … 17.69 | as left | 1 (MAP; unlabelled cell GUESS); top 3.00 | shed, tin |
+| B3. 26 front porch | −4.82 … −0.20 | **−0.69** … 1.41 (MAP: −2.89 … 1.41) | 1, open (MAP) | nearly flat, 3.35 at the wall → 3.15, tin (MAP "o") |
+| B4. 26 bay window | −4.09 … −1.59 (2.50) | 0.56 … 1.41 (0.85 out) | ground floor (GUESS) | own small tin top at 2.95 |
+| C1. 28–30 block | +2.55 … +11.51 (8.96); partition +7.09 | 1.94 … 15.89, less the notch below | 2 (MAP); front top **6.30** (GUESS) | one shed falling to the rear, 6.30 → 5.60, tin |
+| C2. 30 rear notch | +7.09 … +8.86 | 13.96 … 15.89 | 1, open (MAP "1", dashed); top 3.00 | shed, tin |
+| C3. 28 rear addition | +4.32 … +7.16 | 15.89 … 19.59 | 1 (MAP); top 3.00 | shed, tin |
+| C4. 28–30 two-tier porch | +2.55 … +11.51 | 0.65 … 1.94 (1.29 deep) | 2 tiers, open (MAP "2", dashed) | shed, 5.95 at the wall → 5.75, tin |
+
+Walls skirt to −0.20. Interiors not modelled. The gap strip (26 | 28) and the yards are the scene's ground.
+
+**Elevation details: all GUESS, plain by choice** (levels follow the built 32–38 row)
+- **24 (dwelling)**: porch deck Z 0 … 0.18 (one riser, no projecting step), **4 plain square posts 0.14** at X −11.40, −9.24,
+  −7.09, −4.93, Y 0.10, to Z 2.95; plain fascia 2.95–3.15; no rail. Front wall Y 1.41, three bays: **door** (4 panels, plain
+  transom light) X −6.60 … −5.60, head 2.45; **two 2/2 windows** 0.85 × 1.60, Z 0.85 … 2.45, centred X −10.10 and −8.00.
+  Upper floor: **three 2/2 windows** 0.85 × 1.45, Z 3.75 … 5.20, centred X −10.10, −8.00, −6.10. Gable: plain raking boards,
+  0.30 overhang, **no attic window, no bargeboard ornament**. Corner boards 0.15.
+- **26 (Mill'y)**: porch on **3 plain square posts 0.14** at X −4.72, −2.51, −0.30, post line Y −0.59, Z 0 … 2.95, standing
+  on the public sidewalk (**no deck** there: the sidewalk is its floor; a deck Z 0 … 0.15 only between Y 0 and 1.41); plain
+  fascia 2.95–3.15; roof edge at Y −0.69. **Bay shop window** in 5 flat facets on the map's curve (chord 2.50, 0.85 out):
+  panelled base Z 0.15 … 0.75, glass 0.75 … 2.75, plain head to 2.95. **Door** X −1.35 … −0.45, glazed upper half, head 2.60.
+  Upper floor: **two 1/1 windows** 0.80 × 1.45, Z 3.90 … 5.35, centred X −3.60 and −1.40. Plain boxed eave 5.90 … 6.10, 0.30
+  out. Corner boards.
+- **28–30 (Conf'y, Barber)**: lower deck Z 0 … 0.15, flush with the walk. **5 plain square posts 0.12 per tier** at X +2.65,
+  +4.84, +7.03, +9.22, +11.41, Y 0.72; lower tier to Z 3.10; upper deck 3.10 … 3.25; upper posts to 5.60; plain fascia
+  5.60–5.75. **Upper rail**: top rail at 4.10, bottom rail at 3.37, plain square pickets 0.03 at 0.12 centres; the lower tier
+  has no rail. Shop fronts in the wall plane Y 1.94, bulkhead Z 0.15 … 0.75, glass 0.75 … 2.75: **28**: window X +2.95 …
+  +5.35, door +5.75 … +6.65; **30**: door +7.50 … +8.40, window +8.80 … +11.10. Upper floor, opening on the deck: **28**: 1/1
+  window centred X +4.15 (0.80 × 1.45, Z 3.95 … 5.40), half-glazed door +5.75 … +6.60 (Z 3.25 … 5.35); **30**: door +7.55 …
+  +8.40, window centred +9.95. Plain boxed eave 6.10 … 6.30, 0.30 out; corner boards and one board on the partition line.
+- **Side and rear walls**: clapboard, **blank** (no source), including the two walls on the 2.66 m gap and 30's south wall
+  on the 3.41 m gap, all in view from the street. One plain door on each rear.
+- **Not modelled**: chimneys, gutters, 24's rear steps, the detached shed, wires, any sign, barber pole or awning.
+- **Windows per section E**: every pane one `glass` face 4 cm in front of a `WindowBack` cell (blinds, lace, dark room,
+  mixed); the two shop windows, the bay and the shop-door lights use `ShopInterior`. No lettering on any glass.
+
+**Materials & colours** (no colour evidence: all GUESS; nothing to download)
+1. `clap_24`: off-white ≈ #E2DED2: `house-65-main/clapboard_cream.jpg` lightened, board ≈ 0.11–0.14 m as its other uses.
+2. `clap_26`: pale cream ≈ #D8CFB8: the same map untinted (as 32–38's `clap_row`).
+3. `clap_2830`: drab buff ≈ #C4B99F: the same map × #C9BFA6.
+4. `trim`: posts, fasciae, eaves, frames, rails, boards ≈ #DDD5C2: `polyhaven/trim_paint_cream.jpg`, tile 2.0 m.
+5. `roof_tin`: `county-offices/roof_tin_redbrown.jpg`, tile 2.0 m, dulled (A5 darker, as weathered shingle).
+6. `roof_slate` (24 only): `polyhaven/roof_slates_03.jpg`, tile 1.5 m.
+7. `shopfront`: doors, bulkheads, bay base ≈ #2E2E26: `county-offices/door_varnish_dark.jpg`, tile 0.8 m.
+8. `deck`: porch floors: `polyhaven/weathered_planks.jpg`, tile 2.0 m, boards running front to back.
+9. `glass`; 10. `WindowBack` (`shared/window_backs.jpg`); 11. `ShopInterior` (`shared/shop_interior.jpg`).
+
+**Weathering**: soot under eaves and porch roofs; dirt band on the bottom 0.4 m; chalky paint on the gap walls; decks
+darker at the doors; tin roofs dull with rust streaks at the low edges. No moss.
+
+**Budget**: **ordinary, cap 10k, target ~5k**: shells and roofs ~0.9k; 3 porches (17 posts, decks, fasciae, roofs)
+~0.8k; upper rail ~0.9k; bay ~0.2k; 2 shop fronts + 6 doors ~1.0k; 11 windows ~0.7k; eaves, boards ~0.3k; section E
+~0.4k. Textures: 6 reused 1K maps + 2 shared atlases, one 2K lightmap weighted to the fronts and the gap walls. Files:
+`tools/blender/block_24_30.py` + `_bake.py`, `assets/models/source/block-24-30.blend`, `assets/models/block-24-30.glb`
+(≤ 5 MB), previews `assets/models/previews/block-24-30-*.png` (frontal; from the SW along the porches; from the NW; the
+26 | 28 gap).
+
+**Acceptance checks for the reviewer**
+1. Origin at world (7.29, 0.15, −152.365); front −Y, **+X = south**; overall X −11.51 … +11.51.
+2. **Three separate fronts**: 24 (6.69 m) and 26 (4.64 m) touching; an **open gap X −0.18 … +2.55**; 28–30 (8.96 m).
+3. 24 and 26 front wall at Y 1.41; 28–30 front wall at Y 1.94, i.e. 0.53 m further back.
+4. **24**: 1-storey porch with exactly 4 posts, a door and two windows below, three windows above, **gable end to the street**.
+5. **26**: bow/bay shop window (2.50 m wide, 0.85 m out) and one door under a **1-storey open porch on 3 posts whose post
+   line is at Y −0.59** (nothing of it beyond Y −0.79, world x 6.50).
+6. **28–30**: **two-tier porch, 5 posts per tier**, railing on the upper tier only, two shop windows and two shop doors
+   below, a door and a window per unit above.
+7. **No sign, lettering, awning, shutter, bracket, barber pole or chimney** anywhere.
+8. Rear parts present: 24 to Y 22.14, 26 to Y 17.69, 28 to Y 19.59; the 1-storey notch at 30's rear.
+9. Windows are section-E (not flat black): `glass` BLEND over `WindowBack` / `ShopInterior`.
+10. ≤ 10k tris, GLB ≤ 5 MB, TEXCOORD_0 + 1, 1K maps, 2K lightmap.
+
+**Integrator notes**: replace the placeholder, keep the id; move **pole-E7** to z −151.2; check that no street tree stands
+between z −164 and −141 at x > 6.4. Minimap entry: three outlines.
+
+**Decisions for the owner**
+1. **One model for all three buildings** (recommended: one draw call, ~5k triangles), or two models (24–26 and 28–30).
+2. **26's sidewalk porch**: (a, recommended) end it at the scene's curb, 2.1 m deep, covering the walk; (b) full map depth,
+   4.3 m, with its posts standing 2 m out on the scene's roadway; (c) later, have the street itself narrowed north of
+   no. 40 to the map's 17 m, which would put every front here in its true place (a street change, not part of this model).
+3. **Placement**: (a, recommended) map-true, as approved for 40–46 and 32–38, leaving only 0.8 m of walk before 24's
+   porch; or (b) move the group 1.25 m east so 24's porch lines up with the 32–38 porch (not what the map shows).
+4. **Plain guessed fronts** (no photo exists): approve the openings, the gable on 24, the heights and the three paint
+   colours (off-white, cream, drab buff), or name changes.
+5. **26's bay**: ground-floor shop window (recommended) or an upper-floor bay over the porch roof.
+6. **No barber pole, signs or awnings** (none documented): confirm.
+
+**Pure guesses / open questions**
+1. **Every opening, post count, railing and roof form**; only "dwelling with porch", "shop with bay and deep porch" and "two
+   shops with a two-tier porch" are from the map.
+2. **All heights** and **all colours**.
+3. 26's bay on the ground floor (it could equally be an upper-floor oriel over the porch roof, as at 40–42).
+4. Blank side walls on both gaps.
+5. Whether the real street was this narrow, or the sheet is loosely drawn at its north edge: the 1910 and 1921 sheets
+   agree on about 56–58 ft here, so it is taken as real.
+6. **Links for the owner** (a photo would replace the guesses): HCHS Collection 238 list (photo "Alex Zanetti store at 30
+   Main"; ask the Hunterdon County Historical Society for a copy):
+   https://hunterdonhistory.org/wp-content/uploads/2022/06/Collection-238-Container-List.pdf ; West Jersey History gallery
+   (blocks automated access): https://westjerseyhistory.org/images/hunterdon/flemington/ ; Flemington walking tour, Main
+   Street North (app page, not readable here): https://pocketsights.stqry.com/tour/54544/preview ; Street View, to see what
+   stands today: https://www.google.com/maps/search/?api=1&query=24+Main+St,+Flemington,+NJ+08822
+
+### Brick house with shop fronts: "D.G.", "Conf'y", "Gro." and "Cobbler" (57 Main St, old nos. 513–512)
+
+**Status:** spec written — awaiting user approval (planner, 2026-11-11). Not built. Placeholder `#bldg-57-main` still in the scene.
+
+**What it is**: a **mansard-roofed brick house** (Second Empire type: two full storeys and a third in the mansard,
+32 ft) standing 5.9 m back from the street line, between the County Hotel's open side lot and the Wurts Law Office. By
+Sept 1921 its front had been built over with shops, all brick, on a line 2.2 m behind the street line: at the north a
+**2-storey, 28 ft dry-goods front**, and south of it **two 1-storey, 14 ft shops** (confectionery, grocery) with the
+old house's upper floor and mansard rising behind them. A cobbler worked in the 2-storey brick wing at the back. One GLB.
+
+**Storeys: settled as 3 (two storeys + mansard) for c. 1920**
+- **Sept 1921 map**: the house body carries **"3" and "32'" three times** (once in each shop unit) and a **dashed inner
+  outline about 1.2 m inside its walls**. That dashed outline is Sanborn's **mansard-roof sign**: the Union Hotel, a known
+  mansard, has the same line on the same sheet (x 4110–4290, y 6150–6590). The front units read "2 / 28'", "1 / 14'", "1 / 14'".
+- **Nov 1910 map** agrees: "3 D." (3-storey dwelling) with the same dashed outline and hip lines at its corners; the north
+  front piece then read "2½", "32'", "Jewelry, Hand Printing, Photos 3d".
+- **1948 map**: same outline but only "2 / 28'" and "14'" remain; no "3", no "32'", no mansard line.
+- **National Register 1980**: "#57 … a 4-unit, 2-story, brick, commercial structure built in the early 20th Century with
+  striated brick walls and a flat roof." That is the **later rebuild** (after 1921, by 1948), not the 1920 building. The
+  HABS photos of the Wurts office show its plain 2-storey flat-roofed south wall. **No conflict: 3 storeys in 1920.**
+- The 1921 "D.G." unit (2 storeys, 28') is unchanged on the 1948 sheet, so it is probably the **first unit of that
+  rebuild**, already standing in 1921 (inferred).
+
+**What is documented, inferred, guessed**
+- **Documented (MAP, Sept 1921)**: footprint; all brick (pink); house "3", "32'", mansard outline; front units "2 / 28'"
+  (D.G.), "1 / 14'" (Conf'y), "1 / 14'" (Gro.); a solid brick party wall between D.G. and Conf'y through the whole depth
+  ("12" = 12-inch); a dashed (light) partition between Conf'y and Gro.; the old house front wall still standing behind the
+  shops, with openings; a **heavy dashed line 0.29 m in front of the whole shop front** (read as a projecting shop cornice);
+  rear wing "2", "Cobbler"; a 1-storey rear part drawn half frame, half brick; a tiny frame shed; numbers 57, 513, 512.
+- **Documented (PHOTO, c. 1906–10, the earlier state)**: `hchs-stryker-main-st-south-from-hall-grocery.jpg`, seen past the
+  County Hotel's south end (full-res x 2280–2750, y 1230–1830): the **north front piece** as it then was: brick, about
+  9.6 m (± 0.8) to a **deep overhanging eave on brackets**, a **pale slate roof** above it, creeper on the north wall, one
+  **upper window with louvred shutters** on the north side; at the shop front a **striped canvas awning with a scalloped
+  valance** about 2 m out, and a **giant pocket-watch trade sign** hung from an iron bracket (the jeweller of the 1910 map),
+  with a small gabled hood above the awning. `flmngtnmainstrtcountyhtlvu06.jpg` (1906) shows the same awning, watch and
+  roof, tiny. **Nothing of the house itself is seen** (it is behind the hotel) and **no photo shows the 1921 shop fronts.**
+- **Inferred**: between 1910 and 1921 the north piece lost its attic and bracketed roof (2½ / 32' → 2 / 28') when the
+  shops were built; the jeweller had gone (D.G. in 1921), so the watch sign is not shown.
+- **Pure GUESS**: every opening, the house cornice, dormers, parapets, shop-front layout, colours, side and rear walls.
+- **Tenants c. 1920**: only the map's trades. No names found.
+
+**Planner decisions** (owner to confirm; the numbered list for the owner is at the end)
+1. **State = Sept 1921 map** (house + three shop fronts), not the c. 1906–10 jeweller's front.
+2. **3 storeys** = 2 + mansard, 32 ft.
+3. D.G. front: flat parapet at 28 ft, plain 1910s commercial brick front (GUESS guided by the 1980 text).
+4. Plain guessed house: no brackets, no chimneys, no shutters, no creeper. No signs, lettering or awnings.
+5. The 0.62 m forward step of the house front at its south end (map x 3501 against 3489) is ignored: hidden by the shops.
+6. Ordinary, cap 10k, target ~5.5k.
+
+**Sources**
+- Map: 1921 Sanborn **sheet 2** [M1], pixel box **x 3090–3605, y 5095–5465**; line centres by brightness profile (±1.5 px):
+  **street line x 3600 (y 5125) → 3604.8 (y 5415)**; heavy dashed line x **3564.5**; **shop front wall x 3558.9**; old house
+  front wall x **3489** (segments y 5110–5148, 5185–5262, 5310–5340; x 3501 south of y 5341); mansard outline x 3316.5–3466,
+  y 5138.5–5404; **west wall x 3291.8**; **north wall y 5113; party wall y 5227.5; dashed partition y 5341; south wall
+  y 5426.5**. Rear wing x 3094–3292, y 5137–5251 ("2", "Cobbler"); 1-storey rear x 3144.6–3292, y 5251–5323.5 ("1", "o",
+  yellow/pink split); frame shed x 3255–3292, y 5113–5137. Lot lines y 5098.5 (north) and 5460.5 (south).
+- Map: 1910 Sanborn **sheet 5** (`flemington-1910-sanborn-sheet-05.jpg`), box x 5430–5960, y 4190–4560 (1921 ≈ 1910 + 908 in
+  y, − 2360 in x): house x 5634.5–5850, y 4212–4539, mansard outline x 5653–5827, y 4232–4515; north front piece to x 5923,
+  y 4212–4327.7, "2½", "32'"; rear wing x 5438–5634. 1948 sheet: `research/sanborn-compare/west-57_1910-1921-1948.jpg`.
+- **Photos** (checked 2026-11-11, every file in `assets/photos/reference/` and `habs/`):
+  - **Stryker plate c. 1906–10** (local only, never commit): see Documented. Heights scaled on the County Hotel's porch
+    cornice (6.40 m at its south end, 74 px/m; 57 is 7 m further, 67.5 px/m; camera ≈ (2.5, −160)). The visible corner
+    projects to scene x ≈ −12.35 = the front piece's wall line, so the roof seen is the front piece's, not the house's.
+  - `flmngtnmainstrtcountyhtlvu06.jpg` (1906, local only): same features at card x 575–700, y 250–420.
+  - `habs/wurts-law-office-east-front.jpg`, `-south-side.jpg` (HABS, public domain; taken after 1960, the County Office
+    Building is in view): the **later** 2-storey flat-roofed brick 57: common red brick side wall, 1/1 windows with pale
+    stone lintels and sills. Not the 1920 building; used only for the brick colour of the neighbourhood.
+  - `goodspeed-mounts-hotel-c1905-hchs-px333.jpg`: frame ends at the hotel's south bay; 57 is out of frame to the left.
+  - `flmngntnmainststores14.jpg` (1914, camera at the Bank Building looking north): the west side here is dark trees.
+    `flmngntnmainstrtnorthfromhtl08.jpg` (1908): stops at the house at 65. All other files: other places.
+- Web: NRHP 1980 text https://npgallery.nps.gov/GetAsset/1397179c-16a7-4dbf-8ec9-e635f23393f9 (Item 7 p. 102); HPC list 2026
+  https://historicflemington.com/government/documents/department-documents/historic/1547-searchable-historic-district/file ;
+  tax record https://www.njparcels.com/property/1009/17/9/C4103 ; Sanborn 1910 https://www.loc.gov/item/sanborn05479_005/ ,
+  1921 https://www.loc.gov/item/sanborn05479_006/ , 1948 https://www.loc.gov/item/sanborn05479_007/ ; Goodspeed County House
+  series https://goodspeedhistories.com/category/countyhouseseries/ (the hotel next door; nothing on no. 57 found). Web
+  searches 2026-11-11 for the jeweller, the house or its owner: nothing.
+
+**Placement** (west side, front faces east)
+- Entity = centre of the shop front wall at sidewalk level: **(−12.40, 0.15, −84.94)**, `rotation="0 90 0"`, keep id
+  `bldg-57-main` (replaces the placeholder at (−11, 0, −85.4)).
+- **Blender frame**: front −Y, **+X = north**, Y = depth, Z 0 = sidewalk top. World x = −12.40 − Y, world z = −84.94 − X.
+  Map → local: X = (5269.75 − py) × 0.0521, Y = (3558.9 − px) × 0.0521. **Y 0 = the shop front wall**; the shop cornice
+  (to Y −0.29) and the forecourt paving (to Y −2.10) lie in front of it.
+- Scene lines: north wall **z −93.11**; party wall z −87.14; partition z −81.23; south wall **z −76.77**; shop front
+  **x −12.40**; old house front x −16.04; west wall x −26.32; wing back to x −36.62. Property line x −10.30.
+- **Neighbours**: north, the open lot (7.0 m) to the County Hotel's south wall z −100.14; south, 5.7 m to the Wurts Law
+  Office (north wall z −71.04), which stands 2.55 m further back. **Both side walls are in plain view.**
+- Props: pole-W4 (−6.9, −86) and arc-A2 are on the roadway side, clear.
+- **Sun** "to sun" **(−0.40, 0.90, 0.36)** (front in shade, south wall lit). **Bake occluders (not exported)**: County Hotel
+  box X +15.2 … +39.1, Y −2.10 … 9.48, Z 0 … 9.15; Wurts box X −18.6 … −13.9, Y 2.55 … 11.65, Z 0 … 5.0.
+
+**Massing** (X, Y = MAP ±0.1 m; heights as marked)
+
+| Part | Local X | Local Y | Storeys / height | Roof |
+|------|---------|---------|------------------|------|
+| A. House walls | −8.17 … +8.17 (16.34) | 3.64 … 13.92 | 2 full storeys; wall top **7.00** (GUESS) | carries the mansard |
+| B. Mansard | base on A's wall faces | deck edge inset **1.25** on all four sides (MAP: 1.2–1.3) | 3rd storey; top **9.75** (MAP 32') | straight slope ≈ 65°, slate (MAP "o"); flat tin deck with a 0.10 curb |
+| C. D.G. front | +2.20 … +8.17 (5.97) | 0 … 3.64 | 2 (MAP); parapet top **8.53** (MAP 28') | flat tin at 8.10 behind the parapet |
+| D. Conf'y shop | −3.71 … +2.20 (5.91) | 0 … 3.64 | 1 (MAP); parapet top **4.27** (MAP 14') | flat tin at 3.95 |
+| E. Gro. shop | −8.17 … −3.71 (4.46) | 0 … 3.64 | 1 (MAP); parapet top **4.27** (MAP 14') | flat tin at 3.95 |
+| F. Rear wing "Cobbler" | +0.98 … +6.92 (5.94) | 13.92 … 24.22 | 2 (MAP); top **6.40** (GUESS) | low shed 6.40 → 6.10, tin |
+| G. Rear 1-storey | −2.80 … +0.98 | 13.92 … 21.59 | 1 (MAP); top 3.00 (GUESS) | shed, tin |
+| H. Frame shed | +6.92 … +8.17 | 13.92 … 15.85 | 1 (MAP); top 2.40 (GUESS) | shed, tin; clapboard |
+| P. Forecourt paving | −8.17 … +8.17 | −2.10 … 0 | Z −0.05 … 0 | concrete, flush with the sidewalk |
+
+Walls skirt to −0.20 (the side lots are at world y 0). Interiors not modelled.
+
+**Elevation details** (GUESS unless tagged)
+- **Shop fronts** (Y 0), dark wood frames, bulkhead Z 0 … 0.65, glass 0.65 … 2.60, transom lights 2.60 … 3.05, doors
+  glazed in the upper half, 0.90 wide, head 2.60:
+  - **D.G.**: window X +2.60 … +4.55; door +4.75 … +5.65; window +5.85 … +7.80.
+  - **Conf'y**: window X −3.35 … −1.45; door −1.20 … −0.30; window −0.05 … +1.85.
+  - **Gro.**: window X −7.80 … −5.55; door −5.30 … −4.40.
+  - Plain brick piers 0.35 at both ends and at the two division lines.
+- **Shop cornice** (MAP: the heavy dashed line): one plain wooden fascia Z 3.10 … 3.45 across all three fronts, projecting
+  **0.29**; **blank, no lettering**.
+- **1-storey parapets** (D, E): plain brick Z 3.45 … 4.27 with one projecting brick course at 4.05 and a stone coping 0.08.
+- **D.G. upper floor**: three 1/1 windows 0.90 × 1.70, Z 4.75 … 6.45, centred X +3.45, +5.19, +6.93, flat stone lintels
+  and sills; a two-course brick corbel band Z 7.70 … 7.90; plain parapet to 8.53 with a stone coping. North side (X +8.17,
+  Y 0 … 3.64): blank below, one 1/1 window above centred Y 1.82 (PHOTO c. 1906–10 for a window there; no shutters now).
+  South side above the Conf'y roof: blank.
+- **House front above the shops** (Y 3.64, visible X −8.17 … +2.20): **four 2/2 windows** 0.90 × 1.80, Z 4.65 … 6.45,
+  centred X −6.87, −4.28, −1.69, +0.90, flat stone lintels and sills. **Cornice**: plain boxed wooden cornice Z 6.70 … 7.00,
+  projecting 0.35, on all four sides, **no brackets**.
+- **Mansard**: slate on all four slopes; **dormers** flat-topped, 0.75 × 1.30 1/1 sash, Z 7.60 … 8.90, plain cheeks and a
+  small tin top: **front 4**, over the four windows (none behind the D.G. parapet, which hides that stretch from the
+  street); **north 2** at Y 6.9 and 10.6; **south 2** the same; rear none.
+- **House side walls** (X ±8.17, Y 3.64 … 13.92): per side, **three 2/2 windows per floor** centred Y 5.6, 8.8, 12.0, ground
+  floor Z 1.20 … 3.00, upper floor Z 4.65 … 6.45, stone lintels and sills. Rear wall: blank where seen, one door.
+- **Rear wing F**: north and south faces two 1/1 windows per floor (0.80 × 1.45; ground Z 0.95 … 2.40, upper Z 3.75 … 5.20);
+  one plain door on the south face at Y 15.5. **G**: brick, one door, one window. **H**: blank clapboard.
+- **Not modelled**: chimneys (none on the map; a house of this kind surely had them), the creeper, shutters, gutters,
+  the watch sign, awnings, any lettering, the iron fence seen north of the shop c. 1906–10.
+- **Windows per section E**: every pane one `glass` face 4 cm in front of a `WindowBack` cell (blinds, lace, dark room,
+  mixed); the five shop windows, door lights and transoms use `ShopInterior`. No lettering on any glass.
+
+**Materials & colours** (GUESS unless tagged; nothing to download)
+1. `brick_house`: old red brick: `polyhaven/red_brick.jpg`, tile 1.4 m (0.07 m courses, as the Palace and 35–41).
+   PHOTO c. 1906–10: unpainted mid-tone brick.
+2. `brick_shop` (C, D, E): the same map tinted darker and browner (× #B79C8E), as a newer 1910s face brick; one tinted
+   copy made by the builder (`store-57/brick_shop.jpg`, log in SOURCES.md as own work from a CC0 map).
+3. `stone`: lintels, sills, copings: `block-35-41/trim_stone_grey.jpg`, tile 2.0 m.
+4. `trim`: house cornice, sashes, dormer cheeks, shop fascia ≈ #DDD5C2: `polyhaven/trim_paint_cream.jpg`, tile 2.0 m.
+5. `slate`: mansard: `polyhaven/roof_slates_03.jpg`, tile 1.5 m (PHOTO c. 1906–10: pale grey slate on the front piece).
+6. `roof_tin`: flat roofs, deck, dormer tops, rear roofs: `county-offices/roof_tin_redbrown.jpg`, tile 2.0 m, dulled.
+7. `shopfront`: doors, frames, bulkheads ≈ #2E2E26: `county-offices/door_varnish_dark.jpg`, tile 0.8 m.
+8. `paving`: `polyhaven/sidewalk_concrete.jpg`, tile 2.0 m.
+9. `clap` (H only): `house-65-main/clapboard_cream.jpg`, greyed.
+10. `glass`; 11. `WindowBack` (`shared/window_backs.jpg`); 12. `ShopInterior` (`shared/shop_interior.jpg`).
+
+**Weathering**: the house brick darker and sootier than the shop brick, with pale streaks under the sills and a dark band
+under the cornice; a faint lighter patch on the house front just above the shop roofs (where the shops were built on);
+slate slightly mottled; shop fronts cleaner; dirt band on the bottom 0.4 m; tin roofs dull.
+
+**Budget**: **ordinary, cap 10k, target ~5.5k**: shells, parapets, roofs ~0.6k; mansard + 8 dormers ~1.0k; 36 sash windows
+with lintels and sills ~2.0k; 3 shop fronts ~0.9k; cornices, fascia, copings ~0.4k; rear parts ~0.2k; paving ~0.01k;
+section E ~0.5k. Textures: 7 reused 1K maps + 1 tinted copy + 2 shared atlases; one 2K lightmap weighted to the front and
+the two side walls. Files: `tools/blender/store_57.py` + `_bake.py`, `assets/models/source/store-57.blend`,
+`assets/models/store-57.glb` (≤ 5 MB), previews `assets/models/previews/store-57-*.png` (frontal; from the NE across the
+hotel lot; from the SE over the Wurts lawn; detail of the shop fronts).
+
+**Acceptance checks for the reviewer**
+1. Origin at world (−12.40, 0.15, −84.94); front −Y, **+X = north**; shop front wall at Y 0, 16.34 m long (X ±8.17).
+2. **Stepped front**: the north 5.97 m is 2 storeys to 8.53 m; the south 10.37 m is 1 storey to 4.27 m.
+3. **Behind the 1-storey shops, 3.64 m back, the house wall rises to a cornice at 7.00 m and a slate mansard to 9.75 m**,
+   with four 2nd-floor windows and four dormers in view over the shops.
+4. The mansard runs round all four sides of the house (deck edge 1.25 m inside the walls); the house is 16.34 × 10.28 m.
+5. **Three shop fronts**: D.G. (door between two windows), Conf'y (door between two windows), Gro. (window and door); one
+   continuous plain fascia over them, 0.29 m out.
+6. **No sign, lettering, awning, shutter, bracket, chimney or creeper** anywhere.
+7. Both side walls have windows (3 per floor on the house, 2 dormers each); the rear wing is 2 storeys, 5.94 × 10.30 m,
+   on the north half of the back.
+8. Forecourt paving from the front wall to Y −2.10 (world x −10.30), flush with the sidewalk.
+9. Windows are section-E (not flat black): `glass` BLEND over `WindowBack` / `ShopInterior`.
+10. ≤ 10k tris, GLB ≤ 5 MB, TEXCOORD_0 + 1, 1K maps, 2K lightmap.
+
+**Integrator notes**: replace the placeholder, keep the id. The model brings its own forecourt paving; check the join
+with the County Hotel lot's ground to the north and the Wurts lawn to the south. Minimap entry: the stepped outline.
+
+**Decisions for the owner**
+1. **Which year**: (a, recommended) the Sept 1921 map state, with the three shop fronts; or (b) the c. 1906–10 look in the
+   Stryker photo (house with only the jeweller's front piece, bracketed eaves, striped awning, giant watch sign), which
+   is photographed but about ten years too early.
+2. **Storeys**: 3 (two storeys and a mansard roof), as both the 1910 and 1921 maps say; the "2 storeys" of 1980 describes
+   a later rebuild. Confirm.
+3. **Top of the dry-goods front**: (a, recommended) flat parapet at 28 ft, as the 1921 map's "2 / 28'" implies; or (b) keep
+   the photographed bracketed eave and slate roof of c. 1906–10 (the map then said "2½ / 32'").
+4. **Plain guessed house and shop fronts** (window counts, dormers, a cornice without brackets, no chimneys): approve or
+   name changes. Chimneys can be added as an admitted guess.
+5. **No awnings and no signs** (the awning and watch belong to the earlier jeweller; no 1921 photo): confirm.
+6. **Brick colours**: old red brick for the house, a darker brown-red for the newer shop fronts (guess). If you look at
+   Street View, the north unit of today's building may be the 1921 dry-goods front: its brick colour and upper window
+   count would replace two guesses.
+
+**Pure guesses / open questions**
+1. Wall-top and floor levels of the house (only the 32 ft total is on the map), the mansard pitch, dormer count and form.
+2. All openings on every face; the shop-front layout.
+3. Whether the D.G. front of 1921 was a new 1910s front (assumed) or the old piece cut down.
+4. Colours of brick and trim.
+5. Meaning of the heavy dashed line (taken as a shop cornice; an awning rail is the other reading).
+6. **Links for the owner**: Street View https://www.google.com/maps/search/?api=1&query=57+Main+St,+Flemington,+NJ+08822 ;
+   West Jersey History gallery (blocks automated access; any "County Hotel" or "Main Street" card looking south from the
+   hotel after 1910 would show these shops): https://westjerseyhistory.org/images/hunterdon/flemington/ ; HCHS photo
+   collection list https://hunterdonhistory.org/wp-content/uploads/2022/06/Collection-238-Container-List.pdf
+
 ## Constraints
 
 - A-Frame from a CDN, plain HTML/JS. No build tools or frameworks.
@@ -4199,6 +5075,47 @@ Order agreed with the owner: finish 65 Main → **one test person** → 68 Main 
   `lovells-restaurant-lightmap-before-windows.jpg`. Previews (same cameras):
   `lovells-restaurant-windows-{before,after}.png`, `-{before,after}-detail.png`, plus `-after-south.png`.
   Next: integrator (`#bldg-68-main` intensity 1.2468, add `glass-reflect`).
+  5. **Rea Building / Clock Tower Building (48–52 Main): built (blender-builder, 2026-11-11)**: every pane is one
+  `glass` face (#1A1916, alpha 0.40, roughness 0.05, BLEND, single-sided; the old 2 cm dark glass prisms and the
+  "glass" bake tint are gone) 4 cm in front of a window back. Each back is ONE rectangle (the pane's bounding box; the
+  corners beyond the segmental / round heads sit inside the solid wall), so a window costs only +2 tris. Upper floors
+  (14 front, 8 south), Flats (18), north / rear (14), the 4 tall Bloomfield Ave windows of the 52 shop room, the middle
+  arch window, the cobbler's door light, the stair door (now really glazed: stiles and rails round two lights, one back
+  for both), 2 fanlights, the Flats door transom, the oval window and the 4 cupola windows: `WindowBack` cells of the
+  shared atlas (offices / club rooms: cream and green blinds at varied heights, lace, dark rooms; Flats: lace, curtains,
+  blinds; back sides mostly dark rooms; doors, fanlights, oval and cupola plain dark rooms; no repeat side by side or
+  above/below). The two shop fronts (48 drugs; 52 jeweler = the old post-office front): `ShopInterior` cells of
+  `shared/shop_interior.jpg` behind the 4 display windows, 4 door lights and 2 door transoms (52 shows the same cells
+  mirrored; no new texture, no lettering). Shop-front pocket 5 cm and entrance recess 5 cm deeper so the backs sit
+  behind the glass; cupola pockets 2 cm deeper. Hidden-face pass looks through the glass. Clock dials, signs, awnings
+  unchanged. 14,593 -> 14,763 tris (cap 15k), 5 -> 8 materials, 1.89 -> 2.09 MB, **LIGHTMAP_SCALE 1.1735 -> 1.1726**.
+  Old GLB/lightmap kept as `assets/models/source/rea-building-before-windows.glb` /
+  `rea-building-lightmap-before-windows.jpg`. Previews (same cameras, recorded as WINDOW_VIEWS in
+  `tools/blender/rea_building_preview.py`): `rea-building-windows-{before,after}.png`, `-{before,after}-detail.png`,
+  plus `-after-south.png` (Bloomfield Ave side) and `-after-shop.png` (48 shop front); the standard
+  `rea-building-*.png` previews re-rendered. Next: reviewer, then integrator (`#bldg-48-52-main` intensity 1.1726, add
+  `glass-reflect`).
+  6. **County Hotel (47–49 Main): built (blender-builder, 2026-11-11)**: Rea method: every pane is one `glass` face
+  (#1A1916, alpha 0.40, roughness 0.05, BLEND, single-sided; the old 2 cm dark glass prisms and the "glass" bake tint
+  are gone) 4 cm in front of ONE rectangular window back; 58 panes. Hotel rooms (front 2nd floor: 4 windows + the 3
+  deck doors, whose leaves are now really glazed with stiles and rails round the light; 3rd floor: 12; south side: 5):
+  `WindowBack` cells of the shared atlas, cream / green blinds at varied heights, lace, lace + blind, curtains, a few
+  dark rooms; no window repeats one within 3.1 m of it on the same wall (beside, above or below). North and rear (14):
+  mostly dark rooms and blinds. South bay window: lace, beige curtains, lace + blind. Plain dim rooms (use not
+  documented): the south-bay display window and its door, the south ground window, the enclosed north bay's ground
+  floor, the Bar & Pool Room wing (its 2 windows sit on the clapboard without a pocket: back on the boards, glass 4 cm
+  out, casing 2 cm deeper); enclosed bay upper room: blinds and lace. Ground-floor public rooms behind the veranda:
+  `HotelLobby` = the Union Hotel's `shared/hotel_lobby.jpg`, **no new texture**: lobby cells either side of the main
+  entrance (bays 2, 4), dining-room cells behind bays 5–7, a ceiling strip behind the main door's transom; each cell
+  cropped (wainscot top to just over the picture rail) to fit the smaller 0.90 × 1.70 windows at about the same scale.
+  The main door's etched-glass panels stay opaque as before. One addition to the Rea method: the whole front is in
+  shade and mostly under the veranda, so the bake lifts the front window backs in the lightmap (`HotelLobby` × 1.6,
+  `WindowBack` × 1.3, `FRONT_BACK_LIFT` in the bake script); other sides untouched. 10,234 -> 10,428 tris (cap 15k),
+  8 -> 11 materials, 1.81 -> 2.00 MB, **LIGHTMAP_SCALE 1.1087 -> 1.1088**. Old GLB/lightmap kept as
+  `assets/models/source/county-hotel-before-windows.glb` / `county-hotel-lightmap-before-windows.jpg`. Previews (same
+  cameras, recorded as WINDOW_VIEWS in `tools/blender/county_hotel_preview.py`):
+  `county-hotel-windows-{before,after}.png`, `-{before,after}-detail.png`. Next: reviewer, then integrator
+  (County Hotel entity: intensity 1.1088, add `glass-reflect`).
 
 **B. Roads, sidewalks and background**
 - Rework the road, sidewalks, curbs, lawns and side streets (Court St, Bloomfield Ave) to the
@@ -4515,6 +5432,295 @@ atlas, GLB ≤ 2 MB. Draw calls +4 (≤ 10). Audio ≤ 4 MB, ≤ 5 min decoded.
 - Night lighting / lit lamps, weather, seasons; footstep sounds for the player; interactive
   props (talking notice board, newspaper stand).
 - Awnings and shop signs (already on the buildings).
+
+### Street details pass 2: road, sidewalks, yards and filler objects (owner, 2026-11-11)
+
+**Status:** `spec written — awaiting owner decisions` (planner, 2026-11-11). Nothing built, nothing
+downloaded, `index.html` untouched. Local sources only (no web research this round).
+
+**Rule for this pass (owner):** c. 1920, realism, no artistic liberties. Every item carries a tag:
+**PHOTO** (seen in a named photo), **MAP** (drawn or lettered on the Sanborn map), or
+**TYPICAL-GUESS** (neither; normal for a 1920 NJ county town; build only if the owner says so).
+No invented signs or lettering: the only new lettering proposed is one line that can be read in a photo.
+
+**How sure are the positions?** Map items on sheet 2: ±0.5 m. Map items on sheet 3 (south of Court St):
+±1.5 m, because sheet 3 does not sit exactly on sheet 2; values below already include the correction
+**x − 1.1 m, z + 1.6 m** against the CLAUDE.md formula (checked on the Court St line and on the
+Nevius / Odd Fellows fronts). Photo items: ±3–4 m along the street unless tied to a building.
+
+#### 1. What the sources show
+
+Photos (local only, `assets/photos/reference/`; never commit). All period street views are **1905–1914**;
+the only later views are the late-1920s Union Hotel cards. **No photo shows the street surface in 1920 itself.**
+
+| Photo | Date | What it shows at ground level |
+|---|---|---|
+| `hchs-stryker-main-st-south-from-hall-grocery.jpg` (4100 px glass plate, **best source**) | c. 1906–10 | Camera on the west side at the Hall grocery (35–37), looking south. **Road: bare earth/gravel, crowned, fine wheel tracks, horse droppings in the middle and by the curbs, scraps of paper; no paving, no rails, no crossing stones.** East side: big bluestone flag sidewalk, long stone curb slabs ~0.15–0.2 m high with open joints, a patch of **brick paving** at the walk's edge (bottom left), a wooden pole at the curb, a **dropped curb with a sloping stone apron** (carriageway of no. 40), a **large squared stone mounting block** at the curb, **one big maple at the curb** (in front of 44–46), then the Rea Building stoops with iron rails, a **dark box lettered "FOR WASTE PAPER"**, a **striped barber pole with a ball top**, a boy leaning on a **hydrant**, bill posters (unreadable), and a **buggy with its top up** at the east curb near Bloomfield Ave. An **arc lamp** hangs over the street further south. West side: **brick-paved crossing** where the alley north of the grocery meets the street, a grass plot with a stone curb north of it (the later Palace Theatre site), large-slab walk in front of the County Hotel, **barber pole** at the hotel's north end (39–41's basement barber), iron pipe rail at 39–41's basement steps, **a bicycle propped at the curb**, the hotel's lantern standard, a **street clock on a tall iron bracket** beside a striped awning (51–57), a pole, a low iron fence in shade (about no. 59), and a **tall white post with a hanging oval board** at the curb further south. |
+| `goodspeed-mounts-hotel-c1905-hchs-px333.jpg` | c. 1905 | County Hotel from the SE: rough earth road with loose stones, a stone mounting block and a big pollarded tree at the hotel's north end (both gone in the Stryker plate), dog in the road. |
+| `flmngtnmainstrtcountyhtlvu06.jpg` | 1906 | Same view as Stryker, small: bicycle at the curb, barber pole, grass plot. |
+| `flemington_-_some_business_blocks_on_main_street_-_1907.jpg`, `flmgtnmainststores.jpg` | 1907 / 1910s | East side at 78–84: smooth pale walk (concrete), low curb, **three or four stone mounting blocks** at the curb (Nevius, beside the pole, in front of 82–84), crowned hard earth road with fine tracks, sandwich board, goods under awnings. No trees. |
+| `flmngtnneviusstoreandununionhtl09.jpg` | 1909 | **Two** mounting blocks in front of Nevius (near its north and south ends); 6–7 young trees at the hotel curb in round pits. |
+| `flmngntnmainstrtnorthfromhtl08.jpg` | 1908 | From the hotel looking north. West side: **white picket fence with square posts** along the sidewalk in front of the pale house (65 Main) and on north, a pale stone post at its south end, a young tree in a pit, big trees beyond. East side: pale concrete walk, trees in dark round pits. **Road brown earth with droppings.** |
+| `flmngntnmainststores14.jpg`, `flmngtnbankandpovu08.jpg` | 1914 / 1908 | West side opposite the bank: **a grass strip between the walk and the stone curb**, a very large old tree in it, a dark fence behind the walk. Horse and buggy / horse and delivery wagon at the curbs. **US flag on a staff on the bank front (1914).** Road earth-coloured. |
+| `flmingtnporichardsbldgunionhtl.jpg`, `flmngtnmainstrichardsbldgpo06.jpg`, `flmngtnpobankunionhtl07.jpg`, `flmingtnmainstrtview.jpg` | 1905–07 | Bloomfield corner: earth road right across the junction (**no crossing stones**), hydrant and bicycle at the east curb, pole, sandwich board at the bank, people sitting on stoops, no trees in front of Rea or the bank. |
+| `flmngtnmainstrycolrvu10.jpg` | 1910 | Rea Building from Bloomfield Ave: **clipped hedge along its south wall, grass strip with the hydrant at the corner**, big trees, barber pole at the south stoop, arc lamp. (Card colours are unreliable.) |
+| `flemington_-_hunterdon_county_court_house_viewed_dead_on_-_c_1910.jpg` | c. 1910 | **Concrete walk scored in large bays right up to the courthouse steps, two young trees in plain round soil pits (no edging stones), thin low curb, dark earth road.** |
+| `flmngtncntybldngsvuof08.jpg`, `flmngtncntycourthsview06.jpg`, `flmngtnhtdncntycrtandbldg05.jpg`, `flmngtncrthouspublcbldg08.jpg`, `flmngtncourthsandsurrogateoffice.jpg`, `flmngtncountycrthousvu09.jpg`, `flmgtnhtrdncntycrths2.jpg` | 1905–09 | Courthouse and County Offices: paved forecourt, square stone posts at the curb, young trees in pits, pole at the curb, pipe-rail fence starting at the County Offices lawn. 1905–08 views show a **globe-topped stone pillar at the south end of the courthouse steps**; the 1909 view shows the horse fountain north of the portico (see open questions). |
+| `flemington_-_county_building_-_1912.jpg`, `flmngtncountybldnganddentistoffice09.jpg`, `flmngtnhtncountybldg08.jpg` | 1908–12 | County Offices yard: **lawn, low iron post-and-single-pipe-rail fence (~0.7 m) along the walk and beside the three paths, a tall vertical-board fence with a ledged door closing the gap to the courthouse**, one large shade tree on the lawn, a second smaller tree, shrubs at the wall. |
+| `flmngtndrinkingfountainbycrthous.jpg` | c. 1910 | The fountain close up (pass 1); concrete walk and stone curb around it. |
+| `flemington_-_union_hotel_-_union_hotel_-_1910s.jpg`, `flmngtndcmuirheadsunionhtl10.jpg`, `flmngtnunionhtlview.jpg`, `flemington_-_the_union_hotel_-_1900s.jpg`, `flmngtnmainstrtunionhtlvu08.jpg` | 1900s–1910s | Hotel: pale walk, bare-trunk young trees in pits, **a Model T parked parallel at the hotel curb**, a second car and a small evergreen in a round bed in the west-side foreground, the fountain. |
+| `flmngtnunionhtlwthsnow.jpg`, `flemington_-_the_union_hotel_in_winter.jpg` | c. 1910 | Sleighs; winter only, not used. |
+| `flmngtnunionhtl.jpg`, `flmngtnunionhtlvu20s.jpg`, `flemington_-_the_union_hotel_with_parked_cars.jpg`, `flemington_-_hunterdon_county_courthouse_view.jpg` | late 1920s–30s | Smooth pale road, angle-parked closed cars, lantern lamp standards, whitewashed tree trunks. **Later than 1920: not used**, except as a hint that the road was hard-surfaced by then. |
+| `palace-theatre-potter-building-card.jpg` | c. 1915–20 | 27 and 31 Main: smooth pale walk, low curb, **dark unmarked road with tyre tracks**, no trees, no street furniture at all in front of the theatre. Closest view to 1920. |
+| `flmngntnmainstreetsouthfrmonument08.jpg`, `flmngtnmainstnorth13.jpg` | 1908 / 1913 | North end beyond the modelled blocks (houses, verges, big trees). Background only. |
+| HABS (1963), `assets/photos/reference/habs/` | 1963 | Modern street. Not used. |
+
+Maps (1921 Sanborn sheets 2 and 3; 1910 sheets 4 and 5 compared):
+- **Street widths lettered on the map:** Main St **66'** north of Court St; **53'** south of it (1910: 58');
+  Court St **33'**; Bloomfield Ave **40'**. The scene has Main St at 66 ft all the way and Court St at 40 ft.
+- **Hydrants "T.H."**: west curb at the courthouse (−6.4, −4.4) and east curb at the north corner of
+  Bloomfield Ave (5.9, −90.9). The 1910 sheets show the same two. Both are already in the scene.
+- **Fire alarm "F.A."** at the courthouse's SE corner (−16.5, −4.9), 1910 and 1921. No photo shows it.
+- **Buried 500 gal gasoline tank** at the east curb at 100–102 Main (pump already in the scene).
+- **Carriageway "40"** through the ground floor of 40 Main (arched both ends), z −124.2 … −121.5, to a brick garage behind.
+- **Lanes off Main St** (gaps between buildings that lead to mapped back buildings): see section 3.
+- **Back buildings** (sheds, garages, blacksmith, wagon shed, harness shop, W.C.s, coops): see section 5.
+- The map draws no fences except the jail yard's 20 ft stone wall and one dashed line behind no. 40.
+- 1910 → 1921 changes that matter here: the jeweller at 51–57 (the Stryker street clock) and the basement
+  barbers at 39–41 and at the Rea Building (both barber poles) are **gone from the 1921 map**; 1921 barbers
+  are at **30 Main** and **72 Main** (Union Hotel). "57½ D (from plans)" behind no. 57 was only planned in 1921.
+
+`research/*.md` add nothing on street surfaces, fences or furniture (they cover building histories only).
+
+#### 2. Road surface
+
+| Item | Evidence | Where | Proposal | Tag |
+|---|---|---|---|---|
+| Surface | Stryker, 1905–14 cards: bare earth/gravel. Palace card (c. 1915–20): dark, smooth, unmarked, tyre tracks. Late-1920s cards: smooth and pale. | all of Main St | **Oiled / water-bound macadam**: compacted grey-brown stone and earth, no markings, no kerb-side gutters, paler dusty wheel tracks, slightly darker damp strip 0.5 m wide along each curb. Replaces today's clean pale macadam texture. Tile 4–6 m so tracks don't visibly repeat. | PHOTO for "unpaved-looking, unmarked"; exact 1920 finish is a **guess** (decision 1) |
+| Crown | Stryker, 1907 | all | Centre 0.10 m higher than the edges (road is 12.8 m wide): a 3-strip mesh instead of a flat plane. | PHOTO |
+| Wheel tracks | Stryker, 1907, Palace card | along the street; curving into Bloomfield Ave and Court St | In the texture, plus one decal mesh with turning arcs at the two junctions. | PHOTO |
+| Horse droppings, litter | Stryker (c. 10 clusters in 60 m), 1908 card | scattered, mostly centre and at the curbs where wagons stood | Decal quads (one small alpha-tested texture), 12–20 placements. Fewer than 1906–10: more cars by 1920. | PHOTO (amount for 1920 is a guess; decision 5) |
+| Gutters | Stryker: earth meets the curb, no gutter stones | both curbs | None. | PHOTO |
+| Crossing stones | 1905–07 Bloomfield cards, 1910 courthouse card: none | Bloomfield Ave and Court St junctions | None. | PHOTO |
+| Trolley rails | no photo, no map | — | None. | PHOTO / MAP |
+| Bloomfield Ave | 40' on the map; 1910 colour card | z −89.8 … −77.6 (east of x 6.4) | Same road surface. North side: hedge at the Rea wall + walk + grass strip with the hydrant; south side: walk along the bank. Suggested split (widths are guesses): north 3.3 m, road 6.5 m, south 2.4 m. Today the road plane fills all 12.2 m. | MAP + PHOTO (north side); widths TYPICAL-GUESS |
+| Court St | 33' on the map | z 0 … **10.1** (west of x −6.4), not 12.2 | Narrow the plane to 10.1 m; walk 2 m each side, road 6.1 m (guess). | MAP; split TYPICAL-GUESS |
+| **Main St south of Court St** | "53'" on sheet 3; fronts of 79–97 Main drawn on that line | z > +10 (west), z > +2 (east) | Property lines at about **x −7.7 (west)** and **x +8.7 (east)** instead of ±10.3. The east buildings (82–94) already stand right (their fronts are 1.6 m behind this line, on a private strip). The **west side is wrong today**: the placeholder houses stand at x −16, the real fronts (79 Main "Hardware & Paints", 83–87 grocery with a porch over the walk) stood at about x −7.7. Fix = road about 10.4 m wide there (x −5.0 … +5.4, guess) with ~2.7–3.3 m walks. **This is the start area (0, 0.15, 18).** | MAP (decision 2) |
+
+Texture types for asset-scout (Poly Haven CC0, 1K colour only; ids to be chosen by asset-scout):
+compacted gravel/earth road with faint tracks (tile 5 m); bare trodden earth for lanes and yards (tile 3 m);
+mown grass (tile 2 m); red brick paving, running bond (tile 1 m). Reuse `polyhaven/sidewalk_concrete.jpg`
+(tile 3 m) and `lovells-restaurant/stone_bluestone.jpg` (tile 2 m) for flag walks.
+
+#### 3. Sidewalks, curbs, lanes
+
+Curb everywhere: long stone slabs 0.24 wide, top 0.15 above the road (Stryker: 0.15–0.20), joints every
+1.8–2.4 m, a few slabs 1–2 cm out of line (PHOTO). Keep the 3.9 m walk width north of Court St.
+No hitching posts or mounting blocks beyond those listed in pass 1 and section 6.
+
+| Stretch | z from … to | Surface | Evidence | Tag |
+|---|---|---|---|---|
+| **East** 24–38 | −165 … −124.2 | bluestone flags (as the next stretch) | none | TYPICAL-GUESS |
+| East, by 38–40 | about −128 … −126, at the walk's road edge | patch of **brick paving**, 1 m wide | Stryker, bottom-left corner | PHOTO |
+| East 40–46 | −124.2 … −105.8 | **bluestone flags**, slabs about 1.2 × 1.8 m | Stryker | PHOTO |
+| East Rea, bank, 68 | −105.8 … −49.1 | pale smooth walk; material not readable → concrete as now | 1905–08 cards | PHOTO (pale, smooth) |
+| East hotel | −47 … −16 | **concrete**, plain; **round soil pits ~1.2 m** for the trees | 1908–1910s cards | PHOTO |
+| East Nevius, 82–84 | −16 … +17 | **concrete**, no trees | 1907, 1909 | PHOTO |
+| **West** 27, Palace | −165 … −139.2 | **concrete**, smooth, no trees, no furniture | Palace card | PHOTO |
+| West, alley crossing | −139.2 … −135.7 | **brick paving** across the walk, curb dropped | Stryker (before the theatre was built; kept) | PHOTO |
+| West 35–41, County Hotel | −135.7 … −100.1 | **large flags / big-bay slabs**, about 1.5 × 2.5 m | Stryker, Goodspeed | PHOTO |
+| West 51–57 | −94.5 … −78.5 | not visible → concrete | none | TYPICAL-GUESS |
+| West 59 (Wurts), north part of 65 | −78.5 … −56 | **walk 2.3 m (x −10.3 … −8.0) + grass strip 1.36 m (x −8.0 … −6.64) + curb**; big old trees stand in the grass strip | 1908 bank card, 1914 card | PHOTO |
+| West 65 Main | −56 … −39.2 | concrete to the curb, young tree in a pit | 1908 "north from hotel" | PHOTO |
+| West County Offices, courthouse | −39.2 … 0 | **concrete scored in large bays (~1.8 m)**, courthouse forecourt paved to the steps, round pits | 1906–1912 cards | PHOTO |
+
+Dropped curbs / lane mouths (walk surface carries across unless noted):
+
+| Lane | Side, z from … to | Leads to | Surface | Tag |
+|---|---|---|---|---|
+| Carriageway "40" | E, −124.2 … −121.5 | brick "Auto" garage behind 40 | **sloping stone apron 2.7 × 1.0 m at the curb** (Stryker), flags across the walk, earth inside | MAP + PHOTO |
+| Lane at 32 ("32½") | E, −140.9 … −137.8 | Auto Repair Shop | dropped curb, earth lane | MAP |
+| Passage 46 / Rea | E, −109.1 … −105.8 | yard | no dropped curb (foot passage) | MAP |
+| Gap 68 / Union Hotel | E, −49.1 … −45.6 | Harness Shop, Wagon Shed | dropped curb, earth lane | MAP |
+| Gap hotel / Nevius | E, −15.9 … −11.3 | hotel yard | dropped curb, earth lane | MAP |
+| Alley "80" | E, −3.3 … +1.3 | Nevius feed house, garage | dropped curb, earth lane | MAP |
+| Alley "86" | E, +16.9 … +21.7 | brick dwellings 86½ | dropped curb, earth lane | MAP |
+| Palace alley | W, −139.2 … −135.7 | back of 35–37 | brick crossing (above), earth beyond | MAP + PHOTO |
+| Blacksmith's lane "49½" | W, −100.1 … −94.5 | blacksmith 49½ | dropped curb, earth lane, wheel ruts | MAP |
+
+Lanes are earth strips from the property line back to the mapped building (y 0, as the yards).
+
+#### 4. Yards, fences, lawns (west side, south to north)
+
+| Item | Evidence | Position | Size / form | Tag |
+|---|---|---|---|---|
+| Courthouse forecourt | 1906–1910 cards | as built | no change, no fence | PHOTO |
+| **Board fence** closing the gap between the courthouse north wing and the County Offices | 1909 and 1912 "County Building" cards, left edge | x −17.7, z −20.9 … −17.7 | vertical boards, 2.0 m high, weathered unpainted grey, one ledged door 0.9 m wide | PHOTO |
+| **County Offices pipe-rail fence** | 1908–1912 cards | along x −10.3 from z −39.2 to −21.0, open at the three walks (z −24.07, −27.87, −31.67), with 3 m returns beside each walk | iron posts 0.05 × 0.70 m every 2.4 m, one 0.04 pipe rail on top, dark paint; a pale square stone post 0.30 × 0.30 × 1.2 m at its north end (z −39.2) | PHOTO |
+| County Offices lawn trees | 1909, 1912 cards | large shade tree at about (−13.5, −33.5); smaller at (−12.5, −25.5) | large 12 m; small 6 m | PHOTO |
+| **65 Main picket fence** | 1908 "north from hotel" | along x −10.3 from z −58.7 to −39.2 (lot lines from the map), gate at the path z −51.19 | 1.0 m high, square posts 0.12 × 1.2 m every 2.4 m, two rails, pointed pickets 0.06 m wide at 0.12 m centres, white paint, worn; gate 1.1 m | PHOTO (form), MAP (ends) |
+| **59 Main (Wurts) front fence** | 1908 card (picket fence runs on north); Stryker (low iron fence in shade); 1914 (dark fence) | along x −10.3 from z −78.5 to −58.7, gate at the path z −68.69 | type not settled by the photos: **picket as at 65** (recommended, one module) or low iron | PHOTO (a fence), type = guess (decision 3) |
+| Lawns | cards above | existing `#lawn-west`; add the grass strip of section 3 | grass texture instead of flat colour | PHOTO |
+| Side yards between 57 / 59 / 65 / County Offices | map: open ground | z −78.5 … −71, −66.3 … −55.5, −45.7 … −34.8 | lawn; no objects known | MAP |
+| Rea Building hedge (east side, on Bloomfield Ave) | 1910 colour card | along the Rea south wall, x 14 … 30, z −89.8 … −89.0 | clipped hedge 0.8 m wide × 0.9 m high; grass strip between walk and road, hydrant Y2 in it | PHOTO |
+| Vacant street-front lots | map | none between 24 and 106 Main | — | MAP |
+
+No fence, yard or lawn is known on the east side fronts (all stores built to the walk).
+
+#### 5. Back buildings from the map, as plain massing boxes
+
+Scope note: the Goal says outbuildings are on hold and visitors stay on Main St. So only buildings that can be
+**seen from Main St** through a lane, a gap or a side street are proposed (list A). List B is everything else
+mapped within 75 m, for later. Boxes: walls + simple roof, no openings except one dark door rectangle on the
+side facing the street; frame = weathered grey/white clapboard, brick = red brick, roofs dark tin.
+Eave heights: 1-storey 3.0 m, 1½ 4.5 m, 2-storey 6.0 m, 3-storey 9.5 m. All MAP.
+
+**List A (seen from the street), x from … to, z from … to:**
+
+| Id | What (map label) | x | z | Storeys, material | Seen from |
+|---|---|---|---|---|---|
+| A1 | Blacksmith ("Bl. Sm.", 49½) | −73.0 … −57.5 | −101.5 … −96.5 | 1, frame | blacksmith's lane |
+| A2 | Auto Repair Shop (32½), L-shaped | 61 … 70 (+ wing 58 … 61) | −151.5 … −138 (wing −151.5 … −146.5) | 1, brick | lane at 32 |
+| A3 | "Auto" shed | 53 … 57 | −148.5 … −142.5 | 1, frame | lane at 32 |
+| A4 | "Auto" garage behind 40 | 39.5 … 50 | −123.5 … −115.5 | 2, brick | carriageway 40 |
+| A5 | Barn (crossed box) | 66.5 … 76 | −123 … −117 | 2, frame | carriageway 40 |
+| A6 | Harness Shop | 30.8 … 36.3 | −55 … −48.5 | 1, frame | gap 68 / hotel |
+| A7 | Wagon Shed (open south side, brick north wall) | 36.3 … 74.5 | −55 … −47.5 | 1, frame + brick | gap 68 / hotel |
+| A8 | Flats over bakery (12 Bloomfield, "plast'd") | 39.5 … 49 | −108 … −91 | 3, frame, stucco | Bloomfield Ave |
+| A9 | Bake house + brick oven | 49 … 54 | −108 … −91 | 3 (oven part 1, brick) | Bloomfield Ave |
+| A10 | Hats & Shoes (16 Bloomfield) | 55.5 … 60.5 | −107 … −91 | 2, frame | Bloomfield Ave |
+| A11 | Photos | 60.5 … 67.5 | −107 … −91 | 2, frame | Bloomfield Ave |
+| A12 | Chinese Laundry (17 Bloomfield) | 57.5 … 63.5 | −77 … −66 | 2, frame | Bloomfield Ave |
+| A13 | Dwelling (19 Bloomfield) | 67 … 74 | −77 … −63 | 2, frame | Bloomfield Ave |
+| A14 | Brick dwellings 86½ (two houses) | 29 … 51.4 | 19.9 … 26.1 | 2, brick | alley 86 (close: 19 m) |
+| A15 | "Auto" garage + Ice House behind Nevius | 57 … 64.4 and 65 … 71 | 1.6 … 10.6 | 1 brick; 1–2 frame | alley 80 |
+| A16 | Fire Dept House (7 Court St) | −68 … −60 | −9 … 0 | 2, frame + brick | Court St |
+
+**List B (hidden from the street; later):** County Hotel shed (−58.5 … −36, −129 … −118.7, 1, frame, open south),
+"Auto" 2-storey frame (−36 … −29.5, −129 … −117), hotel brick stable (west of −58.5, same z); sheds behind 32–38
+(36 … 49.5, −132.5 … −129); W.C. (52.5 … 57.5, −127.5 … −125.5); coop (71 … 74.5, −137.5 … −136); shed behind 28
+(31 … 35, −150 … −147.5); Mallory machine shop (54.5 … 66, −63 … −55.5); hotel W.C. (62.5 … 66, −31 … −29);
+south of Court St: barn (−57.6 … −43.6, 24.9 … 30.9, 1½), shed (−43 … −35.8, 42.8 … 46), "Storage Auto"
+(−74.6 … −56.6, 39.1 … 45.9, brick), stone-cutting shop (−61 … −50, 10.4 … 16.2), W.C. / dwelling 94½ / shed /
+"Auto" row (39.4 … 66, 35.6 … 41.6). **Not built in 1920:** "57½ D (from plans)".
+
+Builder check before boxing A6/A7 and the hotel's rear wing (27 … 48.5, −25 … −16, 3-storey frame): see what the
+Lovell's and Union Hotel GLBs already include, and skip what is there.
+
+#### 6. Filler objects
+
+Already in the scene from pass 1 and confirmed again: poles and wires, arc lamps, fountain, 4 hitching posts,
+2 hydrants, 2 mounting blocks, shop goods, 2 sandwich boards, 2 bicycles, gasoline pump.
+
+New or changed (y = 0.15 on walks; kit conventions as pass 1: front −Y, origin at the base centre):
+
+| # | Item | Evidence | Scene position (x, z) | Size / form | Tag |
+|---|---|---|---|---|---|
+| F1 | Mounting block, 82–84 Main | 1907 card | (6.89, +6.5) | existing `carriage_step` | PHOTO |
+| F2 | Mounting block, north end of Nevius | 1909 card | (6.89, −10.5) | existing `carriage_step` | PHOTO |
+| F3 | Mounting block south of carriageway 40 | Stryker | (6.89, −119.5) | existing `carriage_step` (the real one was bigger: 1.0 × 0.5 × 0.45) | PHOTO |
+| F4 | Pole E6 moved | Stryker: pole stands just north of the carriageway | (6.9, −126.0) instead of −124.0 | existing `pole` | PHOTO |
+| F5 | **One big maple** in front of 44–46 | Stryker; 1905–08 Post Office cards (left edge) | (7.5, −110.5); note the walk is only 2.1 m here, so the pit sits at the curb | 12–14 m tall, trunk 0.40 m, full round crown | PHOTO |
+| F6 | **Big old trees in the west grass strip** | 1914 and 1908 cards | (−7.3, −62), (−7.3, −70), (−7.3, −77); `tree-west-5` (−7.5, −60) becomes the first of them | 14–16 m, trunk 0.6 m | PHOTO (count and spacing are guesses) |
+| F7 | Courthouse trees nudged to the 1910 card | dead-on card | (−7.5, −3.5) and (−7.5, −13.7), instead of −2.6 and −11.5 | by 1920 about 8 m | PHOTO |
+| F8 | **Tree pits: plain round soil cut-outs**, 1.2 m, no granite edging | 1908, 1910 cards | all sidewalk trees | change in `street-tree.glb` (the square granite edging is not in any photo) | PHOTO |
+| F9 | **Waste-paper box** | Stryker: dark box at the foot of the Rea Building's north stoop, pale panel "FOR WASTE PAPER" | about (9.7, −103.5), against the stoop; integrator reads the stoop from the GLB | box 0.45 × 0.45 × 0.75 m, dark green (colour guess), three-line pale lettering as read | PHOTO (c. 1906–10) |
+| F10 | **Barber pole, 30 Main** | map 1921 "Barber"; pole form from Stryker | (7.6, −143.4) at the porch line | turned pole 0.18 Ø, spiral stripes, ball top, on a 0.30 m plinth, 2.1 m in all; red/white/blue (colours typical: the plate is black and white) | MAP (a barber here) + PHOTO (form); position guess |
+| F11 | **Barber pole, 72 Main** (Union Hotel barber) | map 1921 "Barber" | (10.0, −38.3) at the foot of the hotel steps | as F10 | MAP + PHOTO (form); position guess |
+| F12 | Parked **Model T touring car** at the hotel curb | 1910s hotel cards | (5.3, −30), parallel to the curb, facing south | 3.4 × 1.7 × 1.9 m, black, top up | PHOTO (decision 4) |
+| F13 | Parked **buggy** (top up, shafts down, no horse) | Stryker (east curb near Bloomfield), 1914 | (5.4, −72) at the bank | 2.6 × 1.5 × 2.2 m, black, red-brown wheels (colour guess) | PHOTO (decision 4) |
+| F14 | Parked **delivery wagon** (open box, no horse) | 1908 bank card | (5.4, −99) at the Rea Building | 3.2 × 1.6 × 1.6 m, unlettered | PHOTO (decision 4) |
+| F15 | Bicycle propped at the curb, County Hotel | Stryker, 1906 card | (−6.75, −118), wheel against the curb | existing `bicycle` | PHOTO |
+| F16 | **US flag on a staff** on the bank front | 1914 card | bank front, second floor, centre bay | 48-star flag 1.5 × 0.9 m on a 2.5 m staff at 40° | PHOTO (1914; may be a holiday only: optional) |
+| F17 | Tall white **sign post with an oval hanging board** | Stryker, west curb south of the County Hotel | about (−6.9, −66) ± 8 m | square post 0.15 × 4 m, bracket, oval board 0.7 × 0.45 m, **blank** (unreadable) | PHOTO (c. 1906–10; optional) |
+| F18 | Small evergreen in a round bed | 1910s hotel cards, west-side foreground | on the County Offices lawn about (−12, −36) | 2.5 m | PHOTO (position guess; optional) |
+
+Looked for and **not found in any photo or on the map** (so not proposed): benches on the walk, mailboxes,
+street-name signs, a flagpole on the ground, a separate horse trough (the fountain is the trough), awning posts
+other than those on the buildings, a watering cart, trolley poles. **Seen but left out because the shop had gone by
+1921:** the street clock at 51–57 and the barber poles at 39–41 and at the Rea Building (decision 7).
+
+Trees by stretch (all read as maples; Stryker shows the leaf): hotel row of 7 at ~4.2 m (as built; about 8–9 m
+tall by 1920); courthouse 2; County Offices 2 on the walk + 2 on the lawn; 65–59 large old trees; one at 44–46;
+**none** in front of 27, the Palace, 35–41, the County Hotel, Rea, the bank, Nevius or 82–94.
+
+#### 7. Build split
+
+**A. Scene work (scene-integrator, no Blender):**
+1. Ground rebuilt as a few merged meshes (extend `ground-patches` or a new `street-ground` component), one draw
+   call per texture: road (crowned, with the Bloomfield and Court St arms), concrete walks, flag walks,
+   grass (lawn, strip, Rea verge), earth (lanes, yards), brick patches, curbs with dropped sections.
+   Replaces `#road`, `#bloomfield-ave`, `#court-st`, both sidewalks, both curbs, `#lawn-west`, `#paths`,
+   `#courthouse-grounds` (4 boxes) and `#bank-forecourt` = **13 draw calls today → about 7**.
+2. Droppings / litter / junction-track decals: 1 draw call.
+3. New placements of existing kit props (F1–F4, F15) and trees (F5–F7): no new draw calls.
+4. Lightmap intensity etc. untouched. Check every building base still meets the ground (walls skirt to −0.2).
+
+**B. Blender batch 1, "street-details kit" (blender-builder; `tools/blender/street_details.py`,
+`assets/models/street-details.glb`, same rules as the pass-1 kit: one material, one 2K atlas, no alpha,
+merged by `street-props` into z bands = +3 draw calls):** picket fence panel 2.4 m, picket gate, corner/end
+post, pipe-rail panel 2.4 m, stone fence post, board-fence run with door, hedge block, barber pole,
+waste-paper box, flag on staff, sign post, evergreen, curb apron. Target ≤ 6k unique triangles; placed total
+≤ 25k (pickets are the cost: ~40 m of fence ≈ 330 pickets ≈ 4k).
+
+**C. Blender batch 2, vehicles (only if decision 4 says yes):** Model T ≤ 3k, buggy ≤ 2k, wagon ≤ 1.5k
+triangles, same kit GLB or a second one (+0–3 draw calls).
+
+**D. Blender batch 3, back-lot boxes (list A):** one GLB `assets/models/backlots.glb`, already placed in
+scene coordinates (origin at 0,0,0), one material with a small atlas (clapboard, brick, tin), ≤ 1.5k triangles,
+1 draw call, no lightmap (vertex-darkened shade sides), fogged like the town silhouettes.
+
+**E. Tree model:** round plain pit (F8) and a second, larger "old maple" variant (≤ 1k triangles); with
+`instanced-trees` a second model costs +4 draw calls.
+
+**Budget:** scene is about 80 draw calls now, limit ~150. A −6, decals +1, B +3, C +0…3, D +1, E +4 →
+**about 83–86**. Triangles in view +≤ 45k (limit ~300k). Textures: 4 new 1K ground maps, one 2K kit atlas, one
+1K back-lot atlas, one 256 px decal sheet.
+
+**Acceptance checks for the reviewer (once built):**
+1. Road reads as unmarked, crowned, earth-and-stone macadam with wheel tracks; no lane lines, no gutters, no rails.
+2. Flag walk with visible large slabs in front of 40–46 and the County Hotel; concrete elsewhere; brick at the Palace alley crossing.
+3. Grass strip with big trees between walk and curb at z −78.5 … −56 on the west side only.
+4. Curb dropped at the eight lane mouths of section 3 (not at the 46 / Rea foot passage); stone apron at carriageway 40.
+5. White picket fence in front of 65 Main with a gate at its path; pipe-rail fence at the County Offices open at all three walks; board fence closes the gap to the courthouse.
+6. Tree pits are round bare soil with no edging stones; one large maple at 44–46; no trees in front of the Palace, County Hotel, Rea, bank or Nevius.
+7. No new lettering anywhere except "FOR WASTE PAPER"; sign-post board blank.
+8. Every list-A box is visible from the sidewalk through its lane and none pokes through a modelled building.
+9. Walking strip ≥ 2.0 m clear on every walk; no prop blocks a door, stoop, path, lane mouth or Mr. Pickell.
+10. Start view ≤ 90 draw calls; 72 fps on Quest 2.
+
+#### 8. Decisions for the owner
+
+1. **Road finish.** (a) Oiled earth-and-stone macadam with tracks, as above (recommended; fits the Palace card);
+   (b) plain bare earth as in 1906–10; (c) keep today's clean pale macadam.
+2. **Main St south of Court St is 53 ft on the map, not 66 ft, and Court St is 33 ft, not 40 ft.** Fix the
+   layout now (road and walks narrower at the start area; the three placeholder houses move to the real
+   line and become 79–97 Main later), or leave it for a later pass?
+3. **Fence at 59 Main (Wurts).** Picket like 65 (recommended), low iron, or none until a better photo turns up?
+4. **Parked vehicles and horses.** (a) none; (b) one Model T, one buggy, one wagon, no horses (recommended:
+   all three are in photos, and a standing horse is costly to do well); (c) with standing horses.
+5. **Dirt level.** Horse droppings and litter: none / light (recommended) / as thick as the Stryker plate.
+6. **Back buildings.** Only list A (16 boxes seen from the street; recommended), all mapped ones, or none yet?
+7. **Things photographed c. 1906–10 whose shop is gone on the 1921 map** (street clock at 51–57, barber poles at
+   39–41 and Rea): leave out (recommended) or include? And the optional items F16 flag, F17 blank sign post,
+   F18 evergreen: yes or no?
+8. **"FOR WASTE PAPER" box:** the wording is read from the plate (third word clear, first two fairly clear). OK to letter it?
+9. **Order of work.** Suggested: A (ground) → B (fences and small props) → E (trees) → D (back-lot boxes) → C (vehicles).
+
+#### Open questions / guesses
+
+- **When was Main St hard-surfaced?** Not answered by local sources (no web research this round). The
+  1915–20 Palace card still looks unpaved; the late-1920s cards look paved.
+- **Globe-topped stone pillar south of the courthouse steps** in the 1905–08 cards vs the fountain north of
+  the portico from 1909: either the fountain was moved about 1909 or there were two stones. For 1920 the
+  fountain stays where pass 1 put it; no second stone is added.
+- Fire-alarm box (map) still not modelled: no photo.
+- All road/walk splits on the side streets, the south-of-Court St road edges, barber-pole and vehicle spots,
+  tree counts in the grass strip, and box heights are guesses within the tagged evidence.
+- Sidewalk material in front of Rea, the bank, 68 and 51–57 cannot be read from the cards.
+- Sheet-3 positions carry ±1.5 m; the integrator should re-measure against the placed Odd Fellows and Masonic models.
+- Which building the Stryker stoop, box and barber pole belong to (Rea Building, read from the order of
+  fronts) and the position of the pole north of the carriageway are read from one plate: ±4 m.
 
 ## Background
 
@@ -5229,3 +6435,9 @@ Check licensing for every asset and note the source in the progress log.
 | 2026-11-11 | reviewer: **Dry goods and clothing store (27 Main) PASS (round 1)**. GLB 1.47 MB, 1,439 tris, 9 materials (2 over the spec's 7, accepted: section-E `glass` BLEND/`WindowBack`/`ShopInterior`), 8 images all 1024² JPEG, TEXCOORD_0 + _1, lightmap 2048². Bounds X −6.26 … +6.34 (world z −152.24 … −164.83, slit to the Palace ≈ 0.42 m), depth 42.0 m incl. frame wing, top 9.0 (chimney), awning to Y −1.91. Matches the Palace card: 4 even upper windows with pale strips, two pale bands, deep plain cornice, blank frieze, one long plain awning, one globe at the south corner, no lettering. Minor: shopfront reads dark brown not #2E2E26 (near-black in previews, fine). Ready for scene-integrator (intensity 0.8992). |
 | 2026-11-11 | blender-builder: **Block at 32–38 Main built** (not reviewed, not integrated, not committed): three plain 2-storey frame shops (Mill'y, Bakery, Meats; shed tin roofs 6.10 m at the front, boxed eave, corner and partition boards) behind one continuous open porch (bluestone deck, 6 plain square posts, fascia, shed tin roof 3.45 → 3.20), 1-storey Meats strip and long rear building stepping down beside 40–42, Mill'y rear part with open rear porch (dark shingle), Bakery back addition; 3 shop windows + 3 half-glazed doors (dark wood) and 6 upper 1/1 windows, section-E glass from the start (shop_interior / window_backs); buff clapboard patch G over 40–42's north wall; D's south face closes the No. 40 tunnel's open north side. No signs, lettering, awnings, shutters, brackets or chimneys. 1,326 tris, 9 materials, 1.21 MB, LIGHTMAP_SCALE 1.1463; entity (8.54, 0.15, −130.755) rot 0 −90 0. Previews `block-32-38-{front,three-quarter,detail,tunnel,rear}.png`. Next: reviewer. |
 | 2026-11-11 | orchestrator | 32–38: reviewed by the orchestrator from previews (usage 87%, no separate reviewer) = PASS (plain front, 6 posts, 3 shops, no signs; closes the 40-tunnel gap); placed at (8.54, 0.15, −130.755), intensity 1.1463, glass-reflect; minimap entry; browser-checked; committed. |
+| 2026-11-11 | blender-builder: **Rea Building / Clock Tower Building (48–52 Main) section-E windows built** (not reviewed, not integrated, not committed): single `glass` faces (BLEND, alpha 0.40, #1A1916, single-sided) 4 cm in front of window backs from `shared/window_backs.jpg` (upper floors, Flats, sides, cupola, oval, arch doors and fanlights) and `shared/shop_interior.jpg` (48 and 52 display windows, door lights, transoms; 52 mirrored); no new texture. 14,593 -> 14,763 tris, 8 materials, GLB 2.09 MB, **LIGHTMAP_SCALE 1.1726**; backups `assets/models/source/rea-building-before-windows.glb` / `rea-building-lightmap-before-windows.jpg`; previews `rea-building-windows-{before,after}(-detail).png`, `-after-south.png`, `-after-shop.png`. |
+| 2026-11-11 | planner: **Street details pass 2 spec written (awaiting owner decisions)**: road, sidewalks, yards, back buildings and filler objects from all local photos and the 1910/1921 Sanborn sheets, each item tagged PHOTO / MAP / TYPICAL-GUESS. Main findings: road unpaved-looking and unmarked in every period view; flag walks at 40–46 and the County Hotel, brick crossing at the Palace alley, grass strip with old trees at 59–65; picket fence at 65, pipe-rail and board fences at the County Offices; eight lane mouths with dropped curbs; 16 back buildings visible from the street; the map letters Main St 53 ft south of Court St and Court St 33 ft (scene has 66 / 40). No web research, nothing built, index.html untouched. |
+| 2026-11-11 | planner: **96–98, 100–102 and 106 Main specs written, awaiting owner approval** (not committed). Sept 1921 Sanborn sheet 3 re-measured (+ Nov 1910 sheet 4): **96–98** = Hopewell's 1875 brick Democrat building, 4.96 × 22.5 m, 2 storeys / 20', with a 1-storey frame "News" strip 1.95 m wide on its south side; front from Goodspeed's frontal c. 1900 and c. 1918 photos (view only): door, show window, door, three segment-headed windows, bracketed cornice with a round arch in the middle; entity (10.08, 0.15, 43.85). **100–102** = 3-storey frame "Auto Supplies", 7.42 × 18.7 m, 30', front strip built up to 3 storeys since 1910; **no photo found**, plain guessed front (recommended: shop front with two open gallery tiers, from a barely legible map note); entity (10.30, 0.15, 52.01). **106** = 3-storey frame drugstore, 6.20 × 18.65 m, 30', pale Italianate front with a gabled bracketed cornice (HCHS 1890s photo on Goodspeed) and, per the 1921 map, a three-storey open porch 2.24 m out over the sidewalk; entity (8.06, 0.15, 58.80). All ordinary (targets 2.5k / 4k / 5.5k tris), all textures reused, section-E windows, no invented lettering (only the photographed "DEMOCRAT" board, if approved). Correction: `research/nrhp-findings.md` has 96–98 frame / 100–102 brick the wrong way round. |
+| 2026-11-11 | planner: specs written for **24–30 Main** and **57 Main**, both **awaiting owner approval**, not committed. 24–30 (Sept 1921 Sanborn sheet 2, re-measured; 1910 sheet 4 compared): three frame buildings in one GLB at (7.29, 0.15, −152.365): 24 dwelling with 1-storey porch, 26 millinery with a bay shop window, 2.66 m gap, 28–30 two shops behind a two-tier porch; no photo shows them, fronts plain guesses. The flagged "shop on the roadway" at 26 is real, not a misreading: an open 1-storey sidewalk porch (dashed front, street line interrupted, new since 1910) reaching 2.5 m past the street line; it falls on the scene's road because the map's street is only 17.1 m wide there against the scene's 20.6 m; spec ends it at the scene curb. 57 (sheet 2; 1910 sheet 5; 1948): storeys settled as 3 = two storeys + mansard, 32 ft (dashed inner outline = Sanborn mansard sign, same as the Union Hotel; "3 D." in 1910); the 1980 "2-story" text describes a later rebuild. Sept 1921 state: 2-storey 28 ft dry-goods front + two 1-storey 14 ft shops built out in front, cobbler in the rear wing; entity (−12.40, 0.15, −84.94). New photo evidence: the Stryker plate and the 1906 County Hotel card show 57's north front piece c. 1906–10 (bracketed eave, slate roof, striped awning, giant pocket-watch jeweller's sign), an earlier state. Both ordinary (targets ~5k / ~5.5k tris), all textures reused, windows per section E. |
+| 2026-11-11 | blender-builder: **County Hotel (47–49 Main) section-E windows built** (not reviewed, not integrated, not committed): 58 single `glass` faces (BLEND, alpha 0.40, #1A1916, single-sided) 4 cm in front of window backs from `shared/window_backs.jpg` (hotel rooms: blinds at varied heights, lace, curtains, a few dark rooms; plain dim rooms where the use is not documented) and the Union Hotel's `shared/hotel_lobby.jpg` (5 ground-floor windows under the veranda + the main door transom, cells cropped to fit); no new texture; front window backs lifted in the lightmap (front in shade under the veranda). 10,234 -> 10,428 tris, 11 materials, GLB 2.00 MB, **LIGHTMAP_SCALE 1.1088**; backups `assets/models/source/county-hotel-before-windows.glb` / `county-hotel-lightmap-before-windows.jpg`; previews `county-hotel-windows-{before,after}(-detail).png`. |
+| 2026-11-11 | orchestrator | OWNER DECISIONS 2026-11-11. Street details pass 2: (1) road = oiled earth-and-stone with wheel/tyre tracks; (2) street widths: FIX NOW (Main St south of Court 53 ft, Court St 33 ft; also check the ~56 ft width north of no. 40 found by the 24–30 planner) — needs a street-geometry addendum first; (4) parked vehicles = Model T + buggy + wagon, no horses; (5) dirt = light; (3,6,7,8) as recommended: picket fence at 59, only the 16 back buildings seen from the street, leave out pre-1910 items whose shop is gone, letter the waste-paper box as read from the plate; (9) order as suggested. Lots: 96–98 APPROVED with the "DEMOCRAT" board lettered (cigar advert = plain dark panel), other points as recommended; 100–102 APPROVED with shop front + two open gallery tiers, plain; 106 APPROVED with the three-tier open porch per the 1921 map, other points as recommended (map-true position pending the street-geometry addendum); 57 APPROVED as the Sept 1921 map state (3 storeys = 2 + mansard, three plain shop fronts, flat parapet on the dry-goods front, no watch sign, no awnings); 24–30 APPROVED as recommended (one GLB, plain guessed fronts, no barber pole/signs) EXCEPT decision 2 (26's porch depth) and 3 (placement), which wait for the street-geometry addendum. |

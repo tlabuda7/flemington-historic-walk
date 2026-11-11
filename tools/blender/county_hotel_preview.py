@@ -48,8 +48,32 @@ def sock(socks, name):
     return next(x for x in socks if x.name == name and x.type == "RGBA")
 
 
+def glass_preview(src):
+    """The `glass` material: not lightmapped in the scene; plain dark tint over the
+    window backs at its own alpha (the scene adds the sky reflection later)."""
+    bsdf = next(n for n in src.node_tree.nodes if n.type == "BSDF_PRINCIPLED")
+    mat = bpy.data.materials.new("CHP_" + src.name)
+    mat.use_nodes = True
+    nt = mat.node_tree
+    nt.nodes.clear()
+    N, L = nt.nodes.new, nt.links.new
+    out = N("ShaderNodeOutputMaterial")
+    emit = N("ShaderNodeEmission")
+    emit.inputs["Color"].default_value = bsdf.inputs["Base Color"].default_value
+    tr = N("ShaderNodeBsdfTransparent")
+    mix = N("ShaderNodeMixShader")
+    mix.inputs["Fac"].default_value = bsdf.inputs["Alpha"].default_value
+    L(tr.outputs[0], mix.inputs[1])
+    L(emit.outputs[0], mix.inputs[2])
+    L(mix.outputs[0], out.inputs["Surface"])
+    mat.use_backface_culling = True
+    return mat
+
+
 def preview_material(src):
     """Unlit copy: emission = base colour (texture x factor, or plain) x lightmap x scale."""
+    if src.name == "glass":
+        return glass_preview(src)
     mat = bpy.data.materials.new("CHP_" + src.name)
     mat.use_nodes = True
     nt = mat.node_tree
@@ -178,7 +202,20 @@ VIEWS = {
     # from the north on the west sidewalk: the enclosed north bay (1906 "Main Street" card)
     "north":          dict(eye=(26.0, -3.0, 1.7), target=(7.0, 2.0, 4.6), lens=32, h=800),
 }
+# Section E (windows) before/after pictures, 2026-11-11: the same two cameras for
+# county-hotel-windows-before(-detail).png and county-hotel-windows-after(-detail).png. Run with
+#   PREVIEW_VIEWS = "windows"; PREVIEW_PREFIX = "county-hotel-windows-after"   (or "...-before")
+WINDOW_VIEWS = {
+    # from the east sidewalk across Main St, a little south: whole front + the south side
+    "":        dict(eye=(-15.0, -18.5, 1.7), target=(-1.5, 3.0, 4.4), lens=22, h=900),
+    # close, from the sidewalk edge: ground-floor windows behind the veranda (bays 2-6), the main
+    # entrance, the 2nd-floor windows and deck doors
+    "-detail": dict(eye=(-1.0, -5.5, 1.7), target=(-1.5, 2.5, 3.1), lens=18, h=960),
+}
 VIEWS = globals().get("PREVIEW_VIEWS") or VIEWS     # set PREVIEW_VIEWS before exec() for other views
+if VIEWS == "windows":
+    VIEWS = WINDOW_VIEWS
+PREFIX = globals().get("PREVIEW_PREFIX") or "county-hotel-"   # and PREVIEW_PREFIX for other file names
 written = []
 try:
     for name, v in VIEWS.items():
@@ -190,7 +227,7 @@ try:
         cam_data.lens = v["lens"]
         cam_data.shift_x, cam_data.shift_y = v.get("shift", (0, 0))
         scene.render.resolution_x, scene.render.resolution_y = 1280, v.get("h", 960)
-        scene.render.filepath = PREV + "county-hotel-" + name + ".png"
+        scene.render.filepath = PREV + PREFIX + name + ".png"
         bpy.ops.render.render(write_still=True)
         written.append(scene.render.filepath)
 finally:
