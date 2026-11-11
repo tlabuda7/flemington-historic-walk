@@ -414,8 +414,12 @@
       baked-lighting="lightmap: assets/textures/block-40-46-lightmap.jpg; intensity: 1.2093"
       glass-reflect></a-entity>
     <!-- 32–38 placeholder: z -137.6 … -124.05 (trimmed to meet 40–46's north wall) -->
-    <a-entity id="bldg-32-38-main" position="10.3 0 -130.825" rotation="0 -90 0"
-      building="width: 13.55; height: 7.5; depth: 12; stories: 2; color: #c8b48a; wall: wood; photo: "></a-entity>
+    <!-- Block at 32–38 Main (frame row: milliner, bakery, meats; plain guessed front, 1921 porch):
+         tools/blender/block_32_38.py + block_32_38_bake.py. Position = centre of the porch front. -->
+    <a-entity id="bldg-32-38-main" position="8.54 0.15 -130.755" rotation="0 -90 0"
+      gltf-model="url(assets/models/block-32-38.glb)"
+      baked-lighting="lightmap: assets/textures/block-32-38-lightmap.jpg; intensity: 1.1463"
+      glass-reflect></a-entity>
     <a-entity id="bldg-24-30-main" position="10.3 0 -149.1" rotation="0 -90 0"
       building="width: 16.4; height: 7.5; depth: 12; stories: 2; color: #b59a72; wall: wood; photo: "></a-entity>
 
