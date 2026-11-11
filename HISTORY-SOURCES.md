@@ -131,6 +131,7 @@ written, so the page was read on or just before that day.
 | ID | Source | Read by |
 |----|--------|---------|
 | **[W1]** | National Register of Historic Places, *Flemington Historic District* nomination (NRIS 80002493), National Park Service NPGallery, https://npgallery.nps.gov/AssetDetail/NRIS/80002493 (p. 103 quoted for the courthouse). PLAN.md notes that one copy of the PDF is a scan with no text. | 2026-11-02 |
+| [W1] (cont.) | Building inventory (Item 7, pp. 99–111) and significance text read in full on 2026-11-10 from the text PDF https://npgallery.nps.gov/GetAsset/1397179c-16a7-4dbf-8ec9-e635f23393f9 (OCR text layer; the photo PDF …/GetAsset/51ce9f80-a810-468c-8557-a1367c870786 has captions only). Main St findings, page-referenced: `research/nrhp-findings.md`. | 2026-11-10 |
 | **[W2]** | Preservation New Jersey, "PNJ on Tour: The Historic Hunterdon County Courthouse and Jail", https://preservationnj.org/pnj-on-tour-the-historic-hunterdon-county-courthouse-and-jail/ | 2026-11-02 |
 | **[W3]** | Goodspeed Histories (Marfy Goodspeed), "Hunterdon's Courthouse, 1828", https://goodspeedhistories.com/hunterdons-courthouse-1828/ | 2026-11-02 |
 | **[W4]** | New Jersey Historic Trust, Hunterdon County Courthouse site details, https://www.nj.gov/dca/njht/funded/sitedetails/hunterdon_county_courthouse.shtml | 2026-11-02 |

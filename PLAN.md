@@ -42,7 +42,7 @@ Decisions (2026-11-02):
 | Bank Building / Flemington National Bank (56–66 Main) | written, auto-approved (owner away) | done (1 new: sandstone_blocks_05 greyed → stone_rockfaced; 1 generated: awning_stripes; 3 reused) | done, round-1 fixes applied (8.8k tris, 6 materials, 1.8 MB, 2K lightmap, LIGHTMAP_SCALE 1.1241); **windows (E) re-export 2026-11-10: 9,522 tris, 8 materials, 2.05 MB, LIGHTMAP_SCALE 1.1242** | round 2: PASS (windows: not yet reviewed) | yes (GLB at 12.24, 0.15, −66.24); windows re-export not yet integrated |
 | Nevius Store / Fulper's Dry Goods (78 Main) | written, auto-approved (owner away) | reused, none new (asset-scout skipped; 4 reused maps) | done, round-1 fixes applied (7.0k tris, 5 materials, 1.3 MB, 2K lightmap, LIGHTMAP_SCALE 1.1072) | round 2: PASS (round 1: 3rd-floor windows raised; LIGHTMAP_SCALE now 1.1072) | **yes** (10.30, 0.15, −7.33) |
 | Frame Dwelling at 65 Main (old no. 510) | written, auto-approved (owner away) | reused, 1 recoloured copy (asset-scout skipped; brown_planks_05 → clapboard_cream made by the builder; roof_slates_03 + red_brick reused) | done (6.3k tris, 4 materials, 1.0 MB, 2K lightmap, LIGHTMAP_SCALE 1.274) | round 1: PASS | yes (GLB, 2026-11-03) |
-| Lovell's Restaurant (68 Main) | written, auto-approved (owner away) | reused + 2 generated (asset-scout skipped; clapboard_cream reused; signs_atlas + stone_bluestone (lightened concrete_floor_worn_001) made by the builder) | done, round-1 fixes applied (4.75k tris, 4 materials, 0.77 MB, 2K lightmap, LIGHTMAP_SCALE 1.2462) | round 2: PASS (round 1: awning raised/shortened, glazed doors, lighter stone; LIGHTMAP_SCALE now 1.2462) | yes (2026-11-04) at (12.66, 0.15, −52.13); bank forecourt extended over its front strip |
+| Lovell's Restaurant (68 Main) | written, auto-approved (owner away) | reused + 2 generated (asset-scout skipped; clapboard_cream reused; signs_atlas + stone_bluestone (lightened concrete_floor_worn_001) made by the builder) | done, round-1 fixes applied (4.75k tris, 4 materials, 0.77 MB, 2K lightmap, LIGHTMAP_SCALE 1.2462); **windows (E) re-export 2026-11-10: 4,814 tris, 7 materials, 0.95 MB, LIGHTMAP_SCALE 1.2468** | round 2: PASS (round 1: awning raised/shortened, glazed doors, lighter stone; LIGHTMAP_SCALE now 1.2462) (windows: not yet reviewed) | yes (2026-11-04) at (12.66, 0.15, −52.13); bank forecourt extended over its front strip; windows re-export not yet integrated |
 | Rea Building / Clock Tower Building, old Post Office block (48–52 Main) | approved by owner 2026-11-04, **landmark** detail (≤ 15k tris) | — | done (14.6k tris, 5 materials, 1.89 MB, 2K lightmap, LIGHTMAP_SCALE 1.1735) | round 1: PASS | yes (2026-11-04) at (10.85, 0.15, −97.79); 1 draw call |
 | County Hotel (47–49 Main) | approved by owner 2026-11-04: pale painted walls, **landmark** detail (≤ 15k tris) | — | done (10.2k tris, 8 materials, 1.81 MB, 2K lightmap, LIGHTMAP_SCALE 1.1087) | round 1: PASS | in scene 2026-11-04 (−10.30, 0.15, −112.07), 1 draw call |
 | Block at 40–46 Main (40–42 "Auto Sales", 44–46 "Shoe Shine & Fruits") | approved by owner 2026-11-04: map-true placement, ordinary (≤ 10k tris) | — | done (4.8k tris, 8 materials, 1.43 MB, 2K lightmap, LIGHTMAP_SCALE 1.2152) | **PASS** round 1 (2026-11-04) | **in scene** 2026-11-04 (8.60, 0.15, −116.55), 1 draw call |
@@ -51,9 +51,10 @@ Decisions (2026-11-02):
 | Distant landscape pass 1 (`landscape.glb`: real hills ring from USGS 3DEP + tree lines + town silhouettes) | written; owner pre-approved the approach, auto-approved within the usage cap (2026-11-04) | not needed (DEM in `assets/maps/`, 1 generated atlas) | done (8.3k tris: far terrain 5,760 + far trees 1,116 + town 1,426; 3 unlit materials, COLOR_0 + 1K RGBA tree atlas, 0.77 MB GLB, no lightmap) | no separate review (integrator sanity check, 2026-11-04) | in scene 2026-11-04: `#landscape` (far ring follows rig at 0.85), ground = 335 m following disc, fog 0.005, sky r 1200, camera near 0.05; +3 draw calls |
 | Palace Theatre (31 Main, old no. 518) | approved by owner 2026-11-08: c. 1920, blank parapet panel, ordinary (≤ 10k tris) | reused, none new (asset-scout skipped; 6 reused maps + 1 generated poster atlas, no lettering) | done 2026-11-10 (2.7k tris, 8 materials, 1.58 MB, 2K lightmap, LIGHTMAP_SCALE 0.9901) | **PASS** round 1 (reviewer 2026-11-10) | **yes** (−10.30, 0.15, −145.52) |
 | Odd Fellows Hall / Hopewell Building (82–84 Main, old nos. 537–538) | approved by owner 2026-11-10: blank signboards, ordinary (≤ 10k tris) | reused, none new (asset-scout skipped; 6 reused maps + 1 faded copy of the bank awning stripes) | done 2026-11-10 (4.7k tris, 8 materials, 1.38 MB, 2K lightmap, LIGHTMAP_SCALE 1.2485) | **PASS round 1** (reviewer 2026-11-10) | **in scene** 2026-11-10 at (10.30, 0.15, 9.09) |
-| Block at 35–41 Main (35–37 frame "Gro.", 39–41 brick "Cobbler") | approved by owner 2026-11-10: valance lettered "PRODUCE \| JACOB R. HALL \| GROCER" (3b), stair modelled (B2) | done 2026-11-10 (none downloaded; 6 reused maps + 2 made by `tools/prepare_block_35_41_textures.py`: `trim_stone_grey` (#A39A88) and `signs_atlas` (stripes, lettered valance, louvre)) | — | — | placeholder only |
+| Block at 35–41 Main (35–37 frame "Gro.", 39–41 brick "Cobbler") | approved by owner 2026-11-10: valance lettered "PRODUCE \| JACOB R. HALL \| GROCER" (3b), stair modelled (B2) | done 2026-11-10 (none downloaded; 6 reused maps + 2 made by `tools/prepare_block_35_41_textures.py`: `trim_stone_grey` (#A39A88) and `signs_atlas` (stripes, lettered valance, louvre)) | done 2026-11-10 (9.0k tris, 10 materials incl. section-E `glass`/`window_back`/`grocery_interior`, 2.11 MB, 2K lightmap, LIGHTMAP_SCALE 1.1243) | round 1 FIXES 2026-11-10 (1 item: stair painted pale like the trim, as both photos show) | placeholder only |
 | Block at 32–38 Main (frame row: "Mill'y", "Bakery", "Meats") | written, awaiting owner approval | — | — | — | placeholder only |
 | Dry goods and clothing store (27 Main, old nos. 519 A/B; "D.G. & Clo.", possibly the "Potter Building") | written, awaiting owner approval | — | — | — | placeholder only |
+| Masonic Hall / Hunterdon County National Bank (90–94 Main, old nos. 536–534) | approved by owner 2026-11-10: 1921 stone bank front (1), carved bank name + plaque only (2), ordinary 10k (3) | — | — | — | placeholder only |
 
 ## Building specs
 
@@ -2975,7 +2976,7 @@ may still have used the upper floors in 1920; nothing on the outside shows it, s
 
 ### Block at 35–41 Main St: frame "Gro." (35–37, old no. 517) and brick "Cobbler" (39–41, old no. 516)
 
-**Status:** **assets ready** (asset-scout, 2026-11-10): nothing downloaded; reuse `house-65-main/clapboard_cream.jpg`, `polyhaven/red_brick.jpg`, `county-offices/roof_tin_redbrown.jpg`, `county-offices/door_varnish_dark.jpg`, `polyhaven/sidewalk_concrete.jpg`; new (logged in SOURCES.md, made by `tools/prepare_block_35_41_textures.py`): `block-35-41/trim_stone_grey.jpg` (trim, #A39A88, tile 2.0 m) and `block-35-41/signs_atlas.jpg` (1024²: `stripes` 0,0–768,384 = 42 stripes over the 6.40 m awning; `val_s` 0,384–768,512 and `val_n` 0,512–768,640 = valance south/north halves (3.20 × 0.25 m each) lettered "PRODUCE \| JACOB R. HALL \| GROCER" left→right = south→north, scallop hem period 0.15 m; `louvre` 768,0–1024,640 = County Hotel shutter leaf; `canvas` 0,640–768,1024; `green` 768,640–1024,832). Next: blender-builder. **Re-checked 2026-11-10 (planner) against the owner's three new postcards (1908 north from the Union Hotel, 1908 south from the Soldiers' Monument, 1914 "looking N."): none shows this block, spec unchanged, the owner's approval stands.** Earlier: spec approved by owner 2026-11-10 (3b, B2); spec written (planner, 2026-11-08; revised 2026-11-10 from the Stryker plate and the c. 1905 County Hotel photo).
+**Status:** **reviewer round 1 (2026-11-10): FIXES** (1 item: paint the whole stair B2 in `trim`, not dark `shopfront`; the c. 1905 and Stryker photos show it pale; everything else passes: 9,022 tris, 10 materials with section-E `glass` BLEND, 2.11 MB, 1K maps, 2K lightmap, bounds match the spec). Earlier: **built (blender-builder, 2026-11-10)**: `assets/models/block-35-41.glb` 9,022 tris (cap 10k; target ~7k exceeded by the turned balusters, spindles and bars), 10 materials (clapboard, trim, brick, roof, shopfront, signs, paving + section-E `glass` (BLEND, alpha 0.40, not lightmapped), `window_back` (shared atlas), `grocery_interior` (new 1K `block-35-41/grocery_interior.jpg`, `tools/prepare_grocery_interior.py`: ray-traced dim grocery, produce crates, tins, counters, no lettering)), 2.11 MB, 2K lightmap `block-35-41-lightmap.jpg`, **LIGHTMAP_SCALE 1.1243**. Scripts `tools/blender/block_35_41{,_bake,_preview}.py`, `.blend` `assets/models/source/block-35-41.blend`; previews `assets/models/previews/block-35-41-{front,three-quarter,detail,court,match-stryker,match-1920s-card}.png` (a plain box stands in for the County Hotel). Deviations: brick tiled 1.4 m (0.07 m courses, as the Palace) instead of 2.0; stair starts behind the south column plinth (Y 0.30, not 0.10), so the lower flight is ~49°; landing and upper flight 0.53 m deep along the wall (Y 1.45–1.98), deck opening X 0.85–2.45; awning/shutter colours from the scout atlas; 39–41 south wall left unlit (inside the hotel). Next: reviewer. Earlier: **assets ready** (asset-scout, 2026-11-10): nothing downloaded; reuse `house-65-main/clapboard_cream.jpg`, `polyhaven/red_brick.jpg`, `county-offices/roof_tin_redbrown.jpg`, `county-offices/door_varnish_dark.jpg`, `polyhaven/sidewalk_concrete.jpg`; new (logged in SOURCES.md, made by `tools/prepare_block_35_41_textures.py`): `block-35-41/trim_stone_grey.jpg` (trim, #A39A88, tile 2.0 m) and `block-35-41/signs_atlas.jpg` (1024²: `stripes` 0,0–768,384 = 42 stripes over the 6.40 m awning; `val_s` 0,384–768,512 and `val_n` 0,512–768,640 = valance south/north halves (3.20 × 0.25 m each) lettered "PRODUCE \| JACOB R. HALL \| GROCER" left→right = south→north, scallop hem period 0.15 m; `louvre` 768,0–1024,640 = County Hotel shutter leaf; `canvas` 0,640–768,1024; `green` 768,640–1024,832). Next: blender-builder. **Re-checked 2026-11-10 (planner) against the owner's three new postcards (1908 north from the Union Hotel, 1908 south from the Soldiers' Monument, 1914 "looking N."): none shows this block, spec unchanged, the owner's approval stands.** Earlier: spec approved by owner 2026-11-10 (3b, B2); spec written (planner, 2026-11-08; revised 2026-11-10 from the Stryker plate and the c. 1905 County Hotel photo).
 
 **What it is**: **two separate buildings**, 0.44 m apart on the map, between the Palace Theatre alley
 and the County Hotel. North: a **3-storey frame grocery with a two-tier front porch**. South: a
@@ -3641,6 +3642,239 @@ showing this front (re-checked 2026-11-10 with the owner's new photos, incl. the
 6. "Potter Building" = no. 27 (caption only); no merchant's name known.
 7. The meaning of "A 519 B": two old numbers on one store, so possibly once two units; only one tenant on the 1921 map.
 
+### Masonic Hall / Hunterdon County National Bank (90–94 Main St, old nos. 536–534)
+
+**Status:** APPROVED by owner 2026-11-10: decision 1 = Sept 1921 state (stone bank front north, old brick arches south); 2 = small carved bank name + round plaque only (no hanging sign, no A&P); 3 = ordinary, 10k cap; 4–6 as recommended. (spec: planner, 2026-11-10). Not built. Placeholder `#bldg-90-94-main`
+(index.html: 20.8 m wide at z 29.1) is replaced by this spec's numbers.
+
+**What it is**: **one 3-storey brick hall with its gable end to the street**, south of Odd Fellows Hall across a 4.8 m
+alley. Built 1864–66 by John C. Hopewell (who also built Odd Fellows Hall) for the **Hunterdon County National Bank**
+and named **"Masonic Hall"** (Darcy Lodge): stores on the ground floor, offices and a lodge room on the 2nd, a big hall
+on the 3rd. Front: **5 bays between brick pilaster strips, round-arched windows** (a pair in the middle bay), a
+**wheel window in the gable**, a **corbelled raking cornice**. The bank bought the building c. 1918 and **in 1920–21
+rebuilt the north and centre stores as new banking rooms with a stone ground-floor front** (opened Monday 7 March
+1921). The Sept 1921 map shows exactly this: **"Bank"** in the north 10.6 m, **"Vacant"** in the south 7.9 m (the old
+bank rooms), **"Lodge Rms. 3d"**.
+
+**What is documented, inferred, guessed**
+- **Documented (map, Sept 1921)**: footprint 18.50 × 18.29 m, 3 storeys, **38'**, brick, "Bank" (90) / "Vacant"
+  (94), ground-floor-only partition ("WALL 1ST ONLY"), "Lodge Rms. 3d", a fire escape on the rear, window ticks
+  on both side walls and the rear, a dashed line 0.35 m in front of the wall along the whole front.
+- **Documented (photos)**: gable front, 5 bays, pilasters, arched windows, wheel window, corbel table, chimney at the
+  apex (1910s card, c. 1918, 1938-published photo); **ground floor before 1920 = a brick arcade of round arches**
+  (c. 1918); **ground floor after = rusticated pale stone front** with two big windows, a main door with consoles
+  and a small second door (photo published 1938, which shows the 1921 alteration "in use until the 1938
+  remodelling", see Sources); arched windows on both side walls (1938, c. 1918).
+- **Inferred**: that the 1938-published photo shows the 1921 stone front unchanged; that the vacant south part kept
+  its c. 1918 arcade in Sept 1921 (the photo shows a later A&P shop front there); window positions on the side
+  walls (map ticks + photos); hood and sill forms on the side walls.
+- **Pure guess**: all colours; the south-most ground-floor opening (behind a tree in c. 1918); rear wall; second
+  chimney position; roof covering.
+- **Tenants c. 1920**: Hunterdon County National Bank (documented). Upper floors: lawyers' offices on the 2nd floor
+  (documented for 1866 and later, not for 1920) and lodge rooms on the 3rd (map). Nothing outside shows them.
+
+**Planner decisions** (owner to confirm)
+1. **Show the Sept 1921 state** (recommended): new stone bank front on the north 3 bays, old brick arcade kept on the
+   vacant south part. It matches the 1921 map that every other building follows. Alternative (b): the **c. 1918
+   state** with the brick arcade across the whole front (best photo, full front; but then the map's "Bank"/"Vacant"
+   is reversed: the bank was then in the south part).
+2. **Lettering**: the 1938-published photo shows (i) a small carved inscription "THE / HUNTERDON / COUNTY / NATIONAL /
+   BANK" with a round bronze plaque under it on the north corner pier, (ii) a large projecting vertical blade sign
+   ("THE HUNTERDON COUNTY NATIONAL BANK / CAPITAL $100,000 / SURPLUS & PROFITS $400,000"), (iii) an "ATLANTIC &
+   PACIFIC TEA CO." fascia on 94. **Recommended: (i) only**, as plain carved letters (part of the 1921 stone front);
+   **leave out (ii)** (undated, could be any year to 1938) and **(iii)** (94 was vacant in 1921). Owner may choose
+   none at all.
+3. **Ordinary building: cap 10k, target ~8.5k** (corbel table and 30 arched windows cost the most). Option: landmark
+   detail ≤ 15k as for the Rea Building and County Hotel.
+4. **Front placement**: brick wall on the scene's building line x 10.30 (as Odd Fellows and Nevius; map 0.19 m further
+   out, within reading error); the stone/arcade ground floor projects 0.30 m in front of it (map's dashed line,
+   0.35 m), so the entity sits at **x 10.00**.
+5. **No awnings** (none seen on the stone front; the 1910s shop awnings belonged to the old stores; small fabric
+   awnings on two 2nd-floor windows c. 1918 are seasonal). No blinds-out shutters.
+6. **Bank windows show a banking room**: reuse cells of the shared `bank_hall.jpg` (made for the Bank Building, no
+   lettering) behind the two big stone-front windows and the main-door glass; the vacant 94 shows empty dark rooms.
+
+**Sources**
+- Map: 1921 Sanborn **sheet 3** [M2], pixel box **x 3980–4440, y 1600–2080** (pink, "3", "38'" twice, "o" twice).
+  Line centres from a darkness profile: street line x 3984.5; **dashed line x 4012.5** (y 1695–2045); **front wall
+  x 4019.3**; **rear wall x 4370.3**; **north wall y 1696.5**; **south wall y 2051.5**; partition y 1899.8 ("WALL 1ST
+  ONLY", "12"). Odd Fellows south wall y 1605 (alley 4.77 m, with a line at y 1651 in it); next building
+  ("Cigars"/"Printing", the Democrat) north wall y 2075 (1.22 m slot). Wall thicknesses "12 12 16". Window ticks:
+  north wall x ≈ 4085 and 4280; south wall x ≈ 4090 and 4290; rear wall y ≈ 1825. "F.E." ladder off the rear wall's
+  south half. Numbers: 90 / 536 / 535 at the north part, 94 / 534 at the south. Behind the rear (not this model): a
+  2-storey brick dwelling block (86½) at x 4370–4880, y 1660–1745.
+- **Photos** (none in the project shows the front squarely; all three below agree on the upper front):
+  - **Primary for the stone front and upper floors: Goodspeed `HCNB-1938-copy.jpg`**, from the NW, published with
+    the 1938 bank history: https://i0.wp.com/goodspeedhistories.com/wp-content/uploads/2021/04/HCNB-1938-copy.jpg
+    (on https://goodspeedhistories.com/flemingtons-first-bank-chapter-3/ ). **View only, do not save in the project.**
+    Perspective fit (corners = map width, vanishing point x ≈ 2450 px) gives the X values below, ±0.3 m.
+  - **Primary for the arcade and the gable: Goodspeed `OriginalFacade-ca1918-copy-scaled.jpg`** ("about 1918,
+    judging from the automobile"), from the SW, the whole front; the Democrat building (south) in front of the south
+    wall: https://i0.wp.com/goodspeedhistories.com/wp-content/uploads/2021/06/OriginalFacade-ca1918-copy-scaled.jpg
+    (on https://goodspeedhistories.com/flemingtons-first-bank-part-two/ ). **View only.**
+  - `flmgtnmainststores.jpg` (1910s, local only) and `flemington_-_some_business_blocks_on_main_street_-_1907.jpg`
+    (1907; same print): the building at the right, from the NW: 5 bays with the middle pair, tall 3rd-floor arches,
+    gable, apex chimney with a cap, the arched stair entrance at the south end.
+  - Checked, do not show it: the other local cards and photos, HCHS Stryker plate (trees hide it), HABS.
+  - Goodspeed `DemocratOffice-copy-scaled.jpg` shows only the neighbour to the south (not this model).
+- Web: [a] Goodspeed, "Postscript to Flemington's First Bank, parts one & two" (1866 Gazette: "Masonic Hall", cost
+  ~$30,000; 3rd-floor hall "with a balcony across the front" (inside); bank bought it c. 1918; "two years later
+  started construction of new banking rooms, using the north and center stores"; the remodel "included the stone
+  front on the first floor"; opened "Monday morning, March 7" 1921; "remained in use until the recent [1938]
+  remodeling"), https://goodspeedhistories.com/flemingtons-first-bank-chapter-3/ ; [b] Goodspeed, "Flemington's
+  First Bank, part two" (1864–66, first floor "renovated" in the 1920s, top floor once a theatre),
+  https://goodspeedhistories.com/flemingtons-first-bank-part-two/ ; [c] a walking-tour text seen only as a search
+  snippet: "original brick arcades on the first floor were replaced with terracotta and granite facade in the
+  1920's" (source page not found); [d] PreservationNJ / TapInto on the 90 Main St redevelopment (today's building
+  still stands, façade to be kept), https://preservationnj.org/pnj-news-20180816/seven-new-details-about-flemingtons-union-hotel-redevelopment-plan-flemington_raritan-nj-news-tapinto .
+  No NRHP / HABS data sheet text found for this address.
+- **For the owner, optional** (would firm up decisions 1–2): the 1938 bank booklet "The Story of the Hunterdon County
+  National Bank of Flemington" (Alan Painter, Hunterdon County Democrat), or any 1920s photo of the stone front, at
+  the Hunterdon County Historical Society.
+
+**Placement** (east side, front faces west)
+- Entity = centre of the front-most line (stone front face) at sidewalk level: **(10.00, 0.15, 30.92)**,
+  `rotation="0 -90 0"`, keep id `bldg-90-94-main`.
+- **Blender frame** (as Odd Fellows): front −Y, **+X = south**, world z = 30.92 + X, world x = 10.00 + Y.
+  Map → local: X = (py − 1874) × 0.0521, Y = (px − 4013.5) × 0.0521 (same sheet-3 join as Odd Fellows:
+  z = 9.09 + (py − 1455) × 0.0521).
+- Lines: stone/arcade face Y 0 (x 10.00); **brick wall Y 0.30 (x 10.30)**; rear wall Y 18.59 (x 28.59); **north wall
+  X −9.25 (z 21.67)**, **south wall X +9.25 (z 40.17)**. Below, "Xn" = metres from the north wall (Xn = X + 9.25).
+- Neighbours: north, 4.81 m alley to Odd Fellows (south wall z 16.86); south, a 1.2 m slot to the 2-storey Democrat
+  building (map z ≈ 41.4; its placeholder `#bldg-96-98-main` starts at z 40.4, not this spec's job).
+- **Sun** "to sun" **(0.40, −0.90, 0.36)**. **Bake occluders (not exported)**: Odd Fellows box X −29.6 … −14.06,
+  Y 0.3 … 21.6, Z 0 … 12.9; Democrat box X +10.47 … +16.4, Y 0.3 … 21.2, Z 0 … 8.0.
+
+**Massing**
+
+| Part | Local X | Local Y | Height | Roof |
+|------|---------|---------|--------|------|
+| A. Main block, brick | −9.25 … +9.25 (18.50, map) | 0.30 … 18.59 (18.29, map) | side-wall cornice top **11.60** (map 38'); 3 storeys | **gable, ridge along Y**, top of raking cornice at the apex **Z 15.6** (photo fit ±0.5; ≈ 23°); same gable at the rear (guess) |
+| B. Ground-floor front | −9.25 … +9.25 | 0 … 0.30 | 0 … 4.40 | flat top under the projecting cornice |
+
+Floor lines (photo fits, ±0.3): ground floor top / front cornice Z **4.40**; 2nd-floor sills 4.75; 3rd-floor sills
+8.05; corbel-table base 10.90. Roof: tin, standing seam (map "o"; covering a guess), plain. Walls skirt to −0.20 at
+the sides and rear. Not modelled: rear fire escape, interiors, the 3rd-floor gallery.
+
+**Elevation details: upper front** (brick wall plane Y 0.30)
+- **Pilaster strips** (brick, 0.06 proud): corners 0.60 wide (X ±8.95 centres), inner 0.45 wide at **X ±2.2 and ±5.6**,
+  from Z 4.40 up to the cornice/rake; each ends under the raking cornice in a **pair of small brackets** (1938).
+- **Windows, all round-arched, 2-over-2, cream sash, set back 0.15, with an arched brick hood mould** 0.12 proud,
+  0.12 wide, following the arch, short drops at the springing, and a pale stone sill 0.10 tall, 0.08 proud:
+  - Bay centres **X −7.45, −3.85, +3.85, +7.45**: single, opening **1.00 wide**.
+  - **Middle bay: a pair**, centres **X ±0.65**, each **0.80 wide**, separate hoods.
+  - **3rd floor**: sill 8.05, springing 9.95, arch top **10.45** (taller: the lodge floor).
+  - **2nd floor**: sill 4.75, springing 6.05, arch top **6.55**.
+- **Wheel window** in the gable, centre X 0, Z **13.2**, Ø **1.30**: pale stone ring 0.15 wide, 8-spoke rosette
+  tracery inside (c. 1918, 1938), dark glass behind.
+- **Raking cornice**: boxed, projecting 0.55, 0.35 deep fascia, dark soffit; under it a **stepped brick corbel table**
+  (small corbels about 0.20 apart, 0.15 tall) along both rakes and along both side eaves; the side-wall cornice top
+  Z 11.60, the same profile.
+- **Chimney 1** at the apex just behind the front: Y 1.2, 0.90 × 0.60, top Z 17.0, corbelled cap (1910s card, c. 1918).
+  **Chimney 2** on the south slope near the eave at Y ≈ 9 (c. 1918; position guess), 0.80 × 0.60, top Z 14.5.
+
+**Elevation details: ground floor, 90 (bank), Sept 1921** (stone front, Y 0, Xn 0 … 11.5; 1938-published photo)
+- Pale **rusticated ashlar**: horizontal V-channels every 0.40 m on all piers (modelled as 2 cm grooves or baked into
+  the texture), smooth **plinth Z 0 … 0.75**, plain frieze Z 3.95–4.20, **cornice 4.20–4.40 projecting 0.20**. The north
+  corner pier returns 0.60 along the north wall.
+
+| Xn from | Xn to | Part |
+|---------|-------|------|
+| 0 | 1.10 | north corner pier; **carved inscription** (Decision 2 (i)): 5 short lines, letters 0.10 tall, Z 2.4–3.1, round bronze plaque Ø 0.40 at Z 1.6 |
+| 1.10 | 3.15 | **bank window 1**: sill 0.95 (stone sill 0.10, 0.08 proud), transom bar 3.05, head 3.85; one big pane below, 2 lights above |
+| 3.15 | 4.50 | pier |
+| 4.50 | 6.30 | **main door**, recessed 0.50: pair of glazed oak doors to 2.75, transom 2.85–3.65; **two scroll consoles** at the opening top (Z 3.10–3.85) carrying a small hood cornice 3.85–4.00 |
+| 6.30 | 7.35 | pier |
+| 7.35 | 9.00 | **bank window 2**, as window 1 |
+| 9.00 | 9.70 | pier |
+| 9.70 | 10.95 | **side door** (to the upper floors, inferred), recessed 0.20, single panelled door to 2.40, plain panel/transom to 3.20 |
+| 10.95 | 11.50 | south end pier (stone ends on the pilaster line above) |
+
+**Elevation details: ground floor, 94 (vacant), Sept 1921** (Xn 11.5 … 18.5; c. 1918 arcade kept, **inferred**)
+- Brick arcade, face Y 0: round-arched openings with brick voussoirs, arch springing Z 3.00, a projecting brick/
+  stone cornice band Z 4.10–4.40 (0.20 proud), stone plinth Z 0–0.45.
+- Centres: **Xn 13.1 old bank window** (1.30 wide, top Z 3.65, sill 0.95, **vertical iron bars**, dark empty room
+  behind); **Xn 15.7 stair-hall entrance** (1.80 wide, top Z 3.95, pair of panelled doors to 2.90, glazed fanlight
+  above, **two stone steps** 0.17 high projecting to Y −0.60, 2.4 wide); **Xn 17.6 arched window** (1.20 wide, top
+  3.60; **guess**, hidden by a tree in c. 1918).
+
+**Side and rear walls** (brick, corbel table and cornice along the eaves)
+- **North wall** (in view from the north, across the alley): two columns of windows at **Y ≈ 3.4 and Y ≈ 13.6** (map
+  ticks; the front one also in the 1938 photo): 3rd and 2nd floor as the front singles; ground floor a plain
+  segment-headed window 1.0 × 2.0, sill 1.0.
+- **South wall**: columns at **Y ≈ 3.7 and Y ≈ 14.1** (map; c. 1918 shows the 3rd-floor arches above the Democrat
+  roof); same window forms.
+- **Rear wall**: gable end, plain; one column of 3 plain windows at X −2.55 (map tick). No detail.
+
+**Windows the new way (PLAN.md section E)**: every pane = one `glass` face (#1A1916, alpha 0.40, roughness 0.05,
+BLEND, single-sided) 4 cm in front of a window back. Upper floors (≈ 30 panes): shared `window_backs.jpg` cells, no
+repeat side by side or above/below; 2nd floor (offices): cream and green blinds at varied heights, a few plain dark
+rooms; 3rd floor (lodge rooms): mostly dark green blinds pulled well down, a little lace; wheel window: dark room.
+Bank windows 1–2 + main-door glass and transom: `bank_hall.jpg` cells (Decision 6). 94 openings and the side door:
+dark empty-room cells. Budget ≤ +600 tris.
+
+**Materials & colours** (no colour photo; **all colours guesses**, tones from the photos: brick mid-dark, stone front
+the palest thing in the 1938 photo, sash pale, soffit dark). Asset-scout can be skipped: everything is reused.
+1. `brick`: unpainted red-brown ≈ #8A4A38; `polyhaven/red_brick.jpg`, tile 2.0 m. Walls, pilasters, hoods, corbels,
+   chimneys, 94 arcade.
+2. `stone`: pale grey granite/limestone ashlar ≈ #C4BFB4; `county-offices/stone_buff.jpg` re-tinted grey, tile 1.6 m.
+   Stone front, sills, wheel-window ring and tracery, plinths, steps.
+3. `cornice`: painted wood, drab ≈ #6E6250; `county-offices/trim_paint_drab.jpg`, tile 2.0 m. Raking and eave
+   cornices, brackets.
+4. `sash`: cream ≈ #DDD5C2; `polyhaven/trim_paint_cream.jpg`, tile 1.0 m. Window frames and sash bars.
+5. `wood_dark`: `county-offices/door_varnish_dark.jpg`, tile 0.8 m. Doors, door frames.
+6. `roof`: `county-offices/roof_tin_redbrown.jpg`, tile 2.0 m, dulled.
+7. `iron`: plain near-black #222222 (bars, plaque rim; plaque face dull bronze #5A4A2E as a second colour on the
+   same material, or bake it).
+8. `WindowBack` (shared `window_backs.jpg`), 9. `BankHall` (shared `bank_hall.jpg`), 10. `glass`.
+Inscription (if approved): engraved into the `stone` texture area of the corner pier (baked darker letters) or a small
+dedicated 512 px decal on `stone`; no other text anywhere.
+
+**Weathering**: 55 years old in 1920 (stone front brand new): soot under the cornices, hoods and corbel table; darker
+brick in the bottom 0.5 m and below sills; brick on the 94 arcade grimier than the clean stone; faint run marks under
+the wheel window. No moss.
+
+**Budget**: **ordinary, cap 10k, target ~8.5k**: 30 arched windows with hoods and sills ~3.0k; corbel table, cornices
+and brackets ~1.6k; stone front with consoles and grooves ~1.2k; 94 arcade and steps ~0.6k; wheel window ~0.4k;
+shell, roof, chimneys ~0.6k; window backs + glass ~0.6k. Textures: 7 reused 1K maps + 2 shared atlases, one 2K
+lightmap weighted to the front and north wall. ≤ 10 materials (one draw call after merge + glass). Files:
+`tools/blender/masonic_hall.py` + `masonic_hall_bake.py`, `assets/models/source/masonic-hall.blend`,
+`assets/models/masonic-hall.glb` (≤ 5 MB), `assets/textures/masonic-hall-lightmap.jpg`, previews
+`assets/models/previews/masonic-hall-*.png` (frontal; from the NW matching the 1938-published photo and the 1910s
+card; from the SW; from the visitor's start (0, 1.6, 18)).
+
+**Acceptance checks for the reviewer**
+1. Origin at world (10.00, 0.15, 30.92); front −Y, +X = south; 18.50 m wide, brick wall at Y 0.30, rear at Y 18.59.
+2. **Gable end to the street**, side cornices at 11.6 m, apex about 15.6 m; a corbel table under both rakes and both
+   side eaves.
+3. Upper front: **5 bays between pilaster strips, a pair of narrow windows in the middle bay**, single windows in the
+   other four; all round-arched with hood moulds; 3rd-floor windows clearly taller than the 2nd.
+4. **A wheel window with radiating tracery centred in the gable**, and a chimney at the apex.
+5. Ground floor north 11.5 m: **pale rusticated stone front**, two big windows, a main door with two consoles, a small
+   side door at the south end; the stone stands 0.30 m in front of the brick.
+6. Ground floor south 7 m: **brick round-arched openings**: barred window, wide entrance with two steps, window.
+7. Side walls: two columns of arched windows each; north wall in view from the alley.
+8. **No lettering anywhere except the small corner inscription (only if the owner approves Decision 2 (i)); no blade
+   sign, no awnings.**
+9. Windows per section E: `glass` material separate and transparent; window backs varied; banking room behind the bank
+   windows.
+10. ≤ 10k tris, ≤ 10 materials, GLB ≤ 5 MB, TEXCOORD_0 + 1, 1K maps, 2K lightmap.
+
+**Integrator notes**: replace the placeholder, keep the id, position (10.00, 0.15, 30.92), lightmap intensity =
+LIGHTMAP_SCALE, add `glass-reflect`. Leave the Odd Fellows alley open.
+
+**1920 vs earlier and later**: before 1920: brick arcade across the whole front, shop awnings in the north part (1910s),
+bank in the south part. During 1920 the north stores were being rebuilt. After 1921: an A&P store took 94 (shop front
+with fascia) and a large blade sign appeared (both undated, before 1938); 1938 another remodelling (unknown extent).
+
+**Pure guesses (owner to check)**
+1. **Which ground floor** (Decision 1) and that the 1938-published photo shows the 1921 stone front.
+2. **All colours** (brick unpainted, pale stone, drab cornice, cream sash) and the tin roof.
+3. The 94 part in Sept 1921 (old arcade kept, empty rooms), and its south-most opening.
+4. Side-door purpose; the bank's door and window glazing pattern; window sash (2-over-2).
+5. Side and rear windows' exact positions and the ground-floor forms there; second chimney.
+6. Heights from photo fits (±0.3 m; apex ±0.5 m).
+
 ## Constraints
 
 - A-Frame from a CDN, plain HTML/JS. No build tools or frameworks.
@@ -3843,6 +4077,23 @@ Order agreed with the owner: finish 65 Main → **one test person** → 68 Main 
   `bank-building-lightmap-before-windows.jpg`. Previews (same cameras): `bank-building-windows-{before,after}.png`,
   `-{before,after}-detail.png`, `-{before,after}-nw.png` (Bloomfield Ave side). Next: integrator (`#bank-building`
   intensity 1.1242, add `glass-reflect`).
+  4. **Lovell's Restaurant (68 Main): built (blender-builder, 2026-11-10)**: every pane is one `glass` face (#1A1916,
+  alpha 0.40, roughness 0.05, BLEND, single-sided) 4 cm in front of a window back (the old dark glass boxes are gone; the
+  centre-door recess cutter is 6 cm deeper at the transom so its back sits behind the glass). Pool room upstairs (2 front,
+  4 south, 2 north), the 2 rear north windows downstairs (kitchen) and the 3 cellar lights: `window_back` cells of the
+  shared atlas (cream / green blinds at varied heights, lace, lace + blind, a few curtains; cellars dark rooms; no repeat
+  side by side or above/below). Ground-floor glass of the dining room (Ladies' Entrance leaf + transom, the two centre
+  door leaves + transom, display window + its top row, the 3 south windows): new `restaurant_interior` material with a
+  dedicated 1K `assets/textures/shared/restaurant_interior.jpg` (+ `.json`, 10 cells), ray-traced per pane by
+  `tools/prepare_restaurant_interior.py` (run in Blender): one plain dining room, small tables with white cloths and
+  chairs, a plain panelled counter with stools and a back bar of plain jars / glasses / crockery along the north wall,
+  a low display platform with jars and covered cake stands behind the display window, oak wainscot, buff-green walls,
+  pressed-tin ceiling, unlit pendants, a dark kitchen doorway at the back; no lettering. Hidden-face pass looks through
+  the glass. 4,752 -> 4,814 tris, 4 -> 7 materials, 0.77 -> 0.95 MB, **LIGHTMAP_SCALE 1.2462 -> 1.2468**. Old
+  GLB/lightmap kept as `assets/models/source/lovells-restaurant-before-windows.glb` /
+  `lovells-restaurant-lightmap-before-windows.jpg`. Previews (same cameras):
+  `lovells-restaurant-windows-{before,after}.png`, `-{before,after}-detail.png`, plus `-after-south.png`.
+  Next: integrator (`#bldg-68-main` intensity 1.2468, add `glass-reflect`).
 
 **B. Roads, sidewalks and background**
 - Rework the road, sidewalks, curbs, lawns and side streets (Court St, Bloomfield Ave) to the
@@ -4853,3 +5104,7 @@ Check licensing for every asset and note the source in the progress log.
 | 2026-11-10 | asset-scout: **Block at 35–41 Main assets ready**, nothing downloaded. Reused: clapboard_cream (tile ≈ 1.24 m for the spec's 0.14 m boards), red_brick, roof_tin_redbrown, door_varnish_dark, sidewalk_concrete. Made by `tools/prepare_block_35_41_textures.py` (logged in SOURCES.md): `block-35-41/trim_stone_grey.jpg` (trim_paint_cream re-tinted #A39A88) and `block-35-41/signs_atlas.jpg` (42-stripe awning, valance "PRODUCE \| JACOB R. HALL \| GROCER" in Bookman Old Style Bold split into south/north halves, County Hotel louvre leaf, canvas, green). Next: blender-builder. |
 | 2026-11-10 | planner: **three new owner postcards checked** (local only): 1908 "looking North" = taken in front of the **Union Hotel** (right-hand porch with steps and lantern = the hotel's own veranda; pale house with picket fence on the left = most likely 65 Main); 1908 "looking South from Soldiers' Monument" = residential north end (monument at z ≈ −313); 1914 "looking N." = from the Bank Building (Bank right, Rea Building and cupola beyond). **None shows 35–41, 32–38 or 27**: specs unchanged apart from Sources/Status notes; 35–41 build goes ahead as approved; 32–38 and 27 still await the owner's approval as written. |
 | 2026-11-10 | blender-builder: **Bank Building windows (E) rolled out** (not integrated, not committed): window backs from the shared atlas upstairs/rear/basement, new `bank_hall.jpg` (banking room + the four 1921 shops, `tools/prepare_bank_hall.py`) behind the ground-floor glass, bank door leaves now glazed, transparent `glass` material. 9,522 tris, 8 materials, 2.05 MB, LIGHTMAP_SCALE 1.1242 (was 1.1241). Previews `bank-building-windows-{before,after}{,-detail,-nw}.png`. Next: reviewer, integrator (`glass-reflect`). |
+| 2026-11-10 | planner: **Masonic Hall / Hunterdon County National Bank (90–94 Main, old 536–534)** spec written, **awaiting owner approval**. 1864–66 3-storey brick hall by J. C. Hopewell, gable end to the street, 5 bays with a middle pair of round-arched windows, wheel window, corbelled raking cornice (1910s card; Goodspeed c. 1918 and 1938-published photos, view only). Sept 1921 Sanborn sheet 3: 18.50 × 18.29 m, 38', "Bank" (north 10.6 m) / "Vacant" (south 7.9 m), "Lodge Rms. 3d". Recommended state: Sept 1921 = new 1920–21 rusticated stone bank front on the north 11.5 m, old brick arcade on vacant 94. Entity (10.00, 0.15, 30.92) (brick wall on x 10.30, stone front 0.30 proud). Ordinary, target ~8.5k tris, all textures reused, windows per section E. Owner decisions: which ground floor, corner inscription yes / blade sign and A&P fascia no. Not committed. |
+| 2026-11-10 | blender-builder: **Block at 35–41 Main built** (not integrated, not committed): 35–37 frame grocery with the two-tier porch (4 Tuscan columns per tier, turned balusters, 1920s bars, spindle frieze and drop fringe, stair B2), striped awning lettered "PRODUCE \| JACOB R. HALL \| GROCER" (3b), shuttered windows, bracketed eave, chimney; 39–41 brick with balcony, French windows, basement door down the areaway; windows per section E from the start (new `grocery_interior.jpg` behind the shop window and door). `block-35-41.glb` 9,022 tris, 10 materials, 2.11 MB, LIGHTMAP_SCALE 1.1243. Previews `block-35-41-*.png`. Next: reviewer. |
+| 2026-11-10 | reviewer: **Block at 35–41 Main round 1 FIXES** (previews + GLB parse, no browser). GLB 2.11 MB, 9,022 tris (cap 10k), 1 mesh, 10 materials (section-E `glass` is BLEND, alpha 0.40; extra materials accepted), 9 JPEG maps all 1024², TEXCOORD_0 + 1, lightmap 2048². Bounds match the spec (porch front Y 0, walls Y 1.98 / 1.90, steps to −0.60, paving −0.82, awning −1.31, eave 8.53, ridge 9.45, chimney 10.40, wing to 32.10). Matches the Stryker plate, 1920s card and c. 1905 photo: 4 columns per tier, balusters + bars, spindle frieze + fringe, lettered valance, shutters, 5 brackets; 39–41 balcony, shuttered windows, basement door in the areaway. Builder deviations all acceptable. **1 fix**: the stair (treads, boarded stringers, newels, handrails, landing posts, upper flight) is dark `shopfront` brown; both photos show it painted pale like the porch trim; move it to `trim` and rebake. |
+| 2026-11-10 | blender-builder: **Lovell's Restaurant windows (E) rolled out** (not integrated, not committed): every pane one `glass` face 4 cm in front of a window back; pool room upstairs, kitchen windows and cellar lights from the shared `window_backs` atlas; dining-room glass (both doors, transoms, display window, 3 south windows) shows a new ray-traced `shared/restaurant_interior.jpg` (`tools/prepare_restaurant_interior.py`: clothed tables, chairs, counter and back bar, no lettering). 4,752 -> 4,814 tris, 4 -> 7 materials, 0.77 -> 0.95 MB, LIGHTMAP_SCALE 1.2462 -> **1.2468**. Backups `assets/models/source/lovells-restaurant-before-windows.glb` / `-lightmap-before-windows.jpg`; previews `lovells-restaurant-windows-{before,after}(-detail).png`, `-after-south.png`. Next: integrator (`#bldg-68-main` intensity 1.2468 + `glass-reflect`). |

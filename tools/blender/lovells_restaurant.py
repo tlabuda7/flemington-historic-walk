@@ -22,15 +22,32 @@ Coordinates (metres, Blender Z-up):
     Z  up from the sidewalk top; walls skirt down to -0.10; shop floor 0.45
 glTF export turns -Y into +Z, which matches the A-Frame scene's "front faces +Z".
 
-Four materials only (draw calls): paint (cream clapboard texture; the front and all trim
+Seven materials (draw calls): paint (cream clapboard texture; the front and all trim
 read as smooth paint through squeezed UVs), dark (plain), signs (generated atlas: awning
-canvas, valance lettering, sign boards), stone (steps, stone course, roof, coping). The
-geometry is split into named builders so the bake can give each its UVs and tint.
+canvas, valance lettering, sign boards), stone (steps, stone course, roof, coping), and for
+the windows glass, window_back and restaurant_interior (below). The geometry is split into
+named builders so the bake can give each its UVs and tint.
+
+Windows (PLAN.md "E. Windows that don't read as flat black", 2026-11-10, same treatment as the
+Nevius Store, the Union Hotel and the Bank Building): every pane is ONE glass face (builder
+Glass -> material `glass`, transparent, see lovells_restaurant_bake.py) 4 cm in front of a
+"window back" face. Upper floor (pool room), the north wall's rear windows and the cellar
+lights use cells of the shared atlas assets/textures/shared/window_backs.jpg (blinds at varied
+heights, lace, curtains; builder WinBack); the ground-floor glass of the dining room (Ladies'
+Entrance door and transom, the centre doors and transom, the display window and the three
+south windows) uses assets/textures/shared/restaurant_interior.jpg, made by
+tools/prepare_restaurant_interior.py (builder Interior). The backs carry their atlas UVs
+(layer "UVMap") from here; the bake keeps them.
 """
 
+import json
 import math
+import random
 import bpy
 import bmesh
+from mathutils import Vector
+
+PROJECT = r"C:\Users\Tarik\AppFactory\Flemington Historic Walk"
 
 # ---------------------------------------------------------------------------
 # Dimensions (PLAN.md)
@@ -81,13 +98,15 @@ def plain(name, color, rough=0.8):
     return mat
 
 
-COLOURS = {"Paint": "#e4ddcb", "Dark": "#2b302c", "Signs": "#e8e2d2", "Stone": "#8e8c86"}
+COLOURS = {"Paint": "#e4ddcb", "Dark": "#2b302c", "Signs": "#e8e2d2", "Stone": "#8e8c86",
+           "Glass": "#1a1916", "WindowBack": "#3a332c", "Interior": "#2e2822"}
 MATS = {k: plain("LV_" + k, c) for k, c in COLOURS.items()}
 # builder -> material (the bake gives every builder its own UVs and tint)
 BUILDER_MAT = {"Trim": "Paint", "Chimney": "Paint", "Dark": "Dark", "Stone": "Stone", "Roof": "Stone",
                "Awning": "Signs", "Canvas": "Signs", "Valance": "Signs",
                "BoardR": "Signs", "BoardL": "Signs", "BoardIce": "Signs",
-               "DoorFrame": "Paint"}       # door stiles, rails, panels, transom bars: paint + dark bake tint
+               "DoorFrame": "Paint",       # door stiles, rails, panels, transom bars: paint + dark bake tint
+               "Glass": "Glass", "WinBack": "WindowBack", "Interior": "Interior"}
 
 # ---------------------------------------------------------------------------
 # Mesh builder
@@ -210,6 +229,70 @@ def band(cu, zc, r_in, r_out, a0, a1, segs):
 
 
 # ---------------------------------------------------------------------------
+# Window backs and glass
+# ---------------------------------------------------------------------------
+WB_CELLS = json.load(open(PROJECT + r"\assets\textures\shared\window_backs.json"))["cells"]
+RI_CELLS = json.load(open(PROJECT + r"\assets\textures\shared\restaurant_interior.json"))["cells"]
+GAP = 0.04             # window back this far behind the glass
+# Pool room upstairs: roller blinds at different heights, lace, a few curtains.
+UPPER_WEIGHTS = {"blind_cream_high": 2, "blind_cream_half": 3, "blind_cream_low": 1, "blind_green_high": 1,
+                 "blind_green_half": 2, "lace": 2, "lace_blind_cream": 2, "lace_blind_green": 1,
+                 "lace_full_blind_cream": 1, "curtains_beige": 1, "curtains_olive": 1, "curtains_maroon_blind": 1}
+# Kitchen / back room (north wall, rear, ground floor): plain blinds and curtains.
+KITCHEN_WEIGHTS = {"blind_cream_half": 2, "blind_cream_low": 1, "blind_green_half": 1, "curtains_beige": 1,
+                   "lace_blind_cream": 1}
+_wb_rng = random.Random(1870)
+_wb_grid = {}          # (wall, row) -> {column: cell}, so neighbours (side by side, above/below) differ
+
+
+def pick_cell(weights, wall, row, colm):
+    avoid = {_wb_grid.get((wall, row), {}).get(colm - 1), _wb_grid.get((wall, row - 1), {}).get(colm),
+             _wb_grid.get((wall, row + 1), {}).get(colm), _wb_grid.get((wall, row), {}).get(colm + 1)}
+    names = [n for n in weights if n not in avoid]
+    cell = _wb_rng.choices(names, weights=[weights[n] for n in names])[0]
+    _wb_grid.setdefault((wall, row), {})[colm] = cell
+    return cell
+
+
+def flat_face(mb, wall, pts, d, uv=None):
+    """One flat face [(u, z), ...] in a wall's plane at depth d, facing out (wall.n). With
+    uv = (U0, V0, U1, V1) its bounding box is mapped onto that atlas rectangle, left to right
+    as seen from outside."""
+    bm = mb.bm
+    f = bm.faces.new([bm.verts.new(wall.pt(u, z, d)) for u, z in pts])
+    f.normal_update()
+    if f.normal.dot(Vector((wall.n[0], wall.n[1], 0.0))) < 0:
+        f.normal_flip()
+    if uv:
+        layer = bm.loops.layers.uv.get("UVMap") or bm.loops.layers.uv.new("UVMap")
+        us, zs = [p[0] for p in pts], [p[1] for p in pts]
+        u0, u1, z0, z1 = min(us), max(us), min(zs), max(zs)
+        right = (-wall.n[1], wall.n[0])                   # viewer's right, facing the wall
+        flip = wall.t[0] * right[0] + wall.t[1] * right[1] < 0
+        U0, V0, U1, V1 = uv
+        for loop in f.loops:
+            co = loop.vert.co
+            u = (co.x - wall.p0[0]) * wall.t[0] + (co.y - wall.p0[1]) * wall.t[1]
+            t = (u - u0) / (u1 - u0)
+            t = 1 - t if flip else t
+            loop[layer].uv = (U0 + (U1 - U0) * t, V0 + (V1 - V0) * (co.z - z0) / (z1 - z0))
+
+
+def window_back(wall, pts, d, cell):
+    if cell in RI_CELLS:
+        flat_face(G["Interior"], wall, pts, d, RI_CELLS[cell]["uv"])
+    else:
+        flat_face(G["WinBack"], wall, pts, d, WB_CELLS[cell]["uv"])
+
+
+def pane(wall, glass_pts, d_glass, cell, back_pts=None):
+    """Glass face at depth d_glass (< 0: behind the wall face), window back GAP behind it
+    (back_pts: a larger outline hidden at its edges by the sash, default the glass outline)."""
+    flat_face(G["Glass"], wall, glass_pts, d_glass)
+    window_back(wall, back_pts or glass_pts, d_glass - GAP, cell)
+
+
+# ---------------------------------------------------------------------------
 # Scene setup
 # ---------------------------------------------------------------------------
 
@@ -286,19 +369,19 @@ def stone_course(wall, a, b, holes):
         ST.wbox(wall, u0, u1, z1, FL, -0.01, SC)
 
 
-def cellar_window(wall, u0, u1, z0, z1):
+def cellar_window(wall, u0, u1, z0, z1, cell="dark_room"):
     wall.cut.wbox(wall, u0, u1, z0, z1, -0.16, 0.25)
-    D.wbox(wall, u0, u1, z0, z1, -0.15, -0.13)                  # dark pane
+    pane(wall, rect(u0, u1, z0, z1), -0.11, cell)                # glass, dark cellar behind
     for k in (1, 2, 3):                                          # iron bars
         u = u0 + (u1 - u0) * k / 4
         D.wbox(wall, u - 0.012, u + 0.012, z0, z1, -0.10, -0.075)
 
 
 stone_course(FRONT_W, 0.80, HW + SC, [CELLAR_F])                 # the steps cover x -3.00 ... 0.80
-cellar_window(FRONT_W, *CELLAR_F)
+cellar_window(FRONT_W, *CELLAR_F, cell="dark_room_frame")
 stone_course(SOUTH_W, 0.0, DEPTH + SC, [(y - w / 2, y + w / 2, 0.08, 0.38) for y, w in CELLAR_S])
-for y, w in CELLAR_S:
-    cellar_window(SOUTH_W, y - w / 2, y + w / 2, 0.08, 0.38)
+for k, (y, w) in enumerate(CELLAR_S):
+    cellar_window(SOUTH_W, y - w / 2, y + w / 2, 0.08, 0.38, cell=("dark_room", "dark_room_frame")[k])
 stone_course(NORTH_W, 0.0, DEPTH + SC, [])
 stone_course(REAR_W, -HW, HW, [])
 
@@ -317,14 +400,15 @@ def shutters(wall, cu, half, z0, z1, gap=0.11, leaf=0.43, ribs=5):
             D.wbox(wall, u0 + 0.05, u1 - 0.05, zc - 0.03, zc + 0.03, 0.06, 0.075)
 
 
-def window(wall, cu, size, shut=True):
-    """2/2 double-hung side window in a shallow recess: dark glass, sash (stiles, rails,
-    meeting rail, one vertical muntin), flat 0.10 casing with a capped head, sill 0.05 proud."""
+def window(wall, cu, size, shut=True, cell="dark_room"):
+    """2/2 double-hung side window in a shallow recess: glass inside the sash with a window
+    back behind it, sash (stiles, rails, meeting rail, one vertical muntin), flat 0.10 casing
+    with a capped head, sill 0.05 proud."""
     w, z0, z1 = size
     h = w / 2
-    wall.cut.wbox(wall, cu - h, cu + h, z0, z1, -RECESS, 0.25)
-    D.wbox(wall, cu - h, cu + h, z0, z1, -0.13, -0.11)                     # glass
     s = 0.05
+    wall.cut.wbox(wall, cu - h, cu + h, z0, z1, -RECESS, 0.25)
+    pane(wall, rect(cu - h + s, cu + h - s, z0 + 0.07, z1 - 0.05), -0.11, cell, rect(cu - h, cu + h, z0, z1))
     for a, b in ((cu - h, cu - h + s), (cu + h - s, cu + h)):              # stiles
         T.wbox(wall, a, b, z0, z1, -0.14, -0.08)
     zm = (z0 + z1) / 2
@@ -341,7 +425,7 @@ def window(wall, cu, size, shut=True):
         shutters(wall, cu, h + c, z0, z1, gap=0.01, ribs=5)
 
 
-def front_window(cu):
+def front_window(cu, cell="dark_room"):
     """Upper front window: 2/2 sash 0.85 x 1.45, segmental head (rise 0.12), flat casing
     following the head, segmental moulded hood to ~5.82, sill, louvred shutters."""
     W = FRONT_W
@@ -350,7 +434,7 @@ def front_window(cu):
     zc, Rr, th = seg_geom(w, zs, rise)
     outline = [(cu - h, z0), (cu + h, z0)] + arc_pts(cu, zc, Rr, math.pi / 2 - th, math.pi / 2 + th, 6)
     W.cut.wprism(W, outline, -RECESS, 0.25)
-    D.wprism(W, outline, -0.13, -0.11)                                      # glass
+    pane(W, outline, -0.11, cell)                                           # glass + window back
     s = 0.05
     for a, b in ((cu - h, cu - h + s), (cu + h - s, cu + h)):
         T.wbox(W, a, b, z0, zs + 0.02, -0.14, -0.08)                       # stiles
@@ -388,21 +472,22 @@ def side_door(wall, cu, w, z0, z1):
 
 
 # Upper front: two shuttered windows with segmental hoods
-for x in (-WIN_X, WIN_X):
-    front_window(x)
+for k, x in enumerate((-WIN_X, WIN_X)):
+    front_window(x, cell=pick_cell(UPPER_WEIGHTS, "front", 1, k))
 
-# South wall: 4 windows upstairs, 3 + the kitchen door downstairs, all shuttered
-for y in (2.5, 6.5, 10.5, 14.5):
-    window(SOUTH_W, y, W_UP)
-for y in (2.5, 6.5, 10.5):
-    window(SOUTH_W, y, W_DN)
+# South wall: 4 windows upstairs, 3 + the kitchen door downstairs, all shuttered (the ground
+# floor ones look into the dining room)
+for k, y in enumerate((2.5, 6.5, 10.5, 14.5)):
+    window(SOUTH_W, y, W_UP, cell=pick_cell(UPPER_WEIGHTS, "south", 1, k))
+for k, y in enumerate((2.5, 6.5, 10.5)):
+    window(SOUTH_W, y, W_DN, cell="south_%d" % k)
 side_door(SOUTH_W, 15.5, 0.90, FL, FL + 2.10)
 ST.box(HW + 0.0, HW + 0.40, 14.95, 16.05, SKIRT, 0.30)                      # kitchen-door step
 
 # North wall: blank against the bank (0 ... 11.05); 2 windows per floor on the rear part, no shutters
-for y in (13.0, 16.5):
-    window(NORTH_W, y, W_UP, shut=False)
-    window(NORTH_W, y, W_DN, shut=False)
+for k, y in enumerate((13.0, 16.5)):
+    window(NORTH_W, y, W_UP, shut=False, cell=pick_cell(UPPER_WEIGHTS, "north", 1, k))
+    window(NORTH_W, y, W_DN, shut=False, cell=pick_cell(KITCHEN_WEIGHTS, "north", 0, k))
 
 # ---------------------------------------------------------------------------
 # Shop front (Lovell's photo): pilaster - Ladies' door - pier - recessed double door -
@@ -430,10 +515,10 @@ CUT.box(LD0, LD1, -0.25, RECESS, FL, TOP_SF)
 ST.box(LD0, LD1, -0.02, RECESS, FL - 0.02, FL + 0.01)                         # threshold
 
 
-def leaf(x0, x1, z0, z1, y_face, glass_from, lock=None):
+def leaf(x0, x1, z0, z1, y_face, glass_from, cell):
     """Door leaf at depth y_face (its front): stiles and rails 0.10, raised lower panel
-    (DoorFrame: painted dark green, lighter than the glass), glass (dark, slightly set back)
-    from glass_from up to the top rail."""
+    (DoorFrame: painted dark green), glass (one face, 0.025 into the leaf, the dining room
+    seen through it on a window back behind the leaf) from glass_from up to the top rail."""
     yb = y_face + 0.05
     DF.box(x0, x0 + 0.10, y_face, yb, z0, z1)
     DF.box(x1 - 0.10, x1, y_face, yb, z0, z1)
@@ -442,26 +527,28 @@ def leaf(x0, x1, z0, z1, y_face, glass_from, lock=None):
     DF.box(x0 + 0.10, x1 - 0.10, y_face, yb, z1 - 0.12, z1)                    # top rail
     DF.box(x0 + 0.10, x1 - 0.10, y_face + 0.02, yb, z0 + 0.22, glass_from - 0.12)   # panel field
     DF.box(x0 + 0.16, x1 - 0.16, y_face + 0.005, y_face + 0.02, z0 + 0.30, glass_from - 0.20)   # raised panel
-    D.box(x0 + 0.10, x1 - 0.10, y_face + 0.03, y_face + 0.04, glass_from, z1 - 0.12)   # glass
+    pane(FRONT_W, rect(x0 + 0.10, x1 - 0.10, glass_from, z1 - 0.12), -(y_face + 0.025), cell)   # glass
 
 
-leaf(LD0 + 0.03, LD1 - 0.03, FL, 2.75, 0.12, 1.45)
+leaf(LD0 + 0.03, LD1 - 0.03, FL, 2.75, 0.12, 1.45, "ladies_door")
 DF.box(LD0, LD1, 0.02, RECESS - 0.02, 2.75, 2.85)                              # transom bar
-D.box(LD0, LD1, 0.13, 0.14, 2.85, TOP_SF)                                      # transom glass
+pane(FRONT_W, rect(LD0, LD1, 2.85, TOP_SF), -0.13, "ladies_t")                 # transom glass
 DF.box(-2.19, -2.16, 0.10, 0.13, 2.85, TOP_SF)                                  # transom muntin
 
 # Centre double door: x -1.05 ... +0.65, recessed 0.45, panelled reveals
 CD0, CD1, CREC = -1.05, 0.65, 0.45
-CUT.box(CD0, CD1, -0.25, CREC, FL, TOP_SF)
+# recess cutter; 6 cm deeper at the transom so its window back sits behind the glass
+CUT.prism([(-0.25, FL), (CREC, FL), (CREC, 2.95), (CREC + 0.06, 2.95), (CREC + 0.06, TOP_SF), (-0.25, TOP_SF)],
+          CD0, CD1, axis="x")
 ST.box(CD0, CD1, -0.02, CREC, FL - 0.02, FL + 0.01)                           # recess floor / threshold
 T.box(CD0, CD0 + 0.10, CREC - 0.06, CREC, FL, TOP_SF)                          # door frame jambs
 T.box(CD1 - 0.10, CD1, CREC - 0.06, CREC, FL, TOP_SF)
 DF.box(CD0, CD1, CREC - 0.07, CREC, 2.85, 2.95)                                # transom bar
-D.box(CD0 + 0.10, CD1 - 0.10, CREC - 0.03, CREC - 0.02, 2.95, TOP_SF)          # transom glass
+pane(FRONT_W, rect(CD0 + 0.10, CD1 - 0.10, 2.95, TOP_SF), -(CREC - 0.03), "door_t")   # transom glass
 DF.box(-0.215, -0.185, CREC - 0.05, CREC - 0.03, 2.95, TOP_SF)                  # transom muntin
 xm = (CD0 + CD1) / 2
-leaf(CD0 + 0.10, xm - 0.005, FL, 2.85, CREC - 0.11, 1.15)
-leaf(xm + 0.005, CD1 - 0.10, FL, 2.85, CREC - 0.11, 1.15)
+leaf(CD0 + 0.10, xm - 0.005, FL, 2.85, CREC - 0.11, 1.15, "door_l")
+leaf(xm + 0.005, CD1 - 0.10, FL, 2.85, CREC - 0.11, 1.15, "door_r")
 for xr, sgn in ((CD0, 1), (CD1, -1)):                                          # panelled reveals
     xa, xb = sorted((xr, xr + sgn * 0.02))
     for za, zb in ((0.62, 1.30), (1.45, 3.30)):
@@ -471,7 +558,8 @@ for xr, sgn in ((CD0, 1), (CD1, -1)):                                          #
 # 1.05 - 2.95 in one pane, 2-light top row 2.95 - 3.45
 DW0, DW1 = 1.10, 2.65
 CUT.box(DW0, DW1, -0.25, 0.20, 1.05, TOP_SF)
-D.box(DW0, DW1, 0.10, 0.11, 1.05, TOP_SF)                                      # glass
+pane(FRONT_W, rect(DW0, DW1, 1.05, 2.95), -0.10, "display")                     # glass, the dining room
+pane(FRONT_W, rect(DW0, DW1, 2.95, TOP_SF), -0.10, "display_t")                 # top row
 for a, b in ((DW0, DW0 + 0.06), (DW1 - 0.06, DW1)):
     T.box(a, b, 0.04, 0.12, 1.05, TOP_SF)                                      # frame stiles
 T.box(DW0, DW1, 0.04, 0.12, 3.39, TOP_SF)                                      # head

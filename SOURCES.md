@@ -250,6 +250,9 @@ boards), `polyhaven/sidewalk_concrete.jpg` (paving) (all listed above). Both fil
 |------|--------|-----|---------|----------|
 | `trim_stone_grey.jpg` | Painted Plaster Wall (`painted_plaster_wall`, via `polyhaven/trim_paint_cream.jpg`), tinted #A39A88 | https://polyhaven.com/a/painted_plaster_wall | CC0 | mid stone-grey trim: columns, rails, spindles, fascia, eave, brackets, frames (tile 2.0 m) |
 | `signs_atlas.jpg` | none: drawn with Pillow (original work, no download); stripes resampled from the generated `bank-building/awning_stripes.jpg`; shutter leaf copied from the generated `county-hotel/signs_atlas.jpg`. Valance lettering set in Bookman Old Style Bold (`BOOKOSB.TTF`, installed with Windows; rendered into the image, no font file is shipped) | — | original work | striped awning (42 stripes over 6.40 m), valance "PRODUCE \| JACOB R. HALL \| GROCER" in two halves, dark green louvred shutter leaf, plain canvas and green (1024², one material) |
+| `grocery_interior.jpg` (+ `.json`) | none: ray-traced in Blender (numpy) by `tools/prepare_grocery_interior.py` from a box model of a c. 1920 grocery (original work, no download, no lettering) | — | original work | what is seen through the shop window and the glazed door of 35–37 (1024², material `grocery_interior`) |
+
+`assets/textures/block-35-41-lightmap.jpg` is baked in Blender by `tools/blender/block_35_41_bake.py` (original work). The 39–41 window backs and the upper floors use the shared `shared/window_backs.jpg` (listed above).
 
 `assets/textures/union-hotel-lightmap.jpg` is baked in Blender by
 `tools/blender/union_hotel_bake.py` (original work).
@@ -295,6 +298,7 @@ The kit also reuses, unchanged, `polyhaven/metal_plate_02.jpg` (iron) and
 | `shop_interior.jpg` (+ `shop_interior.json` cell layout) | none: ray-traced from a simple box model of a c. 1920 dry-goods store by `tools/prepare_shop_interior.py` (run inside Blender, numpy; original work, no download, no lettering or signs) | own work (CC0) | 1K texture of the dim store seen through the Nevius Store's shop-front glass (display windows, door glass, splayed returns, transoms): window display of folded cloth, bolts and boxes, side counters, wall shelving, centre tables, pressed-tin ceiling; `nevius-store.glb` material `NVR_ShopInterior` (window realism v2, 2026-11-10) |
 | `hotel_lobby.jpg` (+ `hotel_lobby.json` cell layout) | none: ray-traced from a simple box model of the Union Hotel's ground floor by `tools/prepare_hotel_lobby.py` (run inside Blender, numpy; original work, no download, no lettering or signs) | own work (CC0) | 1K texture of the dim c. 1920 hotel rooms seen through the Union Hotel's ground-floor windows and door fanlights: parlour (armchairs, table, piano, framed pictures, tied-back curtains), lobby (plain counter, empty pigeonhole rack, chairs), dining room (clothed tables, chairs, sideboard); `union-hotel.glb` material `UHR_Lobby` (window realism rollout, 2026-11-10) |
 | `bank_hall.jpg` (+ `bank_hall.json` cell layout) | none: ray-traced from a simple box model of the Bank Building's ground floor by `tools/prepare_bank_hall.py` (run inside Blender, numpy; original work, no download, no lettering or signs) | own work (CC0) | 1K texture of what shows through the Bank Building's (56–66 Main) ground-floor glass c. 1920, one perspective cell per pane: the Flemington National Bank's banking room (counter with grille, desks, vault door, back room) behind the bank window, door and the 11 Bloomfield Ave windows; the four shops (men's furnishings, drugs, boots & shoes, confectionery) behind the display windows, transoms and door lights. Used by `bank-building.glb` (material `BKR_BankHall`). |
+| `restaurant_interior.jpg` (+ `restaurant_interior.json` cell layout) | none: ray-traced from a simple box model of Lovell's Restaurant's dining room by `tools/prepare_restaurant_interior.py` (run inside Blender, numpy; original work, no download, no lettering or signs) | own work (CC0) | 1K texture of what shows through Lovell's Restaurant's (68 Main) ground-floor glass c. 1920, one perspective cell per pane: plain dining room with small clothed tables and chairs, a panelled counter with stools and a back bar of plain jars and crockery, a display platform with jars and covered cake stands, dark kitchen doorway. Used by `lovells-restaurant.glb` (material `restaurant_interior`). |
 
 ## Sky (`assets/textures/sky/`)
 
@@ -427,6 +431,19 @@ restrictions on Sanborn maps published before 1926.
 | `flemington-1921-sanborn-sheet-03.jpg` | 3 | Main Street from Court St. south to William St., continuing the Union Hotel's block |
 
 Full-resolution JPEGs (6450 × 7650 px) from the Library of Congress image service.
+
+Sanborn Fire Insurance Map from Flemington, Hunterdon County, New Jersey, November 1910
+(8 sheets), Sanborn Map Company. Library of Congress, Geography and Map Division,
+https://www.loc.gov/item/sanborn05479_005/ — public domain (published 1910; the Library of
+Congress lists no known restrictions on Sanborn maps published before 1926). Fetched 2026-11-10
+from the LoC IIIF image service (`…g3814fm_g054791910:05479_1910-000N/full/pct:100/0/default.jpg`).
+Uses old house numbers (5xx); same scale as 1921 (50 ft ≈ 295 px), but its own sheet layout, so the
+1921 pixel → scene formulas do **not** apply. Comparison notes: `research/sanborn-and-today-findings.md`.
+
+| File | Sheet | Covers |
+|------|-------|--------|
+| `flemington-1910-sanborn-sheet-04.jpg` | 4 | East side of Main St (Main at the left edge) from Pennsylvania Ave. south past Bloomfield Ave. and the Union House to Union (Higgins) Ave.: old nos. 539–564 (today's 24–106 range) |
+| `flemington-1910-sanborn-sheet-05.jpg` | 5 | West side of Main St (Main at the right edge) from Capner St. south past Court St.: old nos. 510–525 (Hotel Flemington, 27–41, County Hotel, 57, Wurts office) |
 
 **Elevation (distant landscape).** `landscape-dem.png` (16-bit, elevation m × 10, 640 × 480, row 0
 = north) + `landscape-dem.json` (bounds W −75.04, S 40.377, E −74.68, N 40.647; transform; horizon

@@ -29,6 +29,18 @@ Steps (pattern: house_65_main_bake.py):
     narrow gap, chimney soot, and the roof / chimney tints as a colour attribute).
  6. Fill empty lightmap pixels from their neighbours, warm the shade, save the sRGB JPEG,
     print LIGHTMAP_SCALE, export the GLB (TEXCOORD_0 + TEXCOORD_1).
+
+Windows (PLAN.md "E. Windows that don't read as flat black", 2026-11-10; same as the Nevius
+Store, the Union Hotel and the Bank Building): every pane is a single glass face in its own
+material named `glass` (warm grey dust tint GLASS_RGB, alpha GLASS_ALPHA, roughness 0.05, alpha
+blend, single-sided) 4 cm in front of a window back: `window_back` (shared atlas
+assets/textures/shared/window_backs.jpg) upstairs, on the north wall's rear windows and the
+cellar lights; `restaurant_interior` (assets/textures/shared/restaurant_interior.jpg,
+tools/prepare_restaurant_interior.py) behind the ground-floor glass of the dining room. Their
+atlas UVs come from lovells_restaurant.py. The backs are lightmapped like everything else; the
+glass keeps Lightmap UVs (squeezed to almost nothing) but the scene draws it WITHOUT the
+lightmap, with a sky reflection (`glass-reflect`). During the bake the glass is fully
+transparent so the backs behind it get their light, and the hidden-face pass looks through it.
 """
 
 import math
@@ -48,6 +60,10 @@ TO_SUN = (0.40, -0.90, 0.36)          # east-side building (front faces west)
 COLL, RIG = "LovellsRestaurant", "LV_BakeRig"
 CLAP_TILE = 1.6                       # 9 boards per tile -> 0.18 m exposure
 TRIM_V = 0.937                        # flattest board row (tools/prepare_house_65_textures.py)
+SHARED = PROJECT + r"\assets\textures\shared" + "\\"
+GLASS_ALPHA = 0.40
+GLASS_RGB = (0x1A, 0x19, 0x16)       # faint warm grey dust tint (as the Nevius Store, Union Hotel, bank)
+ATLAS_KINDS = ("WinBack", "Interior")  # keep the atlas UVs made by lovells_restaurant.py
 
 # 1. Geometry -----------------------------------------------------------------
 exec(open(PROJECT + r"\tools\blender\lovells_restaurant.py").read())
@@ -74,8 +90,12 @@ LOOK = {
     "Dark":  (None, 1.0, 0.3, tuple(srgb_to_lin(c) for c in (0x2B, 0x30, 0x2C)), None),
     "Signs": (TX + r"lovells-restaurant\signs_atlas.jpg", 1.0, 0.85, None, None),
     "Stone": (TX + r"lovells-restaurant\stone_bluestone.jpg", 2.0, 0.9, None, None),   # review round 1: lighter
+    "Glass": (None, 1.0, 0.05, tuple(srgb_to_lin(c) for c in GLASS_RGB), None),
+    "WindowBack": (SHARED + "window_backs.jpg", 1.0, 0.9, None, None),
+    "Interior": (SHARED + "restaurant_interior.jpg", 1.0, 0.9, None, None),
 }
-FINAL_NAMES = {"Paint": "paint", "Dark": "dark", "Signs": "signs", "Stone": "stone"}
+FINAL_NAMES = {"Paint": "paint", "Dark": "dark", "Signs": "signs", "Stone": "stone",
+               "Glass": "glass", "WindowBack": "window_back", "Interior": "restaurant_interior"}
 
 
 def textured_material(name, image_file, roughness, colour, factor):
@@ -107,6 +127,13 @@ def textured_material(name, image_file, roughness, colour, factor):
             nt.links.new(tex.outputs["Color"], bsdf.inputs["Base Color"])
     else:
         bsdf.inputs["Base Color"].default_value = (*colour, 1)
+    if name == "glass":   # transparent, drawn with a sky reflection by the scene
+        bsdf.inputs["Alpha"].default_value = GLASS_ALPHA
+        mat.use_backface_culling = True
+        if hasattr(mat, "surface_render_method"):
+            mat.surface_render_method = "BLENDED"
+        elif hasattr(mat, "blend_method"):
+            mat.blend_method = "BLEND"
     return mat
 
 
@@ -148,6 +175,9 @@ def set_uvs(obj, kind):
     Awning (canvas box, along the slope), Canvas (spare canvas), sign boards and the valance
     (lettered front face fitted to its atlas box, other faces on the box's edge colour)."""
     mesh = obj.data
+    if kind in ATLAS_KINDS:              # window backs keep their atlas UVs
+        assert mesh.uv_layers.get("UVMap"), kind
+        return
     while mesh.uv_layers:
         mesh.uv_layers.remove(mesh.uv_layers[0])
     uv = mesh.uv_layers.new(name="UVMap")
@@ -281,7 +311,11 @@ def remove_hidden_faces(obj, rays=120):
     bm = bmesh.new()
     bm.from_mesh(obj.data)
     bm.normal_update()
-    bvh = BVHTree.FromBMesh(bm)
+    # the glass does not block the view: rays pass it to reach (or leave) the window backs
+    glass_i = [i for i, m in enumerate(obj.data.materials) if m.name == "glass"]
+    bm.verts.index_update()
+    bvh = BVHTree.FromPolygons([v.co for v in bm.verts],
+                               [[v.index for v in f.verts] for f in bm.faces if f.material_index not in glass_i])
     dirs = fibonacci(rays)
     face_tris = {}
     for t in bm.calc_loop_triangles():
@@ -333,10 +367,9 @@ bpy.ops.object.mode_set(mode="OBJECT")
 # downward, north, rear and roof faces.
 lm_data = mesh.uv_layers["Lightmap"].data
 mat_names = [m.name for m in mesh.materials]
+LM_SHRINK = {"dark": 0.6, "glass": 0.03, "window_back": 0.6, "restaurant_interior": 0.8}
 for p in mesh.polygons:
-    f = 1.0
-    if mat_names[p.material_index] == "dark":
-        f *= 0.6
+    f = LM_SHRINK.get(mat_names[p.material_index], 1.0)
     if p.normal.z < -0.5:
         f *= 0.6                                  # soffits, awning underside
     if p.normal.x < -0.7:
@@ -485,6 +518,8 @@ def point_materials_at(img):
 for o in bpy.context.view_layer.objects:
     o.select_set(o == h_obj)
 bpy.context.view_layer.objects.active = h_obj
+glass_alpha = next(n for n in FINAL["Glass"].node_tree.nodes if n.type == "BSDF_PRINCIPLED").inputs["Alpha"]
+glass_alpha.default_value = 0.0             # light passes the panes to the window backs
 try:
     light_img = bake_target("LV_Light", True)
     point_materials_at(light_img)
@@ -627,6 +662,7 @@ try:
         mesh.materials[i] = mat
     print("grime baked")
 finally:
+    glass_alpha.default_value = GLASS_ALPHA
     for name, state in render_state.items():
         if bpy.data.collections.get(name):
             bpy.data.collections[name].hide_render = state
