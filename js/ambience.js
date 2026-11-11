@@ -31,7 +31,9 @@
 (function () {
   const DIR = 'assets/audio/';
   const FILES = [
-    'amb-town-bed', 'amb-walla',
+    // 'amb-town-bed' (BigSoundBank "Wind in a Tree") removed 2026-11-10: owner found the
+    // wind noise unpleasant. The bed Audio object still exists but never gets a clip.
+    'amb-walla',
     'bird-robin', 'bird-cardinal', 'bird-titmouse', 'bird-catbird',
     'horse-carriage', 'horse-buckboard', 'horse-neigh', 'horse-snort',
     'modelt-run', 'modelt-stop', 'horn-oogah',

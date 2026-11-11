@@ -359,7 +359,7 @@ CC0 / public-domain alternative turns up.
 
 | File | Source | URL | Licence | Used for |
 |------|--------|-----|---------|----------|
-| `amb-town-bed.ogg` | BigSoundBank #0659 "Wind in a Tree" (J. Sardin), 42–107 s, loop | https://bigsoundbank.com/wind-in-a-tree-s0659.html (file https://bigsoundbank.com/UPLOAD/ogg/0659.ogg) | CC0 | global background bed, 65 s loop. Chosen over the spec's #1911 "Countryside #3": that recording (France, May 2020) has loud field crickets and dense European birdsong throughout |
+| `amb-town-bed.ogg` | BigSoundBank #0659 "Wind in a Tree" (J. Sardin), 42–107 s, loop | https://bigsoundbank.com/wind-in-a-tree-s0659.html (file https://bigsoundbank.com/UPLOAD/ogg/0659.ogg) | CC0 | **NOT USED since 2026-11-10 (owner: wind noise; removed from js/ambience.js).** Was: global background bed, 65 s loop. Chosen over the spec's #1911 "Countryside #3": that recording (France, May 2020) has loud field crickets and dense European birdsong throughout |
 | `amb-walla.ogg` | Freesound 817131 "Crowd Walla" by craigsmith, 10–50 s, loop | https://freesound.org/s/817131/ (file https://cdn.freesound.org/previews/817/817131_2524442-hq.mp3) | CC0 (see note above) | crowd murmur at the hotel veranda and courthouse steps |
 | `bird-robin.ogg` | "American Robin" by G. McGrane (North Carolina, 2007), 31.5–41.5 s | https://commons.wikimedia.org/wiki/File:American_Robin.ogg | Public domain | birdsong one-shot |
 | `bird-cardinal.ogg` | "Northern Cardinal" by G. McGrane (FL / NC), 100–110 s | https://commons.wikimedia.org/wiki/File:Northern_Cardinal.ogg | Public domain | birdsong one-shot |
