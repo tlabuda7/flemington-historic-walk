@@ -453,3 +453,18 @@ fetched 2026-11-04, no login. Licence: **public domain** (U.S. Government work);
 "U.S. Geological Survey, 3D Elevation Program" (https://www.usgs.gov/information-policies-and-instructions/copyrights-and-credits).
 Made by `tools/prepare_landscape_dem.py`; the raw GeoTIFF is not kept. Street axis/origin from
 OpenStreetMap (© OpenStreetMap contributors, ODbL; two coordinates and a bearing only, no map data stored).
+
+### Masonic Hall / Hunterdon County National Bank, 90–94 Main St (`assets/textures/masonic-hall/`)
+
+Nothing new downloaded. Reused unchanged: `polyhaven/red_brick.jpg` (brick), `county-offices/trim_paint_drab.jpg` (cornices),
+`polyhaven/trim_paint_cream.jpg` (sash, modillions, brackets), `county-offices/door_varnish_dark.jpg` (doors, bars),
+`county-offices/roof_tin_redbrown.jpg` (roof), `shared/window_backs.jpg` and `shared/bank_hall.jpg` (window backs) (all listed above).
+All files below are made by `tools/prepare_masonic_hall_textures.py`.
+
+| File | Source | URL | Licence | Used for |
+|------|--------|-----|---------|----------|
+| `stone_grey.jpg` | recolour of `county-offices/stone_buff.jpg` (Poly Haven, CC0, see above): desaturated, pale grey ashlar ~#C4BFB4 | see `county-offices/stone_buff.jpg` above | CC0 | sills, plinths, frieze and cornice of the 1921 front, wheel window, 94 band and steps (tile 1.6 m) |
+| `stone_rusticated.jpg` | `stone_grey.jpg` above with horizontal V-channels every 0.40 m drawn with Pillow | see above | CC0 | rusticated piers of the 1921 bank front (tile 1.6 m) |
+| `inscription_mask.png` | none: drawn with Pillow (original work). Lettering set in Times New Roman Bold (`timesbd.ttf`, installed with Windows; rendered into the image, no font file is shipped) | — | original work | bake input only (not exported): the carved "THE / HUNTERDON / COUNTY / NATIONAL / BANK" darkened into the lightmap on the corner-pier tablet |
+
+`assets/textures/masonic-hall-lightmap.jpg` is baked in Blender by `tools/blender/masonic_hall_bake.py` (original work).

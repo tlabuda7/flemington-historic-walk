@@ -456,8 +456,12 @@
     <a-entity id="bldg-82-84-main" position="10.3 0.15 9.09" rotation="0 -90 0"
       gltf-model="url(assets/models/odd-fellows-hall.glb)"
       baked-lighting="lightmap: assets/textures/odd-fellows-hall-lightmap.jpg; intensity: 1.2485"></a-entity>
-    <a-entity id="bldg-90-94-main" position="10.3 0 29.1" rotation="0 -90 0"
-      building="width: 20.8; height: 11.5; depth: 15; stories: 3; color: #8a4a38; wall: brick; photo: "></a-entity>
+    <!-- Masonic Hall / Hunterdon County National Bank (90–94 Main), Sept 1921 state:
+         tools/blender/masonic_hall.py + masonic_hall_bake.py. Position = centre of the stone front face. -->
+    <a-entity id="bldg-90-94-main" position="10.00 0.15 30.92" rotation="0 -90 0"
+      gltf-model="url(assets/models/masonic-hall.glb)"
+      baked-lighting="lightmap: assets/textures/masonic-hall-lightmap.jpg; intensity: 1.1751"
+      glass-reflect></a-entity>
     <a-entity id="bldg-96-98-main" position="10.3 0 42.8" rotation="0 -90 0"
       building="width: 4.8; height: 7; depth: 12; stories: 2; color: #c2ad84; wall: wood; photo: "></a-entity>
     <a-entity id="bldg-100-102-main" position="10.3 0 50.05" rotation="0 -90 0"
