@@ -370,7 +370,7 @@ AFRAME.registerComponent('locomotion', {
     speed:     { default: 2.0 },   // metres per second (a brisk stroll)
     snapAngle: { default: 45 },    // degrees per snap turn
     deadzone:  { default: 0.15 },  // ignore tiny thumbstick drift
-    boundsX:   { default: 10.2 },  // stay on the street and sidewalks
+    boundsX:   { default: 10.2 },  // stay on the street and sidewalks (see STREET_GROUND.limits)
     minZ:      { default: -160 },  // north end of the walkable street
     maxZ:      { default: 60 }     // south end of the walkable street
   },
@@ -479,8 +479,11 @@ AFRAME.registerComponent('locomotion', {
     pos.x += (x * cos - z * sin) * step;
     pos.z += (-x * sin - z * cos) * step;
 
-    // Simple boundaries instead of full collision detection.
-    pos.x = THREE.MathUtils.clamp(pos.x, -this.data.boundsX, this.data.boundsX);
+    // Simple boundaries instead of full collision detection. The street is not the same
+    // width everywhere (it narrows north of Bloomfield Ave and south of Court St), so
+    // js/ground.js gives the limits for each stretch; boundsX is the fallback.
+    const lim = window.STREET_GROUND ? window.STREET_GROUND.limits(pos.z) : null;
+    pos.x = THREE.MathUtils.clamp(pos.x, lim ? lim.min : -this.data.boundsX, lim ? lim.max : this.data.boundsX);
     pos.z = THREE.MathUtils.clamp(pos.z, this.data.minZ, this.data.maxZ);
   },
 

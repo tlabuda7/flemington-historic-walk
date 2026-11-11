@@ -304,6 +304,23 @@ The kit also reuses, unchanged, `polyhaven/metal_plate_02.jpg` (iron) and
 | `bank_hall.jpg` (+ `bank_hall.json` cell layout) | none: ray-traced from a simple box model of the Bank Building's ground floor by `tools/prepare_bank_hall.py` (run inside Blender, numpy; original work, no download, no lettering or signs) | own work (CC0) | 1K texture of what shows through the Bank Building's (56–66 Main) ground-floor glass c. 1920, one perspective cell per pane: the Flemington National Bank's banking room (counter with grille, desks, vault door, back room) behind the bank window, door and the 11 Bloomfield Ave windows; the four shops (men's furnishings, drugs, boots & shoes, confectionery) behind the display windows, transoms and door lights. Used by `bank-building.glb` (material `BKR_BankHall`). |
 | `restaurant_interior.jpg` (+ `restaurant_interior.json` cell layout) | none: ray-traced from a simple box model of Lovell's Restaurant's dining room by `tools/prepare_restaurant_interior.py` (run inside Blender, numpy; original work, no download, no lettering or signs) | own work (CC0) | 1K texture of what shows through Lovell's Restaurant's (68 Main) ground-floor glass c. 1920, one perspective cell per pane: plain dining room with small clothed tables and chairs, a panelled counter with stools and a back bar of plain jars and crockery, a display platform with jars and covered cake stands, dark kitchen doorway. Used by `lovells-restaurant.glb` (material `restaurant_interior`). |
 
+### Street ground (`assets/textures/ground/`)
+
+Road, sidewalk and curb maps for the `street-ground` component (`js/ground.js`), all made by
+`tools/prepare_ground_textures.py` (Pillow, fixed random seed) from Poly Haven CC0 colour maps.
+One new download (2026-11-11): `assets/textures/polyhaven/gravel_ground_01.jpg`, 1K colour
+(Diffuse) map, unmodified, used only as the source for the road.
+
+| File | Made from | URL | Licence | Used for |
+|------|-----------|-----|---------|----------|
+| `polyhaven/gravel_ground_01.jpg` | Gravel Ground 01 (`gravel_ground_01`), 3.0 m, 1K Diffuse, unmodified | https://polyhaven.com/a/gravel_ground_01 | CC0 | source only (not loaded by the scene) |
+| `road_oiled_earth.jpg` | `gravel_ground_01`, darkened and greyed to about #5C574F, plus generated paler wheel / tyre tracks | https://polyhaven.com/a/gravel_ground_01 | CC0 | road: oiled earth-and-stone (tile 6.4 m, U = 0 on the crown) |
+| `walk_bluestone_flags.jpg` | `lovells-restaurant/stone_bluestone.jpg` (Concrete Floor Worn 001), cut into 1.8 x 1.2 m flags with dark joints, tinted blue-grey #686D72 | https://polyhaven.com/a/concrete_floor_worn_001 | CC0 | bluestone flag walks (tile 3.6 m east side; stretched to 2.5 x 1.5 m flags at the County Hotel) |
+| `walk_brick.jpg` | `polyhaven/red_brick.jpg` (Red Brick), darkened and dirtied, 512 px | https://polyhaven.com/a/red_brick | CC0 | brick crossing at the Palace alley, brick patch by 38-40 Main (tile 1 m) |
+| `curb_stone.jpg` | `street-props/granite_dressed_light.jpg` (Granite Tile 03), greyed, with slab joints every 1.9-2.2 m, 1024 x 64 px | https://polyhaven.com/a/granite_tile_03 | CC0 | stone curbs (8 m per repeat) |
+| `ground_detail.jpg` | `gravel_ground_01`, greyscale, very pale, 256 px | https://polyhaven.com/a/gravel_ground_01 | CC0 | light mottling under the vertex colours of grass strips and earth lanes |
+| `street_decals.png` | drawn by the script (no source image), 512 px RGBA | — | own work | horse droppings, paper scraps, curved wheel tracks at the junctions |
+
 ## Sky (`assets/textures/sky/`)
 
 Made by `tools/prepare_sky.py` from the 2K .hdr (not committed): exposure 1.9,
@@ -472,3 +489,16 @@ All files below are made by `tools/prepare_masonic_hall_textures.py`.
 | `inscription_mask.png` | none: drawn with Pillow (original work). Lettering set in Times New Roman Bold (`timesbd.ttf`, installed with Windows; rendered into the image, no font file is shipped) | — | original work | bake input only (not exported): the carved "THE / HUNTERDON / COUNTY / NATIONAL / BANK" darkened into the lightmap on the corner-pier tablet |
 
 `assets/textures/masonic-hall-lightmap.jpg` is baked in Blender by `tools/blender/masonic_hall_bake.py` (original work).
+
+### Democrat building, 96–98 Main St (`assets/textures/democrat-building/`)
+
+Nothing new downloaded. Reused unchanged: `polyhaven/red_brick.jpg` (brick), `polyhaven/door_paint_green.jpg` (shop front, doors,
+cornices, darkened by a colour factor), `polyhaven/trim_paint_cream.jpg` (sash, hood edges, sills, News trim),
+`house-65-main/clapboard_cream.jpg` (News lean-to, darkened by a colour factor), `county-offices/roof_tin_redbrown.jpg` (roofs),
+`shared/window_backs.jpg` (window backs) (all listed above).
+
+| File | Source | URL | Licence | Used for |
+|------|--------|-----|---------|----------|
+| `signs.jpg` | none: drawn by `tools/prepare_democrat_building_textures.py` with Pillow (original work, no download). Lettering set in Rockwell Bold (`ROCKB.TTF`, installed with Windows / Office; rendered into the image and condensed sideways, no font file is shipped) | — | original work | face of the white "DEMOCRAT" sign board over the north door (1024 × 256, one material) |
+
+`assets/textures/democrat-building-lightmap.jpg` is baked in Blender by `tools/blender/democrat_building_bake.py` (original work).

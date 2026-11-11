@@ -13,6 +13,7 @@
   <!-- Our own code: shared components, the building kit, the modelled landmarks,
        the townspeople you can talk to, and the street sounds. -->
   <script src="js/components.js"></script>
+  <script src="js/ground.js"></script>
   <script src="js/kit.js"></script>
   <script src="js/landmarks.js"></script>
   <script src="js/people.js"></script>
@@ -107,10 +108,13 @@
          LAYOUT (from the 1921 Sanborn map, sheets 2 and 3)
          1 scene unit = 1 metre. Main Street runs north-south along Z (north = -Z).
          z = 0 is the north side of Court Street.
-         Main Street is 66 ft (20.6 m) between property lines: x = -10.3 to +10.3.
+         Main Street is 66 ft (20.6 m) between property lines from Bloomfield Ave to Court St:
            Road:       x = -6.4 to 6.4
            Sidewalks:  x = ±6.4 to ±10.3
-         Cross streets: Bloomfield Ave (east, z -89.8 to -77.6), Court St (west, z 0 to 12.2).
+         North of Bloomfield Ave the east curb slants in (road 12.8 m at Bloomfield, 9.9 m at
+         z -180); south of Court St the street is 53 ft and the west curb stands at x -4.5.
+         Cross streets: Bloomfield Ave (east, z -89.9 to -77.3), Court St (west, z 0 to 10.4),
+         Higgins Ave (east, z 62.1 to 68.7). Outlines: js/ground.js; PLAN.md pass 2, section 9.
          ============================================================ -->
 
     <!-- Ground beyond the street (yards, lots): a 335 m disc that follows the player rig
@@ -127,24 +131,14 @@
     <a-entity id="landscape" position="0 0 0" rotation="0 0 0"
       gltf-model="url(assets/models/landscape.glb)" far-landscape="factor: 0.85"></a-entity>
 
-    <!-- Paved roads: pale weathered macadam, as in the 1920s postcards.
-         Texture tiles every 3 m (repeat = size / 3). -->
-    <a-plane id="road" rotation="-90 0 0" position="0 0.01 -50" width="12.8" height="260"
-      material="src: assets/textures/polyhaven/road_macadam.jpg; repeat: 4.3 87; roughness: 1"></a-plane>
-    <a-plane id="bloomfield-ave" rotation="-90 0 0" position="35.15 0.01 -83.7" width="50" height="12.2"
-      material="src: assets/textures/polyhaven/road_macadam.jpg; repeat: 16.7 4; roughness: 1"></a-plane>
-    <a-plane id="court-st" rotation="-90 0 0" position="-35.15 0.01 6.1" width="50" height="12.2"
-      material="src: assets/textures/polyhaven/road_macadam.jpg; repeat: 16.7 4; roughness: 1"></a-plane>
-
-    <!-- Concrete sidewalks (15 cm high, scored into 1.5 m slabs) with stone curbs. -->
-    <a-box id="sidewalk-west" position="-8.35 0.075 -50" width="3.9" height="0.15" depth="260"
-      material="src: assets/textures/polyhaven/sidewalk_concrete.jpg; repeat: 1.3 87; roughness: 1"></a-box>
-    <a-box id="sidewalk-east" position="8.35 0.075 -50" width="3.9" height="0.15" depth="260"
-      material="src: assets/textures/polyhaven/sidewalk_concrete.jpg; repeat: 1.3 87; roughness: 1"></a-box>
-    <a-box id="curb-west" position="-6.52 0.08 -50" width="0.24" height="0.16" depth="260"
-      material="color: #a49d92; roughness: 1"></a-box>
-    <a-box id="curb-east" position="6.52 0.08 -50" width="0.24" height="0.16" depth="260"
-      material="color: #a49d92; roughness: 1"></a-box>
+    <!-- Road, sidewalks, curbs, grass strips and lane mouths: `street-ground` (js/ground.js)
+         builds them from the 1921 Sanborn outlines as one mesh per texture (7 draw calls).
+         Road = oiled earth-and-stone with wheel tracks, crowned 10 cm; walks = concrete, or
+         bluestone flags (east side north of the Rea Building; west side at 35-41 Main and the
+         County Hotel), top at y 0.15; stone curbs (top 0.16) dropped at the lane mouths; a few
+         horse droppings and paper scraps. Textures: tools/prepare_ground_textures.py
+         -> assets/textures/ground/. -->
+    <a-entity id="street-ground" street-ground></a-entity>
 
     <!-- Lawns in front of the set-back buildings on the west side, with front paths. -->
     <a-plane id="lawn-west" rotation="-90 0 0" position="-27.65 0.015 -38.7" width="34.7" height="77.4"
@@ -154,10 +148,12 @@
          County Offices: three 1.6 m walks from the sidewalk to its three stoops (they run
          0.1 m under the stoop feet at x -15.3 so no gap shows). Then 65 Main (1.3 m walk from
          the sidewalk to under its porch steps) and the
-         Wurts law office (1.2 m walk from the sidewalk to 0.1 m under its front step). -->
+         Wurts law office (1.2 m walk from the sidewalk to 0.1 m under its front step).
+         Last two: guessed 1.2 m paths across the front yards of 91-93 and 95-97 Main. -->
     <a-entity id="paths" ground-patches="y: 0.03; color: #b9b0a0;
       rects: -12.85 -24.07 5.1 1.6, -12.85 -27.87 5.1 1.6, -12.85 -31.67 5.1 1.6,
-             -12.63 -51.19 4.75 1.3, -12.5 -68.69 4.5 1.2"></a-entity>
+             -12.63 -51.19 4.75 1.3, -12.5 -68.69 4.5 1.2,
+             -10.55 38.4 5.3 1.2, -10.45 52.8 5.1 1.2"></a-entity>
 
     <!-- ============================================================
          STARTER BLOCK: Bloomfield Ave to Court St
@@ -303,8 +299,10 @@
          (data-span) as one line mesh: 4 draw calls in total. Lit by the scene lights.
          ============================================================ -->
     <a-entity id="street-props" street-props="src: url(assets/models/street-props.glb)">
+      <!-- Poles stand 0.5 m behind the road edge. The street narrows south of Court St (W0)
+           and north of Bloomfield Ave (E5-E7), so those four stand further in. -->
       <!-- Poles, west curb (S to N); W1, W2, W3, W5 carry a bracket lamp -->
-      <a-entity id="pole-W0" data-prop="pole"           position="-6.9 0.15 28"    rotation="0 90 0"></a-entity>
+      <a-entity id="pole-W0" data-prop="pole"           position="-4.95 0.15 28.5" rotation="0 90 0"></a-entity>
       <a-entity id="pole-W1" data-prop="pole pole_lamp" position="-6.9 0.15 -0.6"  rotation="0 90 0"></a-entity>
       <a-entity id="pole-W2" data-prop="pole pole_lamp" position="-6.9 0.15 -21.5" rotation="0 90 0"></a-entity>
       <a-entity id="pole-W3" data-prop="pole pole_lamp" position="-6.9 0.15 -55"   rotation="0 90 0"></a-entity>
@@ -317,9 +315,9 @@
       <a-entity id="pole-E2" data-prop="pole"           position="6.9 0.15 -15.5"  rotation="0 -90 0"></a-entity>
       <a-entity id="pole-E3" data-prop="pole pole_lamp" position="6.9 0.15 -46.5"  rotation="0 -90 0"></a-entity>
       <a-entity id="pole-E4" data-prop="pole"           position="6.9 0.15 -76.5"  rotation="0 -90 0"></a-entity>
-      <a-entity id="pole-E5" data-prop="pole"           position="6.9 0.15 -92.5"  rotation="0 -90 0"></a-entity>
-      <a-entity id="pole-E6" data-prop="pole pole_lamp" position="6.9 0.15 -124"   rotation="0 -90 0"></a-entity>
-      <a-entity id="pole-E7" data-prop="pole"           position="6.9 0.15 -156"   rotation="0 -90 0"></a-entity>
+      <a-entity id="pole-E5" data-prop="pole"           position="6.8 0.15 -92.5"  rotation="0 -90 0"></a-entity>
+      <a-entity id="pole-E6" data-prop="pole pole_lamp" position="5.75 0.15 -126"  rotation="0 -90 0"></a-entity>
+      <a-entity id="pole-E7" data-prop="pole"           position="4.95 0.15 -150.5" rotation="0 -90 0"></a-entity>
       <!-- Arc lamps (1910 colour card), hook on a span wire between two poles; globe bottom ~7.3 m -->
       <a-entity id="arc-A1" data-prop="arc_lamp" data-span="pole-W1 pole-E1" position="0 8.35 1.2"></a-entity>
       <a-entity id="arc-A2" data-prop="arc_lamp" data-span="pole-W4 pole-E4" position="0 8.35 -81.25"></a-entity>
@@ -473,20 +471,34 @@
       gltf-model="url(assets/models/masonic-hall.glb)"
       baked-lighting="lightmap: assets/textures/masonic-hall-lightmap.jpg; intensity: 1.1751"
       glass-reflect></a-entity>
-    <a-entity id="bldg-96-98-main" position="10.3 0 42.8" rotation="0 -90 0"
-      building="width: 4.8; height: 7; depth: 12; stories: 2; color: #c2ad84; wall: wood; photo: "></a-entity>
+    <!-- Democrat building (96–98 Main, Hopewell 1875) with the frame "News" lean-to:
+         tools/blender/democrat_building.py + democrat_building_bake.py. -->
+    <a-entity id="bldg-96-98-main" position="10.08 0.15 43.85" rotation="0 -90 0"
+      gltf-model="url(assets/models/democrat-building.glb)"
+      baked-lighting="lightmap: assets/textures/democrat-building-lightmap.jpg; intensity: 1.1571"
+      glass-reflect></a-entity>
     <a-entity id="bldg-100-102-main" position="10.3 0 50.05" rotation="0 -90 0"
       building="width: 9.7; height: 10; depth: 14; stories: 3; color: #a0604a; wall: brick; photo: "></a-entity>
     <a-entity id="bldg-106-main" position="10.3 0 57.65" rotation="0 -90 0"
       building="width: 5.5; height: 10; depth: 12; stories: 3; color: #b8a07a; wall: wood; photo: "></a-entity>
 
-    <!-- South of Court St, west side: houses (positions and styles are guesses) -->
-    <a-entity id="house-w-s1" position="-16 0 22" rotation="0 90 0"
-      kit-building="type: house; width: 9; depth: 11; stories: 2; color: #e8e1cf"></a-entity>
-    <a-entity id="house-w-s2" position="-16 0 38" rotation="0 90 0"
-      kit-building="type: house; width: 8; depth: 11; stories: 2; color: #d9cdb0; trim: #f3ecdc"></a-entity>
-    <a-entity id="house-w-s3" position="-16 0 54" rotation="0 90 0"
-      kit-building="type: house; width: 9; depth: 12; stories: 2; color: #e6dfd0; porchWidth: 6; porchX: -1.2"></a-entity>
+    <!-- South of Court St, west side: four map-sized placeholder boxes on the 53 ft street
+         line (1921 Sanborn sheet 3; PLAN.md pass 2, section 9.3). 79 "Hardware & Paints"
+         (3-storey frame) closes the Court St corner; 83-87 "Gro." (3-storey brick) has a flat
+         porch roof on posts over the walk; 91-93 (2-storey frame) and 95-97 (2-storey brick)
+         stand back behind small front yards. Specs for the real buildings come later. -->
+    <a-entity id="bldg-79-main" position="-8.13 0 14.2" rotation="0 90 0"
+      building="width: 7.6; height: 9.75; depth: 25; stories: 3; color: #e8e1cf; wall: wood; photo: "></a-entity>
+    <a-entity id="bldg-83-87-main" position="-8.67 0 23.1" rotation="0 90 0"
+      building="width: 6.6; height: 9.75; depth: 17; stories: 3; color: #8e4a36; wall: brick; photo: "></a-entity>
+    <!-- 83-87's porch: roof slab from the front (x -8.67) to the curb, three posts at x -4.65. -->
+    <a-entity id="bldg-83-87-porch" box-group="color: #e6dfd0;
+      boxes: -6.6 3.3 23.1 4.14 0.2 6.6, -4.65 1.675 20.0 0.14 3.05 0.14,
+             -4.65 1.675 23.1 0.14 3.05 0.14, -4.65 1.675 26.2 0.14 3.05 0.14"></a-entity>
+    <a-entity id="bldg-91-93-main" position="-13.2 0 38.4" rotation="0 90 0"
+      building="width: 8.2; height: 6.5; depth: 9; stories: 2; color: #d9cdb0; wall: wood; photo: "></a-entity>
+    <a-entity id="bldg-95-97-main" position="-13.0 0 52.8" rotation="0 90 0"
+      building="width: 7.8; height: 6.5; depth: 10; stories: 2; color: #a0604a; wall: brick; photo: "></a-entity>
 
     <!-- ============================================================
          PLAYER RIG

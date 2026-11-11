@@ -55,12 +55,13 @@ Decisions (2026-11-02):
 | Block at 32–38 Main (frame row: "Mill'y", "Bakery", "Meats") | approved by owner 2026-11-10: plain guessed front (no photo exists; building demolished mid-1900s). Do NOT cite the Stryker plate "continuous porch" (see research/sanborn-and-today-findings.md) | skipped (all reused, none new) | built 2026-11-11: `block-32-38.glb` 1,326 tris, 9 materials incl. section-E `glass`/`WindowBack`/`ShopInterior`, 1.21 MB, 2K lightmap, LIGHTMAP_SCALE 1.1463 | — | placeholder only |
 | Dry goods and clothing store (27 Main, old nos. 519 A/B; "D.G. & Clo.", possibly the "Potter Building") | approved by owner 2026-11-10: plain guessed front (no better photo exists; front built out over the 1910 porch between 1910 and 1921) | skipped (all reused, none new) | built 2026-11-11: `store-27.glb` 1,439 tris, 9 materials incl. section-E `glass`/`WindowBack`/`ShopInterior`, 1.47 MB, 2K lightmap, LIGHTMAP_SCALE 0.8992 | **PASS round 1** (reviewer 2026-11-11) | placeholder only |
 | Masonic Hall / Hunterdon County National Bank (90–94 Main, old nos. 536–534) | approved by owner 2026-11-10: 1921 stone bank front (1), carved bank name + plaque only (2), ordinary 10k (3) | skipped (all reused; 2 stone maps generated) | built 2026-11-10: `masonic-hall.glb` 7,129 tris, 10 mats, 2.26 MB, LIGHTMAP_SCALE 1.1751 | round 1 PASS 2026-11-10 (previews + GLB parse) | placeholder only |
-| Democrat building: cigar store, news stand, printing office (96–98 Main, old no. 533) | written 2026-11-11, **awaiting owner approval** (5 decisions: DEMOCRAT board, cigar advert, News strip, width, no shutters) | none needed (all reused) | — | — | placeholder only |
+| Democrat building: cigar store, news stand, printing office (96–98 Main, old no. 533) | approved by owner 2026-11-11: "DEMOCRAT" board lettered, cigar advert = plain dark panel, plain News lean-to, width 4.96 m, no shutters | skipped (all reused; 1 sign texture generated) | built 2026-11-11: `democrat-building.glb` 2,135 tris, 8 mats, 1.27 MB, LIGHTMAP_SCALE 1.1571 | — | placeholder only |
 | Auto supplies store (100–102 Main, old no. 532) | written 2026-11-11, **awaiting owner approval** (no photo: plain guessed front; decision 1 = open galleries over a shop front, or flat front) | none needed (all reused) | — | — | placeholder only |
 | Corner drugstore (106 Main, old no. 531, Higgins Ave corner) | written 2026-11-11, **awaiting owner approval** (decision 1 = three-tier porch per the 1921 map; 2 = porch 2.24 m out over the sidewalk) | none needed (all reused) | — | — | placeholder only |
-| Street details pass 2 (road, sidewalks, yards, back buildings, filler objects; under "Street ambiance") | written 2026-11-11 by planner, **awaiting owner decisions** (9 questions) | — | — | — | — |
+| Street details pass 2 (road, sidewalks, yards, back buildings, filler objects; under "Street ambiance") | written 2026-11-11 by planner; **owner decisions made 2026-11-11**; street-geometry addendum (section 9) written 2026-11-11; **ground pass (road, walks, curbs, true widths) built in the scene 2026-11-11, not committed, owner to look**; fences / props / trees / back lots / vehicles still to do | — | — | — | ground: in scene, uncommitted |
 | Houses and shops at 24–30 Main (24 dwelling, 26 "Mill'y", 28–30 "Conf'y" / "Barber"; old nos. 561–558) | written 2026-11-11, **awaiting owner approval** (plain guessed fronts, no photo exists; one GLB; 26's sidewalk porch ended at the scene curb) | none needed (all reused) | — | — | placeholder only |
 | Brick house with shop fronts (57 Main, old nos. 513–512; "D.G.", "Conf'y", "Gro.", "Cobbler") | written 2026-11-11, **awaiting owner approval** (Sept 1921 state: 3-storey mansard house behind a 2-storey and two 1-storey brick shop fronts) | none needed (all reused, 1 tinted copy) | — | — | placeholder only |
+| Side streets, backdrop buildings (Court St, Bloomfield Ave, alley 80, Higgins Ave, street ends; under "Background") | written 2026-11-11 by planner, **awaiting owner decisions** (7 questions; 4 GLBs, ≤ 15.5k tris, +4 draw calls; no photo shows any of them) | — | — | — | — |
 
 ## Building specs
 
@@ -3988,7 +3989,7 @@ with fascia) and a large blade sign appeared (both undated, before 1938); 1938 a
 
 ### Democrat building: cigar store, news stand and printing office (96–98 Main St, old no. 533)
 
-**Status:** spec written — awaiting user approval (planner, 2026-11-11). Not built. Placeholder `#bldg-96-98-main`
+**Status:** approved by the owner 2026-11-11 ("DEMOCRAT" board lettered; cigar advert = plain dark panel; plain guessed News lean-to, no lettering; width 4.96 m; no shutters, no awning). **Built 2026-11-11 (blender-builder): `assets/models/democrat-building.glb`, 2,135 tris, 8 materials, 1.27 MB, LIGHTMAP_SCALE 1.1571; not reviewed, not integrated, not committed.** Next: reviewer. Differences from the spec: (1) the "DEMOCRAT" lettering is a small colour texture (`democrat-building/signs.jpg`, material `DBR_Signs`) on the board's face, not baked into the lightmap (orchestrator's instruction); (2) show window and cigar-store door glass use the counter-and-shelves cells of the shared `window_backs.jpg` instead of `shop_interior.jpg` (that one shows bolts of cloth; this also keeps the count at 8 materials); (3) `trim_dark` uses `polyhaven/door_paint_green.jpg` tinted to #3A3A2E (a colour factor cannot turn the brown `door_varnish_dark.jpg` green-brown); (4) the wooden posts are 0.22 / 0.12 m and the door openings 0.88 / 1.14 m wide (jambs added between pier, doors and window). Placeholder `#bldg-96-98-main`
 (index.html: 4.8 m wide at z 42.8, "wood") is replaced by this spec's numbers.
 
 **What it is**: John C. Hopewell's **2-storey brick building "next to the Bank"**, begun Nov 1875 for Joseph V. Smith's
@@ -5435,8 +5436,8 @@ atlas, GLB ≤ 2 MB. Draw calls +4 (≤ 10). Audio ≤ 4 MB, ≤ 5 min decoded.
 
 ### Street details pass 2: road, sidewalks, yards and filler objects (owner, 2026-11-11)
 
-**Status:** `spec written — awaiting owner decisions` (planner, 2026-11-11). Nothing built, nothing
-downloaded, `index.html` untouched. Local sources only (no web research this round).
+**Status:** `GROUND (build split A.1–A.2 + section 9) built in the scene by scene-integrator 2026-11-11, NOT committed: waiting for the owner to look`. Road, walks, curbs, grass strips, lane mouths, Higgins Ave stub, true widths, 4 placeholder boxes south of Court St, poles moved, light dirt decals (`js/ground.js`, `tools/prepare_ground_textures.py`). Still to do: fences and small props (B), tree pits / old maples (E, needs `street-tree.glb` changed), back-lot boxes (D), vehicles (C), new kit placements F1–F7, F15.
+Spec written from local sources only (no web research this round).
 
 **Rule for this pass (owner):** c. 1920, realism, no artistic liberties. Every item carries a tag:
 **PHOTO** (seen in a named photo), **MAP** (drawn or lettered on the Sanborn map), or
@@ -5707,6 +5708,231 @@ scene coordinates (origin at 0,0,0), one material with a small atlas (clapboard,
 8. **"FOR WASTE PAPER" box:** the wording is read from the plate (third word clear, first two fairly clear). OK to letter it?
 9. **Order of work.** Suggested: A (ground) → B (fences and small props) → E (trees) → D (back-lot boxes) → C (vehicles).
 
+#### 9. Addendum 2026-11-11: Street geometry (true widths by stretch)
+
+**Status:** `written, ready for scene-integrator` (planner, 2026-11-11; owner chose "fix now", decision 2). Local maps and
+photos only. Nothing built, `index.html` untouched. This addendum **replaces** the last three rows of section 2
+(Bloomfield Ave, Court St, Main St south of Court St) and the sentence "Keep the 3.9 m walk width north of Court St" in
+section 3 (true for the west side and for the east side south of Bloomfield Ave only).
+
+**In one paragraph.** The map's Main St is 66 ft wide only between Bloomfield Ave and Court St. North of Bloomfield the
+**east** line runs steadily inward (64 ft at Bloomfield, 58 ft at no. 26, 55 ft at z −180) while the west line stays
+straight. South of Court St both lines step inward to 53 ft. The buildings already stand map-true, so only the ground
+changes: (1) north of Bloomfield the **east curb slants in** with the property line (walk 2.85 m wide all the way);
+(2) south of Court St the **west curb moves 1.85 m east** and the west property line 2.2 m east; the east curb and walk
+stay where they are; (3) Court St narrows to 34 ft, Bloomfield widens a touch, the Higgins Ave lane mouth is added.
+The 66 ft middle stretch (courthouse to the bank) does not change at all.
+
+##### 9.1 Measurements (Sept 1921 Sanborn, darkness-profile line centres, ±1 px = ±0.05 m)
+
+Sheet 2: CLAUDE.md formula. **Sheet 3 re-registered** on the two Main St lines and the Court St lines that both sheets
+draw: sheet-3 px → sheet-2 px = **x − 30, y + 5624** (i.e. x − 1.57 m, z + 1.62 m against the CLAUDE.md formula; the
+pass-2 text above used x − 1.1 m, which is 0.47 m too far east). The two sheets differ by 6 px in the width of the
+same stretch, so sheet-3 x values carry ±0.25 m. Building fronts already built or specified on the east side south of
+Court St (x 10.00–10.30) agree with this within 0.25 m and **stay as they are**.
+
+| z (m) | at | west line x | east line x | width m | ft |
+|---|---|---|---|---|---|
+| −190 | north of the model, south side of Capner St | −10.32 | 6.02 | 16.34 | 53.6 |
+| −180 | model's north end | −10.32 | 6.36 | 16.68 | 54.7 |
+| −170 | no. 22 / 17 | −10.32 | 6.59 | 16.91 | 55.5 |
+| −160 | no. 24 / 27 | −10.45 | 6.90 | 17.35 | 56.9 |
+| −152 | no. 26 / Palace | −10.47 | 7.24 | 17.71 | 58.1 |
+| −140 | no. 30 / Palace alley | −10.32 | 7.50 | 17.82 | 58.5 |
+| −130 | nos. 34–36 / 37 | −10.21 | 7.84 | 18.05 | 59.2 |
+| −115 | no. 44 / County Hotel | −10.08 | 8.39 | 18.47 | 60.6 |
+| −108 | no. 46 / County Hotel | −9.98 | 8.60 | 18.58 | 61.0 |
+| −95 | Rea Building / blacksmith's lane | −10.32 | 9.12 | 19.44 | 63.8 |
+| −91 | north corner of Bloomfield Ave | −10.29 | 9.25 | 19.54 | 64.1 |
+| −76 | bank, south corner of Bloomfield | −10.00 | 10.03 | 20.03 | 65.7 |
+| −60 | bank / Wurts | −10.00 | 10.00 | 20.00 | 65.6 |
+| −40 | Union Hotel / 65 Main | −9.98 | 10.03 | 20.01 | 65.6 |
+| −20 | Union Hotel / County Offices | −10.21 | 10.03 | 20.24 | 66.4 |
+| −2 | Nevius / courthouse (lettered **66'**) | −10.32 | 10.16 | 20.48 | 67.2 |
+| +12 | 79 / 82–84 (lettered **53'**; sheet 3) | −8.15 | 8.26 | 16.41 | 53.8 |
+| +30 | 87 / 90–94 | −8.02 | 8.23 | 16.25 | 53.3 |
+| +45 | 93 / 96–98 | −7.92 | 8.18 | 16.10 | 52.8 |
+| +55 | 97 / 100–106 | −7.89 | 8.18 | 16.07 | 52.7 |
+| +65 | Higgins Ave mouth | −7.84 | (mouth) | — | — |
+| +75 | south of Higgins Ave | −7.79 | 8.49 | 16.28 | 53.4 |
+
+- **West line:** straight at x −10.3 ± 0.3 from z −190 to Court St (no change to the scene's −10.3). It steps east
+  **2.2 m** at the south side of Court St (z +10.4) to x −8.15, then drifts to −7.84 at z +65.
+- **East line, north of Bloomfield:** one straight slanting line, x = 9.25 + 0.0321 × (z + 89.9) (1.84° to the
+  street axis; measured points lie within 0.14 m of it). At the Bloomfield corner it is 0.78 m west of the line south
+  of the avenue (9.25 against 10.03).
+- **East line, Bloomfield to Court St:** x 10.0–10.16 (scene 10.3 kept; the walk is paved to the fronts anyway).
+- **East line, south of Court St:** steps **1.8 m west** at z +3.4 (between the Nevius alley and the Odd Fellows
+  front) to x 8.2. The fronts of 82–106 stay on the old line (map x 10.05, built 10.00–10.30): they stand 1.8 m back on
+  a private strip, exactly as pass 2 said.
+- **Cross streets (between property lines):** **Court St** z −0.1 … +10.4 = 10.4–10.5 m, lettered 33' (scene: 12.2 m).
+  **Bloomfield Ave** z −90.0 … −77.25 = 12.76 m, lettered 40' (scene: −89.8 … −77.6; the built Rea south wall −89.82 and
+  bank north wall −77.31 fit). **Higgins Ave** (east side; the 100–102 spec calls it Chorister Place) z +62.1 … +68.7 =
+  6.6 m, lettered 20' (not in the scene yet). **Capner St** (west side) z −202.4 … −192.4 = 10.0 m, lettered 33':
+  north of the model's end (z −180), listed for completeness, nothing to build. The map draws no street on the west
+  side opposite Higgins Ave.
+- **Lane mouths:** as the pass-2 table in section 3 (re-checked: Palace alley z −139.2 … −135.9; blacksmith's lane
+  z −100.1 … −94.5); only the curb x changes on the east side north of Bloomfield.
+- **Three porches drawn across the street line fix the walk widths** (a porch over a public walk has its posts at
+  the curb): **26 Main** (east, z −157.2 … −152.6) reaches 2.5–2.9 m past the line to x 4.40; **83 Main** (west,
+  z +19.8 … +26.4) reaches 3.46 m past the line to x −4.58; **106 Main** (east) reaches only 0.4 m past the line.
+
+Check against the fronts in the scene (`index.html`) and the pending specs:
+
+| Building | Front x (scene) | Map street line there | Result with the new ground |
+|---|---|---|---|
+| Rea 48–52 (steps to 9.65) | 10.85 | 9.25 → 8.7 | walk 3.3–3.8 m between curb and steps |
+| 44–46 | 8.60 | 8.4–8.6 | on the line; walk **2.9 m** (was 2.1) |
+| 32–38 porch | 8.54 | 8.1 → 7.7 | 0.4–0.8 m behind the line; walk 3.2–3.7 m (was 2.0) |
+| 24–30 (spec) | 7.29 | 7.24 | on the line; walk 3.1–3.4 m (was 0.8) |
+| County Hotel, Palace, 27, 35–41, 57 (spec) | −10.30 … −12.40 | −10.0 … −10.47 | unchanged |
+| bank, 68, Union Hotel, Nevius | 10.30–12.66 | 10.0–10.16 | unchanged |
+| 82–84, 90–94, 96–98 (spec), 100–102 (spec) | 10.00–10.30 | 8.2 (fronts 1.8 m back) | unchanged; private strip paved |
+| 106 porch (spec) | 8.06 | 8.18 | on the line; 1.5 m open walk outside the posts |
+
+No built or specified building ends up on the road, and none stands more than 0.8 m behind its walk.
+
+##### 9.2 New ground layout by stretch
+
+Curb convention as now: "road edge" = street face of the curb; the curb is the first 0.24 m of the walk (top 0.16).
+
+| Stretch | West walk | West road edge | East road edge | East walk | Road | Evidence |
+|---|---|---|---|---|---|---|
+| **N: north of Bloomfield** (z −180 … −89.9) | −10.3 … −6.4 (3.9 m, 12.8 ft), unchanged | −6.40 | **slants: 6.40 at z −89.9 → 3.51 at z −180**, x = 6.40 + 0.0321 × (z + 89.9) | **2.85 m (9.4 ft)**, parallel to the property line, plus whatever lies between the line and each front | 12.8 m at Bloomfield → 11.7 (z −125) → 10.8 (z −152) → 9.9 m (z −180) | MAP: 26's porch = walk depth; the same 2.85 m gives exactly today's 6.40 at the Bloomfield corner. PHOTO: Stryker plate shows a wide west walk at the County Hotel, a narrower east walk, straight curbs |
+| **M: Bloomfield to Court St** (z −77.3 … 0) | unchanged (3.9 m) | −6.40 | 6.40 | unchanged (3.9 m) | 12.8 m | lettered 66'; all cards |
+| **S: south of Court St** (z +10.4 … +80) | **−8.15 … −4.55 at z 10.4, −7.84 … −4.24 at z 65** (3.6 m, 11.8 ft) | **−4.55 → −4.24** (line + 3.60) | 6.40, **unchanged** | public walk 6.4 … 8.2 + private strip to the fronts at 10.0–10.3 = today's paving, unchanged | 10.9 m (36 ft) | MAP: 83's porch reaches x −4.58. PHOTO: 1907 and 1910s "Business Blocks" cards show the east curb running straight from Nevius past 82–84 to the Masonic Hall with no jog |
+
+- **Centreline.** The road cannot stay centred on x = 0 everywhere, and the map says so clearly: its middle is at
+  x 0 in stretch M, drifts west to **−0.6 at z −125 and −1.45 at z −180** in stretch N, and sits at **+0.9 … +1.1** in
+  stretch S. The crown (section 2) follows the middle of the road, not x = 0.
+- **Transitions.** N: no step, one straight taper over the whole 90 m (1.84°), starting at the Bloomfield corner.
+  S, west side: the curb line shifts 1.85 m across the 10.4 m mouth of Court St (north corner x −6.40, south corner
+  x −4.55), so no taper is needed on the walk itself; S, east side: none (the property line steps at z +3.4 but
+  nothing on the ground shows it).
+- **Court St** (z 0 … 10.4): walk 2.0 m each side, road z 2.0 … 8.4 (6.4 m, 21 ft). Split is TYPICAL-GUESS.
+  The courthouse forecourt already ends on z 0; 79 Main stands on the south line.
+- **Bloomfield Ave** (z −89.9 … −77.3): north side 3.4 m (hedge, walk, grass verge as section 4), road z −86.5 … −79.9
+  (6.6 m), south walk 2.6 m. Split is TYPICAL-GUESS.
+- **Higgins Ave** (z 62.1 … 68.7): a 20 ft lane; road z 62.9 … 67.9 from the Main St edge east to x 40, earth margins,
+  no walks, curb dropped across the mouth.
+- **Corners:** curb returns of about 1.5 m radius, drawn as two chamfer points in the outlines below.
+- Sidewalk widths end up 9.4–12.8 ft everywhere, inside or just over the period range of 8–12 ft; the photos support
+  "wide west, narrower east" north of Bloomfield and a straight east curb south of Court St, but give no measured widths.
+
+##### 9.3 Knock-on changes
+
+Rule for curb props north of Bloomfield, east side: x = road edge + 0.5 (poles, hydrant, block), as today (6.4 + 0.5).
+
+| Item | Now | New | Why |
+|---|---|---|---|
+| `pole-E5` | (6.9, −92.5) | **(6.8, −92.5)** | edge 6.32 |
+| `hydrant-Y2` | (6.85, −90.9) | (6.85, −90.9), no change | edge 6.37 |
+| `pole-E6` (F4 moved it to z −126) | (6.9, −124) | **(5.75, −126.0)** | edge 5.24 |
+| `pole-E7` | (6.9, −156) | **(4.95, −150.5)** | edge 4.45; z changed so it does not stand in front of 26's porch (z −157.2 … −152.6) |
+| F3 mounting block | (6.89, −119.5) | **(5.94, −119.5)** | edge 5.45 |
+| F5 big maple at 44–46 | (7.5, −110.5) | **(6.70, −110.5)** | edge 5.74; 1.2 m pit clear of the curb, 1.9 m of walk behind it |
+| F14 parked delivery wagon | (5.4, −99) | **(5.1, −99)** | edge 6.11, wagon centre 1.0 m out |
+| Carriageway-40 stone apron | at x 6.4 | x 5.25 … 6.25, z −124.2 … −121.5 | edge 5.25 |
+| Brick patch by 38–40 | walk's road edge | x 5.15 … 6.15, z −128 … −126 | edge 5.15 |
+| Dropped curb, lane at 32 | x 6.4 | along the edge at x 4.67 … 4.77, z −140.9 … −137.8 | |
+| `goods-G4`, F9 waste-paper box | (8.05, −112.6), (9.7, −103.5) | no change (tied to the fronts) | |
+| F10 barber pole, 30 Main | (7.6, −143.4) | **dropped** | the owner approved 24–30 "no barber pole / signs" on 2026-11-11 |
+| `pole-W0` | (−6.9, 28) | **(−4.95, 28.5)** | new west edge −4.45; just south of 83's porch |
+| `pole-W1` … `W6`, `E0` … `E4`, arc lamps, fountain, hitching posts, steps, `hydrant-Y1`, goods G1–G3, boards, bicycles, pump P1, F1, F2, F6, F7, F11–F13, F15–F18 | | no change | all in stretch M, on the west side, or on the unchanged east curb south of Court St |
+| Street trees (12) | | no change | all in stretch M |
+| Player start `#rig` | (0, 0.15, 18) | no change | road there is x −4.5 … +6.4; the start is 4.5 m from the new west curb |
+| `locomotion` limit `boundsX: 10.2` | constant | optional: per-stretch limits (east: fronts − 0.3 m north of Bloomfield; west: −8.0 south of Court St) | today the visitor can already walk through the 40–46 front; not needed for this pass |
+| Sound routes R1–R4 (`js/ambience.js`) | | no change | none runs on the changed ground |
+
+Placeholders:
+- **`house-w-s1` … `s3` (west side, south of Court St) are in the wrong place** (x −16 lawns; pass 2 said so). Replace by
+  four map-sized boxes (plain `building` placeholders, west side, `rotation="0 90 0"`; centre of the front line):
+  **79 Main** "Hardware & Paints", 3-storey frame, 32', on both street lines: (−8.13, 0, 14.2), width 7.6, depth 25;
+  **83–87 Main** "Gro.", 3-storey brick, 32': (−8.67, 0, 23.1), width 6.6, depth 17, plus a flat 1-storey porch roof on
+  posts x −8.05 … −4.58 over the walk (posts at the curb); **91–93 Main** office / dwelling, 2-storey frame, porch front
+  (−13.2, 0, 38.4), width 8.2, depth 9; **95–97 Main** dwelling, 2-storey brick, porch front (−13.0, 0, 52.8), width 7.8,
+  depth 10. Colours as the old placeholders. (Specs for these four come later, like any other lot.)
+- `bldg-24-30-main`, `bldg-57-main`, `bldg-96-98-main`, `bldg-100-102-main`, `bldg-106-main`: not moved by this
+  addendum; each is replaced at its spec position when built.
+
+Lawns and forecourt strips:
+- `#lawn-west`, `#paths`, `#courthouse-grounds`, `#bank-forecourt`: no change.
+- **East side north of Bloomfield:** the old walk between the new back edge (outline E-N below) and x 10.3 becomes
+  plain lot ground; the buildings cover almost all of it.
+- **West side south of Court St:** front yards of 91–97 = lawn x −13.0 … −7.9, z 26.4 … 58.4, with two 1.2 m paths at
+  z 38.4 and 52.8 (TYPICAL-GUESS; the map shows open ground only). No fence known.
+- The grass strip at 59–65 Main (section 3) and the Rea verge (section 4) are unchanged.
+
+Mini map (`data/minimap.json`, `assets/maps/minimap-1921.jpg`): the image is the map itself, so it does not change, and
+the player arrow will now agree with the drawn street edges better than before. Change only the label boxes in
+`streets`: COURT ST `z1` 12.2 → **10.4**; BLOOMFIELD AVE `z0`/`z1` → **−89.9 / −77.3**; optional new entry
+HIGGINS AVE (x 6.4 … 45, z 62.1 … 68.7) if `bounds.z1` is ever raised above 50. Optional, small: the south half of the
+image is pasted with the old sheet offset (`SHEET3_DY = 5593`, no x shift in `tools/prepare_minimap.py`), so it sits
+about 1.6 m off in x and z (10 px); use 5624 and a 30 px x shift when the image is next rebuilt.
+
+Pending lot specs:
+- **24–30 Main, decision 2 → (b) full map depth.** 26's porch is built as mapped, 4.30 m deep, posts at x 4.40: with the
+  true width they stand on the new curb (road edge 4.31 there), not on the road. **Decision 3 → (a) map-true**, entity
+  (7.29, 0.15, −152.365) as specified; the open walk is now 3.1 m before 24's porch and 3.3 m before 28–30's. The
+  spec's lines "end the porch at the scene's curb (posts at x 6.70) … 2.10 m deep" and "walk left on the scene
+  sidewalk" are superseded by this; nothing else in that spec changes.
+- **106 Main:** porch position (8.06, 0.15, 58.80) stands, map-true; east curb unchanged, so the open walk outside the
+  posts is 1.54 m (the spec's 1.66 m was measured from the road edge). Its south wall (z 61.9) is on the Higgins Ave line.
+- **100–102 (10.30, 0.15, 52.01) and 96–98 (10.08, 0.15, 43.85):** no change. The pump stays at the curb (6.95, 47.2).
+- **57 Main (−12.40, 0.15, −84.94):** no change (west line there is −10.2 on the map, −10.3 in the scene); the 2.1 m
+  strip between the walk and its shop fronts is paved as part of the west walk (outline W-N, note).
+
+##### 9.4 How to build it (scene-integrator; replaces the rectangles assumed in section 7 A.1)
+
+Outlines are (x, z) lists, one closed polygon each, in order round the edge; y, textures, crown and the surface
+changes along each walk are as sections 2–3. z runs from −180 to +80 and the side streets to x ±60, as today.
+
+- **Road** (one mesh; crown line through (−1.45, −180), (0, −89.9), (0, 0), (0.93, 10.4), (1.08, 65)):
+  (−6.40, −180), (−6.40, −1.5), (−6.85, 0.9), (−8.4, 2.0), (−60, 2.0), (−60, 8.4), (−6.35, 8.4), (−5.08, 8.93),
+  (−4.55, 10.2), (−4.24, 65), (−4.19, 80), (6.40, 80), (6.40, 68.4), (6.9, 67.9), (40, 67.9), (40, 62.9), (6.9, 62.9),
+  (6.40, 62.4), (6.40, −78.4), (6.85, −79.45), (7.9, −79.9), (60, −79.9), (60, −86.5), (7.9, −86.5), (6.85, −86.95),
+  (6.40, −88.0), (6.40, −89.9), (3.51, −180).
+- **Walk W-N** (west, north of Court St, with the Court St north walk): (−10.30, −180), (−6.40, −180), (−6.40, −1.5),
+  (−6.85, 0.9), (−8.4, 2.0), (−60, 2.0), (−60, 0), (−10.30, 0). Note: add the 57 Main strip
+  x −12.40 … −10.30, z −94.5 … −78.5 when that building goes in.
+- **Walk W-S** (west, south of Court St, with the Court St south walk): (−60, 8.4), (−6.35, 8.4), (−5.08, 8.93),
+  (−4.55, 10.2), (−4.24, 65), (−4.19, 80), (−7.76, 80), (−7.84, 65), (−8.15, 10.4), (−60, 10.4).
+- **Walk E-N** (east, north of Bloomfield, with the Bloomfield north side; the back edge steps to each front):
+  (3.51, −180), (6.40, −89.9), (6.40, −88.0), (6.85, −86.95), (7.9, −86.5), (60, −86.5), (60, −89.9), (10.95, −89.9),
+  (10.95, −105.8), (8.70, −105.8), (8.70, −124.05), (8.64, −124.05), (8.64, −137.6), (7.72, −137.6), (7.61, −140.9),
+  (7.40, −140.9), (7.40, −164), (6.87, −164), (6.36, −180).
+- **Walk E-M** (east, Bloomfield to Higgins, with the Bloomfield south walk): (6.40, −78.4), (6.85, −79.45),
+  (7.9, −79.9), (60, −79.9), (60, −77.3), (10.30, −77.3), (10.30, 62.1), (6.9, 62.1), (6.9, 62.9), (6.40, 62.4).
+  `#bank-forecourt` (x 10.30 … 12.66, z −77.31 … −49.13) joins it as now.
+- **Walk E-S** (east, south of Higgins): (6.40, 68.4), (6.9, 67.9), (6.9, 68.7), (9.3, 68.7), (9.3, 80), (6.40, 80).
+- **Curbs** (0.24 m strip on the walk side of each line, top 0.16; dropped to road level at the lane mouths of
+  section 3 and across Higgins Ave):
+  west-north (−6.40, −180) → (−6.40, −1.5) → (−6.85, 0.9) → (−8.4, 2.0) → (−60, 2.0);
+  west-south (−60, 8.4) → (−6.35, 8.4) → (−5.08, 8.93) → (−4.55, 10.2) → (−4.24, 65) → (−4.19, 80);
+  east-south (6.40, 80) → (6.40, 68.4) → (6.9, 67.9) → (40, 67.9) and (40, 62.9) → (6.9, 62.9) → (6.40, 62.4) →
+  (6.40, −78.4) → (6.85, −79.45) → (7.9, −79.9) → (60, −79.9);
+  east-north (60, −86.5) → (7.9, −86.5) → (6.85, −86.95) → (6.40, −88.0) → (6.40, −89.9) → (3.51, −180).
+- **Grass:** `#lawn-west` as now; strip at 59–65 (−8.0, −78.5), (−6.64, −78.5), (−6.64, −56), (−8.0, −56) (cut out of
+  W-N); Rea verge on Bloomfield (8.5, −87.7), (30, −87.7), (30, −86.5), (8.5, −86.5) (cut out of E-N); new front yards
+  (−13.0, 26.4), (−7.9, 26.4), (−7.9, 58.4), (−13.0, 58.4).
+- **Earth:** lanes as section 3; Higgins margins z 62.1 … 62.9 and 67.9 … 68.7, x 6.9 … 40.
+
+Checks for the integrator: every wall base still meets ground or paving (walls skirt to −0.2); stand at
+(0, 1.75, −150) looking north and south (the taper should read as a gently narrowing street, not a kink); stand at the
+start: the west curb is 4.5 m to the left, 79 Main closes the Court St corner; no prop stands on the road; walking
+strip ≥ 2.0 m on every walk except outside 106's porch posts (1.5 m; walk under the porch).
+
+##### 9.5 Decisions for the owner
+
+None needed: this follows the owner's "fix now". Two points are judgement calls and can be overruled:
+1. **South of Court St the road sits off-centre** (west curb in by 1.85 m, east curb unmoved). Reason: the map's porch
+   at 83 Main fixes the west curb, and the 1907 card shows a straight east curb. A symmetrical layout (both curbs in by
+   about 1.3 m) would contradict that card.
+2. **F10 barber pole at 30 Main is dropped**, following the later "no barber pole" approval for 24–30.
+
+Guesses in this addendum: the road / walk split on Court St, Bloomfield Ave and Higgins Ave; corner radii; "porch
+depth = walk width" at 26 and 83 Main; the front-yard lawn at 91–97; sheet-3 x positions ±0.25 m.
+
 #### Open questions / guesses
 
 - **When was Main St hard-surfaced?** Not answered by local sources (no web research this round). The
@@ -5921,6 +6147,260 @@ Node `Town` (fixed, true scale, scene fog ON; entity at origin, rotation 0 0 0):
 - Town silhouettes: number, heights and the north-end steeple position are guesses (Sanborn
   sheets 1, 4–8 not checked under the usage cap). A later pass can place real churches.
 - Exact origin ±15 m and bearing ±1° (OSM); the Sanborn north arrow was not measured.
+
+### Side streets, backdrop buildings (owner, 2026-11-11)
+
+**Status:** `spec written — awaiting owner decisions` (planner, 2026-11-11). Nothing built, nothing downloaded,
+`index.html` untouched, not committed. Local maps and photos only (no web research this round).
+
+**Owner wish (2026-11-11):** "start building side streets, but maybe just the buildings and not walkable yet."
+
+**What this is.** Everything a visitor standing on Main St (walk limits today: x ±10.2, z −160 … +60) can see when
+looking **down a side street or a through lane**: cheap "backdrop" buildings in their true 1921 positions, one merged
+GLB per street. Tags as in pass 2: **MAP** (drawn / lettered on the Sanborn sheet), **PHOTO** (seen in a named local
+photo), **TYPICAL-GUESS** (neither). On these streets almost only the footprints, storeys, materials and a few heights
+are MAP; **every roof form, window, door and colour is TYPICAL-GUESS** (see section 3 and decision 2).
+
+**Sources.** Sept 1921 Sanborn sheet 2 (CLAUDE.md formula, ±0.5 m) and sheet 3 (registered as the Street-geometry
+addendum, pass 2 section 9.1: sheet-3 px → sheet-2 px = x − 30, y + 5624; ±1.5 m); Nov 1910 sheet 4 for one label.
+Gridded crops were made in the session scratchpad (not kept). Roof marks on the map give the **covering only**
+(o = slate or tin, x = wood shingle, • = composition), never the form; almost every building below is marked "o".
+Default eave heights where the map gives none (as pass 2): 1 storey 3.0 m, 1½ 4.5, 2 storeys 6.0, 3 storeys 9.5.
+
+#### 1. Streets and buildings
+
+Sight lines were checked from the Main St centreline and both sidewalks. Scene fog (exp², density 0.005) leaves 78 %
+contrast at 100 m, 57 % at 150 m, 37 % at 200 m, so **tier 1** (full backdrop standard) runs to about 100 m from Main St
+and **tier 2** (plain box + roof, no windows) from there to the end of the view.
+
+**1a. Court St, west of Main (lettered 33'; z 0 … 10.4). Depth: tier 1 to x −108, tier 2 to Park Ave (x −170).**
+The whole street is one straight corridor seen from the start area; the north side beyond the fire house is the open
+Public Park, so the south-side fronts show all the way to Park Ave.
+
+| Id | Map label, number | Footprint (x from … to; z from … to) | Storeys, material, height, roof mark | Porch / notes | Photo |
+|---|---|---|---|---|---|
+| — | Court House & Jail, jail yard "STONE WALL 20'", 2-storey frame yard building on the street line (−49.0 … −43.2; −6.5 … 0) | in `courthouse.glb` already | — | reference only; do not rebuild | courthouse cards |
+| K1 | **Fire Dept House** (7 Court St, old 207/208) = pass-2 **A16**, re-measured | brick core −61.3 … −54.5; −12.8 … 0.0. With the frame lean-to on the west side and rear: −64.1 … −54.5; −14.1 … 0.0. Small frame projection at the rear −58.4 … −56.5; −15.4 … −14.1 | 2 storeys, brick, "22'" (6.7 m), o. Lean-to 1 storey frame | On the street line. Three small compartments across the north end each lettered "20" (reading uncertain). Map note: volunteer company, 35 men, 2 fire engines, 1 Republic hose truck and tractor, 1 motor hook-and-ladder truck, 1 hose cart. **Pass 2 gave A16 as x −68 … −60, z −9 … 0: use the values here.** | **None of the front.** Possibly its tower: `flmngtncountycrthousvu09.jpg` (1909) shows a slim pale tower with small windows and a capped top beyond the courthouse's north flank, taller than the courthouse eave (identification is a guess) |
+| K2 | Stone Cutting (6 Court St, old 218) = pass-2 list B item | brick part −60.7 … −56.5; 10.5 … 15.1. Frame part −56.5 … −50.6; 10.5 … 16.7 | brick part 1 storey; frame part 2 storeys, o | on the street line | none |
+| K3 | Am. Legion Room (8 Court St, old 217) | brick front −75.1 … −67.0; 12.6 … 19.5. Frame rear −75.6 … −66.2; 19.5 … 30.8 | front 2 storeys brick "24'" (7.3 m), o; rear storeys not legible (assume 1) | front 2.2 m behind the street line | none |
+| K4 | Double dwelling (10–12 Court St, old 216 A/B) | front −89.0 … −79.8; 10.7 … 17.0. Rear −87.4 … −79.8; 17.0 … 23.6 | 2 storeys frame, o | on the street line, no porch drawn. Disused brick oven behind (hidden) | none |
+| K5 | **Flemington Steam Laundry** (14 Court St, old 215) | −108.2 … −99.8; 11.5 … 34.5. Boiler lean-to −102.4 … −99.8; 34.5 … 39.5; stack at (−101.3, 36.4) | 2 storeys frame, o; lean-to 1 storey; "upright boiler", concrete floor | 1.1 m behind the line; iron stack (height guess 9 m) | none |
+| K6 | Dwelling (16 Court St, old 214) — tier 2 | −122.9 … −113.7; 18.2 … 28.9; rear ell −119.7 … −115.0; 28.9 … 34.3 | 2 storeys frame, o | 1-storey porch across the front, z 16.6 … 18.2; front 7.8 m behind the line | none |
+| K7 | Dwelling (18 Court St, old 213) — tier 2 | −139.9 … −131.3; 18.4 … 31.2 | 2 storeys frame, o | porch z 16.6 … 18.4 | none |
+| K8 | Dwelling (20 Court St, old 212½) — tier 2 | −148.1 … −142.0; 17.2 … 27.0 | 2 storeys frame, o | porch z 15.5 … 17.2 | none |
+| K9 | Dwelling (22 Court St, old 212) — tier 2 | −155.8 … −149.3; 17.2 … 27.0 | 2 storeys frame, o | porch as K8 | none |
+| K10 | Double dwelling (24–26 Court St, old 211½ / 211) — tier 2 | −168.1 … −157.1; 17.2 … 26.7; rear wing −168.1 … −162.3; 26.7 … 31.4 | 2 storeys frame, o | porch across the front | none |
+| K11 | Livery "Wagon Shed" behind the laundry — tier 2, optional | −119.7 … −112.5; 39.4 … 46.2 and −126.4 … −112.5; 46.2 … 60.9 | 2 storeys frame | seen only through the 5.5 m gap between K6 and K5 | none |
+
+Also on Court St: **79 Main** ("Hardw. & Paints", 3-storey frame, 32') lines the south side for 22 m (x −31.6 … −9.5;
+z 10.4 … 17.7, with a 1-storey rear part to x −41.5). It is a Main St lot: placeholder per addendum 9.3, own spec later;
+**not part of this GLB**. PHOTO for its Court St side: a pale 3-storey wall with three rows of sash windows and a low
+roof at the left edge of `flmngtncntybldngsvuof08.jpg` (1908) and `flmgtnhtrdncntycrths2.jpg`; dark in the 1909 card.
+**Public Park** (north side, x −173 … −64): open ground; the **band stand** (octagonal, frame, 1 storey, shingle roof,
+about 4.5 m across, centre (−114, −22.4)) is hidden from Main St by the fire house, so it is optional. Dwelling "67"
+(−84.2 … −75.4; −57.3 … −45.3) and pass-2 list B (barn, Storage Auto, sheds) stay hidden. Park Ave is off the sheets.
+
+**1b. Bloomfield Ave, east of Main (lettered 40'; z −89.9 … −77.3). Depth: tier 1 to Spring St (x 106), plus the Opera House (x 128).**
+
+| Id | Map label, number | Footprint (x; z) | Storeys, material, height, roof mark | Porch / notes | Photo |
+|---|---|---|---|---|---|
+| — | Rea Building rear "Flats"; bank rear | in `rea-building.glb` / `bank-building.glb` (builder checks how far back each model goes) | — | reference only | — |
+| B1 | Glass Cutting (48½ Main, in the yard) | 32.9 … 41.5; −107.9 … −102.8 | 2 storeys brick, "18'" (5.5 m) | seen through the 4 m gap between the Rea flats and the bakery | none |
+| A8–A11 | Bakery with flats (12), bake house and brick oven (14), Hats & Shoes (16), Photos | **as pass 2 list A** (re-measured, agree within 0.5 m) | A8/A9: 3 storeys, "32'" (9.75 m), plastered. A10/A11: 2 storeys frame | Photos stands 4 m back with a 1-storey front porch and a bay on its east side | none |
+| B2 | Dwelling (20 Bloomfield, old 308) | 84.3 … 91.1; −109.8 … −94.6 | 2 storeys frame, o | 1-storey porch across the front to z −93.4; 3.5 m behind the line | none |
+| B3 | Dwelling (22, old 309) | 96.6 … 102.2; −108.4 … −95.0 | 2 storeys frame, o | porch to z −93.3; canted bay on the west side | none |
+| B4 | Dwelling (24, old 310) | 107.7 … 113.4; −107.3 … −95.1 | 2 storeys frame, o | porch to z −93.4; canted bay on the west side | none |
+| B5 | **Opera House** (old 311). Label from the Nov 1910 sheet 4 ("OPERA HO."); the 1921 sheet 2 draws the same outline at its east edge without a label | front part 116.5 … 127.8; −116.7 … −98.0. Rear part 116.5 … 127.8; −126.9 … −116.7. Rear annex 120.4 … 124.0; −130.3 … −126.9 | 2 storeys frame; front part "30'" (9.1 m), rear part "20'" (6.1 m) (heights from 1910), o | 7.8 m behind the street line, facing south; stands across the head of Spring St. The town's picture house in Jan 1916 (Palace Theatre section, [W-b], [W-c]) | none |
+| A12, A13 | Chinese Laundry (17), dwelling (19) | **as pass 2 list A** | 2 storeys frame | each has a 1-storey front porch strip (z −77.3 … −75.6) | none |
+| B6 | **Garage** (21 Bloomfield); new since 1910 | 76.4 … 92.7; −77.5 … −55.7 | 2 storeys brick, "22'" (6.7 m), composition roof | on the street line. "Off." and "Auto Supp'y" in the front corners, capacity 22 cars, steam heat, concrete floor. Two buried 500-gal gasoline tanks at the curb, at (77.0, −78.9) and (92.7, −78.9) | none |
+| B7 | Dwelling (23, old 316) | 99.0 … 105.6; −75.2 … −63.1 | 2 storeys frame, x (shingle) | porch z −76.7 … −75.2 | none |
+| B8 | Mallory Mfg. Co. machine shop = pass-2 list B item | 55.7 … 68.5; −62.9 … −55.1 | 1 storey frame | seen across the bank's back yard from the west sidewalk | none |
+| B9 | **"Boarding" stable** (stable symbol) at the east end of the hotel wagon shed A7 | 75.5 … 102.8; −54.4 … −45.7 | 2 storeys brick, o | closes the view down the lane between 68 Main and the Union Hotel; ownership not stated on the map | none |
+
+There is an 18 m empty lot between Photos (x 66) and no. 20 (x 84), and the bank's open yard between x 33 and 57 on
+the south side. The 1910 sheet shows a stone garage across Spring St (x > 126); it is off the 1921 sheet 2.
+
+**1c. Alley "80" (east side, opposite Court St). There is no Court St east of Main: the map draws only this lane, z −4.3 … +1.5, running through to Spring St (x 108). Depth: all of it.**
+
+| Id | Map label | Footprint (x; z) | Storeys, material, height | Notes |
+|---|---|---|---|---|
+| — | Nevius store (3 storeys) | in `nevius-store.glb` to x 42.55 | — | reference only |
+| L1 | Feed House (two compartments, hoist) | 42.4 … 65.3; −11.0 … −4.3 | 2 storeys brick, "24'" (7.3 m), o | lane side wall; was left out of the Nevius model on purpose |
+| L2 | Vacant | 65.3 … 77.4; −11.0 … −5.1 | 2 storeys brick, "18'" (5.5 m) | |
+| L3 | Ice House | 77.4 … 86.4; −11.0 … −5.0 | "1=2" frame, "24'" | |
+| L4 | Wagon Shed | 86.4 … 107.7; −11.0 … −5.0 | 1 storey frame, open on the lane side, brick back wall | to Spring St |
+| A15 | "Auto" garage and ice house | **as pass 2 list A** (55.9 … 64.2 and 64.5 … 70.9; 1.5 … 10.7) | 1 storey brick; "1=2" frame 24' | |
+| L5 | Cold Storage | 70.9 … 79.0; 2.4 … 10.7 | 2 storeys brick, "22'" (6.7 m) | |
+| L6 | Shed | 80.3 … 86.5; 4.5 … 10.7 | 2 storeys brick | |
+| L7 | Storage | 86.5 … 103.4 (1-storey end to 107.5); 4.5 … 10.7 | 2 storeys frame | to Spring St |
+
+No photo shows any of them. The other lanes (32½, carriageway 40, 46 / Rea, 68 / hotel, hotel / Nevius, alley 86, Palace
+alley, blacksmith's lane) and their buildings A1–A7 and A14 are in **pass 2, sections 3 and 5**; nothing to add except B9.
+
+**1d. Higgins Ave, east of Main (lettered "HIGGINS AV. (UNION)", 20'; z 62.1 … 68.7). Depth: 50 m.**
+The walk limit (z 60) is north of the lane, so only its **south** side can be seen, at a flat angle, from the west sidewalk.
+
+| Id | Map label, number | Footprint (x; z) | Storeys, material, height | Notes |
+|---|---|---|---|---|
+| H1 | "Auto 1st, Hall 2d (stuccoed)" (3 Higgins) | 34.4 … 43.3; 70.3 … 83.0 | 2 storeys brick, stuccoed, composition roof | 1.6 m behind the line |
+| H2 | Dwelling (5 Higgins) | 45.8 … 50.7; 71.5 … 84.8; ell 45.8 … 55.9; 71.5 … 75.8 | 2 storeys frame | porch 46.8 … 54.3; 69.7 … 71.5 |
+| H3 | Dwelling (6 Higgins, north side) — optional | 61.8 … 73.5; 52.4 … 58.6; rear 66.6 … 73.5; 44.4 … 52.4 | 2 storeys frame | hidden behind 106 Main unless the walk limit moves south |
+| H4, H5 | Blacksmith (19 Spring St, 1½ storey frame, 91.9 … 102.8; 45.8 … 53.0) and double dwelling on Spring St (88.2 … 102.2; 72.7 … 84.1) — tier 2, optional | | | 90–100 m off, behind trees and H1/H2 |
+
+The corner block **108–112 Main** ("Off. / Stationery / 5 & 10 Cent S.", 3 storeys brick, "39'", 9.3 … 31.5; 69.0 … 85.8)
+fills the first 22 m of the south side; it is a Main St lot (see 1f). No photo shows the lane.
+
+**1e. Streets with nothing to build.**
+- **Capner St** (west, lettered 33'; z −202.4 … −192.4): 32 m beyond the walk limit, its only frontage (south side)
+  faces away from the viewer, and its north side is the empty Water Co. tract. Mapped along it, for a later walkable
+  stage: shed (−86.5 … −67.9; −191.7 … −185.4), 2-storey barn (−96.9 … −86.5; −191.5 … −173.2), dwelling 10 Capner
+  (−114.3 … −106.9; −189.5 … −177.1), 2-storey blacksmith in the block (−71.3 … −60.3; −171.9 … −167.0).
+- **"Chorister Pl"**: not lettered on the 1921 sheets; the lane at 106 Main is Higgins Ave (1910: Union). The map
+  draws no street on the west side between Court St and Mine St.
+- **Mine St** (west, z +165 … +200), **Maple Ave** (east, z +124 … +134), **William St** (z +262), **Pennsylvania Ave**
+  (z −300), **Spring St** and **Park Ave** (parallel to Main St): all outside the walk range with no line of sight along them.
+
+**1f. Street ends (not side streets, but the same kind of work; decision 4).** Looking straight up or down Main St from
+the walk limits, the view now ends in nothing but the landscape's guessed silhouettes. Main St lots just beyond:
+
+| Id | Map label | Footprint (x; z) | Storeys, material, height |
+|---|---|---|---|
+| E1 | Capner corner block, west (old 520–522; "Off.", "Vac.", "D") | −25.6 … −15.1; −192.5 … −167.9; 2-storey frame porch on the Main St front to x −13.1; iron-clad rear wing −43.2 … −25.6; −175.6 … −167.9 | 3 storeys + basement, brick; wing 3 storeys iron-clad frame |
+| E2 | 12–16 Main, east ("D", "Restr't") | 10.6 … 28.4; −192.4 … −179.7; 2-storey front porch | 3 storeys frame, "34'" |
+| E3 | 18 Main, east ("Boarding") | 10.6 … 25.4; −177.7 … −171.4; 1-storey front porch | 2 storeys frame |
+| E4 | 20–22 Main, east ("Gro.") | about 10.6 … 22; −171 … −165 (not measured closely) | 2 storeys frame |
+| E5 | 108–112 Main, east (see 1d) | 9.3 … 31.5; 69.0 … 85.8 | 3 storeys brick, "39'" (11.9 m) |
+| E6 | 114 Main, east, dwelling | 16.0 … 27.8; 92.4 … 100.5; front porch | 2 storeys frame |
+| E7 | **Methodist Episcopal Church** (116 Main, corner of Maple Ave) | body 16.3 … 49.4; 106.8 … 119.1; south range 17.6 … 51.5; 119.1 … 123.7 with a **belfry "35'"** at its west end (17.6 … 21.9) and a **tower "24'"** (33.3 … 37.7); canted east end | stone; "1=2", walls "18'" |
+
+West side south of 97 Main and north of Capner St: not measured in this pass.
+
+#### 2. Notable buildings (more than a box), and the evidence
+
+| Building | Why | Evidence in hand | Missing |
+|---|---|---|---|
+| **Fire Dept House** (K1) | first building past the courthouse, 55 m from the start point, on the street line | MAP: footprint, brick, 2 storeys, 22', equipment note. PHOTO: possible tower (1909 card, guess) | **the front** (engine doors, tower position). TYPICAL-GUESS front = two wide door openings below, three windows above |
+| Jail and jail yard | asked about | already in `courthouse.glb` (20' stone wall, yard building). The stone jail in `habs/courthouse-east-front-and-south-side.jpg` and the late-1920s card is the **1925** jail: not for 1920 | nothing |
+| **Opera House** (B5) | large hall closing the Bloomfield Ave view | MAP 1910 + 1921: footprint, 2 storeys, 30' / 20'; trade-press mention (1916) already cited | any photo; front form (gable to the street = TYPICAL-GUESS) |
+| **Garage, 21 Bloomfield** (B6) | big new brick garage, two curb pumps | MAP only | front openings; pumps (reuse the pass-1 pump model) |
+| **Steam Laundry** (K5) | long 2-storey shed with a boiler stack | MAP only | all elevations |
+| **"Boarding" stable** (B9) and wagon shed A7 | the hotel-yard stables | MAP only | elevations |
+| County Hotel stable and shed | asked about | pass 2 list B: hidden from the street | not proposed |
+| **Methodist Episcopal Church** (E7) | stone church 47 m beyond the south walk limit, in plain view from the west sidewalk | MAP: plan, belfry 35', tower 24', wall 18' | any photo (none local; the 1907 "Business Blocks" card stops short of it) |
+| **Presbyterian Church and Soldiers' Monument** | they close the view north | PHOTO: `flmngtnmainstnorth13.jpg` (1913): white monument, grey stone church with a spired corner tower behind it. MAP: monument at about (8.5, −313) on sheet 2; the church is off the sheets | church plan (sheet 1 or 5 not in `assets/maps/`). The landscape pass put its guessed steeple at "west side, z −230": it belongs at the head of the street, beyond the monument |
+| Baptist Church | asked about | off sheet 3 to the south; only the bell and a landscape silhouette | not proposed |
+| Railroad station | asked about | on neither sheet; not visible from the modelled street | not proposed |
+
+**Photo coverage in one line:** of the 48 local photos, none looks down a side street. The only side-street evidence is
+the Court St side of 79 Main (three cards), the possible fire-house tower (one card) and the 1913 view of the monument
+and Presbyterian church. The Rea Building's Bloomfield Ave wall (`flmngtnmainstrycolrvu10.jpg`) is already modelled.
+
+#### 3. Backdrop detail standard
+
+Per building (tier 1):
+- **Massing from the map**: one box per mapped part, eave at the lettered height or the default; porches as a flat
+  or shed roof on 4–6 square posts with a deck (no railings, no brackets).
+- **Roof form (TYPICAL-GUESS)**: dwellings = gable, ridge along the longer side, 30–35°, front-gabled where the house
+  is deeper than wide; stores, garage, feed house, hall = flat or low shed behind a plain parapet; barns, stable,
+  laundry, Opera House = gable along the length; lean-tos = shed. One plain brick chimney per dwelling.
+- **Walls**: tiling 1K textures already in the project (clapboard with a per-building tint, red brick, stone,
+  stucco, slate / tin roof), box UVs in real metres, as on Main St.
+- **Windows: recommended = a cheap window texture, not the section-E glass.** Each window is one flat quad set 3 cm
+  proud of the wall, mapped to a cell of a new shared sheet `shared/backdrop_windows.jpg` (1K, about 8 cells made from
+  the existing `window_backs.jpg`: sash and frame painted in, blind half down / lace / dark room, a faint sky tint;
+  plus a panelled door, a plank barn door and a wide garage door). Opaque, no `glass` material, no reflection
+  component: at 25–150 m the difference cannot be seen, it saves one blended draw call per GLB, and the whole GLB stays
+  one merged draw call. Window count and spacing are TYPICAL-GUESS (2.5–3 m bays, 0.9 × 1.7 m, sill 0.9 m; one door per front).
+- **No** trim, cornice brackets, shutters, signs or lettering (none is photographed). No interiors.
+- **Tier 2**: box + roof + porch slab, tinted wall texture, no windows, no chimney.
+- **Notables** (section 2): same standard plus their one distinguishing feature (tower, stack, wide doors, belfry),
+  each only as far as map or photo supports it.
+
+| GLB (already in scene coordinates, entity at 0 0 0) | Contents | Triangles | Lightmap |
+|---|---|---|---|
+| `sidestreet-court.glb` | K1–K5, tier-2 K6–K10 (+ K11, band stand if wanted), ground west of x −60 | ≤ 3,000 | 2K |
+| `sidestreet-bloomfield.glb` | B1–B9, A8–A13 at this standard (decision 3), ground east of x 60 | ≤ 5,000 | 2K |
+| `sidestreet-southeast.glb` | L1–L7, A15, H1–H2 (+ H3–H5) | ≤ 2,500 | 1K |
+| `street-ends.glb` (only if decision 4 = yes) | E1–E7 | ≤ 5,000 | 2K |
+
+Per building: tier 1 ≤ 300 triangles (notables ≤ 800, church ≤ 1,500), tier 2 ≤ 100. **Total ≤ 15.5k triangles and
+4 draw calls** (`baked-lighting` merges all 1K materials of a GLB into one call; keep each GLB to ≤ 6 colour maps
+because every map becomes a 1024² layer in memory). Scene today about 85 draw calls → **about 89** (limit ~150);
+triangles in view + ≤ 6k from any one spot (limit ~300k). GLB ≤ 1.5 MB each. Scene fog stays on for them.
+Bake with the usual sun (WSW, 21°); these GLBs are not rotated, so use the **world** sun vector for scene axes.
+When a GLB goes in, delete the guessed silhouettes it replaces from the landscape `Town` node (Court St west,
+Bloomfield Ave east, and the street ends if E1–E7 are built) so nothing stands twice.
+
+#### 4. Ground and the player barrier
+
+- **Road and walk stubs** are the Street-geometry addendum's (pass 2, section 9.4; not changed here): Court St road
+  z 2.0 … 8.4 with 2.0 m walks out to **x −60**; Bloomfield Ave road z −86.5 … −79.9 with its walks out to **x +60**;
+  Higgins Ave road z 62.9 … 67.9 to x 40.
+- **Beyond x ±60** each side-street GLB carries its own ground, baked with the buildings' shadows: Court St road and
+  walks on to x −172 (same z lines), Bloomfield Ave on to x 130 (Spring St crossing at x 108 … 123 as plain road).
+  Same road and walk textures as Main St, so the join at x ±60 does not show.
+- **Yards and lots** (inside each GLB): one grass / trodden-earth surface per block under and between the buildings
+  (Court St: z 10.4 … 62 south side, the park z −60 … 0 north side; Bloomfield: z −130 … −89.9 and −77.3 … −45; alley 80
+  and Higgins: lanes as earth). Must not overlap the addendum's polygons or pass 2's lane strips.
+- **Barrier.** No new object is needed: the walk limit is the clamp in `locomotion` (`boundsX: 10.2`, `minZ −160`,
+  `maxZ 60`), which already stops the visitor on the Main St property line across every side-street mouth:
+  Court St at x −10.2 (z 0 … 10.4), Bloomfield Ave at x +10.2 (z −89.9 … −77.3), alley 80 and all lanes at x +10.2;
+  Higgins Ave lies beyond `maxZ`. It stays as it is. If the addendum's optional per-stretch limits are adopted, the
+  side-street mouths keep the same line as the building fronts next to them. Nothing in these GLBs needs collision.
+- **Mini map**: no change (the map image already shows these buildings).
+
+#### 5. Build order and acceptance checks
+
+Order, most visible first:
+1. **Court St west** (`sidestreet-court.glb`): it is in the start view (the visitor starts at z 18, 8 m from the corner).
+2. **Bloomfield Ave** (`sidestreet-bloomfield.glb`): the widest opening, in the middle of the walk.
+3. **South-east** (`sidestreet-southeast.glb`): alley 80 and Higgins Ave.
+4. **Street ends** (`street-ends.glb`), if wanted.
+Each goes through the normal pipeline (asset-scout only for the window sheet; blender-builder; reviewer; integrator).
+Pass 2's `backlots.glb` then holds only A1–A7 and A14.
+
+Acceptance checks for the reviewer (per GLB):
+1. Every footprint corner within 0.5 m (sheet 2) or 1.5 m (sheet 3) of the table values; nothing overlaps a Main St
+   building, the courthouse GLB's jail yard, or a pass-2 list-A box.
+2. Storeys and lettered heights as the tables (fire house 6.7 m, Legion front 7.3 m, Opera House 9.1 / 6.1 m,
+   garage 6.7 m, feed house 7.3 m, bakery flats 9.75 m).
+3. Brick, frame, stucco and stone as mapped; frame dwellings with a 1-storey front porch where the table says so.
+4. No sign, lettering, shutter or bracket anywhere; windows are flat textured quads; no `glass` material.
+5. From (−10, 1.75, 5) looking west: fire house on the street line, then the park opening; south side reads as
+   stone-cutting shop, Legion, double house, laundry with a stack, then houses set back behind porches.
+6. From (−10, 1.75, −84) looking east: 3-storey plastered bakery block on the left, laundry and house on the right,
+   the brick garage, houses with porches, the Opera House's broad front beyond Spring St.
+7. Ground joins the addendum's road and walks at x ±60 with no gap or step; no building floats or sinks.
+8. One draw call per GLB; triangle and file-size limits of section 3; start view ≤ 95 draw calls.
+
+#### 6. Decisions for the owner
+
+1. **How far.** As proposed (Court St to Park Ave in two tiers; Bloomfield Ave to the Opera House; alley 80 to Spring
+   St; two buildings on Higgins Ave; nothing on Capner St), or tier 1 only (stop at about 100 m)?
+2. **Guessed looks.** No photo shows any of these buildings, so roofs, windows, doors and colours would all be
+   typical guesses on true footprints. Accept that for backdrop buildings (recommended; they are 25–150 m away), or
+   build bare boxes with no windows until photos turn up?
+3. **Windows**: cheap window texture (recommended) or the section-E glass look?
+4. **Street ends** (E1–E7, incl. the Methodist church and the Capner corner block): build them now as backdrop
+   (recommended: they are what closes the view up and down Main St), or leave them for full specs later?
+5. **Overlap with pass 2's back buildings**: build A8–A13, A15, A16 and the list-B items that front a side street
+   (stone-cutting shop, Mallory shop) at this standard inside the side-street GLBs instead of as blank boxes
+   (recommended), with the corrected fire-house footprint?
+6. **Fire house front, Opera House, church**: allow one round of web research (historical society, fire company
+   history) before building them, or build plain now and upgrade later? A photo of the fire house would matter most.
+7. **Trees in the side-street yards and the park** (none is documented; TYPICAL-GUESS): a few of the existing street
+   trees, instanced (no extra draw calls), or none?
+
+#### Open questions / guesses
+
+- The slim tower in the 1909 courthouse card: fire-house hose tower (guess) or something in the jail yard.
+- Opera House: label and heights are from 1910; whether it still showed pictures in 1920–21 is not known locally.
+- Am. Legion rear part: storeys not legible. Ownership of the "Boarding" stable not stated.
+- Roof marks were read at crop scale; a few may be misread (they decide slate / tin against shingle only).
+- All roof forms, window layouts, door positions and paint colours; the laundry stack height; pump positions at the garage.
+- Sheet-3 positions (Court St south side, alley 80, Higgins Ave, E5–E7) ±1.5 m; the builder should line K2–K5 up on
+  the addendum's Court St south line (z 10.4) and L1 on the built Nevius rear wall.
+- E4 and the west side beyond the walk limits were not measured.
 
 ## People
 
@@ -6441,3 +6921,8 @@ Check licensing for every asset and note the source in the progress log.
 | 2026-11-11 | planner: specs written for **24–30 Main** and **57 Main**, both **awaiting owner approval**, not committed. 24–30 (Sept 1921 Sanborn sheet 2, re-measured; 1910 sheet 4 compared): three frame buildings in one GLB at (7.29, 0.15, −152.365): 24 dwelling with 1-storey porch, 26 millinery with a bay shop window, 2.66 m gap, 28–30 two shops behind a two-tier porch; no photo shows them, fronts plain guesses. The flagged "shop on the roadway" at 26 is real, not a misreading: an open 1-storey sidewalk porch (dashed front, street line interrupted, new since 1910) reaching 2.5 m past the street line; it falls on the scene's road because the map's street is only 17.1 m wide there against the scene's 20.6 m; spec ends it at the scene curb. 57 (sheet 2; 1910 sheet 5; 1948): storeys settled as 3 = two storeys + mansard, 32 ft (dashed inner outline = Sanborn mansard sign, same as the Union Hotel; "3 D." in 1910); the 1980 "2-story" text describes a later rebuild. Sept 1921 state: 2-storey 28 ft dry-goods front + two 1-storey 14 ft shops built out in front, cobbler in the rear wing; entity (−12.40, 0.15, −84.94). New photo evidence: the Stryker plate and the 1906 County Hotel card show 57's north front piece c. 1906–10 (bracketed eave, slate roof, striped awning, giant pocket-watch jeweller's sign), an earlier state. Both ordinary (targets ~5k / ~5.5k tris), all textures reused, windows per section E. |
 | 2026-11-11 | blender-builder: **County Hotel (47–49 Main) section-E windows built** (not reviewed, not integrated, not committed): 58 single `glass` faces (BLEND, alpha 0.40, #1A1916, single-sided) 4 cm in front of window backs from `shared/window_backs.jpg` (hotel rooms: blinds at varied heights, lace, curtains, a few dark rooms; plain dim rooms where the use is not documented) and the Union Hotel's `shared/hotel_lobby.jpg` (5 ground-floor windows under the veranda + the main door transom, cells cropped to fit); no new texture; front window backs lifted in the lightmap (front in shade under the veranda). 10,234 -> 10,428 tris, 11 materials, GLB 2.00 MB, **LIGHTMAP_SCALE 1.1088**; backups `assets/models/source/county-hotel-before-windows.glb` / `county-hotel-lightmap-before-windows.jpg`; previews `county-hotel-windows-{before,after}(-detail).png`. |
 | 2026-11-11 | orchestrator | OWNER DECISIONS 2026-11-11. Street details pass 2: (1) road = oiled earth-and-stone with wheel/tyre tracks; (2) street widths: FIX NOW (Main St south of Court 53 ft, Court St 33 ft; also check the ~56 ft width north of no. 40 found by the 24–30 planner) — needs a street-geometry addendum first; (4) parked vehicles = Model T + buggy + wagon, no horses; (5) dirt = light; (3,6,7,8) as recommended: picket fence at 59, only the 16 back buildings seen from the street, leave out pre-1910 items whose shop is gone, letter the waste-paper box as read from the plate; (9) order as suggested. Lots: 96–98 APPROVED with the "DEMOCRAT" board lettered (cigar advert = plain dark panel), other points as recommended; 100–102 APPROVED with shop front + two open gallery tiers, plain; 106 APPROVED with the three-tier open porch per the 1921 map, other points as recommended (map-true position pending the street-geometry addendum); 57 APPROVED as the Sept 1921 map state (3 storeys = 2 + mansard, three plain shop fronts, flat parapet on the dry-goods front, no watch sign, no awnings); 24–30 APPROVED as recommended (one GLB, plain guessed fronts, no barber pole/signs) EXCEPT decision 2 (26's porch depth) and 3 (placement), which wait for the street-geometry addendum. |
+| 2026-11-11 | planner: **Street geometry addendum written** (pass 2, section 9; ready for scene-integrator, not committed, index.html untouched). Sept 1921 Sanborn re-measured every 10–20 m: Main St is 66 ft only between Bloomfield Ave and Court St; north of Bloomfield the east line slants in (64 ft at Bloomfield → 58 ft at no. 26 → 55 ft at z −180, west line straight); south of Court St 53 ft (west line steps 2.2 m east, east line 1.8 m west, with the fronts of 82–106 staying 1.8 m back); Court St 34 ft (z 0 … 10.4), Bloomfield 42 ft (z −89.9 … −77.3), Higgins Ave 20 ft lane (z 62.1 … 68.7), Capner St beyond the model (z −202 … −192). Sheet 3 re-registered (x −30 px, y +5624 px). New ground: east curb north of Bloomfield slants from x 6.40 to 3.51 with a 2.85 m walk (26 Main's mapped porch = walk depth); west curb south of Court St moves to x −4.55 … −4.24 (83 Main's mapped porch); east curb south of Court St and the whole middle stretch unchanged. Moves: poles E5/E6/E7/W0, mounting block F3, maple F5, wagon F14, apron and brick patch; three west placeholder houses replaced by four map-sized boxes (79, 83–87, 91–93, 95–97); 24–30: 26's porch at full map depth, placement map-true; 106, 100–102, 96–98, 57 unchanged; mini map: two street label boxes only. Polygon outlines for road, walks, curbs and grass given. |
+| 2026-11-11 | blender-builder: **Democrat building (96–98 Main) built** (not reviewed, not integrated, not committed): 2-storey brick front 4.96 m wide (wall at Y 0.22), shop front between two brick piers (north door with transom, show window in 2 × 2 panes over a stall riser, recessed pair of half-glazed doors), wooden fascia and moulded shop cornice with a scrolled console on each pier, white "DEMOCRAT" board over the north door (generated `democrat-building/signs.jpg`, Rockwell Bold condensed, as the c. 1900 photo), plain dark panel over the show window, three segment-headed 1/1 windows with brick hoods, pale top edges and pale sills, panelled frieze, 6 brackets, boxed cornice 6.10 rising in a round arch (apex 6.85) with a recessed dark tympanum; shed tin roof, plain rear extension, two south-wall windows; plain guessed 1-storey clapboard News lean-to (door, one window, fascia, no lettering). Section-E glass from the start (window backs from `shared/window_backs.jpg`). Bake occluders: Masonic Hall (box + gable), 100–102 (3-storey box). 2,135 tris, 8 materials, GLB 1.27 MB, **LIGHTMAP_SCALE 1.1571**; entity (10.08, 0.15, 43.85) rot 0 −90 0, id `bldg-96-98-main`, add `glass-reflect`. Previews `democrat-building-{front,three-quarter,detail,match-DemocratOffice,match-OriginalFacade-ca1918,context}.png`. Next: reviewer. |
+| 2026-11-11 | planner: **Side streets, backdrop buildings spec written (awaiting owner decisions)**, under "Background"; not committed, index.html untouched, local maps and photos only. Sept 1921 Sanborn sheets 2 and 3 measured along every street and through lane that meets the walkable part of Main St: **Court St west** 5 near buildings (Fire Dept House, stone-cutting shop, Am. Legion Room, double house, Flemington Steam Laundry) + 5 houses to Park Ave; **Bloomfield Ave** 9 new (glass-cutting shop, three houses, the Opera House (label from the 1910 sheet), the brick Garage at no. 21, a house, the Mallory shop, the brick "Boarding" stable) + pass 2's A8–A13; **alley 80** 7 (feed house to Spring St, cold storage, storage); **Higgins Ave** 2; **Capner St** none (out of sight). Street ends listed for a decision (Capner corner block, 12–22 Main, 108–114 Main, Methodist Episcopal Church). Pass 2's A16 fire-house footprint corrected (x −64.1 … −54.5, z −14.1 … 0). No local photo looks down a side street. Standard: true footprints, guessed roofs, flat textured windows, one merged GLB + lightmap per street, ≤ 15.5k triangles and +4 draw calls in all; walk limit unchanged (`locomotion` clamp). |
+| 2026-11-11 | orchestrator | Side streets APPROVED by owner 2026-11-11: (1) full depth as proposed; (2+6) ONE round of web research first (fire house, Opera House, churches, any side-street views), then build what photos show and plain typical roofs/windows on true footprints for the rest; (4) street ends built now as backdrop (fix the misplaced Presbyterian steeple); (3,5,7) as recommended (cheap window texture, side-street-fronting pass-2 boxes built at this standard, a few instanced trees). Helper agents run on Opus from now (owner: Fable used half the 5-hour window in 30 min); orchestrator stays on Fable. |
+| 2026-11-11 | scene-integrator: **Street details pass 2, GROUND built in the scene** (not committed, owner looks first; no Blender). New `js/ground.js`: component `street-ground` builds road, walks, curbs, grass and lanes from the section 9.4 outlines as one mesh per texture = **7 draw calls, 2,171 triangles** (replaces `#road`, `#bloomfield-ave`, `#court-st`, both sidewalks, both curbs = 7 calls). Road = oiled earth-and-stone with wheel tracks (`assets/textures/ground/road_oiled_earth.jpg`, tile 6.4 m, made by `tools/prepare_ground_textures.py` from ONE new CC0 download, Poly Haven `gravel_ground_01` 1K; nothing local was a gravel road), crowned 0.10 m along the map's crown line, darker strip at the curbs, flat arms for Court St (z 2.0–8.4), Bloomfield Ave (z −86.5 … −79.9) and the new Higgins Ave stub (to x 40). True widths: east curb slants 6.40 → 3.51 north of Bloomfield (walk 2.85 m + up to each front), west curb at x −4.55 … −4.19 south of Court St. Walks: concrete as before; **bluestone flags** (generated from `stone_bluestone.jpg`) on the east side z −180 … −105.8 and the west side z −135.9 … −100.1; **brick** crossing at the Palace alley + patch by 38–40; **grass strip** at 59–65 (z −78.5 … −56), Rea verge on Bloomfield, front yards of 91–97 with two guessed paths (added to `#paths`). Stone curbs with joints, **dropped with a 1 m sloping apron at 8 lane mouths**; earth lanes behind them; earth margins on Higgins. Light dirt: 14 droppings + 6 paper scraps + 4 curved junction tracks, one decal mesh. Props moved: `pole-E5` (6.8, −92.5), `pole-E6` (5.75, −126), `pole-E7` (4.95, −150.5), `pole-W0` (−4.95, 28.5). `house-w-s1…s3` replaced by `bldg-79-main`, `bldg-83-87-main` (+ `bldg-83-87-porch`, new `box-group` component), `bldg-91-93-main`, `bldg-95-97-main` at the addendum positions. `locomotion` now uses per-stretch limits (`STREET_GROUND.limits`: east 7.0 / 7.3 / 8.25 / 8.3 / 9.35 north of Bloomfield, west −7.85 south of Court St). `data/minimap.json`: COURT ST z1 10.4, BLOOMFIELD AVE −89.9 / −77.3. Browser check (localhost:8010): no console errors; start view 62 → 66 calls / 186k → 188k tris (ground itself 7 → 7 calls; the +4 are probably the 79 Main placeholder box, now in view at the Court St corner; not measured separately); z −150 looking south 101 → 91 calls. **Not followed exactly:** three east lane mouths cut short so poles E3, E2 and step C2 keep a full curb (−49.1 … −47.2, −14.8 … −11.3, −3.3 … 0.6); curb slabs are not set 1–2 cm out of line; Higgins margins are at walk height, not y 0; the 91–97 "porch fronts" are not on the plain placeholders; lot ground between the new east walk and the 24–30 placeholder (x 7.4 … 10.3) is a bare-earth patch until 24–30 is built. **For blender-builder:** round plain tree pits (F8) need `street-tree.glb` changed (square granite edging still there). **Left for later passes:** F1–F3, F5–F7, F15 placements, fences, hedge, small props, vehicles, back-lot boxes, 57 Main walk strip (when 57 goes in), minimap image re-registration. |
