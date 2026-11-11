@@ -64,6 +64,21 @@ details against the West Jersey History photos.
 | `wurts-law-office-east-front.jpg` | 1. EAST FRONT - Alexander Wurts Law Office, 59 Main Street | https://www.loc.gov/pictures/item/nj0072.photos.107271p/ |
 | `wurts-law-office-south-side.jpg` | 2. SOUTH SIDE - Alexander Wurts Law Office, 59 Main Street | https://www.loc.gov/pictures/item/nj0072.photos.107272p/ |
 
+## Booklet photos (`assets/photos/reference/booklets/`)
+
+Crops from two Flemington booklets scanned by the Library of Congress for the Internet Archive,
+both published before 1929 and marked NOT_IN_COPYRIGHT (public domain in the US). Used for the
+side-street / street-end backdrop research (`research/side-streets-findings.md`).
+
+| File | Caption (as printed) | Source |
+|------|---------|--------|
+| `booklet1910-methodist-church.jpg` | "Churches: (3) Methodist" (photo by Miss Sunderlin), *Flemington, where town and country meet*, Board of Trade, 1910 (copyright 1909), page n38 | https://archive.org/details/flemingtonwheret00flem |
+| `booklet1910-presbyterian-church.jpg` | "Churches: (2) Presbyterian", same booklet, page n38 | https://archive.org/details/flemingtonwheret00flem |
+| `booklet1910-soldiers-monument.jpg` | "(4) Soldiers Monument", same booklet, page n37 | https://archive.org/details/flemingtonwheret00flem |
+| `booklet1910-public-park.jpg` | "(2) Public Park" (Court St park and band stand), same booklet, page n21 | https://archive.org/details/flemingtonwheret00flem |
+| `booklet1898-churches.jpg` | "Churches: Baptist, Episcopal, Presbyterian, Catholic, Methodist", *Flemington, New Jersey* (E. E. Bice, 1898), page n16 | https://archive.org/details/flemingtonnewjer00conn |
+| `booklet1898-main-and-broad-monument.jpg` | "Main and Broad Streets" (Soldiers' Monument, Presbyterian church), same booklet, page n18 | https://archive.org/details/flemingtonnewjer00conn |
+
 ## Textures (`assets/textures/polyhaven/`)
 
 From Poly Haven (https://polyhaven.com), CC0 (public domain). 1K colour maps; painted

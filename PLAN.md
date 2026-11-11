@@ -56,12 +56,12 @@ Decisions (2026-11-02):
 | Dry goods and clothing store (27 Main, old nos. 519 A/B; "D.G. & Clo.", possibly the "Potter Building") | approved by owner 2026-11-10: plain guessed front (no better photo exists; front built out over the 1910 porch between 1910 and 1921) | skipped (all reused, none new) | built 2026-11-11: `store-27.glb` 1,439 tris, 9 materials incl. section-E `glass`/`WindowBack`/`ShopInterior`, 1.47 MB, 2K lightmap, LIGHTMAP_SCALE 0.8992 | **PASS round 1** (reviewer 2026-11-11) | placeholder only |
 | Masonic Hall / Hunterdon County National Bank (90–94 Main, old nos. 536–534) | approved by owner 2026-11-10: 1921 stone bank front (1), carved bank name + plaque only (2), ordinary 10k (3) | skipped (all reused; 2 stone maps generated) | built 2026-11-10: `masonic-hall.glb` 7,129 tris, 10 mats, 2.26 MB, LIGHTMAP_SCALE 1.1751 | round 1 PASS 2026-11-10 (previews + GLB parse) | placeholder only |
 | Democrat building: cigar store, news stand, printing office (96–98 Main, old no. 533) | approved by owner 2026-11-11: "DEMOCRAT" board lettered, cigar advert = plain dark panel, plain News lean-to, width 4.96 m, no shutters | skipped (all reused; 1 sign texture generated) | built 2026-11-11: `democrat-building.glb` 2,135 tris, 8 mats, 1.27 MB, LIGHTMAP_SCALE 1.1571 | — | placeholder only |
-| Auto supplies store (100–102 Main, old no. 532) | written 2026-11-11, **awaiting owner approval** (no photo: plain guessed front; decision 1 = open galleries over a shop front, or flat front) | none needed (all reused) | — | — | placeholder only |
-| Corner drugstore (106 Main, old no. 531, Higgins Ave corner) | written 2026-11-11, **awaiting owner approval** (decision 1 = three-tier porch per the 1921 map; 2 = porch 2.24 m out over the sidewalk) | none needed (all reused) | — | — | placeholder only |
+| Auto supplies store (100–102 Main, old no. 532) | approved by owner 2026-11-11: front (a) = closed shop front + two open gallery tiers, all plain; no sign/lettering/awning; plain dim shop in the show windows | skipped (all reused, none new) | built 2026-11-11: `store-100-102.glb` 3,790 tris, 7 mats, 1.48 MB, 2K lightmap, LIGHTMAP_SCALE 1.1366 | — | placeholder only |
+| Corner drugstore (106 Main, old no. 531, Higgins Ave corner) | approved by owner 2026-11-11: three-tier open porch per the 1921 map (plain), map-true position, no lettering, gabled bracketed cornice + 1890s front, plain dim shop | none needed (all reused) | built 2026-11-11: `store-106.glb` 4,269 tris, 9 mats, 1.59 MB, 2K lightmap, LIGHTMAP_SCALE 1.1209 | — | placeholder only |
 | Street details pass 2 (road, sidewalks, yards, back buildings, filler objects; under "Street ambiance") | written 2026-11-11 by planner; **owner decisions made 2026-11-11**; street-geometry addendum (section 9) written 2026-11-11; **ground pass (road, walks, curbs, true widths) built in the scene 2026-11-11, not committed, owner to look**; fences / props / trees / back lots / vehicles still to do | — | — | — | ground: in scene, uncommitted |
 | Houses and shops at 24–30 Main (24 dwelling, 26 "Mill'y", 28–30 "Conf'y" / "Barber"; old nos. 561–558) | written 2026-11-11, **awaiting owner approval** (plain guessed fronts, no photo exists; one GLB; 26's sidewalk porch ended at the scene curb) | none needed (all reused) | — | — | placeholder only |
 | Brick house with shop fronts (57 Main, old nos. 513–512; "D.G.", "Conf'y", "Gro.", "Cobbler") | written 2026-11-11, **awaiting owner approval** (Sept 1921 state: 3-storey mansard house behind a 2-storey and two 1-storey brick shop fronts) | none needed (all reused, 1 tinted copy) | — | — | placeholder only |
-| Side streets, backdrop buildings (Court St, Bloomfield Ave, alley 80, Higgins Ave, street ends; under "Background") | written 2026-11-11 by planner, **awaiting owner decisions** (7 questions; 4 GLBs, ≤ 15.5k tris, +4 draw calls; no photo shows any of them) | — | — | — | — |
+| Side streets, backdrop buildings (Court St, Bloomfield Ave, alley 80, Higgins Ave, street ends; under "Background") | written 2026-11-11 by planner, **approved by owner 2026-11-11**; web research round done 2026-11-11 (section 7: Methodist + Presbyterian churches and Soldiers' Monument PHOTO-BASED, park PHOTO-BASED, the rest PLAIN-GUESS with 1980 NRHP roof forms; 3 small new owner decisions in 7.3) | — | — | — | — |
 
 ## Building specs
 
@@ -4163,7 +4163,10 @@ c. 1918: no shutters, cigar advert over the window. After 1926 the Democrat was 
 
 ### Auto supplies store (100–102 Main St, old no. 532)
 
-**Status:** spec written — awaiting user approval (planner, 2026-11-11). Not built. **No photo of this front has been
+**Status:** built 2026-11-11 (blender-builder), not reviewed, not integrated: `assets/models/store-100-102.glb`
+(3,790 tris, 7 materials, 1.48 MB), lightmap `assets/textures/store-100-102-lightmap.jpg`, **LIGHTMAP_SCALE 1.1366**;
+entity (10.30, 0.15, 52.01) rot 0 −90 0, id `bldg-100-102-main`, add `glass-reflect`. Owner decision 2026-11-11: front
+(a), plain, no sign/lettering/awning. Next: reviewer. **No photo of this front has been
 found: the front is a plain guess on the map's footprint.** Placeholder `#bldg-100-102-main` (index.html: 9.7 m wide
 at z 50.05, "brick") is replaced by this spec's numbers.
 
@@ -4290,8 +4293,11 @@ place together with 106 if possible (shared party wall and rear porch).
 
 ### Corner drugstore (106 Main St, old no. 531, corner of Higgins Ave)
 
-**Status:** spec written — awaiting user approval (planner, 2026-11-11). Not built. Placeholder `#bldg-106-main`
-(index.html: 5.5 m wide at z 57.65) is replaced by this spec's numbers.
+**Status:** approved by owner 2026-11-11 (three-tier plain porch, map-true position, no lettering). **Built by blender-builder
+2026-11-11** (not reviewed, not integrated, not committed): `assets/models/store-106.glb` (4,269 tris, 9 materials,
+1.59 MB), lightmap `assets/textures/store-106-lightmap.jpg`, **LIGHTMAP_SCALE 1.1209**; scripts `tools/blender/store_106.py`,
+`store_106_bake.py`, `store_106_preview.py`; source `assets/models/source/store-106.blend`. Next: reviewer. Placeholder
+`#bldg-106-main` (index.html: 5.5 m wide at z 57.65) is replaced by this spec's numbers.
 
 **What it is**: a **3-storey frame drugstore, 30 ft high**, on the north corner of Higgins Ave (20 ft wide; today's
 Chorister Place), with its long clapboard side along the avenue. An 1890s photograph shows it: a **pale clapboard
@@ -6150,8 +6156,9 @@ Node `Town` (fixed, true scale, scene fog ON; entity at origin, rotation 0 0 0):
 
 ### Side streets, backdrop buildings (owner, 2026-11-11)
 
-**Status:** `spec written — awaiting owner decisions` (planner, 2026-11-11). Nothing built, nothing downloaded,
-`index.html` untouched, not committed. Local maps and photos only (no web research this round).
+**Status:** `spec approved by owner 2026-11-11; web research round done (planner, 2026-11-11), forms adjusted in
+section 7 — ready for asset-scout / blender-builder (Court St first)`. Nothing built, `index.html` untouched, not
+committed. **Section 7 overrides sections 1–3 where they differ.** Findings: `research/side-streets-findings.md`.
 
 **Owner wish (2026-11-11):** "start building side streets, but maybe just the buildings and not walkable yet."
 
@@ -6391,10 +6398,88 @@ Acceptance checks for the reviewer (per GLB):
 7. **Trees in the side-street yards and the park** (none is documented; TYPICAL-GUESS): a few of the existing street
    trees, instanced (no extra draw calls), or none?
 
+#### 7. Research round (planner, 2026-11-11): evidence per building and adjusted forms
+
+Full notes, quotes and links: `research/side-streets-findings.md`. New public-domain photos (1898 and 1910 town
+booklets, Internet Archive) are in `assets/photos/reference/booklets/` (logged in SOURCES.md). The 1980 NRHP text
+describes most side-street buildings (later state, same buildings): used below for **roof form and porch type
+only**, tagged **NRHP-1980**. **PHOTO-BASED** = a period photo shows the building; **PLAIN-GUESS** = footprint from
+the map, everything else typical (section 3 standard). NRHP-1980 items stay PLAIN-GUESS but with that roof form.
+
+**7.1 Changes to earlier sections (these win):**
+- **Fire house K1: drop the hose tower.** The slim tower in `flmngtncountycrthousvu09.jpg` stands north-west of the
+  courthouse (camera is north-east of it; 79 Main is on the left), so it is not the fire house (south-west). The
+  "Fire House, Flemington" postcard on Goodspeed shows the **Lyceum at Court St / Park Ave after the borough bought
+  it in 1922**; do not use it for K1. K1 = the 1862 2-storey brick engine house with the company's meeting room
+  upstairs (Snell 1881, 1902 Sanborn, 1898 booklet). Still PLAIN-GUESS front.
+- **Opera House B5**: the Sept 1921 sheet 4 letters it **"OPERA HO. — Damaged By Fire"**. It stood (repaired and used
+  by a congregation from 1922; demolished 1965). Model the shell; see decision 7.3-1.
+- **Presbyterian church position fixed** (Sept 1921 sheet 5 found on Wikimedia Commons, registered on the church-lot
+  corner shared with sheet 2): south front z ≈ −357 (west end) … −352 (east end), x ≈ 4.4 … 34.9; whole church to
+  z ≈ −406; **spire at the south-west corner, about (7.5, −368) ±3 m, "SPIRE 110'" (33.5 m)**; walls "16'–20' to
+  eaves". Replace the landscape's guessed steeple at "west side, z −230" with this (new item E8).
+- **Higgins Ave (Union) is today's Chorister Place**; H1 ("Auto 1st, Hall 2d, stuccoed", 3 Higgins) is the
+  **Children's Choir School** building (built as a stable; school 1895–1958). Still PLAIN-GUESS.
+- **E6 (114 Main) is the Doric House** (1846, Mahlon Fisher, HCHS museum), not a plain dwelling.
+
+**7.2 Per building.**
+
+| Id | Building | Class | Form to build (adjusted) | Evidence |
+|---|---|---|---|---|
+| K1 | Fire Dept House, 7 Court | PLAIN-GUESS | 2-storey brick box on the map footprint, 6.7 m eave, **front gable to Court St** (narrow deep plan, 30°, slate); ground floor: **two wide arched-or-square engine doors** (each ≈ 2.8 m × 3.2 m) side by side on the brick front; upper floor: three windows (meeting room); no tower, no lettering; frame lean-to as mapped (shed roof) | history: Snell 1881, Goodspeed, HCHS 1902 map note, 1898 booklet; borough moved it to the Lyceum in 1922 |
+| K2 | Stone cutting, 6 Court | PLAIN-GUESS (NRHP-1980) | brick part: **1½ storeys, low-pitched slate gable, windows of mixed sizes** (old carriage house, later "Grand Jury Room"); frame part as before | NRHP-1980 #6 Court |
+| K3 | Am. Legion Room, 8 Court | PLAIN-GUESS (NRHP-1980) | ground storey **red brick with brick pilasters and a pale painted metal classical entablature** across the front; upper storey **stucco** (light grey-cream); flat roof behind a plain parapet | NRHP-1980 #8 Court (addition already shown on the 1921 map) |
+| K4 | Double dwelling 10–12 Court | PLAIN-GUESS | as section 3 | — |
+| K5 | Steam Laundry, 14 Court | PLAIN-GUESS (NRHP-1980) | **gable along the length**, 2 storeys (1980: 2½), simple openings; iron stack 9 m (guess) | NRHP-1980 #14 Court |
+| K6–K10 | Houses 16–26 Court | PLAIN-GUESS (NRHP-1980) | K6 L-plan, low gable; K7 cross-gable with brackets; **K8, K9 gable end to the street**, 3-bay porch (K9 keeps its 1921 porch); K10 2½-storey 5-bay duplex, cross gable, bracketed eaves, 3-bay porch | NRHP-1980 #16–#26 Court |
+| K11 | barns near Park Ave | PLAIN-GUESS (NRHP-1980) | 2-storey frame, gable | NRHP-1980 "Barns" |
+| Park | Public Park + band stand | **PHOTO-BASED** (c. 1909) | lawns, curving gravel paths, scattered young shrubs and trees, benches, one tall lamp pole; band stand **octagonal, raised floor with a railing, pointed roof** (if built) | `booklets/booklet1910-public-park.jpg` |
+| B1 | Glass cutting | PLAIN-GUESS | as section 3 | — |
+| A8/A9 | Bakery block 12–14 Bloomfield | PLAIN-GUESS (NRHP-1980) | 3-storey stucco, **flat roof with wide overhang on paired simple brackets**, 5 bays | NRHP-1980 |
+| A10, A12, A13 | 16, 17, 19 Bloomfield | PLAIN-GUESS (NRHP-1980) | A10 stucco 4 bays flat; A12 flat roof with a storefront; A13 gable, 3 bays, 3-bay porch with turned posts | NRHP-1980 |
+| B2 | Dwelling 20 Bloomfield | PLAIN-GUESS (NRHP-1980) | **narrow end to the street, front gable with bargeboards**, 2nd-storey bay on the west side, porch with plain classical posts | NRHP-1980 #20 |
+| B3, B4 | Dwellings 22, 24 Bloomfield | PLAIN-GUESS (NRHP-1980) | front gable + side cross gable, bargeboards; porch with sawn trim (kept plain per section 3) | NRHP-1980 #22, "#28 identical" |
+| B5 | Opera House | PLAIN-GUESS | 2-storey frame hall, gable along the length, gable end to the street (south); plain; **fire-damaged in Sept 1921** (decision 7.3-1) | Sept 1921 sheet 4; Cinema Treasures; FJCC |
+| B6 | Garage 21 Bloomfield | PLAIN-GUESS (NRHP-1980) | 2-storey red brick, **flat roof, corbelled brick cornice, 4 bays**, wide wooden shop / garage front on the ground floor (office and auto-supply corners per map) | NRHP-1980 #21 |
+| B7 | Dwelling 23 Bloomfield | PLAIN-GUESS | gable, as section 3 | NRHP-1980 (later shop added in front: ignore) |
+| B8, B9, L1–L7, A15 | Mallory shop, Boarding stable, alley-80 sheds | PLAIN-GUESS | as section 3 | nothing found |
+| H1 | Choir School (3 Higgins / Chorister Pl) | PLAIN-GUESS | 2-storey stuccoed, as mapped | HCHS trail stop 13 |
+| H2 | Dwelling 5 Higgins | PLAIN-GUESS | as section 3 | — |
+| E1 | Capner corner block | PLAIN-GUESS | as section 1f (replaced by a 1-storey building before 1980; no photo) | — |
+| E2 | 12–16 Main | PLAIN-GUESS (NRHP-1980) | 3-storey frame with a **2-storey front porch on plain square posts** | NRHP-1980 #14 Main |
+| E3/E4 | 18–22 Main | PLAIN-GUESS (NRHP-1980) | 2-storey frame Italianate, **low-pitched slate gable, bracketed wide eaves, bargeboards; a wide hanging oriel at one end bay upstairs; 3-bay porch** | NRHP-1980 #18–22 Main |
+| E5 | 108–112 Main | PLAIN-GUESS (NRHP-1980) | 3-storey brick, flat roof, **bracketed cornice**, segment-arched brick window hoods | NRHP-1980 #110 Main |
+| E6 | **Doric House, 114 Main** | PLAIN-GUESS (NRHP-1980; building survives, modern HCHS photos online) | 2½-storey frame, pale painted, Greek Revival: **flat-roofed front with a full-width portico on Doric columns**, wide entablature with small frieze windows, classical doorway with transom; 1-storey Greek Revival office beside it; cast-iron fence on the street line | NRHP-1980 #114 Main; HCHS trail stop 14 |
+| E7 | **Methodist Episcopal Church**, 116 Main | **PHOTO-BASED** (1898, c. 1909) | rock-faced **grey stone** in regular courses; **two equal steep gables** (one to Main St, one to Maple Ave), each with one **large pointed-arch traceried window**; **square corner tower in the SW angle** (map: belfry "35'" at 17.6 … 21.9): pointed-arch door at the foot, small pointed window, belfry stage with **two tall louvred lancets per face**, corbel band, **four corner pinnacles**, steep **pyramidal spire, tip ≈ 18 m** (photo estimate), small crosses on spire and gables; lower hipped chapel at the rear; slate roofs dark grey; low basement band | `booklets/booklet1910-methodist-church.jpg`, `booklets/booklet1898-churches.jpg`; 1910 text (grey stone, 54 × 120 ft, 1886–88); NRHP-1980 |
+| E8 | **Presbyterian Church**, 10 East Main (new) | **PHOTO-BASED** (1898, c. 1909, 1913) | **dark grey stone**, Gothic; footprint per 7.1 (≈ 30 m wide front block, chapel behind with canted ends, 41 m deep); eaves 5–6 m ("16'–20'"); **square SW tower with a tall slender spire to 33.5 m**; steep main gable facing south with a **round rose window**, in front of it a lower front range with a row of small round-headed windows and a small gabled entrance porch; small gables on the south roof slope; chapel with hipped roofs and a large stone chimney; ivy on the lower walls | `booklets/booklet1910-presbyterian-church.jpg`, `booklets/booklet1898-churches.jpg`, local `flmngtnmainstnorth13.jpg`; FPC c. 1910 card (web); Sept 1921 sheet 5 |
+| E9 | **Soldiers' Monument** (new) | **PHOTO-BASED** | at (8.2, −312.6) on the sheet-2 triangle; ≈ 6 m (20 ft): pale grey-white granite stepped base, die, tall pedestal, standing Union soldier; low iron railing round the triangular grass plot; no cannon or flagpole (later) | `booklets/booklet1898-main-and-broad-monument.jpg`, `booklets/booklet1910-soldiers-monument.jpg`, local 1913 card; Waymarking (1892, granite) |
+
+E8 and E9 go into `street-ends.glb` (budget: church ≤ 1,500 tris, monument ≤ 300; the GLB cap rises to 6,800).
+Colours: Methodist stone mid grey (#8A8780 area, warm), Presbyterian darker grey (#6E6C68); roofs slate #4A4E55.
+
+**7.3 Decisions for the owner (new).**
+1. **Opera House, Sept 1921 "damaged by fire"**: build it as an intact plain hall (recommended; 110 m away, the damage
+   is not described), or with boarded-up windows?
+2. **Lyceum at Court St / Park Ave** (the end of the Court St view, 160+ m): add a tier-2 2-storey box with a front
+   gable (no engine doors; those came in 1922), or leave the view ending at Park Ave as now (recommended: leave;
+   its position is off our map sheets)?
+3. **Doric House E6**: build its portico (columns + entablature, about +400 tris) since it is a known landmark, or
+   keep the plain-dwelling standard (recommended: build the portico)?
+
+**7.4 By-hand links for the owner** (sites block automated access): West Jersey History Flemington gallery
+https://westjerseyhistory.org/images/hunterdon/flemington/ ("Presbyterian Church - 1923", and any fire house, Opera
+House, Court St, Bloomfield Ave, Methodist Church views); walking-trails PDF
+https://www.loveflemington.com/wp-content/uploads/2019/09/Flemington-Walking-Trails.pdf ; HMDB monument page
+https://www.hmdb.org/m.asp?m=18007 ; NJ State Library postcard "Methodist Church"
+https://dspace.njstatelib.org/items/d887b252-a7d5-457e-9314-6375a5467a6e . Offline: HCHS library (1982 fire department
+booklet); Hunterdon County Library, North Branch (Opera House photo).
+
 #### Open questions / guesses
 
-- The slim tower in the 1909 courthouse card: fire-house hose tower (guess) or something in the jail yard.
-- Opera House: label and heights are from 1910; whether it still showed pictures in 1920–21 is not known locally.
+- ~~The slim tower in the 1909 courthouse card~~: resolved (not the fire house; see 7.1).
+- Opera House: fire-damaged in Sept 1921 (sheet 4); extent of damage unknown.
+- Fire house K1: front layout, roof form and doors remain guesses; no photo of the 1862 house was found online.
+- Presbyterian church outline ±5 m (sheet 5 registered on one shared corner); Methodist spire height (photo estimate).
 - Am. Legion rear part: storeys not legible. Ownership of the "Boarding" stable not stated.
 - Roof marks were read at crop scale; a few may be misread (they decide slate / tin against shingle only).
 - All roof forms, window layouts, door positions and paint colours; the laundry stack height; pump positions at the garage.
@@ -6926,3 +7011,6 @@ Check licensing for every asset and note the source in the progress log.
 | 2026-11-11 | planner: **Side streets, backdrop buildings spec written (awaiting owner decisions)**, under "Background"; not committed, index.html untouched, local maps and photos only. Sept 1921 Sanborn sheets 2 and 3 measured along every street and through lane that meets the walkable part of Main St: **Court St west** 5 near buildings (Fire Dept House, stone-cutting shop, Am. Legion Room, double house, Flemington Steam Laundry) + 5 houses to Park Ave; **Bloomfield Ave** 9 new (glass-cutting shop, three houses, the Opera House (label from the 1910 sheet), the brick Garage at no. 21, a house, the Mallory shop, the brick "Boarding" stable) + pass 2's A8–A13; **alley 80** 7 (feed house to Spring St, cold storage, storage); **Higgins Ave** 2; **Capner St** none (out of sight). Street ends listed for a decision (Capner corner block, 12–22 Main, 108–114 Main, Methodist Episcopal Church). Pass 2's A16 fire-house footprint corrected (x −64.1 … −54.5, z −14.1 … 0). No local photo looks down a side street. Standard: true footprints, guessed roofs, flat textured windows, one merged GLB + lightmap per street, ≤ 15.5k triangles and +4 draw calls in all; walk limit unchanged (`locomotion` clamp). |
 | 2026-11-11 | orchestrator | Side streets APPROVED by owner 2026-11-11: (1) full depth as proposed; (2+6) ONE round of web research first (fire house, Opera House, churches, any side-street views), then build what photos show and plain typical roofs/windows on true footprints for the rest; (4) street ends built now as backdrop (fix the misplaced Presbyterian steeple); (3,5,7) as recommended (cheap window texture, side-street-fronting pass-2 boxes built at this standard, a few instanced trees). Helper agents run on Opus from now (owner: Fable used half the 5-hour window in 30 min); orchestrator stays on Fable. |
 | 2026-11-11 | scene-integrator: **Street details pass 2, GROUND built in the scene** (not committed, owner looks first; no Blender). New `js/ground.js`: component `street-ground` builds road, walks, curbs, grass and lanes from the section 9.4 outlines as one mesh per texture = **7 draw calls, 2,171 triangles** (replaces `#road`, `#bloomfield-ave`, `#court-st`, both sidewalks, both curbs = 7 calls). Road = oiled earth-and-stone with wheel tracks (`assets/textures/ground/road_oiled_earth.jpg`, tile 6.4 m, made by `tools/prepare_ground_textures.py` from ONE new CC0 download, Poly Haven `gravel_ground_01` 1K; nothing local was a gravel road), crowned 0.10 m along the map's crown line, darker strip at the curbs, flat arms for Court St (z 2.0–8.4), Bloomfield Ave (z −86.5 … −79.9) and the new Higgins Ave stub (to x 40). True widths: east curb slants 6.40 → 3.51 north of Bloomfield (walk 2.85 m + up to each front), west curb at x −4.55 … −4.19 south of Court St. Walks: concrete as before; **bluestone flags** (generated from `stone_bluestone.jpg`) on the east side z −180 … −105.8 and the west side z −135.9 … −100.1; **brick** crossing at the Palace alley + patch by 38–40; **grass strip** at 59–65 (z −78.5 … −56), Rea verge on Bloomfield, front yards of 91–97 with two guessed paths (added to `#paths`). Stone curbs with joints, **dropped with a 1 m sloping apron at 8 lane mouths**; earth lanes behind them; earth margins on Higgins. Light dirt: 14 droppings + 6 paper scraps + 4 curved junction tracks, one decal mesh. Props moved: `pole-E5` (6.8, −92.5), `pole-E6` (5.75, −126), `pole-E7` (4.95, −150.5), `pole-W0` (−4.95, 28.5). `house-w-s1…s3` replaced by `bldg-79-main`, `bldg-83-87-main` (+ `bldg-83-87-porch`, new `box-group` component), `bldg-91-93-main`, `bldg-95-97-main` at the addendum positions. `locomotion` now uses per-stretch limits (`STREET_GROUND.limits`: east 7.0 / 7.3 / 8.25 / 8.3 / 9.35 north of Bloomfield, west −7.85 south of Court St). `data/minimap.json`: COURT ST z1 10.4, BLOOMFIELD AVE −89.9 / −77.3. Browser check (localhost:8010): no console errors; start view 62 → 66 calls / 186k → 188k tris (ground itself 7 → 7 calls; the +4 are probably the 79 Main placeholder box, now in view at the Court St corner; not measured separately); z −150 looking south 101 → 91 calls. **Not followed exactly:** three east lane mouths cut short so poles E3, E2 and step C2 keep a full curb (−49.1 … −47.2, −14.8 … −11.3, −3.3 … 0.6); curb slabs are not set 1–2 cm out of line; Higgins margins are at walk height, not y 0; the 91–97 "porch fronts" are not on the plain placeholders; lot ground between the new east walk and the 24–30 placeholder (x 7.4 … 10.3) is a bare-earth patch until 24–30 is built. **For blender-builder:** round plain tree pits (F8) need `street-tree.glb` changed (square granite edging still there). **Left for later passes:** F1–F3, F5–F7, F15 placements, fences, hedge, small props, vehicles, back-lot boxes, 57 Main walk strip (when 57 goes in), minimap image re-registration. |
+| 2026-11-11 | blender-builder: **Auto supplies store (100–102 Main) built** (not reviewed, not integrated, not committed; index.html untouched): owner front (a), all plain guesses: 3-storey frame store 7.42 m wide, cornice top 9.14; ground floor = dark closed shop front on the front line (corner boards, two show windows in 2 panes each over plain risers, plain transom bands, centre pair of half-glazed doors recessed 0.60 with a transom light, fascia 2.95–3.30); 2nd and 3rd floors = open galleries 2.16 deep (decks 3.30–3.50 and 6.15–6.35, four plain square posts per tier, plain top/bottom rails with 0.03 square balusters at 0.13 m along the front and across both open ends); main wall behind with a half-glazed door and two 1/1 windows per floor; plain boxed cornice 8.84–9.14 projecting 0.35 with a short north return, no brackets; shed tin roof 9.14 → 8.50; north wall with 2 windows per upper floor (Y 5 and on the bump at Y 13); north bump X −5.27 … −3.71, Y 9.48 … 15.81 (0.41 m clear of the Democrat wall); light court X 1.55 … 3.71, Y 11.02 … 18.68; plain 3-tier rear porch (2 decks, roof, 4 posts) and 3 rear windows per floor. North wall covers the Democrat News lean-to's south wall over its whole length (News Y 0 … 9.35, 2 cm gap). No sign, lettering or awning. Section-E glass (`glass`, backs from `shared/window_backs.jpg`: lace, blinds, dark rooms upstairs; the atlas's shop cells in the show windows and doors, so no separate ShopInterior material). Bake occluders: `democrat-building.glb` shifted into place; 106 as a body box from its front wall back plus its open 3-tier porch (decks, roof, posts) instead of a solid box out to Y −2.24. 3,790 tris, 7 materials, GLB 1.48 MB, **LIGHTMAP_SCALE 1.1366**; entity (10.30, 0.15, 52.01) rot 0 −90 0, id `bldg-100-102-main`, add `glass-reflect`. Previews `store-100-102-{front,three-quarter,detail,gallery,context,context-sw}.png`. Next: reviewer. |
+| 2026-11-11 | planner: **Side streets web research round done** (owner-approved, one round; not committed, index.html untouched). Findings in `research/side-streets-findings.md`; PLAN section 7 added to the side-streets spec. **PHOTO-BASED now**: Methodist Episcopal Church (1898 + 1910 booklet photos: grey stone, two pointed-window gables, SW corner tower with pinnacles and spire), Presbyterian Church (1898/1910 photos + Sept 1921 sheet 5 from Commons: dark grey stone, SW spire 110 ft, placed at about (7.5, −368), replacing the landscape's misplaced steeple), Soldiers' Monument (1892 granite soldier, iron-railed triangle), Court St park and band stand (1910). **PLAIN-GUESS** for the rest, with roof forms from the 1980 NRHP text (garage 21 Bloomfield flat roof + corbelled cornice; Legion room brick pilasters + metal entablature below, stucco above; laundry long gable; houses' gables/porches). Fire house: 1862 brick engine house, no photo; the "hose tower" is withdrawn (it stands north-west of the courthouse) and the Goodspeed "Fire House" card is the Lyceum after the borough bought it in 1922. Opera House: Sept 1921 sheet 4 says "Damaged By Fire". Higgins Ave = Chorister Pl (H1 = Choir School); 114 Main = Doric House. 6 public-domain booklet crops saved to `assets/photos/reference/booklets/` (SOURCES.md updated). By-hand links listed (West Jersey History, loveflemington PDF, HMDB, NJ State Library). |
+| 2026-11-11 | blender-builder: **Corner drugstore (106 Main) built** (not reviewed, not integrated, not committed; index.html untouched): 3-storey frame body 6.18 × 18.65 m (main wall Y 2.24, rear Y 20.89), cornice top 9.14, shed tin roof 9.14 → 8.50; pale cream clapboard front, darker drab clapboard on the south (Higgins Ave), rear and party walls; front upper floors per the 1890s photo: three openings per floor at X −1.95/0/+1.95 with open dark-green louvred blinds (county-hotel `signs_atlas.jpg` louvre cell), 2nd floor tall 1/1 windows under segmental hoods, 3rd floor shorter with flat head boards, the middle opening a half-glazed door onto the porch deck on both floors (guess); frieze with 8 console brackets (corner pairs, pairs under the gable feet) + a pair under the south return, boxed cornice projecting 0.45 with a 0.6 m south return, then a plain 0.25 boxed eave along the avenue; low pediment over the middle bay (rakes X ±1.30, apex 9.75, recessed boarded tympanum); shop front (guess, dark green): corner pilasters, two show windows in 2 panes over panelled risers, transom band, centre pair of half-glazed doors recessed 0.50 with transom light, fascia 2.95–3.20; plain dim shop in the windows; three-tier open porch 2.24 deep, full width: four 0.16 square posts per tier (ground posts on stone blocks, sidewalk runs under, no step), wall half-posts, decks 3.15–3.35 and 6.05–6.25, plain beams, plain rails with 0.03 balusters at 0.13 m on the front and both ends of tiers 2–3, flat tin porch roof; south wall blank for its first 8 m, then 3 windows per upper floor (Y 11/14.5/18) and a side door + window on the ground floor; rear: 2 windows per floor, 3-tier rear porch with decks level with 100–102's (its south post stands at the shared edge, so 106 has 3 rear posts). No sign, no bill boards, no hanging board. **Deviation from the spec heights**: porch roof slab 8.24–8.38 (spec 8.60–8.80, which would cover the frieze and brackets), 2nd-floor heads 5.80, 3rd-floor heads 8.12 (to fit under the decks/roof); even so the front frieze brackets are hidden from the sidewalk by the porch roof edge (sight-line geometry with the map's 30 ft height) — they show from the upper decks and far away; the south-return pair shows from Higgins Ave / the SW. Section-E glass (`glass`, backs from `shared/window_backs.jpg`, shop cells in the show windows and doors, no separate ShopInterior). Bake occluder: `store-100-102.glb` shifted into place; nothing south of Higgins Ave yet. 4,269 tris, 9 materials, GLB 1.59 MB, **LIGHTMAP_SCALE 1.1209**; entity (8.06, 0.15, 58.80) rot 0 −90 0, id `bldg-106-main`, add `glass-reflect`. Previews `store-106-{front,three-quarter,detail,sw,match-100-110-Main,context}.png`. Next: reviewer. |
