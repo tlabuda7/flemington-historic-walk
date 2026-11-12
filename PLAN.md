@@ -7361,6 +7361,108 @@ in `research/new-photos-2026-11-11.md`). Results:
   …/nj0070/ .
 - **G1 Flemington Garage** close view (`flmngtnparadefloatbldg.jpg`, c. 1910, float in front): see row G1 (updated).
 
+**7.9 North approach, z −180 … −300, both sides (planner, 2026-11-12).** **Status:** `spec written — awaiting owner
+approval (2026-11-12)`. Nothing built. Replaces the guessed `landscape.glb` `Town` silhouettes between the last
+shops (27 Main / 24–30 Main, z ≈ −165) and the Soldiers' Monument (E9, z −312).
+
+*Map coverage (plain answer).*
+- **East side (2–10 Main)**: on our **Sept 1921 sheet 2** (CLAUDE.md formula, ±0.5 m), px box x 3900–4700, y 1250–3100;
+  same outlines on **Nov 1910 sheet 4** (old nos. 565–570; 1910: 566 already 3-storey brick, 565 already "Br. 1st,
+  Ir. Cl. 2nd").
+- **West side north of Capner St (1–11 Main): NOT on our sheets.** Sheet 2 draws block 6 only inside the heavy line
+  round the Flemington Water Co. tract (x ≤ −31); the 20 m strip along Main St outside that line is blank because it
+  is drawn on **Sept 1921 sheet 6** (LoC https://www.loc.gov/item/sanborn05479_006/ , image
+  `…g3814fm_g054791921:05479_1921-0006`). **Correction: the built `street-ends.glb` (street_ends.py `LotW`, "empty
+  Water Co. ground") and section 1e ("north side is the empty Water Co. tract") read that blank as empty: five houses
+  stood there.** Sheet 6 was viewed in the session scratchpad only (public domain: asset-scout may add it as
+  `assets/maps/flemington-1921-sanborn-sheet-06.jpg` + SOURCES.md). Nov 1910 sheet 5 (in `assets/maps/`) shows the
+  same west-side houses (old 523–527, 701–702) at px x 5550–5950, y 0–2000.
+- Sheet 6 is 100 ft/in. Registration: **x = −10.6 + (px − 5755) × 0.1033, z = −202.4 + (py − 7007) × 0.1033**
+  (tie: Main St west line × Capner St north line; check: the fire-alarm box, sheet-6 (5848, 5745) → (−1.0, −332.8),
+  sheet 2 (−0.7, −332.1)). **±2.5 m.** Main St is lettered **52'** here; the built road and walks already follow it.
+- No lettered heights. Defaults: 2 storeys eave 6.0 m, 2½ storeys 7.0 m (+ attic gable), 3 storeys 9.5 m.
+
+*Buildings* (ids N…; scene x; z; west fronts face +x, east fronts −x; tags as section 7):
+
+| Id | Building (1921 label, old no.) | Class | Footprint (x; z) | Storeys, material, roof | Porch / details | Evidence |
+|---|---|---|---|---|---|---|
+| NW1 | **9–11 Main "Capnerhurst"** ("D" + "Plumber", 524/523), Capner St corner | PLAIN-GUESS (NRHP-1980 + HCHS) | stone block −25.1 … −16.0; −214.5 … −202.3 (on the Capner St line). Rear 1-storey stone −30.7 … −25.1; −214.5 … −209.8, frame shed −34.6 … −30.7 same z. Along Capner St: **plumber's 2-storey frame annex** −33.7 … −25.1; −208.3 … −202.6 and **2-storey frame "Storage"** −57.3 … −33.7; −209.3 … −202.6 | **2 storeys, stone** (map blue; eave 5.5 guess), **gable roof, ridge parallel to Main St, tin** (NRHP "metal gable roof"); **5-bay front**, centre door with transom, small-paned sash (NRHP 12/12 below, 12/8 above). Dwelling in the north part, plumber's shop in the south part (1910: "S.", "Tin Shop 2d") | 1-storey porch across the front to x −14.2 (map, plain posts) | sheet 6 px x 5520–5717, y 6887–7008; NRHP-1980 #9 ("late 18th c. stone with stucco finish"); HCHS trail stop 5 (parts c. 1760, "stucco over stone and brick", carriage houses behind). **Stucco in 1921 unknown** (map gives no "stuccoed" note): build plain grey-brown rubble stone |
+| NW2 | **7 Main** ("D", 525) | PLAIN-GUESS (NRHP-1980) | −28.9 … −16.0; −225.6 … −216.0 | 2 storeys frame, L-plan, **low-pitched gable with brackets** | porch wraps the front and north side, to x −13.7 (map), classical posts, spindle frieze | sheet 6 px x 5575–5722, y 6782–6875; NRHP #7 |
+| NW3 | **5 Main** ("D", 526) | **PHOTO-BASED** (1913) + NRHP-1980 | north part −25.4 … −18.9; −244.2 … −239.1; main −29.2 … −18.9; −239.1 … −230.5; rear 1-storey −31.8 … −29.2; −235 … −230.5 | 2½ storeys frame, L-plan, intersecting gables; **front gable to the street with a curved, bracketed raking cornice** (1913); **segment-arched window heads** (1913, NRHP); cream clapboard, dark shutters (1913 tint) | **1-storey porch along the front to x −16.8, round NE corner to −14.7** (map); in 1913 an **arcaded porch: pierced flat-sawn posts, pointed-arch spandrels, white baluster rail** (NRHP's plain porch is later); **white garden urn on a pedestal** on the front lawn | sheet 6 px x 5550–5715, y 6602–6735; `flmngtnmainstnorth13.jpg` (near left); probably `flemington_-_the_residence_of_paul_a_queen_esq_-_c_1910.jpg` (same porch arches and urn; name not used in the model) |
+| NW4 | **3 Main** ("D", 527) | **PHOTO-BASED** (1913; 1908 probable) + NRHP-1980 | −31.2 … −20.5; −263.3 … −249.5 | 2½ storeys frame, L-plan, **intersecting slate gables**; **square bay over the entrance with a steep pyramid roof (turret, finial)**; 2-storey bays front and side; segment-arched heads; cream walls, dark roof (1913) | wrap porch to x −16.8 with a canted front bay (map), arcaded cut-out trim "as No. 2" (NRHP) | sheet 6 px x 5533–5695, y 6417–6551; `flmngtnmainstnorth13.jpg` (second house, the dark steep turret); NRHP #3 |
+| NW5 | **1 Main, Capner / Brodhead House** ("D", 702), residence of James E. Brodhead | **PHOTO-BASED** (1906, c. 1910, 1914) + NRHP-1980 + HCHS | main −40.8 … −29.3; −306.3 … −293.8 (**front 18 m behind the street line**); **semicircular 2-storey bay** on the south side −40.5 … −34.2 to z −291.2; rear 2-storey part (brick 1st, frame 2nd) −50.4 … −40.8; −302.7 … −291.5 | **2½ storeys, red brick, pale trim** (1914), 5 bays, gable ends with 2-storey bays, **central gambrel gable with a Palladian window**, dormers, **pair of tall stepped chimneys**, pedimented entrance, windows with wide keystoned architraves (NRHP) | **wrap porch** (front to x −25.3, north side z −308.4) on **slender Ionic columns**, classical balusters; **porte-cochère** as a diagonal strip at the SE corner, corners ≈ (−29.3, −295.0), (−23.1, −290.5), (−26.4, −287.2), (−31.5, −292.0). Lawn with a curving walk; formal beds, an urn and young conifers (1913–14) | sheet 6 px x 5370–5634, y 5981–6186; `flemington_-_rresidence_of_j_e_brodhead_-_c_1910.jpg`, `flmngtnresjasebrodhead06.jpg`, `flemington_-_brodhead_residence_1914_blizzard_flemington.jpg`, `flemington_-_the_view_from_the_lawn_of_mr_james_e_brodhead_-_1913.jpg`; NRHP #1; HCHS trail stop 6 (c. 1800 brick, late-1800s remodel, porte-cochère) |
+| NE1 | **10 Main** ("Off.", 565) | PLAIN-GUESS | 15.9 … 21.9; −209.1 … −200.4; rear 1-storey frame 21.9 … 23.7; −208.7 … −203.8 | 2 storeys: **brick 1st, iron-clad 2nd** (map: pink + grey); flat roof behind a plain cornice (guess) | small 1-storey porch 13.9 … 15.9; −205.2 … −200.4; steps on the south side | sheet 2 px x 4064–4252, y 2887–3053; no NRHP entry |
+| NE2 | **8 Main "Boarding"** (566) | PLAIN-GUESS | 15.9 … 23.7; −223.0 … −209.1; rear 2-storey frame 23.7 … 29.9; −217.4 … −210.8, then 1-storey to 37.4 | **3 storeys + basement, brick**, roof mark "x" (shingle): low hip (guess) | 1-storey porch across the whole front 13.9 … 15.9 | sheet 2 px x 4064–4515, y 2617–2887; gone by 1979 (NRHP #8 = 1-storey modern) |
+| NE3 | **6 Main** ("D", 567) | PLAIN-GUESS | 16.2 … 30.8; −237.5 … −229.7; north wing 22.6 … 27.7 to z −240.0; rear 1-storey 30.8 … 33.5 | 2 storeys frame, gable (section 3 standard) | 1-storey porch across the front 14.2 … 16.2 | sheet 2 px x 4070–4440, y 2294–2491; no NRHP entry |
+| NE4 | **4 Main** ("D", 569) | PLAIN-GUESS (NRHP-1980) | 16.0 … 28.2; −255.2 … −246.7; rear 28.2 … 31.7; −255.2 … −250.6; south bay 20.2 … 23.1 to z −245.7 | **2½ storeys brick, L-plan Italianate, low-pitched gable, paired large brackets, heavy bargeboards**, tall narrow windows | **arcaded porch** wrapping the front (14.7 … 16.0) and the north side to x 23 | sheet 2 px x 4080–4415, y 1989–2185; NRHP #4 |
+| NE5 | **2 Main** ("D", 570), probably the **W. D. Bloom** residence | **PHOTO-BASED** (before 1907, c. 1905–10) + NRHP-1980 | **skewed 10.9°** to the bent street line: front corners (22.7, −285.1) N, (19.9, −271.5) S; rear (31.4, −282.8), (28.9, −270.6); rear part to x 35.7 (z −279.0 … −272.9); 2-storey frame ell 35.7 … 39.9 | **2½ storeys, T-plan Italianate, scored stucco (pale)**, 5 bays, **cross-gable roof with wide bracketed eaves**, 2-storey bay on the south side | **3-bay arcaded porch** across the front (18.7 … 21.0, z −282.8 … −274.4), cut-out trim, chamfered posts on pedestals | sheet 2 px x 4155–4565, y 1428–1706; `flmngtnstresmonumnt.jpg` / `flmngtnstreetsceneview.jpg` (left of the monument), `flemington_-_looking_at_the_soldier's_monument_and_some_surrounding_houses.jpg`, `flemington_-_the_soldiers_monument_on_main_street_-_c_1910.jpg`; NRHP #2. "W. D. Bloom" = William D. Bloom, one-time county clerk (Goodspeed, bank ch. 3) |
+
+Also mapped, not proposed: the Capner St dwelling "106" (2-storey frame, x ≈ −72 … −62) and two "Auto" sheds behind
+NW2–NW3 (x ≈ −70); the Water Co. barn and coops (x −107 … −60, z −320 … −260, behind NW1 from every walk spot);
+the "Undertaker" (x ≈ −80, z −330); NE sheds at x 32–47; the carriage house with a cupola that NRHP puts behind 2 Main
+is not clearly drawn (perhaps the frame ell). The T.H. hydrant at (5.4, −261) could take the pass-1 hydrant prop.
+
+*Cards: which stretch each shows.*
+- **This stretch**: `flmngtnmainstnorth13.jpg` (1913 colour, **primary**): camera on the west walk at about z −215
+  looking N (monument 11° and spire 8.5° right of centre; computed 10° / 6°): NW3 near left, NW4 second, NW5 in the
+  trees; east side lawns and big trees; west walk ≈ 1.8 m with a grass strip to the curb, earth road.
+  `flmngntnmainstreetsouthfrmonument08.jpg` (1908) = `flmngtnmainstrtvu.jpg` (colour): **probable** (medium), from
+  near the monument looking S: right a towered house with a 2-tier porch (probably NW4), left porched houses behind
+  lawns (NE5–NE3); big trees along both walks, poles on the west side. The monument-from-the-rear cards (before 1907,
+  c. 1905–10, four files above) and the Brodhead cards (1906, c. 1910, 1913, 1914): NE5 and NW5.
+- **Not this stretch**: `flmngtnmainstrtvuwthhotel08.jpg`, `flmngtnhotelhntrdon00s10s.jpg`, `flmngtnhtlflemingtonvu08.jpg`
+  (E1, looking S from Capner St); `flmngntnmainstrtnorthfromhtl08.jpg` (walkable stretch, Union Hotel porch at right);
+  `flmngtnmainstrtviewof06.jpg` (c. 1906) = the same scene as `flemington_-_main_street_looking_north_from_the_railroad_station_-_1909.jpg`
+  (far south end); `flemington_-_main_street_looking_south_from_william_street_-_1910.jpg` (far south);
+  `flmngtnlarge_homes_on_main_street,_flemington_nj_1912.jpg` ("looking W.", south end); the five Large residence cards
+  and HABS Reading-Large (119 Main, W1) and John G. Reading (151–153 Main): south. `flmngtnmainsthouses.jpg` is Mine St.
+- **Not identifiable**: `flmngtnhousesonmainst11.jpg` ("Residence Section": grass strip with a double tree row, like the
+  south end: probably south); `flmngtnmainstmaybe.jpg` (1903); Richards (`flemington_-_the_residence_of_william_richards.jpg`,
+  `flmngtnwllmrichardsres.jpg`), Emmet (`flmngtnemmethouse07.jpg`), Newell (`flmngtnehnewellhouse.jpg`): no street given,
+  none matches a house above.
+
+*Trees (backdrop-tree instances, `street_ends_bake.py` `TREES` style).* PHOTO for the rows (1908, 1913: big
+deciduous trees along both walks, crowns meeting); spacing TYPICAL-GUESS:
+- West, at the lawn edge x −11.3: z −206, −224, −241, −258, −276, −291 (scale 2.0–2.3).
+- East, behind the walk x 7.0: z −198, −214, −230, −246; then (12.8, −278), (15.5, −292) along the bend; keep (10.0, −262).
+- In front of NW5: two big trees at (−20, −300) and (−22, −286) (c. 1910 card); keep (−14, −300) only if it does not
+  sit on the walk line.
+
+*`Town` silhouettes this replaces* (`tools/blender/landscape.py` `build_town`, north block; switch to `gone()` so the
+random draws stay the same): houses at Blender y 214 (east), 246 (east) and 246 (west) (the west one stands on NW3);
+trees `tree(±12.8, …)` at y 207/212, 222/227, 238/243; big trees (36, 190), (−37, 210), (34, 226), (−36, 244). After this
+no `Town` item remains north of the walk.
+
+*Ground.* Lots stay the built `LotW` / `LotE` grass. Add per house a straight concrete path from the walk to the porch
+steps (1.2 m) and NW5's curving walk (c. 1910). Decision 3 covers the west walk.
+
+*Build.* Section 3 standard; **NW3, NW4, NW5, NE5 as notables** (porch arches as alpha quads, NW4's turret, NW5's
+porte-cochère, Palladian gable and chimneys, NE5's wide bracketed eaves): ≤ 700 tris each; the other six ≤ 300; NW1's
+Capner annexes ≤ 150. **Total ≤ 4,800 tris.** Recommended: a new `north-approach.glb` (script `tools/blender/north_approach.py`
++ `_bake.py`, scene axes like street_ends.py, own 2K lightmap, ≤ 6 colour maps, +1 draw call, ≤ 1.5 MB), so
+street-ends.glb's lightmap is not spread thinner. Materials reuse the project's clapboard (cream, white), red brick,
+stucco (pale buff for NE5), rubble stone (NW1), slate and tin; window sheet as section 3.
+
+*Acceptance checks.* (1) Every footprint within 0.5 m (east) / 2.5 m (west) of the table; nothing on the road, walk or
+E1/E2. (2) From (−9, 1.75, −160) looking N: NW1's stone front on the Capner corner, then NW2–NW4 close behind short
+lawns, NW4's dark turret, NW5 far back behind trees; the monument and spire beyond. (3) From (8, 1.75, −160) looking N:
+NE1 small office, NE2 tall 3-storey brick boarding house, NE3, NE4, then NE5 turned to the bend. (4) NW5 red brick with
+porte-cochère at its SE corner; NE5 pale stucco with an arcaded 3-bay porch. (5) No sign or lettering; no `glass`.
+(6) The listed `Town` items are gone; no house stands twice. (7) One draw call; ≤ 4,800 tris.
+
+*Decisions for the owner.*
+1. **Build the north approach as above** (ten real 1921 houses, four photo-backed; recommended), or only the four
+   photo-backed ones (NW3, NW4, NW5, NE5) with the others as plain boxes?
+2. **Detail for the four photo-backed houses**: notable standard with their porches, turret and porte-cochère
+   (recommended; ≈ +1,600 tris), or the plain section-3 standard?
+3. **West walk north of Capner St**: narrow it to the 1913 card's ≈ 1.8 m concrete walk with a ≈ 2.2 m grass strip to the
+   curb (a ground edit in street_ends.py; recommended, it is the one ground detail a photo shows), or keep the built
+   full-width concrete walk?
+
+*Open questions / guesses.* West side ±2.5 m (sheet 6 at half the scale); every height (no lettering); NW1 stone or
+stucco in 1921; NE1, NE2, NE3 roof forms and colours; NE5 = Bloom and NW3 = the Queen house are inferences;
+the 1908 card's view direction (medium).
+
 #### Open questions / guesses
 
 - ~~The slim tower in the 1909 courthouse card~~: resolved (not the fire house; see 7.1).
@@ -7751,6 +7853,93 @@ county offices; `dry` — 18th Amendment (17 Jan 1920), 1920s cards (cars at the
 - The Goodspeed article's "Nevius family took possession in the 1930s" conflicts with the other
   sources; if the owner finds the 1920 tenant was someone else, only the JSON and the name change.
 
+### Proposal: more townsfolk (planner, 2026-11-12)
+
+**Status:** `proposal written — awaiting owner approval, one person at a time (2026-11-12)`. Nothing built.
+Same pipeline and technique as Pickell (UAL rig + MPFB2 head/hands + modelled clothes, ≤ 15k tris, one 2K atlas,
+`Idle`/`Talk`, blob shadow, `data/dialogue/<id>.json`, Piper voice). Scene day as Pickell: **early September 1920**.
+Rule kept: real people say only documented facts about their place; anonymous figures get no name and only general
+period small talk. Each person adds +2 draw calls where he or she is in view (body + shadow).
+
+**Evidence strength**: R1 strong · R2 medium-thin · A1, A2 anonymous (photo-based clothing only).
+
+**R1. Albert H. Rittenhouse, cashier of the Hunterdon County National Bank (90–94 Main, Masonic Hall).** REAL, strong.
+- Why: cashier **1895–1934** in the Comptroller of the Currency lists (SPMC: https://banklookup.spmc.org/bank/892 ;
+  president 1917–28 John A. Bullock). The bank is in the built Masonic Hall (`#bldg-90-94-main`). Age, looks and family
+  unknown (an "H. H. Rittenhouse" was assistant cashier in 1938, Goodspeed ch. 3: relation unknown, not used).
+- Spot: east walk just north of the bank's main door (model Xn 4.50–6.30 from the north end), in front of bank
+  window 1: about **(9.40, 0.15, 25.4)**, `rotation="0 -120 0"` (faces WNW, toward the start point 7 m north).
+  Integrator: check the door position in `masonic-hall.glb` (its entity comment says "centre of the stone front face").
+- Standing. Clothing: dark three-piece business suit, white starched collar, dark tie, watch chain, bareheaded,
+  black oxfords (as the clerk in `flemington_-_some_business_blocks_on_main_street_-_1907.jpg`; FIT 1920–29); differ
+  from Pickell by colour (dark navy or black), no tape measure, wire spectacles (guess), older face (age guess 55).
+- Lines (sources): (1) "Good afternoon. Albert Rittenhouse, cashier of the Hunterdon County National Bank." [SPMC]
+  (2) "I have been cashier here since 1895. Mr. John A. Bullock is our president." [SPMC] (3) "Mr. Hopewell put up this
+  hall for the bank in the 1860s: stores below, offices, and the Masons' rooms on the top floor." [Masonic Hall spec:
+  built 1864–66 by John C. Hopewell for the bank, "Masonic Hall"; Sept 1921 map "Lodge Rms. 3d"; Goodspeed
+  https://goodspeedhistories.com/flemingtons-first-bank-part-two/ ] (4) "The bank bought the whole building a couple of
+  years ago, and this year we are making new banking rooms out of the north and centre stores, with a stone front."
+  [Goodspeed https://goodspeedhistories.com/flemingtons-first-bank-chapter-3/ : "acquired the building about 1918",
+  "In 1920 … a major remodel", "north and center stores", stone front, opened 7 March 1921] (5) "We have been a
+  national bank since 1865. Good day to you." [SPMC: chartered 14 Mar 1865]
+- Uncertain: his appearance and age; the scene shows the **finished** 1921 stone front while he speaks in Sept 1920
+  of work in progress (line 4 could say "our new banking rooms" instead).
+
+**R2. Anthony Killgore, editor of the *Hunterdon County Democrat* (96–98 Main, Democrat building).** REAL, **medium-thin
+for 1920**: only Wikipedia says he edited the paper "until 1922" (https://en.wikipedia.org/wiki/Hunterdon_County_Democrat);
+the HCHS newspaper-collection finding aid names the Killgores (father, then son Anthony) as owners/editors from 1867
+(https://hunterdonhistory.org/wp-content/uploads/2019/10/Collection-144-Archives-Detail.pdf ; it gives the father as
+"Robert K.", Goodspeed as "Robert J."). Age, looks unknown.
+- Spot: east walk in front of the slot between the Masonic Hall and the Democrat's north door, about
+  **(9.30, 0.15, 41.2)**, `rotation="0 -120 0"` (integrator: keep clear of the north door, Xn 0.24–1.21 from z 41.37).
+- Standing. Clothing: dark suit **with the coat off**: waistcoat, white shirt with sleeve garters, dark tie (a printing-
+  office guess; the c. 1900 Goodspeed photo `DemocratOffice-copy-scaled.jpg`, view only, shows men in dark suits at
+  this door); bareheaded.
+- Lines: (1) "Good afternoon. Anthony Killgore; I edit the Hunterdon County Democrat. This is our office." [Wikipedia;
+  1921 map "Printing"] (2) "The paper has carried that name since July 1867." [Wikipedia] (3) "Mr. Hopewell built this
+  for the Democrat and a tobacco store in 1875, and my father bought it the next year; the deed says nothing taller may
+  be built on the lot." [Goodspeed https://goodspeedhistories.com/hopewells-buildings/ ; Democrat spec] (4) "We print
+  in the back room; the press runs on an electric motor. Cigars in the front shop, papers at the stand alongside."
+  [Sept 1921 map: "Cigars", "Printing, El. Mo.", "News" strip]
+- Uncertain: that he (not a manager) was at the office in Sept 1920; father's middle initial; whether to keep him at
+  all if the owner wants only strong evidence (alternative real person with strong evidence: **Firman R. Williamson**,
+  president of the Flemington National Bank 1915–1932, SPMC https://banklookup.spmc.org/bank/2331 , at the Bank
+  Building 56–66 Main; its cashier B. H. Berkaw is listed 1901–1920 and N. Sutphin from 1921, so the Sept 1920 cashier
+  is uncertain: not proposed).
+
+**A1. The grocer's boy at 35–37 Main (anonymous).** Seen in the HCHS Stryker plate c. 1906–10
+(`hchs-stryker-main-st-south-from-hall-grocery.jpg`, full-res x ≈ 3600–3700, y ≈ 1750–2000): a young man standing at
+the grocery porch under the awning, **light-coloured work jacket, bareheaded, short hair**.
+- Spot: west walk in front of the grocery porch, north of its stair, about **(−9.80, 0.15, −133.0)** (35–37: z −135.82
+  … −129.42, porch front x −11.12), `rotation="0 60 0"` (faces ESE, toward visitors coming up from the south). Standing.
+- Clothing: light tan duck work jacket (photo), dark trousers, white shirt, **long white grocer's apron** (guess, typical),
+  boots or oxfords; age about 17 (guess).
+- Lines (general, no names): (1) "Afternoon! Tomatoes and sweet corn are in, and the first apples." [season, general]
+  (2) "Leave your order and I'll bring it round with the delivery wagon." [grocery wagon photo F14, pass 2 8a]
+  (3) "Sugar's been dear all year." [1920 sugar price peak: https://en.wikipedia.org/wiki/Dance_of_the_Millions ]
+  (4) "Mind the steps, and come up out of the sun." 
+- Uncertain: the plate is 10–14 years before 1920; **do not let him name the grocer** (the valance's "Jacob R. Hall"
+  is not confirmed for 1920; owner may allow "Mr. Hall's" since the awning already says so).
+
+**A2. A woman shopping on the east walk (anonymous).** The 1914 colour card `flmngntnmainststores14.jpg` ("Main Street
+looking N.") shows women in long dresses and hats and girls in white on the east walk before the Bank Building.
+- Spot: east walk before the Bank Building shop fronts, about **(8.60, 0.15, −70.5)** (`#bank-building` at x 12.24,
+  forecourt x 11.48; integrator to check), `rotation="0 -60 0"`. Standing, a shopping basket or parcel.
+- Clothing (1920, not 1914): **mid-calf skirt, loose white shirtwaist blouse, dropped waist with a sash, wide-brimmed
+  straw hat with a ribbon, dark stockings, laced low-heeled shoes**, hair pinned up (FIT 1920–29 timeline,
+  https://fashionhistory.fitnyc.edu/1920-1929/ ; Pickell spec research note); age about 35 (guess). Needs a new female
+  MPFB2 body and a modelled dress (more builder work than R1/R2).
+- Lines (general): (1) "Good afternoon. Warm for September, isn't it?" (2) "I'm on my way to Nevius's for dress goods."
+  [78 Main "Dry Goods", Pickell spec] (3) "This November we women vote for President for the first time." [19th
+  Amendment, NJ ratified 9 Feb 1920, election 2 Nov 1920: https://en.wikipedia.org/wiki/Nineteenth_Amendment_to_the_United_States_Constitution ]
+  (4) "Mind the motor cars when you cross."
+- Uncertain: everything personal (she is generic by design).
+
+**Recommended order:** **R1 Rittenhouse first** (strongest evidence; male suit pipeline reused from Pickell, so the
+cheapest), then **A2** (variety: the first woman), then **A1**, then **R2** only if the owner accepts the thin 1920
+evidence (or swap in Williamson). Not proposed: the Union Hotel's 1920 proprietor (not found; the "D. C. Muirhead"
+card is c. 1910), the Palace Theatre manager (only a 1940s name found), Jacob R. Hall by name (1920 not confirmed).
+
 ## Asset checklist
 
 ### Reference material
@@ -7925,3 +8114,4 @@ Check licensing for every asset and note the source in the progress log.
 | 2026-11-12 | orchestrator | **79 Main placed and published** (`bldg-79-main` at (−9.74, 0.15, 14.22), 2,997 tris, intensity 1.0137, glass-reflect; placeholder removed). Plain paving boxes `walk-79-87` in front of 79 and 83–87 (flat colour, not the textured sidewalk). Alley between 79 and 83–87 and the strip behind 79 have no ground of their own. 91–93 and 95–97 building. |
 | 2026-11-12 | orchestrator | **91–93 and 95–97 Main placed and published** (`bldg-91-93-main` at (−13.18, 0.02, 38.63), 4,136 tris, intensity 1.0927; `bldg-95-97-main` at (−13.00, 0.02, 54.01), 2,544 tris, intensity 1.0812; both glass-reflect; walks in `paths-91-97`). **No placeholder boxes remain on Main St.** Performance: the two end-of-street views had reached 102–104 draw calls and 313k / 323k triangles (budget ~300k). Fix: backdrop trees split into six area groups; new `hide-beyond` component stops drawing the three side-street backdrops and their trees beyond 90 m of their street mouth (estimated 287k / 289k at the ends; start view was 84 calls / 281k before the fix). Not re-measured after the fix: the browser pane was hidden. |
 | 2026-11-12 | orchestrator | **Section-E windows placed on the Palace Theatre (intensity 0.9893) and Odd Fellows Hall (1.2495)**, both with `glass-reflect` and `?v=2` URLs: every building on the walk now has the window treatment. **`old-maple.glb`** (1,430 tris, real size) now used for the three big trees opposite the bank (`#old-maples-west`, scale ~0.8) and the 14 Court St trees (scale ~1.0, hidden beyond 90 m). Other backdrop trees remain the scaled young tree. |
+| 2026-11-12 | planner | **North approach (z −180 … −300) spec written** as "Side streets" 7.9, awaiting owner approval: 1921 sheet 2 covers only the east side (2–10 Main); the west side (1–11 Main) is on **Sept 1921 sheet 6** (LoC, viewed in the scratchpad, not committed), so the built street-ends.glb "empty Water Co. ground" is wrong: five houses stood there. Ten buildings N…, four photo-backed (5, 3, 1 Main from the 1913 and Brodhead cards; 2 Main from the monument-from-the-rear cards) + NRHP-1980 forms; `Town` silhouettes to remove listed; 3 owner decisions. **People proposal** under "## People": R1 Albert H. Rittenhouse (bank cashier, strong), R2 Anthony Killgore (Democrat editor, thin for 1920), A1 grocer's boy (anonymous, Stryker plate), A2 woman shopper (anonymous, 1914 card); recommended order R1, A2, A1, R2. Nothing built. |
