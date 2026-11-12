@@ -9,7 +9,7 @@ Run inside Blender:
 Set EN_MATERIALS_ONLY = True before exec() to stop after step 2 (look at the materials).
 
  1. Rebuild the geometry (street_ends.py).
- 2. Nine materials (`baked-lighting` merges them into one draw call):
+ 2. Ten materials (`baked-lighting` merges them into one draw call):
       clap      house-65-main/clapboard_cream.jpg, tile 1.0 m (paint colours via the Tint attribute
                 into the lightmap)
       brick     polyhaven/red_brick.jpg, tile 1.4 m, x factor -> #7A4436 (hotel, Vosseller, library,
@@ -24,6 +24,8 @@ Set EN_MATERIALS_ONLY = True before exec() to stop after step 2 (look at the mat
       concrete  polyhaven/sidewalk_concrete.jpg, tile 3 m (walks, curbs, steps)
       grass     shared/backdrop_grass.jpg, tile 4 m (lots, lawns, the monument plot)
       earth     ground/ground_detail.jpg x js/ground.js's EARTH #8c7b62, tile 2 m (trodden lots)
+      leaves    shared/shrub_leaves.jpg (tools/prepare_shrub_leaves.py), tile 0.8 m: the Methodist
+                church's ivy and four foundation shrubs (R-b, 2026-11-12)
  3. Join, delete faces nobody can see, unwrap "Lightmap" (street fronts weighted up, roofs and
     far ground down), pack.
  4. Bake warm late-afternoon sun + sky into one 2K lightmap with Cycles. Scene axes, so the world
@@ -58,9 +60,9 @@ TREE_SHADOWS = True
 # TYPICAL-GUESS); crown ~6.6 m x scale
 TREES = [(-7.6, -173.5, 2.0, 0.15),   # big trees on the walk in front of the hotel (1908 cards)
          (-7.6, -187.0, 2.1, 0.15),
-         (10.0, -262.0, 2.1, 0.15),   # east side, south of the fork
-         (-14.0, -300.0, 2.3, 0.15),  # big trees round the monument (1910 colour card, rear views)
-         (-14.0, -322.0, 2.2, 0.15),
+         # (R-a 2026-11-12: (10, -262) and (-14, -300) removed; (10, -262) is now the old maple
+         #  omaple-n-15 at (9.6, -261) in the maple list below)
+         (-14.0, -322.0, 2.2, 0.15),  # big tree by the monument (1910 colour card, rear views)
          (40.0, -326.0, 2.2, 0.15),   # corner of Branch St and Pennsylvania Ave
          (14.0, -337.5, 2.3, 0.15),   # church lawn (1923 card: tall trees)
          (0.0, -378.0, 2.2, 0.15),    # west of the church
@@ -82,7 +84,8 @@ TREES += [(-11.3, -206.0, 0.95, 0.15, "maple"), (-11.3, -224.0, 1.0, 0.15, "mapl
           (7.0, -198.0, 1.0, 0.15, "maple"), (7.0, -214.0, 0.95, 0.15, "maple"),
           (7.0, -230.0, 1.0, 0.15, "maple"), (7.0, -246.0, 0.9, 0.15, "maple"),
           (12.4, -275.0, 1.0, 0.15, "maple"), (20.0, -291.5, 0.95, 0.15, "maple"),
-          (-20.0, -300.0, 1.05, 0.15, "maple"), (-22.0, -286.0, 1.05, 0.15, "maple")]
+          (-20.0, -300.0, 1.05, 0.15, "maple"), (-22.0, -286.0, 1.05, 0.15, "maple"),
+          (9.6, -261.0, 0.95, 0.15, "maple")]                                  # R-a: omaple-n-15
 # neighbours for the bake (GLB, index.html position, rotation y); the south-east backdrop and the
 # north approach are in scene axes already
 NEIGHBOURS = [("store-27.glb", (-10.30, 0.15, -158.49), 90), ("block-24-30.glb", (7.29, 0.15, -152.365), -90),
@@ -113,6 +116,7 @@ LOOK = {   # name: (file, roughness, factor)
     "concrete": (TX + r"polyhaven\sidewalk_concrete.jpg", 0.95, None),
     "grass": (TX + r"shared\backdrop_grass.jpg", 1.0, (0.80, 0.74, 0.80)),
     "earth": (TX + r"ground\ground_detail.jpg", 1.0, tint((201, 201, 201), (0x8C, 0x7B, 0x62))),
+    "leaves": (TX + r"shared\shrub_leaves.jpg", 1.0, None),           # R-b: Methodist ivy and shrubs
 }
 FINAL_NAMES = {k: "en_" + k for k in LOOK}
 
@@ -155,7 +159,7 @@ PRES = tint(STONE, (112, 110, 105))                           # Presbyterian: da
 PART_TINT = {"E1W": (0.62, 0.62, 0.60), "E1L": (0.90, 0.88, 0.83), "E1R": (0.95, 0.94, 0.90),
              "E2": (0.88, 0.87, 0.80), "E3": (0.96, 0.94, 0.86), "E4": (0.84, 0.78, 0.64),
              "E6N": (0.80, 0.80, 0.78), "E6F": (0.10, 0.10, 0.10), "E6W": (0.98, 0.97, 0.93),
-             "E7I": (0.85, 1.0, 0.75), "E9R": (0.10, 0.10, 0.10), "E9M": (0.97, 0.97, 0.95),
+             "E9R": (0.10, 0.10, 0.10), "E9M": (0.97, 0.97, 0.95),
              "RoadND": (0.77, 0.75, 0.73), "RoadSD": (0.77, 0.75, 0.73), "Beds": (0.78, 0.68, 0.58)}
 TINTS = {("E1", "brick"): (0.98, 0.92, 0.90), ("E5", "brick"): (0.80, 0.72, 0.70),
          ("E10", "brick"): (0.82, 0.74, 0.72), ("E11", "brick"): (0.95, 0.88, 0.85),
@@ -164,7 +168,11 @@ TINTS = {("E1", "brick"): (0.98, 0.92, 0.90), ("E5", "brick"): (0.80, 0.72, 0.70
          ("Paths", "concrete"): (1.0, 0.97, 0.90), ("LotW", "grass"): (0.98, 0.94, 0.84),
          ("LotE", "grass"): (0.98, 0.95, 0.86), ("LotB", "grass"): (0.98, 0.95, 0.86),
          ("LotC", "grass"): (1.0, 1.0, 0.95), ("LotS", "grass"): (1.0, 0.99, 0.93),
-         ("LawnW", "grass"): (1.0, 1.0, 0.95), ("E9P", "grass"): (1.0, 1.0, 0.95)}
+         ("LawnW", "grass"): (1.0, 1.0, 0.95), ("E9P", "grass"): (1.0, 1.0, 0.95),
+         # R-b: ivy darker than the shrubs; shrubs dark green, a little different each
+         ("E7I", "leaves"): (0.52, 0.58, 0.46), ("E7J", "leaves"): (0.58, 0.64, 0.50),
+         ("E7S1", "leaves"): (0.72, 0.78, 0.64), ("E7S2", "leaves"): (0.80, 0.82, 0.66),
+         ("E7S3", "leaves"): (0.68, 0.76, 0.66), ("E7S4", "leaves"): (0.76, 0.80, 0.62)}
 
 
 def part_tint(part, mat):
@@ -216,6 +224,11 @@ mesh.materials.clear()
 for name in order:
     mesh.materials.append(bpy.data.materials[name])
 mesh.polygons.foreach_set("material_index", mi)
+# R-b: smooth shading on the leaf faces so the low-poly shrubs read as rounded (the ivy is planar)
+_leaf_slot = order.index("en_leaves") if "en_leaves" in order else -1
+for _p in mesh.polygons:
+    if _p.material_index == _leaf_slot:
+        _p.use_smooth = True
 
 
 def fibonacci(n):
@@ -696,7 +709,8 @@ bpy.context.view_layer.objects.active = r_obj
 import os
 import tempfile
 REENCODE = {"road_oiled_earth": (70, None), "roof_slates_03": (62, None), "red_brick": (62, None),
-            "backdrop_grass": (72, None), "ground_detail": (85, 1024)}
+            "backdrop_grass": (72, None), "ground_detail": (85, 1024),
+            "shrub_leaves": (50, None)}                     # R-b: keeps the GLB near 1.6 MB
 tmpdir = tempfile.mkdtemp(prefix="street_ends_glb_")
 swapped = []
 for mat in mesh.materials:

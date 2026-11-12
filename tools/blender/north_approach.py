@@ -35,10 +35,13 @@ No signs, lettering or glass. No trees (the scene instances old-maple.glb; posit
 north_approach_bake.py TREES).
 
 GROUND (this model draws it; street-ends.glb no longer does):
-  west  lawn x -60 .. -10.4 and the 1913 walk: concrete x -10.4 .. -8.6 (1.8 m), grass strip
+  west  lawn x -110 .. -10.4 (R-a 2026-11-12; was -60) and the 1913 walk: concrete x -10.4 .. -8.6 (1.8 m), grass strip
         x -8.6 .. -6.4 (2.2 m), curb face at x -6.4; all for z -202.4 .. -328.7
   east  lawns from the east walk's property line (6.29, -192.4) .. (6.0, -247.8) ..
-        (12.0, -279.6) .. (25.7, -307.2) east to x 50 / 80, z -192.4 .. -307.2
+        (12.0, -279.6) .. (25.7, -307.2) east to x 95 (R-a; was 50 / 80), z -192.4 .. -307.2,
+        SE edge (25.7, -307.2) .. (80, -294.9) .. (95, -291.5)
+OUTBUILDINGS (R-a, PLAN.md "Rough-spot fixes"): 26 plain massing boxes from the 1921 maps (OE1-14,
+  OW1-12), see build_outbuildings()
   1.2 m concrete paths cut into the lawns (no overlap) from the walk to each porch's steps,
   NW5's curving walk (c.1910 card). Road, east walk, Capner St and everything north of
   z -328.7 (west) / beyond the east walk's bend stay in street-ends.glb.
@@ -833,6 +836,171 @@ def ne5_point(dx, dy):
 
 
 # ===========================================================================
+# OUTBUILDINGS (PLAN.md "Rough-spot fixes" R-a, 2026-11-12). Footprints: Sept 1921 sheet 2 (east,
+# +-0.5 m) and sheet 6 (west, +-2.5 m). Plain massing: weathered clapboard, 35 deg gable with the
+# ridge along the long side, 0.25 m eaves, slate-grey or brown-shingle roof, one dark door on the
+# side facing the house. Heights GUESS (1 storey 2.6 m eave, 1 1/2 = 3.6 m, 2 = 5.2 m).
+# ===========================================================================
+OUT_EAVE = {1: 2.6, 1.5: 3.6, 2: 5.2}
+OUT_ROOF = {"grey": (0.62, 0.62, 0.66), "brown": (0.82, 0.70, 0.58)}
+OUT_WALL = [(0.42, 0.37, 0.31), (0.38, 0.36, 0.32), (0.45, 0.40, 0.33), (0.40, 0.37, 0.34)]   # weathered grey-brown
+OUT_TINTS = {}      # (part, final material) -> Tint, merged into the bake's TINTS
+OUT_BOXES = []      # Blender (x0, x1, y0, y1) per outbuilding, for the bake's lightmap density
+TO_HOUSE = {"E": Vector((-1, 0)), "W": Vector((1, 0)), "S": Vector((0, -1))}   # Blender XY
+
+
+def rect_b(x0, x1, z0, z1):
+    """scene ranges -> Blender XY corners (counter-clockwise)"""
+    return [Vector((x0, -z1)), Vector((x1, -z1)), Vector((x1, -z0)), Vector((x0, -z0))]
+
+
+def turned_b(x0, x1, z0, z1, deg):
+    """rectangle turned by deg (Blender, about Z) whose bounding box is the given scene ranges"""
+    W, H = x1 - x0, z1 - z0
+    c, s = math.cos(math.radians(abs(deg))), math.sin(math.radians(abs(deg)))
+    w, h = (W * c - H * s) / (c * c - s * s), (H * c - W * s) / (c * c - s * s)
+    m = Vector(((x0 + x1) / 2, -(z0 + z1) / 2))
+    th = math.radians(deg)
+    rot = lambda v: Vector((v.x * math.cos(th) - v.y * math.sin(th), v.x * math.sin(th) + v.y * math.cos(th)))
+    return [m + rot(Vector((sx * w / 2, sy * h / 2))) for sx, sy in ((-1, -1), (1, -1), (1, 1), (-1, 1))]
+
+
+def outb(p, corners, storeys, kind="gable", door="E", cell="door_brown", dw=1.0, dh=2.0, wall="clap",
+         roof="slate", roof_tint="grey", wall_tint=None, pitch=35.0, eave=None, hi=None, gable_mat=None,
+         under="sw:wood_grey", oe=0.25):
+    """one outbuilding from four Blender XY corners (any rectangle-ish quad, in order).
+    kind 'gable' (ridge along the long side) or 'lean' (one slope, falling to the -v long side).
+    Returns Q(a, b, z) in the box's own frame (a along the ridge, b across) for extra details."""
+    A, B, C, D = corners
+    e1, e2 = (B - A + C - D) / 2, (C - B + D - A) / 2
+    if e1.length >= e2.length:
+        u, L, W = e1.normalized(), e1.length, e2.length
+    else:
+        u, L, W = e2.normalized(), e2.length, e1.length
+    v = Vector((-u.y, u.x))
+    m = (A + B + C + D) / 4
+    U3, V3 = Vector((u.x, u.y, 0)), Vector((v.x, v.y, 0))
+
+    def Q(a, b, z):
+        q = m + u * a + v * b
+        return Vector((q.x, q.y, z))
+    z_e = G + (eave if eave is not None else OUT_EAVE[storeys])
+    xs = [q.x for q in corners]
+    ys = [q.y for q in corners]
+    OUT_BOXES.append((min(xs), max(xs), min(ys), max(ys)))
+    if kind == "gable":
+        rise = W / 2 * TAN(pitch)
+        for s in (-1, 1):                                   # long walls
+            face_out(p, wall, [Q(-L / 2, s * W / 2, 0), Q(L / 2, s * W / 2, 0), Q(L / 2, s * W / 2, z_e),
+                               Q(-L / 2, s * W / 2, z_e)], V3 * s)
+        for s in (-1, 1):                                   # gable ends
+            a = s * L / 2
+            if gable_mat:
+                face_out(p, wall, [Q(a, -W / 2, 0), Q(a, W / 2, 0), Q(a, W / 2, z_e), Q(a, -W / 2, z_e)], U3 * s)
+                face_out(p, gable_mat, [Q(a, -W / 2, z_e), Q(a, W / 2, z_e), Q(a, 0, z_e + rise)], U3 * s)
+            else:
+                face_out(p, wall, [Q(a, -W / 2, 0), Q(a, W / 2, 0), Q(a, W / 2, z_e), Q(a, 0, z_e + rise),
+                                   Q(a, -W / 2, z_e)], U3 * s)
+        sl = TAN(pitch)
+        for s in (-1, 1):                                   # roof: top + underside, no edges
+            pts = [Q(-L / 2 - oe, s * (W / 2 + oe), z_e - oe * sl), Q(L / 2 + oe, s * (W / 2 + oe), z_e - oe * sl),
+                   Q(L / 2 + oe, 0, z_e + rise), Q(-L / 2 - oe, 0, z_e + rise)]
+            nrm = V3 * s * sl + Vector((0, 0, 1))
+            face_out(p + "R", roof, pts, nrm)
+            face_out(p, under, [q - Vector((0, 0, 0.1)) for q in pts], -nrm)
+    else:                                                   # lean-to, high on +v
+        z_lo = z_e
+        z_hi = G + hi if hi is not None else z_e + 0.7
+        zt = lambda b: z_lo + (z_hi - z_lo) * (b + W / 2) / W
+        for s in (-1, 1):
+            b = s * W / 2
+            face_out(p, wall, [Q(-L / 2, b, 0), Q(L / 2, b, 0), Q(L / 2, b, zt(b)), Q(-L / 2, b, zt(b))], V3 * s)
+            a = s * L / 2
+            face_out(p, wall, [Q(a, -W / 2, 0), Q(a, W / 2, 0), Q(a, W / 2, z_hi), Q(a, -W / 2, z_lo)], U3 * s)
+        sl = (z_hi - z_lo) / W
+        pts = [Q(-L / 2 - oe, -W / 2 - oe, z_lo - oe * sl), Q(L / 2 + oe, -W / 2 - oe, z_lo - oe * sl),
+               Q(L / 2 + oe, W / 2 + oe, z_hi + oe * sl), Q(-L / 2 - oe, W / 2 + oe, z_hi + oe * sl)]
+        nrm = Vector((0, 0, 1)) - V3 * sl
+        face_out(p + "R", roof, pts, nrm)
+        face_out(p, under, [q - Vector((0, 0, 0.1)) for q in pts], -nrm)
+    fm = "atlas" if wall.startswith("sw:") else wall
+    OUT_TINTS[(p, fm)] = wall_tint or OUT_WALL[len(OUT_TINTS) % len(OUT_WALL)]
+    if not roof.startswith("sw:"):
+        OUT_TINTS[(p + "R", roof)] = OUT_ROOF[roof_tint]
+    if door is None:
+        return Q
+    # the door: on the wall whose outward normal points most toward the house
+    d = TO_HOUSE[door]
+    walls = [(u, L / 2, W), (-u, L / 2, W), (v, W / 2, L), (-v, W / 2, L)]
+    nrm, off, span = max(walls, key=lambda w_: w_[0].dot(d))
+    c2 = m + nrm * (off + 0.03)
+    t2 = Vector((-nrm.y, nrm.x))
+    ww = min(dw, span - 0.5)
+    hh = min(dh, z_e - G - 0.2)
+    q = [Vector((c2.x, c2.y, G)) + Vector((t2.x, t2.y, 0)) * k for k in (-ww / 2, ww / 2)]
+    u0, v0, u1, v1 = ATLAS[cell]
+    face_out(p, "atlas", [q[0], q[1], q[1] + Vector((0, 0, hh)), q[0] + Vector((0, 0, hh))],
+             Vector((nrm.x, nrm.y, 0)), [(u0, v0), (u1, v0), (u1, v1), (u0, v1)])
+    return Q
+
+
+def build_outbuildings():
+    E, Wd = "E", "W"
+    BD = dict(cell="barn_doors", dw=2.6, dh=2.4)
+    # --- east side (sheet 2) ---
+    outb("OE1", turned_b(43.1, 46.5, -277.6, -272.9, -11.2), 1, door=E, roof_tint="brown")
+    outb("OE2", rect_b(57.7, 59.8, -271.9, -270.0), 1, door=E, dw=0.8, dh=1.9)
+    outb("OE3", rect_b(68.7, 78.3, -274.4, -266.5), 2, door=E, **BD)
+    outb("OE4", rect_b(76.7, 83.0, -255.5, -253.4), 1, kind="lean", door=E, roof_tint="brown", dh=1.8)
+    outb("OE5", rect_b(50.4, 52.3, -255.0, -253.2), 1, door=E, dw=0.8, dh=1.9, roof_tint="brown")
+    outb("OE6", rect_b(33.0, 40.5, -246.9, -244.0), 1, door=E)
+    outb("OE7", rect_b(44.4, 47.0, -247.2, -245.4), 1, door=E, roof_tint="brown")
+    outb("OE8", rect_b(53.3, 59.3, -246.9, -243.0), 1, door="S", **BD)
+    outb("OE9", rect_b(76.5, 82.0, -233.9, -224.2), 2, door=E, roof_tint="brown", **BD)
+    outb("OE10", rect_b(61.9, 66.3, -229.0, -226.9), 1, kind="lean", door=E, roof_tint="brown", dh=1.8)
+    outb("OE11", rect_b(52.3, 54.3, -223.3, -220.7), 1, door=E)
+    outb("OE12", rect_b(58.0, 63.7, -223.5, -217.3), 1, door=E, **BD)
+    stone = (168, 162, 147)
+    buff = tuple(min(1.0, srgb_lin(t) / srgb_lin(a)) for a, t in zip(stone, (176, 160, 132)))
+    outb("OE13", rect_b(74.7, 92.0, -222.8, -213.6), 1, kind="lean", door=E, wall="block", eave=3.0, hi=3.5,
+         wall_tint=buff, **BD)
+    outb("OE14", rect_b(74.7, 87.7, -196.7, -193.0), 1, kind="lean", door="S", roof_tint="brown", **BD)
+    # --- west side (sheet 6) ---
+    outb("OW1", rect_b(-103.2, -93.1, -283.2, -270.3), 2, door=Wd, **BD)
+    outb("OW2", [Vector((x, -z)) for x, z in ((-90.6, -269.8), (-85.4, -268.3), (-88.9, -254.8), (-94.4, -255.7))],
+         1.5, door=Wd, roof_tint="brown", **BD)
+    outb("OW3", rect_b(-104.1, -98.1, -259.4, -254.7), 1, door=Wd)
+    outb("OW4", rect_b(-75.8, -72.0, -298.2, -294.9), 1, door=Wd, roof_tint="brown")
+    outb("OW5", rect_b(-71.0, -67.9, -298.2, -289.8), 1, door=Wd)
+    for p, z0, z1 in (("OW6", -298.4, -294.1), ("OW7", -293.4, -289.2)):     # glass-roofed ranges (opaque)
+        outb(p, rect_b(-66.8, -57.9, z0, z1), 1, door=None, wall="brick", eave=0.8, pitch=30.0,
+             roof="sw:paint_white", gable_mat="sw:paint_white", under="sw:paint_white", dw=0.9, dh=0.6,
+             wall_tint=(0.9, 0.84, 0.8))
+        OUT_TINTS[(p, "atlas")] = (0.86, 0.88, 0.88)
+    outb("OW8", rect_b(-73.1, -68.3, -286.9, -282.9), 1, door=Wd, roof_tint="brown")
+    outb("OW9", rect_b(-70.4, -62.9, -263.1, -253.8), 1.5, door=Wd, **BD)
+    outb("OW9S", [Vector((x, -z)) for x, z in ((-70.4, -263.1), (-70.4, -253.8), (-73.4, -253.8), (-73.4, -263.1))],
+         1, kind="lean", door="S", eave=2.3, hi=3.1)
+    outb("OW10", rect_b(-65.7, -57.6, -235.8, -227.7), 2, door=Wd, **BD)
+    outb("OW11", rect_b(-62.1, -57.1, -225.9, -219.8), 1, door=Wd, roof_tint="brown", **BD)
+    # OW12, 106 Capner St: 2-storey frame dwelling, 3-bay front to Capner St (south = Blender -Y)
+    outb("OW12", rect_b(-72.8, -63.1, -208.8, -203.7), 2, door="S", cell="door_brown", dw=1.0, dh=2.2,
+         wall_tint=(0.95, 0.92, 0.84), under="sw:paint_white")
+    y0 = 203.7
+    for xb in (-70.2, -67.95, -65.7):
+        window("OW12", cream(), "-y", (xb, y0, G + 3.3), 0.9, 1.5)
+    for xb in (-70.2, -65.7):
+        window("OW12", cream(), "-y", (xb, y0, G + 0.8), 0.9, 1.7)
+    window("OW12", cream(), "+x", (-63.1, 206.25, G + 3.3), 0.9, 1.5)
+    window("OW12", cream(), "+x", (-63.1, 206.25, G + 0.8), 0.9, 1.7)
+
+
+def srgb_lin(c):
+    c = c / 255
+    return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
+
+
+# ===========================================================================
 # GROUND (scene x, z)
 # ===========================================================================
 EAST_PROP = [(6.36, -180.0), (6.0, -247.8), (12.0, -279.6), (25.7, -307.2)]
@@ -869,7 +1037,8 @@ def build_ground():
     X_W, X_S, X_C = -10.4, -8.6, -6.4
     Z0, Z1 = -202.4, -328.7
     # --- west lawn with notches for the paths and NW5's curving walk ---
-    loop = [(-60.0, Z0), (X_W, Z0)]
+    XW_OUT = -110.0                                         # R-a 2026-11-12: lawn widened from x -60
+    loop = [(XW_OUT, Z0), (X_W, Z0)]
     for zc, xe in PATHS_W:
         zs, zn = zc + 0.6, zc - 0.6
         loop += [(X_W, zs), (xe, zs), (xe, zn), (X_W, zn)]
@@ -880,10 +1049,11 @@ def build_ground():
     loop += hi + list(reversed(lo))
     for i in range(len(NW5_WALK) - 1):
         poly_flat("Paths", "concrete", [hi[i], hi[i + 1], lo[i + 1], lo[i]], G)
-    loop += [(X_W, Z1), (-60.0, Z1)]
+    loop += [(X_W, Z1), (XW_OUT, Z1)]
     poly_flat("LotW", "grass", loop, G)
-    edge_skirt("LotW", "grass", [(-60.0, Z0), (-60.0, Z1)], G, -0.05, (-30, -260))
-    edge_skirt("LotW", "grass", [(-60.0, Z0), (-52.0, Z0)], G, -0.05, (-56, -220))
+    edge_skirt("LotW", "grass", [(XW_OUT, Z0), (XW_OUT, Z1)], G, -0.05, (-30, -260))
+    edge_skirt("LotW", "grass", [(XW_OUT, Z0), (-52.0, Z0)], G, -0.05, (-56, -220))
+    edge_skirt("LotW", "grass", [(XW_OUT, Z1), (-60.0, Z1)], G, -0.05, (-80, -300))
     # --- the 1913 walk: concrete 1.8 m, grass strip 2.2 m, curb ---
     for za, zb in zip(split(Z0, Z1, 25.0), split(Z0, Z1, 25.0)[1:]):
         poly_flat("WalkW", "concrete", [(X_W, za), (X_S, za), (X_S, zb), (X_W, zb)], G)
@@ -895,8 +1065,9 @@ def build_ground():
     paths = list(PATHS_E)
     ne5_steps = ne5_point(-2.0 - 0.66, 278.45 - 271.5)      # outer edge of NE5's porch steps
     paths[4] = (zc5, ne5_steps[0] + 0.1)
-    loop = [(6.29, -192.4), (50.0, -192.4), (50.0, -260.0), (80.0, -260.0), (80.0, -294.9), (25.7, -307.2),
-            (12.0, -279.6)]
+    # R-a 2026-11-12: widened to x 95; the SE edge carries Pennsylvania Ave's walk line (25.7, -307.2) ->
+    # (80, -294.9) on to (95, -291.5) (the street-ends road and walk end at x 80)
+    loop = [(6.29, -192.4), (95.0, -192.4), (95.0, -291.5), (80.0, -294.9), (25.7, -307.2), (12.0, -279.6)]
     order = sorted(paths, key=lambda q: q[0])               # increasing z (from the bend toward -192.4)
     inserted_v = False
     for zc, xe in order:
@@ -907,8 +1078,8 @@ def build_ground():
         loop += [(xw_east(za), za), (xe, za), (xe, zb), (xw_east(zb), zb)]
         poly_flat("Paths", "concrete", [(xw_east(za), za), (xe, za), (xe, zb), (xw_east(zb), zb)], G)
     poly_flat("LotE", "grass", loop, G)
-    edge_skirt("LotE", "grass", [(50.0, -192.4), (50.0, -260.0), (80.0, -260.0), (80.0, -294.9)], G, -0.05,
-               (30, -250))
+    edge_skirt("LotE", "grass", [(50.0, -192.4), (95.0, -192.4), (95.0, -291.5), (80.0, -294.9)], G, -0.05,
+               (40, -250))
 
 
 # ===========================================================================
@@ -927,6 +1098,7 @@ build_ne3()
 build_ne4()
 build_ne5()
 turn_ne5()
+build_outbuildings()
 build_ground()
 OBJS = make_objects(col)
 for o in OBJS:
@@ -935,7 +1107,7 @@ tris = sum(sum(len(p.vertices) - 2 for p in o.data.polygons) for o in OBJS)
 import re
 by = {}
 for o in OBJS:
-    m = re.match(r"N[WE]\d", o["part"])
+    m = re.match(r"N[WE]\d|O[WE]", o["part"])
     k = m.group(0) if m else "ground"
     by[k] = by.get(k, 0) + sum(len(p.vertices) - 2 for p in o.data.polygons)
 print("NorthApproach built:", len(OBJS), "objects,", tris, "triangles")

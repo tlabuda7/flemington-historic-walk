@@ -143,8 +143,8 @@
     <!-- Bloomfield Ave east: Opera House, garages incl. the 1909 concrete-block garage at
          Spring St (from the owner's postcards), houses (tools/blender/sidestreet_bloomfield.py). -->
     <a-entity id="sidestreet-bloomfield" position="0 0 0" rotation="0 0 0"
-      gltf-model="url(assets/models/sidestreet-bloomfield.glb)"
-      baked-lighting="lightmap: assets/textures/sidestreet-bloomfield-lightmap.jpg; intensity: 1.0571"
+      gltf-model="url(assets/models/sidestreet-bloomfield.glb?v=2)"
+      baked-lighting="lightmap: assets/textures/sidestreet-bloomfield-lightmap.jpg?v=2; intensity: 1.0575"
       hide-beyond="x: 75; z: -85; distance: 90"></a-entity>
     <!-- South-east: the lane at No. 80 (feed, ice and wagon houses), the yard at No. 86 and
          Higgins Ave (tools/blender/sidestreet_southeast.py). All plain guesses from the 1921 map. -->
@@ -156,8 +156,8 @@
          Monument, Hotel Flemington, Vosseller and Deats buildings, library, Doric House;
          tools/blender/street_ends.py). Mostly from the owner's postcards and HABS photos. -->
     <a-entity id="street-ends" position="0 0 0" rotation="0 0 0"
-      gltf-model="url(assets/models/street-ends.glb?v=2)"
-      baked-lighting="lightmap: assets/textures/street-ends-lightmap.jpg?v=2; intensity: 1.0533"></a-entity>
+      gltf-model="url(assets/models/street-ends.glb?v=3)"
+      baked-lighting="lightmap: assets/textures/street-ends-lightmap.jpg?v=3; intensity: 1.0523"></a-entity>
     <!-- Big side-street maples: the street tree without its stone pit (backdrop-tree.glb),
          all drawn as two instanced meshes. Positions are the ones baked into the backdrops' shade. -->
     <!-- The trees are split into groups by area, so groups behind the viewer are not drawn. -->
@@ -205,8 +205,6 @@
     <a-entity id="backdrop-trees-north-end" instanced-trees="src: url(assets/models/backdrop-tree.glb)">
       <a-entity id="btree-end-1" position="-7.6 0.15 -173.5" rotation="0 15 0" scale="2.0 2.0 2.0"></a-entity>
       <a-entity id="btree-end-2" position="-7.6 0.15 -187" rotation="0 76 0" scale="2.1 2.1 2.1"></a-entity>
-      <a-entity id="btree-end-3" position="10 0.15 -262" rotation="0 137 0" scale="2.1 2.1 2.1"></a-entity>
-      <a-entity id="btree-end-4" position="-14 0.15 -300" rotation="0 198 0" scale="2.3 2.3 2.3"></a-entity>
       <a-entity id="btree-end-5" position="-14 0.15 -322" rotation="0 259 0" scale="2.2 2.2 2.2"></a-entity>
       <a-entity id="btree-end-6" position="40 0.15 -326" rotation="0 320 0" scale="2.2 2.2 2.2"></a-entity>
       <a-entity id="btree-end-7" position="14 0.15 -337.5" rotation="0 21 0" scale="2.3 2.3 2.3"></a-entity>
@@ -228,8 +226,8 @@
          (tools/blender/north_approach.py; 5, 3, 1 and 2 Main from the owner's postcards,
          the rest from the 1921 map and the 1980 register text). -->
     <a-entity id="north-approach" position="0 0 0" rotation="0 0 0"
-      gltf-model="url(assets/models/north-approach.glb)"
-      baked-lighting="lightmap: assets/textures/north-approach-lightmap.jpg; intensity: 1.0734"></a-entity>
+      gltf-model="url(assets/models/north-approach.glb?v=2)"
+      baked-lighting="lightmap: assets/textures/north-approach-lightmap.jpg?v=2; intensity: 1.0393"></a-entity>
     <!-- Its street maples (real-size old maples). Not drawn from further than 170 m, to keep
          the long view from the south end within the triangle budget. -->
     <a-entity id="old-maples-north" instanced-trees="src: url(assets/models/old-maple.glb)"
@@ -248,6 +246,16 @@
       <a-entity id="omaple-n-12" position="20.0 0.15 -291.5" rotation="0 213 0" scale="0.95 0.95 0.95"></a-entity>
       <a-entity id="omaple-n-13" position="-20 0.15 -300" rotation="0 296 0" scale="1.05 1.05 1.05"></a-entity>
       <a-entity id="omaple-n-14" position="-22 0.15 -286" rotation="0 19 0" scale="1.05 1.05 1.05"></a-entity>
+      <!-- n-15 replaces the young tree at (10, -262); n-16 ... n-23 stand in the back yards (rough-spot fix R-a). -->
+      <a-entity id="omaple-n-15" position="9.6 0.15 -261" rotation="0 140 0" scale="0.95 0.95 0.95"></a-entity>
+      <a-entity id="omaple-n-16" position="40 0.15 -236" rotation="0 35 0" scale="1.0 1.0 1.0"></a-entity>
+      <a-entity id="omaple-n-17" position="36 0.15 -259" rotation="0 200 0" scale="0.9 0.9 0.9"></a-entity>
+      <a-entity id="omaple-n-18" position="55 0.15 -283" rotation="0 110 0" scale="1.05 1.05 1.05"></a-entity>
+      <a-entity id="omaple-n-19" position="66 0.15 -205" rotation="0 290 0" scale="0.95 0.95 0.95"></a-entity>
+      <a-entity id="omaple-n-20" position="-45 0.15 -218" rotation="0 70 0" scale="1.0 1.0 1.0"></a-entity>
+      <a-entity id="omaple-n-21" position="-48 0.15 -246" rotation="0 160 0" scale="0.9 0.9 0.9"></a-entity>
+      <a-entity id="omaple-n-22" position="-52 0.15 -277" rotation="0 250 0" scale="1.05 1.05 1.05"></a-entity>
+      <a-entity id="omaple-n-23" position="-82 0.15 -240" rotation="0 320 0" scale="0.85 0.85 0.85"></a-entity>
     </a-entity>
     <!-- The big old trees on the grass strip opposite the bank (1914 card): old-maple.glb at real size. -->
     <a-entity id="old-maples-west" instanced-trees="src: url(assets/models/old-maple.glb)">

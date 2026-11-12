@@ -7,16 +7,18 @@ Run inside Blender:
 Set SB_MATERIALS_ONLY = True before exec() to stop after step 2 (look at the materials).
 
  1. Rebuild the geometry (sidestreet_bloomfield.py).
- 2. Seven materials, seven 1024 px colour maps (`baked-lighting` merges them into one call):
+ 2. Nine materials, nine 1024 px colour maps (`baked-lighting` merges them into one call):
       clap      house-65-main/clapboard_cream.jpg, tile 1.0 m (paint colours go into the
                 lightmap via the Tint attribute, so one material serves every frame house)
       brick     polyhaven/red_brick.jpg, tile 1.4 m, x factor -> #7A4436
       slate     polyhaven/roof_slates_03.jpg, tile 1.5 m (B7's shingles: a brown Tint)
       atlas     shared/backdrop_windows.jpg: windows, doors, plain paint / tin / stone swatches
                 (the bakery's and no. 16's plaster, trim, porch roofs, G1's sills, lintels, panel)
-      road      ground/road_oiled_earth.jpg: the road with js/ground.js's arm UVs, and the back
-                lots with box UVs (6.4 m tile) and a worn-grass Tint (no separate grass map, so
-                the rock-faced block fits in the 7-map limit)
+      road      ground/road_oiled_earth.jpg: the road with js/ground.js's arm UVs (only the road;
+                R-c 2026-11-12 moved the back lots to the two maps below)
+      grass     shared/backdrop_grass.jpg, tile 4 m: house yards (as north_approach_bake.py)
+      yard      shared/backdrop_earth.jpg, tile 3 m, x factor -> #8C7B62: work yards (as
+                back_lots_bake.py)
       concrete  polyhaven/sidewalk_concrete.jpg, tile 3 m (walks, curbs, steps)
       block     shared/backdrop_block_rockfaced.jpg = bank-building/stone_rockfaced.jpg (Poly Haven
                 sandstone_blocks_05, grey) re-saved at JPEG q60 to keep the GLB under 1.5 MB; tile
@@ -77,6 +79,9 @@ LOOK = {   # name: (file, roughness, factor)
     "road": (TX + r"ground\road_oiled_earth.jpg", 1.0, None),
     "concrete": (TX + r"polyhaven\sidewalk_concrete.jpg", 0.95, None),
     "block": (TX + r"shared\backdrop_block_rockfaced.jpg", 0.95, tint((168, 162, 148), (0xB6, 0xAE, 0x9A))),
+    # R-c 2026-11-12: house yards and work yards (as north_approach_bake.py / back_lots_bake.py)
+    "grass": (TX + r"shared\backdrop_grass.jpg", 1.0, (0.80, 0.74, 0.80)),
+    "yard": (TX + r"shared\backdrop_earth.jpg", 1.0, tint((146, 131, 104), (0x8C, 0x7B, 0x62))),
 }
 FINAL_NAMES = {k: "bloom_" + k for k in LOOK}
 
@@ -117,8 +122,8 @@ PAINT = {"A8R": (0.78, 0.75, 0.68), "A11": (0.93, 0.89, 0.78), "A12": (0.86, 0.8
          "B3": (0.88, 0.92, 0.85), "B4": (1.0, 0.93, 0.76), "B5": (0.90, 0.89, 0.85),
          "B5R": (0.90, 0.89, 0.85), "B7": (0.95, 0.88, 0.74), "B8": (0.64, 0.60, 0.53)}
 TINTS = {("Curb", "concrete"): (1.0, 0.98, 0.95), ("Walk", "concrete"): (0.96, 0.95, 0.92),
-         ("LotsN", "road"): (1.0, 1.25, 0.62), ("LotsS", "road"): (1.02, 1.08, 0.80),
-         ("LotsG", "road"): (1.05, 1.02, 0.92), ("B7", "slate"): (0.88, 0.74, 0.62),
+         ("LotsN", "grass"): (0.98, 0.95, 0.86), ("LotsS", "grass"): (0.98, 0.95, 0.86),
+         ("B7", "slate"): (0.88, 0.74, 0.62),
          ("A10", "atlas"): (0.95, 0.92, 0.86)}
 
 
@@ -261,8 +266,10 @@ for p in mesh.polygons:
     c, n = p.center, p.normal
     m = mat_names[p.material_index]
     if m == "bloom_road" and n.z > 0.9:
-        f *= 0.45 if c.z < 0.05 else 0.24          # road / huge flat lots
-    elif m == "bloom_road":
+        f *= 0.45                                 # road
+    elif m in ("bloom_grass", "bloom_yard") and n.z > 0.9:
+        f *= 0.24                                 # huge flat lots (R-c: grass / earth)
+    elif m in ("bloom_road", "bloom_grass", "bloom_yard"):
         f *= 0.3                                  # lot skirts
     elif m == "bloom_concrete" and n.z > 0.9 and c.z < 0.2:
         f *= 0.5                                  # walks
@@ -604,9 +611,35 @@ if mesh.color_attributes.get("Tint"):
 for o in bpy.context.scene.objects:
     o.select_set(o == r_obj)
 bpy.context.view_layer.objects.active = r_obj
-bpy.ops.export_scene.gltf(filepath=GLB, export_format="GLB", use_selection=True,
-                          export_apply=True, export_yup=True, export_texcoords=True,
-                          export_normals=True)
+# R-c: nine maps; the two lot maps are embedded as re-encoded copies (temp folder, nothing new in
+# the project) to stay under 1.8 MB
+import os
+import tempfile
+REENCODE = {"backdrop_grass": 66, "backdrop_earth": 56}
+tmpdir = tempfile.mkdtemp(prefix="sidestreet_bloomfield_glb_")
+swapped = []
+for mat in mesh.materials:
+    for node in mat.node_tree.nodes:
+        if node.type == "TEX_IMAGE" and node.image:
+            stem = os.path.splitext(os.path.basename(node.image.filepath))[0]
+            if stem in REENCODE:
+                cp = node.image.copy()
+                cp.file_format = "JPEG"
+                path = os.path.join(tmpdir, stem + ".jpg")
+                cp.save(filepath=path, quality=REENCODE[stem])
+                new = bpy.data.images.load(path)
+                swapped.append((node, node.image, new, cp))
+                node.image = new
+try:
+    bpy.ops.export_scene.gltf(filepath=GLB, export_format="GLB", use_selection=True,
+                              export_apply=True, export_yup=True, export_texcoords=True,
+                              export_normals=True)
+finally:
+    for node, orig, new, cp in swapped:
+        node.image = orig
+        bpy.data.images.remove(new)
+        bpy.data.images.remove(cp)
+print("GLB size: %.2f MB" % (os.path.getsize(GLB) / 1e6))
 tris = sum(len(p.vertices) - 2 for p in mesh.polygons)
 print("exported", GLB, "|", tris, "triangles |", len(mesh.materials), "materials:",
       [m.name for m in mesh.materials])

@@ -40,7 +40,8 @@ CONTEXT = [  # glb, lightmap, intensity, scene position (index.html), rotation y
 ]
 TREE_GLB = M + "backdrop-tree.glb"
 # (x, z, scale, y) as street_ends_bake.py
-TREES = [(-7.6, -173.5, 2.0, 0.15), (-7.6, -187.0, 2.1, 0.15), (10.0, -262.0, 2.1, 0.15), (-14.0, -300.0, 2.3, 0.15),
+# (R-a 2026-11-12: (10, -262) and (-14, -300) removed; omaple-n-15 at (9.6, -261) is an old maple)
+TREES = [(-7.6, -173.5, 2.0, 0.15), (-7.6, -187.0, 2.1, 0.15),
          (-14.0, -322.0, 2.2, 0.15), (40.0, -326.0, 2.2, 0.15), (14.0, -337.5, 2.3, 0.15), (0.0, -378.0, 2.2, 0.15),
          (-10.8, 70.0, 2.2, 0.15), (-10.8, 89.0, 2.3, 0.15), (-10.8, 108.0, 2.2, 0.15), (-10.8, 127.0, 2.3, 0.15),
          (-10.8, 146.0, 2.2, 0.15), (12.6, 112.0, 1.4, 0.15), (40.0, 98.0, 2.2, 0.15), (40.0, 145.0, 2.1, 0.15),
@@ -297,6 +298,7 @@ VIEWS = {
     "match-library":       dict(eye=S(1.5, 1.75, 126.0), target=S(22.0, 4.5, 142.0), lens=30, h=840, trees=True),
 }
 VIEWS = globals().get("PREVIEW_VIEWS") or VIEWS
+PREFIX = globals().get("PREVIEW_PREFIX") or "street-ends-"
 written = []
 try:
     for name, v in VIEWS.items():
@@ -308,7 +310,7 @@ try:
         cam.rotation_euler = (target - eye).to_track_quat("-Z", "Y").to_euler()
         cam_data.lens = v["lens"]
         scene.render.resolution_x, scene.render.resolution_y = 1280, v.get("h", 960)
-        scene.render.filepath = PREV + "street-ends-" + name + ".png"
+        scene.render.filepath = PREV + PREFIX + name + ".png"
         bpy.ops.render.render(write_still=True)
         written.append(scene.render.filepath)
 finally:

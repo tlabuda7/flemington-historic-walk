@@ -250,6 +250,7 @@ VIEWS = {
     "match-float":      dict(eye=S(110.0, 1.5, -62.5), target=S(124.2, 3.4, -61.5), lens=28, h=812),
 }
 VIEWS = globals().get("PREVIEW_VIEWS") or VIEWS
+PREFIX = globals().get("PREVIEW_PREFIX") or "sidestreet-bloomfield-"
 written = []
 try:
     for name, v in VIEWS.items():
@@ -261,7 +262,7 @@ try:
         cam.rotation_euler = (target - eye).to_track_quat("-Z", "Y").to_euler()
         cam_data.lens = v["lens"]
         scene.render.resolution_x, scene.render.resolution_y = 1280, v.get("h", 960)
-        scene.render.filepath = PREV + "sidestreet-bloomfield-" + name + ".png"
+        scene.render.filepath = PREV + PREFIX + name + ".png"
         bpy.ops.render.render(write_still=True)
         written.append(scene.render.filepath)
 finally:

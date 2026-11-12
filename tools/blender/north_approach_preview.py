@@ -43,9 +43,16 @@ TREES = [(-11.3, -206.0, 0.95, 0.15, "maple"), (-11.3, -224.0, 1.0, 0.15, "maple
          (7.0, -230.0, 1.0, 0.15, "maple"), (7.0, -246.0, 0.9, 0.15, "maple"),
          (12.4, -275.0, 1.0, 0.15, "maple"), (20.0, -291.5, 0.95, 0.15, "maple"),
          (-20.0, -300.0, 1.05, 0.15, "maple"), (-22.0, -286.0, 1.05, 0.15, "maple"),
-         (10.0, -262.0, 2.1, 0.15, "young"), (-14.0, -300.0, 2.3, 0.15, "young"), (-14.0, -322.0, 2.2, 0.15, "young"),
+         (9.6, -261.0, 0.95, 0.15, "maple"),                                      # R-a 2026-11-12
+         (40.0, -236.0, 1.0, 0.15, "maple"), (36.0, -259.0, 0.9, 0.15, "maple"),
+         (55.0, -283.0, 1.05, 0.15, "maple"), (66.0, -205.0, 0.95, 0.15, "maple"),
+         (-45.0, -218.0, 1.0, 0.15, "maple"), (-48.0, -246.0, 0.9, 0.15, "maple"),
+         (-52.0, -277.0, 1.05, 0.15, "maple"), (-82.0, -240.0, 0.85, 0.15, "maple"),
+         (-14.0, -322.0, 2.2, 0.15, "young"),
          (-7.6, -187.0, 2.1, 0.15, "young"), (-7.6, -173.5, 2.0, 0.15, "young"), (40.0, -326.0, 2.2, 0.15, "young"),
          (14.0, -337.5, 2.3, 0.15, "young")]
+
+TREES = globals().get("PREVIEW_TREES") or TREES
 
 scene = bpy.context.scene
 r_obj = bpy.data.objects["NorthApproach"]
@@ -286,6 +293,7 @@ VIEWS = {
     "match-bloom":      dict(eye=S(-3.0, 1.7, -345), target=S(15.0, 5.0, -300), lens=40, h=830, trees=True),
 }
 VIEWS = globals().get("PREVIEW_VIEWS") or VIEWS
+PREFIX = globals().get("PREVIEW_PREFIX") or "north-approach-"
 written = []
 try:
     for name, v in VIEWS.items():
@@ -297,7 +305,7 @@ try:
         cam.rotation_euler = (target - eye).to_track_quat("-Z", "Y").to_euler()
         cam_data.lens = v["lens"]
         scene.render.resolution_x, scene.render.resolution_y = 1280, v.get("h", 960)
-        scene.render.filepath = PREV + "north-approach-" + name + ".png"
+        scene.render.filepath = PREV + PREFIX + name + ".png"
         bpy.ops.render.render(write_still=True)
         written.append(scene.render.filepath)
 finally:

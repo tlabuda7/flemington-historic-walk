@@ -82,7 +82,8 @@ G = 0.15
 ROAD_Y = 0.01
 CROWN = 0.10
 ATLAS = json.load(open(PROJECT + r"\assets\textures\shared\backdrop_windows.json"))["cells"]
-TILE = {"clap": 1.0, "brick": 1.4, "slate": 1.5, "block": 2.0, "concrete": 3.0, "grass": 4.0, "earth": 2.0}
+TILE = {"clap": 1.0, "brick": 1.4, "slate": 1.5, "block": 2.0, "concrete": 3.0, "grass": 4.0, "earth": 2.0,
+        "leaves": 0.8}
 rng = random.Random(1888)
 BUCKETS = {}
 
@@ -100,7 +101,8 @@ _take(COURT, {"P", "newell", "add", "face_out", "solid", "box", "sbox", "gable_w
               "shed", "window", "win_row", "cream", "green", "clear_collection", "uv_for", "make_objects"})
 _take(BLOOM, {"fp", "foundation", "chimney", "front_row", "sill_lintel", "split"})
 
-FINAL_MAT = {k: k for k in ("clap", "brick", "slate", "block", "concrete", "grass", "earth", "road", "atlas")}
+FINAL_MAT = {k: k for k in ("clap", "brick", "slate", "block", "concrete", "grass", "earth", "road", "atlas",
+                             "leaves")}
 TAN = lambda deg: math.tan(math.radians(deg))
 UP = Vector((0, 0, 1))
 
@@ -657,6 +659,40 @@ def tracery_window(part, n, c, cu, w, v0, vs, rose_r=None, depth=0.35, mullions=
     return out
 
 
+def shrub(p, x, z, w, d, h, seed):
+    """low-poly rounded shrub (scene centre x, z; w along the wall = scene z, d across, h tall):
+    three overlapping squashed, jittered 6-sided domes, bottoms sunk 0.1 m into the lawn, 30 tris
+    each (R-b, 2026-11-12)"""
+    r = random.Random(seed)
+    for dz, dx, fw, fd, fh in ((-0.2, 0.0, 0.36, 0.5, 1.0), (0.22, -0.05, 0.30, 0.45, 0.85),
+                               (0.0, -0.2, 0.30, 0.32, 0.7)):
+        ra, rx, hh = fw * w, fd * d, fh * h
+        rz = 0.62 * hh
+        c = P(x + dx * d, z + dz * w, G + hh - rz)
+        phb = math.asin(max(-1.0, (G - 0.1 - c.z) / rz))
+        rot = r.uniform(0, math.pi)
+        rings = []
+        for ph in (math.radians(55), math.radians(15), phb):
+            ring_ = []
+            for k in range(6):
+                a = rot + 2 * math.pi * k / 6
+                j = r.uniform(0.86, 1.12)
+                zz = c.z + rz * math.sin(ph) * (r.uniform(0.92, 1.06) if ph > 0 else 1.0)
+                if ph < 0:
+                    zz = G - 0.1
+                ring_.append(Vector((c.x + rx * math.cos(ph) * math.cos(a) * j,
+                                     c.y + ra * math.cos(ph) * math.sin(a) * j, zz)))
+            rings.append(ring_)
+        apex = Vector((c.x + r.uniform(-0.05, 0.05) * rx, c.y + r.uniform(-0.05, 0.05) * ra, c.z + rz * r.uniform(0.95, 1.05)))
+        for k in range(6):
+            k2 = (k + 1) % 6
+            f = [apex, rings[0][k], rings[0][k2]]
+            face_out(p, "leaves", f, sum(f, Vector()) / 3 - c)
+            for a_, b_ in ((rings[0], rings[1]), (rings[1], rings[2])):
+                f = [a_[k], a_[k2], b_[k2], b_[k]]
+                face_out(p, "leaves", f, sum(f, Vector()) / 4 - c)
+
+
 def build_e7():
     p = "E7"
     eave = G + 5.6
@@ -673,9 +709,16 @@ def build_e7():
     ivy = [(106.8, 0.2), (110.6, 0.2), (110.85, 0.9), (110.5, 1.7), (110.75, 2.8), (110.55, 4.2), (110.8, 5.4),
            (110.3, 6.4), (110.0, 8.0), (109.6, 8.6), (109.0, 8.1), (108.4, 7.25), (107.7, 6.6), (107.2, 6.0),
            (106.8, 5.4)]
-    wall_poly("E7I", "sw:paint_green_s", "-x", ax0, ivy, off=0.05)
-    wall_poly("E7I", "sw:paint_green_s", "-x", ax0, [(116.6, 0.2), (119.0, 0.2), (119.0, 2.6), (118.5, 3.0),
-                                                    (118.0, 2.3), (117.4, 2.7), (116.9, 1.6)], off=0.05)
+    # R-b 2026-11-12: leaf texture instead of flat paint, plus a smaller jagged second layer 0.12 m off
+    # the wall over the lower 3 m; the low patch by the tower is gone (a shrub, S4, stands there now)
+    wall_poly("E7I", "leaves", "-x", ax0, ivy, off=0.05)
+    wall_poly("E7J", "leaves", "-x", ax0, [(107.0, 0.25), (110.35, 0.25), (110.5, 1.1), (110.2, 1.9), (110.4, 2.5),
+                                           (109.7, 3.0), (109.1, 2.55), (108.5, 3.05), (107.9, 2.6), (107.3, 2.9),
+                                           (107.0, 2.2)], off=0.12)
+    # four foundation shrubs at the foot of the west wall (1909 colour card; sizes are photo estimates)
+    for k, (sx, sz, sw, sd, sh) in enumerate(((15.0, 107.8, 1.6, 1.2, 1.1), (15.1, 110.6, 1.0, 0.8, 0.8),
+                                              (15.0, 115.8, 1.3, 1.0, 0.9), (15.0, 117.9, 1.7, 1.2, 1.2))):
+        shrub("E7S%d" % (k + 1), sx, sz, sw, sd, sh, seed=1909 + k)
     # north wall (towards the Doric House) with three plain pointed windows, north gable of the
     # cross block
     face_out(p, "block", [(ax0, ay1, 0.0), (ax1, ay1, 0.0), (ax1, ay1, eave), (ax0, ay1, eave)], (0, 1, 0))

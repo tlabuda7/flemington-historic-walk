@@ -64,7 +64,8 @@ ROAD_Y = 0.01
 X_JOIN = 60.0                  # js/ground.js draws Bloomfield Ave west of this
 X_END = 146.0                  # east end of the modelled road / walks / lots
 ATLAS = json.load(open(PROJECT + r"\assets\textures\shared\backdrop_windows.json"))["cells"]
-TILE = {"clap": 1.0, "brick": 1.4, "slate": 1.5, "concrete": 3.0, "block": 1.4, "earth": 6.4}
+TILE = {"clap": 1.0, "brick": 1.4, "slate": 1.5, "concrete": 3.0, "block": 1.4, "earth": 6.4, "grass": 4.0,
+        "yard": 3.0}
 rng = random.Random(1923)
 BUCKETS = {}
 
@@ -80,8 +81,10 @@ missing = _HELPERS - {n.name for n in _mod.body}
 assert not missing, missing
 
 # material keys -> final material ("earth" = lots, drawn with the road's earth map, box UVs)
+# (R-c 2026-11-12: the lots no longer use the road map: "grass" = house yards, "yard" = plain earth
+#  work yards; no part uses "earth" now)
 FINAL_MAT = {"clap": "clap", "brick": "brick", "slate": "slate", "concrete": "concrete", "road": "road",
-             "earth": "road", "atlas": "atlas", "block": "block"}
+             "earth": "road", "atlas": "atlas", "block": "block", "grass": "grass", "yard": "yard"}
 
 TAN = lambda deg: math.tan(math.radians(deg))
 
@@ -541,37 +544,45 @@ def build_ground():
     for cx, y_porch in ((70.65, 77.3), (102.3, 76.7)):
         if y_porch + 0.7 < 77.3:
             bflat("Walk", "concrete", cx - 0.6, cx + 0.6, y_porch + 0.7, 77.3, G + 0.012)
-    # north lots (z -130 .. -89.9), from behind the Rea flats (x 34.8) to x 146
+    # north lots (z -130 .. -89.9), from behind the Rea flats (x 34.8) to x 146. R-c (2026-11-12,
+    # Sept 1921 sheet 2): x 34.8 .. 72 = work yards behind the business row (plain earth), x 72 .. 146
+    # = the yards of houses 20, 22, 24 and the Opera House lot (grass)
     lx = [34.8, 47.0, 60.0, 72.0, 84.0, 96.0, 108.0, 120.0, 133.0, X_END]
+    nmat = lambda a: "grass" if a >= 72.0 else "yard"
     for a, b in zip(lx, lx[1:]):
         for y0, y1 in ((89.9, 108.0), (108.0, 130.0)):
-            bflat("LotsN", "earth", a, b, y0, y1, G)
-    bskirt("LotsN", "earth", (34.8, 130.0), (34.8, 99.6), G, -0.05, (-1, 0, 0))
-    bskirt("LotsN", "earth", (34.8, 130.0), (X_END, 130.0), G, -0.05, (0, 1, 0))
-    bskirt("LotsN", "earth", (X_END, 89.9), (X_END, 130.0), G, -0.05, (1, 0, 0))
-    # south lots (z -77.3 .. -49.1 / -45), behind the bank (x 33.4) to Spring St; and the G1 lot
+            bflat("LotsN", nmat(a), a, b, y0, y1, G)
+    bskirt("LotsN", "yard", (34.8, 130.0), (34.8, 99.6), G, -0.05, (-1, 0, 0))
+    bskirt("LotsN", "yard", (34.8, 130.0), (72.0, 130.0), G, -0.05, (0, 1, 0))
+    bskirt("LotsN", "grass", (72.0, 130.0), (X_END, 130.0), G, -0.05, (0, 1, 0))
+    bskirt("LotsN", "grass", (X_END, 89.9), (X_END, 130.0), G, -0.05, (1, 0, 0))
+    # south lots (z -77.3 .. -49.1 / -45), behind the bank (x 33.4) to Spring St; and the G1 lot.
+    # R-c: work yards (plain earth) except the house yards behind no. 19 (x 66 .. 75.5, z -77.3 ..
+    # -63.0) and no. 23 (x 98 .. 108.6, whole depth incl. z -45 .. -40) = grass; G1's lot = earth
     sx = [33.4, 45.0, 56.0, 66.0, 75.5, 87.0, 98.0, 108.6]
+    smat = lambda a, ya: "grass" if (a == 66.0 and ya == 63.0) or a == 98.0 else "yard"
     for a, b in zip(sx, sx[1:]):
         y0 = 49.1 if b <= 75.5 else 45.0
         for ya, yb in ((y0, 63.0), (63.0, 77.3)):
-            bflat("LotsS", "earth", a, b, ya, yb, G)
-    bskirt("LotsS", "earth", (33.4, 49.1), (33.4, 77.3), G, -0.05, (-1, 0, 0))
-    bskirt("LotsS", "earth", (33.4, 49.1), (75.5, 49.1), G, -0.05, (0, -1, 0))
-    bskirt("LotsS", "earth", (75.5, 45.0), (75.5, 49.1), G, -0.05, (-1, 0, 0))
-    bskirt("LotsS", "earth", (75.5, 45.0), (108.6, 45.0), G, -0.05, (0, -1, 0))
-    bskirt("LotsS", "earth", (108.6, 40.0), (108.6, 45.0), G, -0.05, (-1, 0, 0))
+            bflat("LotsS", smat(a, ya), a, b, ya, yb, G)
+    bskirt("LotsS", "yard", (33.4, 49.1), (33.4, 77.3), G, -0.05, (-1, 0, 0))
+    bskirt("LotsS", "yard", (33.4, 49.1), (75.5, 49.1), G, -0.05, (0, -1, 0))
+    bskirt("LotsS", "yard", (75.5, 45.0), (75.5, 49.1), G, -0.05, (-1, 0, 0))
+    bskirt("LotsS", "yard", (75.5, 45.0), (98.0, 45.0), G, -0.05, (0, -1, 0))
+    bskirt("LotsS", "grass", (98.0, 45.0), (108.6, 45.0), G, -0.05, (0, -1, 0))
+    bskirt("LotsS", "grass", (108.6, 40.0), (108.6, 45.0), G, -0.05, (-1, 0, 0))
     for a, b in ((124.3, 135.0), (135.0, X_END)):
         for ya, yb in ((45.0, 61.0), (61.0, 77.3)):
-            bflat("LotsG", "earth", a, b, ya, yb, G)
-    bskirt("LotsG", "earth", (124.3, 45.0), (X_END, 45.0), G, -0.05, (0, -1, 0))
-    bskirt("LotsG", "earth", (X_END, 45.0), (X_END, 77.3), G, -0.05, (1, 0, 0))
-    bskirt("LotsG", "earth", (124.3, 40.0), (124.3, 45.0), G, -0.05, (1, 0, 0))
-    bflat("LotsG", "earth", 124.3, 135.0, 40.0, 45.0, G)
-    bflat("LotsS", "earth", 98.0, 108.6, 40.0, 45.0, G)
-    bskirt("LotsS", "earth", (98.0, 40.0), (108.6, 40.0), G, -0.05, (0, -1, 0))
-    bskirt("LotsS", "earth", (98.0, 40.0), (98.0, 45.0), G, -0.05, (-1, 0, 0))
-    bskirt("LotsG", "earth", (124.3, 40.0), (135.0, 40.0), G, -0.05, (0, -1, 0))
-    bskirt("LotsG", "earth", (135.0, 40.0), (135.0, 45.0), G, -0.05, (1, 0, 0))
+            bflat("LotsG", "yard", a, b, ya, yb, G)
+    bskirt("LotsG", "yard", (124.3, 45.0), (X_END, 45.0), G, -0.05, (0, -1, 0))
+    bskirt("LotsG", "yard", (X_END, 45.0), (X_END, 77.3), G, -0.05, (1, 0, 0))
+    bskirt("LotsG", "yard", (124.3, 40.0), (124.3, 45.0), G, -0.05, (1, 0, 0))
+    bflat("LotsG", "yard", 124.3, 135.0, 40.0, 45.0, G)
+    bflat("LotsS", "grass", 98.0, 108.6, 40.0, 45.0, G)
+    bskirt("LotsS", "grass", (98.0, 40.0), (108.6, 40.0), G, -0.05, (0, -1, 0))
+    bskirt("LotsS", "grass", (98.0, 40.0), (98.0, 45.0), G, -0.05, (-1, 0, 0))
+    bskirt("LotsG", "yard", (124.3, 40.0), (135.0, 40.0), G, -0.05, (0, -1, 0))
+    bskirt("LotsG", "yard", (135.0, 40.0), (135.0, 45.0), G, -0.05, (1, 0, 0))
 
 
 # ===========================================================================

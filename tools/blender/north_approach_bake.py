@@ -18,6 +18,8 @@ Set NA_MATERIALS_ONLY = True before exec() to stop after step 2.
       atlas     shared/backdrop_windows.jpg: windows, doors, pickets, paint / tin / stone swatches
       concrete  polyhaven/sidewalk_concrete.jpg, tile 3 m (walk, paths, curb, foundations, steps)
       grass     shared/backdrop_grass.jpg, tile 4 m (lawns, grass strip)
+    R-a (2026-11-12): + 26 plain outbuildings (clap / block / brick / slate / atlas, Tints in
+    north_approach.py OUT_TINTS), lawns widened to x -110 / 95, nine more maples in TREES.
  3. Join, delete faces nobody can see, unwrap "Lightmap" (street fronts and south faces up,
     lawns and roofs down), pack.
  4. Bake warm late-afternoon sun + sky into one 2K lightmap with Cycles: scene axes, Blender
@@ -53,9 +55,15 @@ TREES = [(-11.3, -206.0, 0.95, 0.15, "maple"), (-11.3, -224.0, 1.0, 0.15, "maple
          (7.0, -230.0, 1.0, 0.15, "maple"), (7.0, -246.0, 0.9, 0.15, "maple"),
          (12.4, -275.0, 1.0, 0.15, "maple"), (20.0, -291.5, 0.95, 0.15, "maple"),        # along the bend
          (-20.0, -300.0, 1.05, 0.15, "maple"), (-22.0, -286.0, 1.05, 0.15, "maple"),     # NW5's lawn (c.1910)
-         # already in the scene (street-ends' backdrop-tree instances btree-end-3, -4, -5)
-         (10.0, -262.0, 2.1, 0.15, "young"), (-14.0, -300.0, 2.3, 0.15, "young"), (-14.0, -322.0, 2.2, 0.15, "young"),
-         (-7.6, -187.0, 2.1, 0.15, "young")]
+         # R-a 2026-11-12: omaple-n-15 replaces btree-end-3 (10, -262); btree-end-4 (-14, -300) removed
+         (9.6, -261.0, 0.95, 0.15, "maple"),
+         # R-a: eight yard maples (TYPICAL-GUESS; 1913 card shows big trees back in the east yards)
+         (40.0, -236.0, 1.0, 0.15, "maple"), (36.0, -259.0, 0.9, 0.15, "maple"),
+         (55.0, -283.0, 1.05, 0.15, "maple"), (66.0, -205.0, 0.95, 0.15, "maple"),
+         (-45.0, -218.0, 1.0, 0.15, "maple"), (-48.0, -246.0, 0.9, 0.15, "maple"),
+         (-52.0, -277.0, 1.05, 0.15, "maple"), (-82.0, -240.0, 0.85, 0.15, "maple"),
+         # already in the scene (street-ends' backdrop-tree instances btree-end-5, btree-end-1)
+         (-14.0, -322.0, 2.2, 0.15, "young"), (-7.6, -187.0, 2.1, 0.15, "young")]
 NEIGHBOURS = [("store-27.glb", (-10.30, 0.15, -158.49), 90), ("block-24-30.glb", (7.29, 0.15, -152.365), -90),
               ("street-ends.glb", (0.0, 0.0, 0.0), 0)]
 
@@ -136,6 +144,7 @@ TINTS = {("NW1", "block"): tint(STONE, (138, 124, 104)),            # grey-brown
          ("Curb", "concrete"): (1.0, 0.98, 0.95), ("WalkW", "concrete"): (0.96, 0.95, 0.92),
          ("Paths", "concrete"): (1.0, 0.97, 0.90), ("LotW", "grass"): (0.98, 0.94, 0.84),
          ("Strip", "grass"): (0.98, 0.94, 0.84), ("LotE", "grass"): (0.98, 0.95, 0.86)}
+TINTS.update(OUT_TINTS)                                              # R-a outbuildings (north_approach.py)
 PART_TINT = {"NW3S": (0.55, 0.6, 0.55), "NW4S": (0.55, 0.6, 0.55), "NE5S": (0.55, 0.6, 0.55)}
 
 
@@ -278,13 +287,16 @@ for p in mesh.polygons:
     c, n = p.center, p.normal
     m = mat_names[p.material_index]
     if m == "na_grass" and n.z > 0.9:
-        f *= 0.32                                 # lawns, grass strip
+        f *= 0.24                                 # lawns, grass strip (0.32 before R-a doubled the lawns)
     elif m == "na_grass":
         f *= 0.25                                 # skirts
     elif m == "na_concrete" and n.z > 0.9 and c.z < 0.3:
         f *= 0.5                                  # walk, paths
     elif m == "na_slate" or (n.z > 0.5 and c.z > 3.0):
         f *= 0.6                                  # roofs
+    if m != "na_grass" and any(bx0 - 0.5 < c.x < bx1 + 0.5 and by0 - 0.5 < c.y < by1 + 0.5
+                               for bx0, bx1, by0, by1 in OUT_BOXES):
+        f *= 0.6                                  # R-a outbuildings (seen from 30 m and more)
     if n.z < -0.5:
         f *= 0.6                                  # soffits, porch ceilings
     if abs(n.z) < 0.5 and ((n.x < -0.7 and c.x > 0) or (n.x > 0.7 and c.x < 0)):

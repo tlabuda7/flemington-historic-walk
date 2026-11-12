@@ -617,3 +617,5 @@ Back-lot buildings (`assets/models/back-lots.glb`): `assets/textures/shared/back
 `assets/models/old-maple.glb` is the mature street tree (`tools/blender/street_tree.py`, `TREE_OLD = True`), same textures as the street tree.
 
 `assets/textures/north-approach-lightmap.jpg` is baked in Blender (original work); the north-approach model reuses existing textures only. The Sept 1921 Sanborn sheet 6 (LoC sanborn05479_006, public domain) was consulted for the west side north of Capner St and is not in the repository.
+
+Rough-spot fixes (2026-11-12): `assets/textures/shared/shrub_leaves.jpg` (1024 x 1024, the Methodist church's ivy and foundation shrubs in `street-ends.glb`) is made by `tools/prepare_shrub_leaves.py` from the project's own `assets/textures/leaf_cluster.png` (drawn by `tools/make_leaf_texture.py`, original work); no download. `north-approach.glb` (outbuildings, wider lawns) and `sidestreet-bloomfield.glb` (lots now on `shared/backdrop_grass.jpg` / `shared/backdrop_earth.jpg`) reuse existing textures only; their lightmaps and `street-ends-lightmap.jpg` are re-baked in Blender (original work).
