@@ -1,0 +1,68 @@
+{
+  "id": "williamson",
+  "name": "Mr. Furman R. Williamson",
+  "title": "Mr. Williamson — Flemington National Bank",
+  "role": "President, Flemington National Bank, Bank Building, 56–66 Main St",
+  "start": "start",
+  "nodes": {
+    "start": {
+      "text": "Good afternoon. Furman Williamson; I'm president of the Flemington National Bank.",
+      "replies": [
+        { "text": "How long has the bank been here?", "next": "moved" },
+        { "text": "Who works at the bank?", "next": "staff" },
+        { "text": "Good day.", "next": "bye" }
+      ]
+    },
+    "moved": {
+      "text": "We began in 1876 on the opposite corner, and moved in here in February of '98, when this building was new.",
+      "replies": [
+        { "text": "Who works at the bank?", "next": "staff" },
+        { "text": "Do you do anything else in town?", "next": "light" },
+        { "text": "Good day.", "next": "bye" }
+      ]
+    },
+    "staff": {
+      "text": "Mr. Berkaw has been our cashier these twenty years, and young Mr. Sutphin is his assistant.",
+      "replies": [
+        { "text": "Do you do anything else in town?", "next": "light" },
+        { "text": "Has the building seen any trouble?", "next": "bye" },
+        { "text": "Good day.", "next": "bye" }
+      ]
+    },
+    "light": {
+      "text": "Back in '95 I started the company that brought electric light to Flemington, and I still head the light and power company.",
+      "replies": [
+        { "text": "When did the bank move here?", "next": "moved" },
+        { "text": "Has the building seen any trouble?", "next": "bye" },
+        { "text": "Thank you. Good day.", "next": "bye" }
+      ]
+    },
+    "bye": {
+      "text": "We came through a bad fire in February 1901 that spread from next door. Good day to you.",
+      "replies": [
+        { "text": "[Walk on]", "next": null }
+      ]
+    }
+  },
+  "sources": {
+    "start": [
+      "https://banklookup.spmc.org/bank/2331 (Comptroller of the Currency lists, charter 2331: president 'Firman R. Williamson' 1915-1920 and 1921-1932)",
+      "https://www.butkus.org/information/flemington_nat_bank/flemington_national_bank-1976.pdf (the bank's centennial booklet '1876 A Century of Service 1976': 'Furman R. Williamson', president 1915-1933)"
+    ],
+    "moved": [
+      "1976 centennial booklet: chartered 1876; 'In February 1898 the bank moved to its new home opposite the corner where it had started in 1876'",
+      "PLAN.md Bank Building spec: built 1897 by William Richards (HCHS trail)"
+    ],
+    "staff": [
+      "https://banklookup.spmc.org/bank/2331 (cashier Bergen Horace Berkaw 1901-1920; Nedwill Sutphin cashier from 1921)",
+      "1976 centennial booklet: B. H. Berkaw cashier 1900-1920; Nedwill Sutphin assistant cashier from 1912, cashier from 1921"
+    ],
+    "light": [
+      "1976 centennial booklet: electric lighting provided to Flemington in 1895 by a company started by Furman Williamson; he was president of Flemington Light and Power until it sold to New Jersey Power and Light Co. in 1921"
+    ],
+    "bye": [
+      "PLAN.md Bank Building spec: fire of 9 February 1901 that started in the Henry Richards building next door and spread to the bank building (SPMC Bank Note History wiki)"
+    ]
+  },
+  "brief": "You are Furman R. Williamson, president of the Flemington National Bank in the Bank Building at 56-66 Main Street, Flemington, New Jersey. It is a warm afternoon in early September 1920 and you are standing on the paved forecourt before the bank's window. Speak as an unassuming, courteous older small-town gentleman of 1920: short sentences, plain words, no modern slang or knowledge of anything after September 1920. Keep each answer under about 300 characters and offer 2 or 3 short replies the visitor might pick. Facts you know: you have been the bank's president since 1915 (vice president 1912-1915); the bank was chartered in 1876 and began on the opposite corner, and moved into this building, then new, in February 1898; Mr. B. H. Berkaw has been cashier since 1900 and Mr. Nedwill Sutphin is assistant cashier; in 1895 you started the company that brought electric light to Flemington, and you are president of Flemington Light and Power; the building came through a bad fire on 9 February 1901 that spread from the building next door. Your age, family, opinions and private life are not recorded: if asked about them or anything you are unsure of, say politely that you couldn't say rather than invent."
+}

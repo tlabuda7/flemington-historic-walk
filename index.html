@@ -593,6 +593,21 @@
       animation-mixer="clip: Idle; crossFadeDuration: 0.4"
       npc="dialogue: data/dialogue/grocer-boy.json; voice: assets/audio/voices/grocer-boy/; radius: 2.5; closeRadius: 4; voiceHeight: 1.62; randomIdleStart: true"
       blob-shadow="width: 0.9; depth: 0.6; opacity: 0.6"></a-entity>
+    <!-- Furman R. Williamson, president of the Flemington National Bank 1915-1933 (white hair and
+         moustache, light grey three-piece, wing collar, bow tie, straw boater), on the paved bank
+         forecourt (#bank-forecourt, x 10.30 ... 12.28) in front of bank window bay 1 (#bank-building:
+         front wall x 12.24, north wall z -77.31; bay-2 stoop z -73.62 ... -69.93, out to x 10.45):
+         his body spans x 10.65-11.15, z -75.7 ... -75.1, so 2.3 m north of the stoop and 1.9 m
+         south of the Bloomfield Ave corner. Faces west, a little south, toward visitors coming up
+         from the south. 5.4 m from the shopper (8.6, -70.5), so the 2.5 m talk circles do not
+         overlap. Built by tools/blender/npc_williamson.py + npc_williamson_bake.py (preview:
+         npc_williamson_preview.py). Text only for now: voice to come from
+         tools/make_voice_williamson.py (assets/audio/voices/williamson/). -->
+    <a-entity id="npc-williamson" position="10.9 0.15 -75.4" rotation="0 -75 0"
+      gltf-model="url(assets/models/npc-williamson.glb?v=1)"
+      animation-mixer="clip: Idle; crossFadeDuration: 0.4"
+      npc="dialogue: data/dialogue/williamson.json; radius: 2.5; closeRadius: 4; voiceHeight: 1.62; randomIdleStart: true"
+      blob-shadow="width: 0.9; depth: 0.6; opacity: 0.6"></a-entity>
 
     <!-- ============================================================
          BEYOND THE STARTER BLOCK: simple placeholders.
