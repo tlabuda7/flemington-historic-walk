@@ -129,7 +129,7 @@
          haze baked in, no fog, follows the rig at 0.85. landscape_town = fixed, fogged
          rooftop / steeple / tree silhouettes beyond the modelled blocks. -->
     <a-entity id="landscape" position="0 0 0" rotation="0 0 0"
-      gltf-model="url(assets/models/landscape.glb?v=2)" far-landscape="factor: 0.85"></a-entity>
+      gltf-model="url(assets/models/landscape.glb?v=3)" far-landscape="factor: 0.85"></a-entity>
 
     <!-- Side-street backdrops (PLAN.md "Side streets, backdrop buildings"): buildings you see
          down the side streets but cannot walk to. Each model is built in scene coordinates,
@@ -149,6 +149,12 @@
     <a-entity id="sidestreet-southeast" position="0 0 0" rotation="0 0 0"
       gltf-model="url(assets/models/sidestreet-southeast.glb)"
       baked-lighting="lightmap: assets/textures/sidestreet-southeast-lightmap.jpg; intensity: 1.0015"></a-entity>
+    <!-- Street ends: what closes the views north and south along Main St (churches, Soldiers'
+         Monument, Hotel Flemington, Vosseller and Deats buildings, library, Doric House;
+         tools/blender/street_ends.py). Mostly from the owner's postcards and HABS photos. -->
+    <a-entity id="street-ends" position="0 0 0" rotation="0 0 0"
+      gltf-model="url(assets/models/street-ends.glb)"
+      baked-lighting="lightmap: assets/textures/street-ends-lightmap.jpg; intensity: 1.0477"></a-entity>
     <!-- Big side-street maples: the street tree without its stone pit (backdrop-tree.glb),
          all drawn as two instanced meshes. Positions are the ones baked into the backdrops' shade. -->
     <a-entity id="backdrop-trees" instanced-trees="src: url(assets/models/backdrop-tree.glb)">
@@ -184,6 +190,24 @@
       <a-entity id="btree-se-6" position="57.5 0.15 70.5" rotation="0 155 0" scale="2.0 2.0 2.0"></a-entity>
       <a-entity id="btree-se-7" position="78 0.15 73" rotation="0 252 0" scale="2.2 2.2 2.2"></a-entity>
       <a-entity id="btree-se-8" position="127.5 0 66" rotation="0 349 0" scale="2.1 2.1 2.1"></a-entity>
+      <a-entity id="btree-end-1" position="-7.6 0.15 -173.5" rotation="0 15 0" scale="2.0 2.0 2.0"></a-entity>
+      <a-entity id="btree-end-2" position="-7.6 0.15 -187" rotation="0 76 0" scale="2.1 2.1 2.1"></a-entity>
+      <a-entity id="btree-end-3" position="10 0.15 -262" rotation="0 137 0" scale="2.1 2.1 2.1"></a-entity>
+      <a-entity id="btree-end-4" position="-14 0.15 -300" rotation="0 198 0" scale="2.3 2.3 2.3"></a-entity>
+      <a-entity id="btree-end-5" position="-14 0.15 -322" rotation="0 259 0" scale="2.2 2.2 2.2"></a-entity>
+      <a-entity id="btree-end-6" position="40 0.15 -326" rotation="0 320 0" scale="2.2 2.2 2.2"></a-entity>
+      <a-entity id="btree-end-7" position="14 0.15 -337.5" rotation="0 21 0" scale="2.3 2.3 2.3"></a-entity>
+      <a-entity id="btree-end-8" position="0 0.15 -378" rotation="0 82 0" scale="2.2 2.2 2.2"></a-entity>
+      <a-entity id="btree-end-9" position="-10.8 0.15 70" rotation="0 143 0" scale="2.2 2.2 2.2"></a-entity>
+      <a-entity id="btree-end-10" position="-10.8 0.15 89" rotation="0 204 0" scale="2.3 2.3 2.3"></a-entity>
+      <a-entity id="btree-end-11" position="-10.8 0.15 108" rotation="0 265 0" scale="2.2 2.2 2.2"></a-entity>
+      <a-entity id="btree-end-12" position="-10.8 0.15 127" rotation="0 326 0" scale="2.3 2.3 2.3"></a-entity>
+      <a-entity id="btree-end-13" position="-10.8 0.15 146" rotation="0 27 0" scale="2.2 2.2 2.2"></a-entity>
+      <a-entity id="btree-end-14" position="12.6 0.15 112" rotation="0 88 0" scale="1.4 1.4 1.4"></a-entity>
+      <a-entity id="btree-end-15" position="40 0.15 98" rotation="0 149 0" scale="2.2 2.2 2.2"></a-entity>
+      <a-entity id="btree-end-16" position="40 0.15 145" rotation="0 210 0" scale="2.1 2.1 2.1"></a-entity>
+      <a-entity id="btree-end-17" position="16 0.15 182" rotation="0 271 0" scale="2.3 2.3 2.3"></a-entity>
+      <a-entity id="btree-end-18" position="24 0.15 196" rotation="0 332 0" scale="2.2 2.2 2.2"></a-entity>
     </a-entity>
 
     <!-- Road, sidewalks, curbs, grass strips and lane mouths: `street-ground` (js/ground.js)
