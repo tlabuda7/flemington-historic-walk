@@ -297,10 +297,10 @@
          "name x y z turn" (y = road: stand on the crowned road surface). They face south (turn 0), the way their lighting was baked.
          ============================================================ -->
     <a-entity id="vehicles"
-      gltf-places="src: url(assets/models/vehicles.glb);
+      gltf-places="src: url(assets/models/vehicles.glb?v=3);
                    places: model-t 5.3 road -30 0, buggy 5.4 road -72 0, delivery-wagon 5.1 road -99 0"
-      baked-lighting="lightmap: assets/textures/vehicles-lightmap.jpg; intensity: 1.526; keep: glass, enamel"
-      glass-reflect paint-reflect="intensity: 0.6"></a-entity>
+      baked-lighting="lightmap: assets/textures/vehicles-lightmap.jpg?v=3; intensity: 1.5178; keep: glass, enamel"
+      glass-reflect paint-reflect="intensity: 0.12"></a-entity>
     <!-- ============================================================
          STREET PROPS (tools/blender/street_props.py + street_props_bake.py
          → assets/models/street-props.glb; PLAN.md "Street ambiance", pass 1)

@@ -190,6 +190,8 @@ for n, short in (("model-t", "model-t"), ("buggy", "buggy"), ("delivery-wagon", 
     VIEWS[short + "-three-quarter-front"] = (V(p, (-4.6, -5.4 + dy, 1.65)), tgt, 40, None)
     VIEWS[short + "-three-quarter-rear"] = (V(p, (-4.4, 4.6, 1.75)), V(p, (0, -0.2, 0.85)), 40, None)
     VIEWS[short + "-side"] = (V(p, (-9.0, dy, 1.05)), V(tgt, (0, 0, 0.05)), 42 if n == "model-t" else 36, None)
+VIEWS["model-t-front"] = ((0.0, -6.8, 1.6), (0.0, 0.0, 0.85), 42, None)      # eye 1.6 m, crank visible
+VIEWS["model-t-top-rear"] = ((-2.3, 4.9, 3.1), (0.0, 0.85, 1.35), 38, None)    # top, rear curtain, back light
 VIEWS["wheel-closeup"] = ((-1.95, -1.80, 0.62), (-0.70, -1.27, 0.40), 50, None)
 VIEWS["wheel-closeup-buggy"] = ((-1.85, -9.0 - 1.45, 0.75), (-0.70, -9.0 - 0.80, 0.50), 50, None)
 VIEWS["scale"] = ((-20.0, -10.0, 3.4), (0, -10.0, 0.9), 28, (-2.0, -4.5, 0))

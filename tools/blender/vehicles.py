@@ -12,10 +12,10 @@ Builds three mesh objects in the collection "vehicles", each at the file origin:
                     and finned core, plain hood (no louvres before 1926), curved cowl, tub body
                     with rounded rear and door lines (no driver's door on the left), crowned
                     fenders with rolled edges, running boards on brackets, electric headlamps,
-                    oil cowl lamps and tail lamp, two-piece windshield, one-man top up (4 bows
-                    pivoting on the body sides, pads, sag between bows, plain rear curtain),
+                    oil cowl lamps and tail lamp, two-piece windshield, one-man top up (header +
+                    3 bows on one pivot a side, sag, rear curtain with a small back light),
                     pleated seats, steering column and wheel, transverse springs, front axle
-                    with radius rods, crank, 12-spoke artillery wheels with 30 x 3 / 30 x 3 1/2
+                    with radius rods, fitted starting crank, 12-spoke artillery wheels with 30 x 3 / 30 x 3 1/2
                     clincher tyres on demountable-look rims (lugs).
     buggy           piano-box top buggy: moulded body, rolled cushion and pleated lazy back,
                     patent-leather dash, folding top with 4 bows, top joints and sag, transverse
@@ -46,7 +46,7 @@ COLL = "vehicles"
 
 # material name -> viewport colour (sRGB hex). "enamel" and "glass" names are fixed (scene).
 MATS = {
-    "enamel": "141414", "satin_black": "1A1A1A", "leather": "1E1C1A", "top_fabric": "2A2826",
+    "enamel": "0A0A0A", "satin_black": "1A1A1A", "leather": "1E1C1A", "top_fabric": "2A2826",
     "rubber": "2C2A28", "iron": "2E2D2B", "gear_paint": "3A2B26", "wagon_wood": "7E705E",
     "glass": "1A1916", "reflector": "A8A69E", "radiator_core": "1C1C1A",
 }
@@ -377,6 +377,33 @@ class Builder:
                 return p
             self.grid([perim(top), perim(bot)], mat, closed_v=True)
 
+    def sheet_holed(self, G, thick, mat, skip=()):
+        """Closed thin shell from a grid of points (rows x cols) with the cells in `skip`
+        ((row, col) of the cell's lower-left corner) left open; walls round every opening."""
+        nr, nc = len(G), len(G[0])
+        top, bot = [], []
+        for i in range(nr):
+            rt, rb = [], []
+            for j in range(nc):
+                du = G[min(i + 1, nr - 1)][j] - G[max(i - 1, 0)][j]
+                dv = G[i][min(j + 1, nc - 1)] - G[i][max(j - 1, 0)]
+                n = du.cross(dv)
+                n = n.normalized() if n.length > 1e-9 else Vector((0, 0, 1))
+                rt.append(self.vert(G[i][j] + n * thick / 2))
+                rb.append(self.vert(G[i][j] - n * thick / 2))
+            top.append(rt)
+            bot.append(rb)
+        keep = {(i, j) for i in range(nr - 1) for j in range(nc - 1)} - set(skip)
+        with self.part():
+            for i, j in keep:
+                q = ((i, j), (i, j + 1), (i + 1, j + 1), (i + 1, j))
+                self.face([top[a][b] for a, b in q], mat)
+                self.face([bot[a][b] for a, b in reversed(q)], mat)
+                for (a, b), nb in ((((i, j), (i, j + 1)), (i - 1, j)), (((i + 1, j + 1), (i + 1, j)), (i + 1, j)),
+                                   (((i, j + 1), (i + 1, j + 1)), (i, j + 1)), (((i + 1, j), (i, j)), (i, j - 1))):
+                    if nb not in keep:
+                        self.face([top[a[0]][a[1]], top[b[0]][b[1]], bot[b[0]][b[1]], bot[a[0]][a[1]]], mat)
+
     def loop_loft(self, loops, mat, closed=True, caps=False):
         with self.part():
             R = [self.ring_verts(l) for l in loops]
@@ -429,21 +456,22 @@ def spokes(B, M, n, r0, r1, z0, z1, sec0, sec1, mat, phase=0.0, sides=6, mid=Non
         B.tube([M @ p for p in pts], rads, sides, mat, nrm=nrm, caps=False)
 
 
-def wheel_model_t(B, x, y, side, R, rear):
-    """Wood artillery wheel, 12 spokes, clincher rim on the felloe (demountable lugs), tyre."""
-    zc = R - 0.006                       # tyre slightly flattened under load
-    M = wheel_M(x, y, zc, side)
+def wheel_model_t(B, x, y, side, R, rear, camber=0.0):
+    """Wood artillery wheel, 12 spokes, clincher rim on the felloe (demountable lugs), tyre.
+    camber: positive = top of the wheel leans outward (front wheels of a T: about 3 degrees)."""
+    zc = R * math.cos(camber) - 0.006    # tyre slightly flattened under load
+    M = wheel_M(x, y, zc, side, camber)
     a = 0.044 if rear else 0.039         # tyre section half height (3 1/2 / 3 in)
     b = 0.045 if rear else 0.038         # half width
     rc = R - a
     prof = []
-    for k in range(9):
-        p = math.radians(-125 + 250 * k / 8)
+    for k in range(7):
+        p = math.radians(-125 + 250 * k / 6)
         prof.append((rc + a * math.cos(p), b * math.sin(p)))
     rs = rc - 0.574 * a                  # where the tyre meets the rim
     prof += [(rs - 0.003, b * 0.93), (rs - 0.014, 0.027), (rs - 0.064, 0.020),
              (rs - 0.064, -0.020), (rs - 0.014, -0.027), (rs - 0.003, -b * 0.93)]
-    mats = ["rubber"] * 8 + ["rubber"] + ["enamel"] * 5 + ["rubber"]
+    mats = ["rubber"] * 6 + ["rubber"] + ["enamel"] * 5 + ["rubber"]
     B.lathe(prof, 32, mats, M, phase=math.pi / 32, closed=True)
     # 12 spokes, wedge-shaped at the hub
     spokes(B, M, 12, 0.055, rs - 0.05, 0.0, 0.0, (0.0175, 0.024), (0.013, 0.016), "enamel",
@@ -453,7 +481,7 @@ def wheel_model_t(B, x, y, side, R, rear):
            (0.050, 0.056), (0.044, 0.092), (0.025, 0.112), (0.0, 0.117)] if rear else \
           [(0.0, -0.055), (0.078, -0.045), (0.064, -0.030), (0.064, 0.030), (0.082, 0.040),
            (0.046, 0.052), (0.040, 0.084), (0.022, 0.103), (0.0, 0.108)]
-    B.lathe(hub, 16, "enamel", M)
+    B.lathe(hub, 12, "enamel", M)
     # demountable rim lugs (6) on the outer felloe face
     for k in range(6):
         ang = 2 * math.pi * (k + 0.5) / 6
@@ -687,7 +715,9 @@ def t_plan(groove_ys):
 
 def t_body(B):
     K = "enamel"
-    plan = t_plan({"left": [0.60, 1.08], "right": [-0.38, 0.14, 0.60, 1.08]})
+    # three opening doors (right front, both rear); on the driver's (left, +X) side the front "door"
+    # is only a stamped outline, as on 1912-25 Ford open cars. No outside handles (latch inside).
+    plan = t_plan({"left": [-0.38, 0.14, 0.60, 1.08], "right": [-0.38, 0.14, 0.60, 1.08]})
     prof = [(-0.015, 0.585), (0.0, 0.600), (0.003, 0.70), (0.003, 0.90), (-0.003, 0.985), (-0.014, 1.022),
             (-0.032, 1.041), (-0.051, 1.038), (-0.064, 1.020), (-0.066, 0.98), (-0.064, 0.625),
             (-0.042, 0.585)]
@@ -715,7 +745,7 @@ def t_body(B):
     pleated_back(B, -0.30, 0.30, 0.90, 1.035, 1.57, math.radians(16), 6, panel=None, depth=0.07)
     # rear seat end rolls (side upholstery against the tub corners)
     for s in (1, -1):
-        B.tube([(s * 0.47, 0.98, 0.88), (s * 0.47, 1.30, 0.90), (s * 0.40, 1.48, 0.95)], 0.05, 6, "leather")
+        B.tube([(s * 0.47, 0.98, 0.88), (s * 0.465, 1.28, 0.90), (s * 0.36, 1.46, 0.93)], 0.05, 6, "leather")
 
 
 def pleated_back(B, x0, x1, z0, z1, y, lean, npleat, panel="enamel", depth=0.05):
@@ -869,9 +899,9 @@ def t_fenders(B):
     for a in (124, 105, 85, 65, 45, 25, 8):
         rear.append((RA_T + 0.47 * math.cos(math.radians(a)), 0.38 + 0.47 * math.sin(math.radians(a))))
     for s in (1, -1):
-        for path, hw, n in ((front, 0.112, 16), (rear, 0.122, 14)):
+        for path, hw, n in ((front, 0.112, 14), (rear, 0.122, 12)):
             pts = smooth_path([(s * (TR_T + 0.004), y, z) for y, z in path], n)
-            B.sweep(pts, fsec(hw), K, lat=(s, 0, 0))
+            B.sweep(pts, fsec(hw), K, lat=(1, 0, 0))     # same lateral axis both sides: crown up on both
     # running boards (linoleum-topped steel, rolled edge) on three brackets each, splash aprons
     for s in (1, -1):
         B.rbox((s * 0.705, -0.01, 0.428), (0.25, 1.55, 0.022), K, bev=0.008, seg=1)
@@ -894,25 +924,25 @@ def t_lamps(B):
                 (0.115, 0.008), (0.113, 0.021), (0.099, 0.025), (0.095, 0.015),
                 (0.050, -0.030), (0.0, -0.052)]
         mats = [K] * 8 + ["reflector"] * 3
-        B.lathe(prof, 16, mats, M)
+        B.lathe(prof, 14, mats, M)
         with B.part(recalc=False):
             rings = []
             for r, z in ((0.098, 0.019), (0.055, 0.031), (0.0, 0.036)):
                 if r == 0:
                     v = B.vert(M @ Vector((0, 0, z)))
-                    rings.append([v] * 16)
+                    rings.append([v] * 14)
                 else:
-                    rings.append([B.vert(M @ Vector((r * math.cos(2 * math.pi * j / 16), r * math.sin(2 * math.pi * j / 16), z)))
-                                  for j in range(16)])
+                    rings.append([B.vert(M @ Vector((r * math.cos(2 * math.pi * j / 14), r * math.sin(2 * math.pi * j / 14), z)))
+                                  for j in range(14)])
             B.grid(rings, "glass", closed_v=True, d=(0, -1, 0))
         # fork bracket and stem down to the frame horn
         for d in (-1, 1):
             B.tube([c + Vector((d * 0.104, 0.0, 0.0)), c + Vector((d * 0.10, 0.0, -0.07)),
-                    c + Vector((d * 0.03, 0.0, -0.12))], 0.008, 6, "iron")
-        B.tube([c + Vector((0, 0, -0.12)), Vector((s * 0.37, -1.55, 0.70)), Vector((s * 0.36, -1.50, 0.58))],
+                    c + Vector((d * 0.006, 0.0, -0.125))], 0.008, 6, "iron")
+        B.tube([c + Vector((0, 0, -0.115)), Vector((s * 0.372, -1.575, 0.70)), Vector((s * 0.36, -1.565, 0.54))],
                0.012, 6, "iron")
         # oil side lamps on the cowl
-        cy, cz = -0.60, 1.00
+        cy, cz = -0.58, 1.00
         cx = s * 0.575
         B.rbox((cx, cy, cz), (0.085, 0.095, 0.14), K, bev=0.012, seg=1)
         B.lathe([(0.0, 0.0), (0.048, 0.0), (0.050, 0.012), (0.028, 0.03), (0.016, 0.07), (0.022, 0.08), (0.0, 0.085)],
@@ -922,7 +952,7 @@ def t_lamps(B):
             B.face([B.vert(T(cx, cy - 0.064, cz) @ ROT_X90 @ Vector((0.03 * math.cos(2 * math.pi * j / 14),
                                                                       0.03 * math.sin(2 * math.pi * j / 14), 0)))
                     for j in range(14)], "glass", d=(0, -1, 0))
-        B.beam((cx, cy, cz - 0.02), (s * 0.535, cy, cz - 0.03), 0.02, 0.012, "iron", hint=(0, 0, 1))
+        B.beam((cx, cy, cz - 0.02), (s * 0.475, cy, cz - 0.03), 0.02, 0.012, "iron", hint=(0, 0, 1))
     # tail lamp on a bracket at the left rear
     c = Vector((0.40, 1.80, 0.70))
     M = T(*c) @ ROT_XM90
@@ -933,7 +963,7 @@ def t_lamps(B):
                 for j in range(12)], "glass", d=(0, 1, 0))
     B.lathe([(0.0, 0.0), (0.02, 0.0), (0.018, 0.05), (0.0, 0.055)], 8, K, T(*c) @ T(0, 0, 0.046))
     B.beam((0.40, 1.74, 0.62), (0.40, 1.80, 0.655), 0.03, 0.006, "iron", hint=(1, 0, 0))
-    B.beam((0.40, 1.60, 0.56), (0.40, 1.74, 0.62), 0.03, 0.006, "iron", hint=(1, 0, 0))
+    B.beam((0.40, 1.54, 0.58), (0.40, 1.74, 0.62), 0.03, 0.006, "iron", hint=(1, 0, 0))
 
 
 def t_windshield(B):
@@ -947,11 +977,14 @@ def t_windshield(B):
         B.beam((-0.536, WY, z), (0.536, WY, z), 0.022, 0.026, K, hint=(0, 0, 1), bev=0.005, seg=1)
     for z0, z1 in ((zb + 0.008, zm - 0.016), (zm + 0.016, zt - 0.008)):
         B.rbox((0, WY, (z0 + z1) / 2), (1.07, 0.006, z1 - z0 + 0.01), "glass", bev=0)
-    # leather straps holding the top's front bow to the windshield
+    # two leather straps from the top's front bow down to the windshield frame (buckled round the
+    # top rail beside the posts)
     for s in (1, -1):
-        x = s * 0.40
-        pts = [(x, WY + 0.012, zt - 0.004), (x, WY + 0.016, zt + 0.03), (x, WY + 0.03, 1.835), (x, WY + 0.05, 1.845)]
-        B.sweep(pts, rect_sec(0.03, 0.004), "leather", lat=(1, 0, 0))
+        x = s * 0.47
+        pts = [(x, WY - 0.006, zt - 0.012), (x, WY - 0.016, zt + 0.006), (x, WY + 0.0, zt + 0.022),
+               (x, -0.405, 1.846), (x, T_HEADER + 0.004, 1.866)]
+        B.sweep(smooth_path(pts, 7, 3), rect_sec(0.032, 0.004), "leather", lat=(1, 0, 0))
+        B.rbox((x, WY - 0.016, zt + 0.004), (0.038, 0.006, 0.026), "iron", bev=0)      # buckle
 
 
 def t_steering(B):
@@ -980,22 +1013,33 @@ def t_steering(B):
 
 def t_chassis(B):
     K = "enamel"
-    for s in (1, -1):
-        B.rbox((s * 0.36, 0.05, 0.525), (0.045, 3.05, 0.095), K, bev=0.006)
+    for s in (1, -1):                       # side rails, running forward to the frame horns
+        B.rbox((s * 0.36, -0.0175, 0.525), (0.045, 3.185, 0.095), K, bev=0.006)
+    # front cross-member between the horns, under the radiator apron
+    B.beam((-0.38, -1.585, 0.515), (0.38, -1.585, 0.515), 0.05, 0.08, K, hint=(0, 0, 1), bev=0.008, seg=1)
     # front: I-beam axle, spindles, transverse spring, radius rods, crank
     zc = 0.375
     B.beam((-0.63, FA_T, zc - 0.012), (0.63, FA_T, zc - 0.012), 0.042, 0.06, K, hint=(0, 0, 1), bev=0.008, seg=1)
     for s in (1, -1):
         B.lathe([(0.0, -0.05), (0.03, -0.05), (0.03, 0.05), (0.0, 0.05)], 10, K, T(s * 0.645, FA_T, zc))
+        # spindle stub from the king pin into the hub (front wheels have 3 deg positive camber)
+        B.tube([(s * 0.64, FA_T, zc), (s * (TR_T - 0.02), FA_T, zc + 0.002)], 0.016, 6, "iron", nrm=(0, 0, 1))
         B.tube([(s * 0.62, FA_T + 0.02, zc - 0.01), (s * 0.30, -0.95, zc + 0.01), (0, -0.62, 0.40)], 0.013, 6, K)
     leaf_spring(B, lambda u, k: Vector((u * 0.56, FA_T, 0.445 + 0.11 * (1 - u * u) + k * 0.009)), 0.56, 2, 0.045,
                 0.008, K, (0, 1, 0))
     for s in (1, -1):
         B.beam((s * 0.56, FA_T, 0.44), (s * 0.56, FA_T, zc + 0.01), 0.03, 0.03, "iron", hint=(1, 0, 0))
     B.rbox((0, FA_T, 0.575), (0.78, 0.07, 0.05), K, bev=0.01)
-    B.tube([(0, -1.62, 0.43), (0, -1.73, 0.43), (0, -1.75, 0.36), (0.0, -1.75, 0.30), (0.06, -1.75, 0.29)],
-           0.011, 6, "iron")
-    B.lathe([(0.0, 0.0), (0.016, 0.0), (0.016, 0.07), (0.0, 0.075)], 8, "iron", T(0.06, -1.75, 0.29) @ ROT_Y90)
+    # starting crank, permanently fitted: shaft from the crankcase nose through a bearing boss in the
+    # front cross-member, arm hanging straight down at rest, grip pointing forward
+    zk, yk = 0.505, -1.715
+    B.tube([(0, -1.50, zk), (0, yk + 0.006, zk)], 0.012, 8, "iron", nrm=(0, 0, 1))
+    B.lathe([(0.0, 0.0), (0.032, 0.0), (0.032, 0.035), (0.020, 0.05), (0.0, 0.05)], 12, "iron",
+            T(0, -1.605, zk) @ ROT_X90)                          # bearing boss on the cross-member
+    B.lathe([(0.0, -0.012), (0.019, -0.012), (0.019, 0.012), (0.0, 0.012)], 10, "iron", T(0, yk, zk) @ ROT_X90)
+    B.beam((0, yk, zk), (0, yk, zk - 0.17), 0.028, 0.012, "iron", hint=(0, 1, 0), bev=0.003)
+    B.lathe([(0.0, -0.01), (0.014, -0.01), (0.018, 0.02), (0.018, 0.085), (0.012, 0.10), (0.0, 0.10)], 8,
+            "iron", T(0, yk + 0.004, zk - 0.165) @ ROT_X90)        # grip on its pin, pointing forward
     # engine, pan, transmission, torque tube, rear axle with the differential, rear spring, muffler
     B.rbox((0, -1.17, 0.70), (0.34, 0.62, 0.34), "iron", bev=0.03, seg=1)
     B.rbox((0, -1.0, 0.47), (0.30, 1.05, 0.14), "iron", bev=0.04, seg=1)
@@ -1008,13 +1052,134 @@ def t_chassis(B):
     B.rbox((0, RA_T + 0.02, 0.565), (0.78, 0.07, 0.05), K, bev=0.01)
     B.tube([(-0.22, -0.70, 0.46), (-0.22, -0.40, 0.42), (-0.22, 0.25, 0.42)], 0.055, 6, "iron")
     B.tube([(-0.22, 0.25, 0.42), (-0.24, 0.70, 0.42)], 0.016, 6, "iron")
+    # exhaust pipe from the manifold (engine side) and two hanger straps to the right frame rail
+    B.tube(smooth_path([(-0.22, -0.66, 0.47), (-0.21, -0.92, 0.55), (-0.15, -1.12, 0.66)], 6, 3), 0.02, 6, "iron")
+    for y in (-0.45, 0.12):
+        B.beam((-0.22, y, 0.45), (-0.36, y, 0.505), 0.03, 0.006, "iron", hint=(0, 0, 1), bev=0)
+
+
+T_HEADER = -0.385                              # front bow (header) of the Model T top
+T_BOWS = [0.30, 0.90, 1.46]                    # bows hinged at the pivot, front to rear
+T_PIVOT = (1.18, 1.052)                        # (y, z) on the body side behind the rear door
+T_HW = 0.585                                   # half width of the roof
+
+
+def t_zr(y):
+    t = (y + 0.43) / 1.75
+    return 1.862 + 0.022 * t + 0.012 * math.sin(math.pi * t)
+
+
+def t_top(B):
+    """1917-20 Ford 'one-man' touring top, up: fabric roof from the front bow (header) to the rear
+    bow with a slight sag between the bows and a short valance, rear curtain with quarters down to
+    the body behind the pivots and a small celluloid back light, open sides (no side curtains up).
+    Three bows hinge on one iron pivot each side; the header rides on the side rails (top irons) and
+    is strapped to the windshield (t_windshield)."""
+    F, hw, val, crown = "top_fabric", T_HW, 0.045, 0.032
+    zr = t_zr
+    allb = [T_HEADER] + T_BOWS
+    yf, yr = T_HEADER - 0.02, T_BOWS[-1] + 0.07
+
+    def sagf(y):
+        for a, b in zip(allb, allb[1:]):
+            if a <= y <= b:
+                return 0.018 * math.sin(math.pi * (y - a) / (b - a)) ** 1.5
+        return 0.0
+    pads = 0.49
+    lat = [(-hw, -val, False), (-hw - 0.002, -0.014, False), (-hw + 0.014, 0.0, False),
+           (-pads - 0.03, None, True), (-pads, "pad", True), (-pads + 0.04, None, True),
+           (-hw * 0.4, None, True), (0.0, None, True)]
+    lat = lat + [(-l, n, i) for l, n, i in reversed(lat[:-1])]
+
+    def roof_z(l, y):
+        return zr(y) + crown * (1 - (l / hw) ** 2) - sagf(y) * (1 - (l / hw) ** 2) ** 0.6
+
+    def roof_row(y, dz=0.0, dy=0.0):
+        row = []
+        for l, n, _ in lat:
+            if n is None or n == "pad":
+                z = roof_z(l, y) + (0.006 if n == "pad" else 0.0)
+            else:
+                z = zr(y) + n
+            row.append(Vector((l, y + dy, z + dz)))
+        return row
+    ys = sorted(set([round(yf + (yr - yf) * i / 7, 4) for i in range(8)] + allb))
+    ys = [y for i, y in enumerate(ys) if i == 0 or y - ys[i - 1] > 0.03 or y in allb]
+    G = [roof_row(yf, -val, 0.004), roof_row(yf, -0.014)] + [roof_row(y) for y in ys] +         [roof_row(yr, -0.014), roof_row(yr, -0.03, -0.004)]
+    B.sheet(G, 0.006, F)
+
+    # rear curtain + quarters: loft from the body rim (behind the pivots, round the back) up to the
+    # roof's rear edge; columns: side 3, corner 5, back 3, corner 5, side 3
+    def plan_loop(xs, y0, ycs, xc, rc, yb):
+        pts = []
+        for k in range(3):
+            pts.append((Vector((xs, lerp(y0, ycs, k / 2), 0)), Vector((1, 0, 0))))
+        for k in range(1, 6):
+            a = math.radians(90 * k / 5)
+            n = Vector((math.cos(a), math.sin(a), 0))
+            pts.append((Vector((xc, ycs, 0)) + n * rc, n))
+        for x in (0.16, 0.0, -0.16):
+            pts.append((Vector((x, yb, 0)), Vector((0, 1, 0))))
+        for k in range(0, 5):
+            a = math.radians(90 + 90 * k / 5)
+            n = Vector((math.cos(a), math.sin(a), 0))
+            pts.append((Vector((-xc, ycs, 0)) + n * rc, n))
+        for k in range(2, -1, -1):
+            pts.append((Vector((-xs, lerp(y0, ycs, k / 2), 0)), Vector((-1, 0, 0))))
+        return pts
+    py, pz = T_PIVOT
+    bot = plan_loop(0.545, py, 1.33, 0.205, 0.34, 1.67)
+    yrb = T_BOWS[-1]
+    top = plan_loop(hw - 0.004, yrb, yr - 0.046, hw - 0.044, 0.04, yr - 0.006)
+    ws = (0.0, 0.25, 0.50, 0.72, 1.0)
+    C = []
+    for w in ws:
+        row = []
+        for (pb, nb), (pt, nt) in zip(bot, top):
+            p = pb.lerp(pt, w)
+            zt = roof_z(min(abs(pt.x), hw), pt.y) - 0.012
+            p.z = lerp(1.040, zt, w)
+            p -= nb * 0.012 * math.sin(math.pi * w)           # fabric sags in a little
+            row.append(p)
+        C.append(row)
+    win = [(2, 8), (2, 9)]                                     # back light: rows 2-3, x -0.16..0.16
+    B.sheet_holed(C, 0.006, F, skip=win)
+    # back light: celluloid pane and its stitched binding
+    corners = [C[2][8], C[2][9], C[2][10], C[3][10], C[3][9], C[3][8]]
+    with B.part(recalc=False):
+        B.face([B.vert(p) for p in corners], "glass", d=(0, 1, 0))
+    B.tube(corners, 0.0055, 4, "leather", closed=True, nrm=(0, 1, 0))
+    # welt over the roof / curtain seam and a binding along the curtain foot on the body rim
+    B.tube(smooth_path([p + Vector((0, 0.004, 0.002)) for p in C[-1]], 21, 3), 0.006, 4, F, nrm=(0, 0, 1))
+    B.tube(smooth_path([p + Vector((0, 0, 0.004)) for p in C[0]], 21, 3), 0.007, 4, "leather", nrm=(0, 0, 1))
+
+    # bows: across under the fabric; the three hinged bows have legs down to the pivots
+    for yb in allb:
+        acr = [Vector((l, yb, roof_z(l, yb) - 0.013)) for l in (-hw + 0.012, -hw * 0.6, 0.0, hw * 0.6, hw - 0.012)]
+        el = Vector((-hw + 0.004, yb, zr(yb) - val + 0.008))
+        er = Vector((hw - 0.004, yb, zr(yb) - val + 0.008))
+        if yb == T_HEADER:
+            pts = [el] + acr + [er]
+        else:
+            pl, pr = Vector((-0.572, py, pz)), Vector((0.572, py, pz))
+            pts = [pl, pl.lerp(el, 0.5), el] + acr + [er, pr.lerp(er, 0.5), pr]
+        B.tube(smooth_path(pts, 13 if yb != T_HEADER else 7, 4), (0.017, 0.010), 4, "enamel",
+               nrm=(0, 1, 0), phase=math.pi / 4)
+    # side rails (top irons) under the roof edge from the header to the rear bow
+    for s in (1, -1):
+        B.tube([Vector((s * (hw - 0.016), y, zr(y) - 0.012)) for y in (T_HEADER, T_BOWS[0], T_BOWS[1], yrb)],
+               0.008, 4, "enamel", nrm=(0, 0, 1))
+        # pivot: iron plate on the body side with the hinge bolt
+        B.rbox((s * 0.566, py, pz - 0.02), (0.014, 0.07, 0.08), "iron", bev=0.004)
+        B.lathe([(0.0, -0.016), (0.026, -0.016), (0.026, 0.016), (0.012, 0.024), (0.0, 0.024)], 10, "iron",
+                T(s * 0.578, py, pz) @ (ROT_Y90 if s > 0 else ROT_YM90))
 
 
 def build_model_t():
     B = Builder()
     for y, rear in ((FA_T, False), (RA_T, True)):
         for s in (1, -1):
-            wheel_model_t(B, s * TR_T, y, s, 0.381, rear)
+            wheel_model_t(B, s * TR_T, y, s, 0.381, rear, 0.0 if rear else math.radians(3.0))
     t_chassis(B)
     t_body(B)
     t_hood_cowl(B)
@@ -1023,13 +1188,7 @@ def build_model_t():
     t_lamps(B)
     t_windshield(B)
     t_steering(B)
-
-    def zr(y):
-        t = (y + 0.43) / 1.75
-        return 1.862 + 0.022 * t + 0.012 * math.sin(math.pi * t)
-    folding_top(B, 0.585, 0.567, [-0.40, 0.25, 0.80, 1.28], zr, (0.98, 1.05), BODY_Y1 + 0.025, 1.042,
-                BODY_RC, "top_fabric", "enamel", pads=0.49, sag=0.016, rows=9, corner=4,
-                hood_ws=(0.0, 0.18, 0.4, 0.62, 0.82, 0.97))
+    t_top(B)
     return B
 
 
@@ -1084,7 +1243,7 @@ def build_buggy():
     for y, R in ((FA, RF), (RA, RR)):
         B.beam((-0.60, y, R), (0.60, y, R), 0.032, 0.032, "iron", hint=(0, 0, 1), bev=0.005)
         B.beam((-0.58, y, R + 0.035), (0.58, y, R + 0.035), 0.05, 0.042, G, hint=(0, 0, 1), bev=0.008, seg=2)
-    B.ring((0, FA, RF + 0.068), 0.16, 0.0, 18, 4, "iron", (0, 0, 1), ellipse=(0.008, 0.012))
+    B.ring((0, FA, RF + 0.060), 0.16, 0.0, 18, 4, "iron", (0, 0, 1), ellipse=(0.008, 0.012))
     B.beam((-0.42, FA, RF + 0.095), (0.42, FA, RF + 0.095), 0.06, 0.045, G, hint=(0, 0, 1), bev=0.01, seg=2)
     elliptic_spring(B, (0, FA, (RF + 0.12 + 0.795) / 2), 0.30, (0.795 - RF - 0.12) / 2, "x", "iron", leaves=1, t=0.011)
     elliptic_spring(B, (0, RA, (RR + 0.06 + 0.795) / 2), 0.31, (0.795 - RR - 0.06) / 2, "x", "iron", leaves=1, t=0.011)
@@ -1099,12 +1258,12 @@ def build_buggy():
             (0.008, 1.012), (0.008, 1.036), (-0.004, 1.048), (-0.020, 1.044), (-0.022, 0.84)]
     box_body(B, 0.31, -0.72, 0.76, 0.025, prof, K, ridges=(-0.26, 0.30))
     B.rbox((0, 0.02, 0.845), (0.58, 1.44, 0.016), K, bev=0.003)
-    B.rbox((0, 0.02, 0.805), (0.30, 1.30, 0.03), G, bev=0.006)        # body sills / cross bars
+    B.rbox((0, 0.02, 0.81), (0.30, 1.70, 0.055), G, bev=0.006)       # body sills, resting on the spring bars
     # seat: panelled seat box, rolled cushion, pleated lazy back with roll, iron arm rails
     B.rbox((0, 0.42, 1.10), (0.68, 0.52, 0.10), K, bev=0.008, seg=1)
     B.rbox((0, 0.40, 1.185), (0.64, 0.46, 0.085), "leather", bev=0.035, seg=2)
     B.tube([(-0.31, 0.18, 1.19), (0.31, 0.18, 1.19)], 0.032, 8, "leather")
-    pleated_back(B, -0.30, 0.30, 1.235, 1.50, 0.64, math.radians(10), 6, panel=K)
+    pleated_back(B, -0.30, 0.30, 1.14, 1.50, 0.64, math.radians(10), 6, panel=K)
     for s in (1, -1):
         B.tube(smooth_path([(s * 0.335, 0.70, 1.46), (s * 0.345, 0.55, 1.36), (s * 0.34, 0.30, 1.29),
                             (s * 0.335, 0.18, 1.18)], 7), 0.008, 5, "iron")
@@ -1147,6 +1306,8 @@ def build_buggy():
         for p in (a, b):
             B.lathe([(0.0, -0.008), (0.011, -0.008), (0.011, 0.012), (0.0, 0.012)], 8, "iron",
                     T(*p) @ (ROT_Y90 if s > 0 else ROT_YM90))
+    for s in (1, -1):        # seat irons carrying the top pivots down to the seat box sides
+        B.beam((s * 0.349, 0.46, 1.318), (s * 0.349, 0.46, 1.10), 0.03, 0.012, "iron", hint=(1, 0, 0), bev=0)
     shafts(B, FA, RF, 0.39, 0.33, G, 2.40)
     return B
 
@@ -1166,6 +1327,9 @@ def build_delivery_wagon():
         B.beam((-0.64, y, R), (0.64, y, R), 0.04, 0.04, "iron", hint=(0, 0, 1), bev=0.006)
         B.beam((-0.60, y, R + 0.045), (0.60, y, R + 0.045), 0.065, 0.05, G, hint=(0, 0, 1), bev=0.01)
     B.ring((0, FA, RF + 0.08), 0.20, 0.0, 16, 3, "iron", (0, 0, 1), ellipse=(0.009, 0.014))
+    B.rbox((0, FA, RF + 0.085), (0.30, 0.07, 0.036), G, bev=0.006)          # head block under the spring
+    for s in (1, -1):                                                         # rear spring seats on the bed
+        B.rbox((s * 0.44, RA, RR + 0.076), (0.05, 0.08, 0.016), "iron", bev=0)
     elliptic_spring(B, (0, FA, (RF + 0.10 + 0.84) / 2), 0.36, (0.84 - RF - 0.10) / 2, "x", "iron", w=0.045,
                     t=0.012, leaves=1)
     for s in (1, -1):

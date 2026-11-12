@@ -8,7 +8,7 @@ Run inside Blender:
  1. Rebuild the geometry (vehicles.py): objects "model-t", "buggy", "delivery-wagon" with smooth /
     weighted normals and "UVMap" (metres; wagon boards one plank of the texture each).
  2. Materials (plain colours, no lettering, no pinstriping):
-      enamel          #141414, roughness 0.30 (Model T body, fenders, hood, wheels, top bows) - the
+      enamel          #0A0A0A, roughness 0.22 (Model T body, fenders, hood, wheels, top bows) - the
                       scene may give it a sky environment map, hence the fixed name
       satin_black     #1A1A1A, roughness 0.50 (buggy body, seat box, bows; wagon trim)
       leather         #1E1C1A, roughness 0.55 (seats, buggy dash, straps)
@@ -103,7 +103,7 @@ make_fabric_texture(FABRIC)
 
 # name -> (texture, roughness, plain colour or target sRGB for the texture)
 LOOK = {
-    "enamel":        (None, 0.30, "141414"),
+    "enamel":        (None, 0.22, "0A0A0A"),
     "satin_black":   (None, 0.50, "1A1A1A"),
     "leather":       (None, 0.55, "1E1C1A"),
     "top_fabric":    (FABRIC, 0.85, "2A2826"),
@@ -495,10 +495,8 @@ dark *= 0.97 + 0.03 * speck
 t_en = (vid == 0) & (mat_name == "enamel")
 side = np.abs(x) > 0.50
 door = np.zeros(len(sel), np.float32)
-for yy in (0.60, 1.08):
+for yy in (-0.38, 0.14, 0.60, 1.08):      # both sides (driver's side front: stamped dummy outline)
     door = np.maximum(door, pulse(y - yy, 0.006) * side * (z > 0.58) * (z < 1.05))
-for yy in (-0.38, 0.14):
-    door = np.maximum(door, pulse(y - yy, 0.006) * (x < -0.50) * (z > 0.58) * (z < 1.05))
 hood = (y > -1.54) & (y < -0.86)
 seams = pulse(y + 0.88, 0.006) * (np.abs(x) < 0.27) * (z > 0.64)
 seams = np.maximum(seams, pulse(x, 0.005) * hood * (z > 1.10))
