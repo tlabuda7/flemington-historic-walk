@@ -557,6 +557,20 @@
       animation-mixer="clip: Idle; crossFadeDuration: 0.4"
       npc="dialogue: data/dialogue/rittenhouse.json; voice: assets/audio/voices/rittenhouse/; radius: 2.5; closeRadius: 4; voiceHeight: 1.62; randomIdleStart: true"
       blob-shadow="width: 0.9; depth: 0.6; opacity: 0.6"></a-entity>
+    <!-- A woman shopping (anonymous, about 35, 1920 dress, straw hat, market basket), on the
+         east walk before the Bank Building (#bank-building, front wall x 12.24; forecourt from
+         x 10.30; stoop of bay 2, z -73.62 ... -69.93, out to x 10.45): she stands 1.8 m in front
+         of the stoop, on the walk, with nothing within 1 m of her. Faces WSW, toward visitors
+         coming up from the south. Built by tools/blender/npc_shopper.py + npc_shopper_bake.py
+         (preview: npc_shopper_preview.py). 1.62 m tall, so voiceHeight 1.52.
+         Leave her 2.5 m talk circle clear of the planned Mr. Williamson at (10.90, -75.40),
+         5.4 m away. Voice (tools/make_voice_shopper.py): not yet made, so she is text only;
+         when it is, add "voice: assets/audio/voices/shopper/" to npc. -->
+    <a-entity id="npc-shopper" position="8.6 0.15 -70.5" rotation="0 -60 0"
+      gltf-model="url(assets/models/npc-shopper.glb?v=1)"
+      animation-mixer="clip: Idle; crossFadeDuration: 0.4"
+      npc="dialogue: data/dialogue/shopper.json; radius: 2.5; closeRadius: 4; voiceHeight: 1.52; randomIdleStart: true"
+      blob-shadow="width: 0.8; depth: 0.55; opacity: 0.6"></a-entity>
 
     <!-- ============================================================
          BEYOND THE STARTER BLOCK: simple placeholders.

@@ -66,6 +66,8 @@ Decisions (2026-11-02):
 | 83–87 Main, brick grocery with roof arch and sidewalk porch (old nos. 507–506) | spec written 2026-11-11 by planner; owner go-ahead 2026-11-12 (recommended choices: card look, shutters closed, no goods) | reused maps + one drawn shutter-louvre map | **built 2026-11-12 by blender-builder**: `block-83-87.glb`, 3,731 tris, 9 materials, 1.73 MB, LIGHTMAP_SCALE 1.0332 | awaiting review | placeholder only |
 | 91–93 Main, frame house used as offices + dwelling ell (old no. 505) | spec written 2026-11-11 by planner; owner go-ahead 2026-11-12 (recommended choices: plain front, porch across the front, cross-gabled metal roof with modillions, two windows per floor on the north wall, white-cream paint) | none needed (all reused) | **built 2026-11-12 by blender-builder**: `house-91-93.glb`, 4,136 tris, 7 materials, 1.42 MB, 2K lightmap, LIGHTMAP_SCALE 1.0927 | awaiting review | placeholder only |
 | 95–97 Main, brick house + frame office annex (old nos. 504–503) | spec written 2026-11-11 by planner; owner go-ahead 2026-11-12 (recommended choices: plain front with full-width porch, side-gabled slate roof with small attic windows, plain office annex, no sign) | none needed (all reused) | **built 2026-11-12 by blender-builder**: `house-95-97.glb`, 2,544 tris, 9 materials, 1.67 MB, 2K lightmap, LIGHTMAP_SCALE 1.0812 | awaiting review | placeholder only |
+| Rough-spot fixes (north approach back lots, Methodist church shrubs, Bloomfield Ave lot grass; under "Background") | spec written 2026-11-12 by planner — awaiting owner approval | R-b needs one generated map (`shared/shrub_leaves.jpg`); rest reused | — | — | — |
+| Fifth person R2-W: Furman R. Williamson, president of the Flemington National Bank (Bank Building, 56–66 Main; under "People") | spec written 2026-11-12 by planner — awaiting owner approval (recommended over R2 Killgore) | — | — | — | — |
 
 ## Building specs
 
@@ -5909,6 +5911,20 @@ items only when something changes). New `near-only` system in `js/components.js`
   Pop check at the hide distances: a Model T at 80 m is a ~5 px dark speck in an 800 × 600 view; fences
   and props at 60 m show no visible change (`assets/models/previews/neardist-*.png`, local only).
 
+**Triangle breakdown (2026-11-12, scene-integrator, measurement only):** per-entity drawn tris
+(frustum + distance hiding applied; sum matches `renderer.info`) at (0, 55) N 295k / 107 calls
+(walked from the start, so Pickell is still drawn), (0, 60) N 267k / 102, (0, −170) S 250k / 96,
+start (0, 18) N 285k / 92, (0, −60) S 230k / 78. Models whose nearest point is beyond 60 m are
+42–62 % of the tris in the four long views (beyond 80 m: 37–55 %); only 14–19 % at (0, −60) S.
+Biggest far contributors (tris drawn beyond 80 m, summed over the 5 views / model tris):
+48–52 Main 44k / 14.8k; Wurts 32.5k / 8.1k; County Hotel 31.3k / 10.4k; Bank 27.2k / 9.1k;
+35–41 Main 27.1k / 9.0k; Union Hotel 25.6k / 25.6k (76.7k beyond 60 m); 40–46 Main 21.9k / 7.3k;
+north-end backdrop trees 20.2k; Court St old maples 20k (14 × 1,430, drawn from the start view);
+65 Main 19.3k / 6.4k; County Offices 18.1k / 9.1k; south-end backdrop trees 16.8k; Courthouse
+13.9k / 13.9k (27.7k beyond 60 m). Far versions at ~10 % for the top 10 buildings, switched at
+80 m, would cut ~45–67k tris from each long view (nothing at (0, −60) S). Up close the heavy items are the parked
+vehicles (27.7k at (0, −60)) and the two people (12.8k and 13.2k each).
+
 ### Pass 1: sound and street props
 
 **Status:** **in scene** (scene-integrator, 2026-11-04): all 34 props placed under `#street-props` in `index.html`; new `street-props` component (js/components.js) bakes them into 3 static meshes by z band (z > −20, −20 … −60, < −60) with the GLB's own lit material, plus one `LineSegments` for the wires (6 per span along both pole lines, 12-segment parabolas, 1.2 % sag; span wires from the W1/E1 and W4/E4 eye bolts to the arc-lamp hooks). Moved from the table: fountain F1 x −7.45 → −7.70 (the bowl reaches 1.32 m in front of the origin, so at −7.45 it overhung the road by 0.27 m; now its front is at x −6.38, on the curb); goods G2 z −56 → −59 (−56 cut through the 66 Main stoop at z −57.57 … −56.17); bicycle B1 → (−7.12, −14.6) rot 180 and B2 → (7.25, −76.5) rot 0 so each leans toward its post/pole with the post mid-frame. Draw calls / triangles: start view 69 → 73 / 108k → 126k; (0, 0.15, −30) 56 → 59 / 66k → 77k; (0, 0.15, −60) 52 → 55 / 21k → 32k; 17.2k triangles placed in total. No console errors. Screenshots `assets/models/previews/street-props-scene-{start,fountain,pole,arc-lamp}.png`. Earlier: props built, round-1 fixes applied (blender-builder, 2026-11-04): `assets/models/street-props.glb`
@@ -7505,6 +7521,179 @@ the 1908 card's view direction (medium).
   the addendum's Court St south line (z 10.4) and L1 on the built Nevius rear wall.
 - E4 and the west side beyond the walk limits were not measured.
 
+### Rough-spot fixes (planner, 2026-11-12)
+
+**Status:** `owner approved (2026-11-12, "go ahead"); build after the townsfolk in Blender`. Three small repairs to built backdrops; nothing built.
+Each is a re-run of an existing script pair (geometry + bake), so no new draw calls. Worst views today are
+~250–267k tris after distance hiding (budget ~300k); all three together add **≤ 1.2k model tris everywhere** plus
+**≤ 12k instanced tree tris that are drawn only when you are north of z ≈ −80**.
+
+#### R-a. North approach back lots (z −192 … −330): fill the empty yards
+
+*What is actually there now (checked 2026-11-12).* The old cone trees and house silhouettes are **gone**: the
+committed `landscape.glb?v=4` `landscape_town` mesh has 156 tris, all at the south end (z +70 … +140) and on
+Bloomfield Ave; **0 tris between z −160 and −340** (read from the GLB). The orchestrator's 2026-11-11 note predates
+the north-approach build. What is still wrong there:
+1. **Empty yards.** `north-approach.glb` draws grass only to x −60 (west) and x 50 / 80 (east). Behind that is the
+   bare olive ground disc (#6f6a45) to the 330 m landscape ring, with no buildings and no trees. Between and behind
+   the ten houses you look out over flat brown ground; the removed `Town` items (four big trees at x ±36, houses at
+   x ±20) were the only things there. The 1913 card `flmngtnmainstnorth13.jpg` shows big trees standing back in the
+   east-side yards, not just along the walk.
+2. **Mixed trees.** Two old `backdrop-tree.glb` instances (the young street tree scaled ×2.1–2.3) stand among the 14
+   real-size old maples: `#btree-end-4` at (−14, −300) is only 6 m from `omaple-n-13` (−20, −300), so two crowns
+   intersect; `#btree-end-3` at (10, −262) is a smaller, different tree in the middle of the east maple row.
+3. The yard outbuildings on the 1921 maps were left out of 7.9 ("also mapped, not proposed").
+
+*Sources.* East side: Sept 1921 **sheet 2**, px box x 4400–5600, y 1450–3200 (CLAUDE.md formula, ±0.5 m). West side:
+Sept 1921 **sheet 6** (LoC `sanborn05479_006`, IIIF region viewed in the session scratchpad only, not committed),
+7.9 registration x = −10.6 + (px − 5755) × 0.1033, z = −202.4 + (py − 7007) × 0.1033, **±2.5 m**, px box
+x 4840–5310, y 6070–7000. Photo: `flmngtnmainstnorth13.jpg` (1913, east-side yard trees).
+
+*Fix, part 1: outbuildings and wider lawns in `north-approach.glb`* (re-run `north_approach.py` + `_bake.py`; scene
+axes, entity stays at 0 0 0). Plain massing boxes, section 5 (pass 2) standard: frame = the project's white/cream
+clapboard map with a weathered grey-brown Tint, gable roof 35° with the ridge along the long side, 0.25 m eaves,
+roofs slate-dark grey or brown shingle Tint; no windows except one dark door rectangle on the side facing the house
+(atlas swatch). Storeys: 1 = 2.6 m eave, 1½ = 3.6 m, 2 = 5.2 m (guesses). Heights are not lettered.
+
+| Id | What (map label) | x | z | Storeys / note |
+|---|---|---|---|---|
+| OE1 | shed behind NE5 (2 Main), turned with NE5 (≈ 11°) | 43.1 … 46.5 | −277.6 … −272.9 | 1, "x" shingle |
+| OE2 | privy | 57.7 … 59.8 | −271.9 … −270.0 | 1 |
+| OE3 | barn / stable (big diagonals, no label) | 68.7 … 78.3 | −274.4 … −266.5 | **2** |
+| OE4 | coop | 76.7 … 83.0 | −255.5 … −253.4 | 1, lean-to roof |
+| OE5 | privy | 50.4 … 52.3 | −255.0 … −253.2 | 1 |
+| OE6 | "Shed" behind NE4 | 33.0 … 40.5 | −246.9 … −244.0 | 1 |
+| OE7 | small shed | 44.4 … 47.0 | −247.2 … −245.4 | 1 |
+| OE8 | "Auto" (garage) | 53.3 … 59.3 | −246.9 … −243.0 | 1, doors face south |
+| OE9 | barn (diagonals) behind NE3 | 76.5 … 82.0 | −233.9 … −224.2 | **2**, "x" shingle |
+| OE10 | coop | 61.9 … 66.3 | −229.0 … −226.9 | 1, lean-to |
+| OE11 | small shed | 52.3 … 54.3 | −223.3 … −220.7 | 1 |
+| OE12 | "Auto" behind NE2 | 58.0 … 63.7 | −223.5 … −217.3 | 1 |
+| OE13 | **"Bl. Sm." blacksmith, hollow tile, 10'** (map pink) | 74.7 … 92.0 | −222.8 … −213.6 | 1, **3.0 m wall**, low shed roof; walls: the project's buff block/brick map with a grey-buff Tint |
+| OE14 | "Auto" + "Coops" strip behind NE1 | 74.7 … 87.7 | −196.7 … −193.0 | 1, lean-to |
+| OW1 | "2 Auto" (garage) | −103.2 … −93.1 | −283.2 … −270.3 | **2** |
+| OW2 | "1½ Auto", turned ≈ 20° (corners (−90.6, −269.8), (−85.4, −268.3), (−88.9, −254.8), (−94.4, −255.7)) | ≈ −94.4 … −85.4 | −269.8 … −254.8 | 1½ |
+| OW3 | small shed | −104.1 … −98.1 | −259.4 … −254.7 | 1 |
+| OW4–OW5 | two small sheds behind NW5 | −75.8 … −72.0; −71.0 … −67.9 | −298.2 … −294.9; −298.2 … −289.8 | 1 |
+| OW6–OW7 | **two "Gl. Rf." ranges = glass-roofed greenhouses** (Brodhead estate) | −66.8 … −57.9 | −298.4 … −294.1; −293.4 … −289.2 | 1, 0.8 m low wall + **pale grey-white roof** (opaque; no glass material) |
+| OW8 | small shed | −73.1 … −68.3 | −286.9 … −282.9 | 1 |
+| OW9 | 1½-storey barn + 1-storey strip on its west side, behind NW4 | −73.4 … −62.9 | −263.1 … −253.8 | 1½ |
+| OW10 | "Auto" 2-storey behind NW3 | −65.7 … −57.6 | −235.8 … −227.7 | **2** |
+| OW11 | "Auto" behind NW2 | −62.1 … −57.1 | −225.9 … −219.8 | 1 |
+| OW12 | **106 Capner St, 2-storey frame dwelling ("2 D.")**, front to Capner St | −72.8 … −63.1 | −208.8 … −203.7 | **2**, gable, 3-bay front with door, section-3 house standard |
+
+Ground: **LotW grass widened from x −60 to x −110** (z −202.4 … −328.7); **LotE widened to x 95** for z −192.4 …
+−291.5, its south-east edge following the existing (25.7, −307.2) → (80, −294.9) line out to (95, −291.5) (builder:
+stop at Pennsylvania Ave's road edge in `street-ends.glb`, no overlap). Skirts move to the new edges. Same grass map
+and Tint. A beaten earth drive (backdrop earth or the road map, 2.5 m wide) from Capner St to OW10 is optional, skip it
+if the material count would grow.
+
+*Fix, part 2: trees (index.html, `#old-maples-north`, `old-maple.glb` at real size, 0 new draw calls).*
+- **Remove `#btree-end-4`** (−14, −300) and **replace `#btree-end-3`** (10, −262) by an old maple `omaple-n-15` at
+  **(9.6, 0.15, −261)**, rotation 0 140 0, scale 0.95 (in line with n-10 (7, −246) and n-11 (12.4, −275); 1.1 m inside
+  the east lawn; check it is clear of NE4's path at z −250.95).
+- **Add 8 yard maples** (TYPICAL-GUESS positions, all ≥ 2 m clear of a house or outbuilding wall; vary rotation, scale
+  0.85–1.05): east (40, −236), (36, −259), (55, −283), (66, −205); west (−45, −218), (−48, −246), (−52, −277), (−82, −240).
+  Same group, so they share its `hide-beyond="x: 0; z: -250; distance: 170"`.
+- Put the same changes in the bake tree lists so the baked shade matches: `north_approach_bake.py` `TREES` (drop the
+  two "young" entries at (10, −262) and (−14, −300), add the nine maples) and `street_ends_bake.py` `TREES` (same two
+  removed, (9.6, −261) added); re-bake both (street-ends is re-baked for R-b anyway).
+
+*Budget.* Outbuildings ≤ 550 tris + ground ≤ 50 → `north-approach.glb` 4,143 → **≤ 4,750 tris**, materials unchanged
+(8), ≤ 1.5 MB. Trees: +9 × 1,430 − 840 = **+12.0k tris instanced, drawn only north of z ≈ −80**.
+
+*Acceptance checks.* (1) `landscape.glb` still has no geometry between z −160 and −340 (GLB read). (2) From
+(8, 1.75, −200) looking N-E and from (−9, 1.75, −215) looking W: outbuildings and yard trees behind the houses, grass
+to the new edges; no bare brown ground nearer than ~90 m. (3) OE13 is the only pink (block) outbuilding, 1 storey;
+OW6–OW7 are low with pale roofs; OW12 is a small 2-storey house facing Capner St. (4) No `backdrop-tree.glb` instance
+remains north of z −200 except `#btree-end-5` (−14, −322) and those around the church; no two crowns closer than 8 m.
+(5) Footprints within 0.5 m (east) / 2.5 m (west) of the table. (6) `north-approach.glb` ≤ 4,750 tris, still one
+merged draw call; new LIGHTMAP_SCALE printed and set in index.html.
+
+#### R-b. Methodist church (E7, `street-ends.glb`): real shrubs instead of flat green shapes
+
+*What is wrong.* `street_ends.py` `build_e7()` draws the ivy as two flat polygons painted `sw:paint_green_s`
+(part `E7I`) on the west gable: a big jagged one over the north half (scene z 106.8 … 110.85, up to 8.6 m) and a low one
+by the tower (z 116.6 … 119.0, ≤ 3.0 m). The low one reads as a cut-out shrub; both read as flat green paint
+(preview `street-ends-match-methodist.png`).
+
+*Evidence.* `flemmethchch09.jpg` / `flmngtnmechch09.jpg` (1909 colour, from the SW): ivy over the north half of the
+west gable up to the gable peak; dark rounded shrubs at the foot of the west wall left of the tower; a row of young
+trees at the walk; a big rounded bush on a lawn in the foreground (lot not certain). `flemngtnmethchch06.jpg` and
+`flmngtnmethodistchrchat.jpg` (1905–06, winter, from the W): bare vines on the west gable and low bare shrubs at the
+wall foot, both sides of the big window and by the tower door.
+
+*Fix.*
+1. **Delete the low patch** (the second `E7I` polygon, z 116.6 … 119.0).
+2. **Four foundation shrubs**, west front, on the church lawn (lawn x 9.3 … 15.9): low-poly rounded clumps, each 2–3
+   overlapping squashed, noise-displaced blobs (icosphere 1 subdivision or similar), opaque, bottoms sunk 0.1 m into
+   the lawn, ≤ 100 tris each:
+
+   | Shrub | Centre (x, z) | Width × depth × height |
+   |---|---|---|
+   | S1 under the ivy, NW corner | (15.0, 107.8) | 1.6 × 1.2 × 1.1 m |
+   | S2 north of the big window | (15.1, 110.6) | 1.0 × 0.8 × 0.8 m |
+   | S3 south of the big window | (15.0, 115.8) | 1.3 × 1.0 × 0.9 m |
+   | S4 beside the tower (replaces the patch) | (15.0, 117.9) | 1.7 × 1.2 × 1.2 m |
+
+   All stand against the west gable wall (x 15.9, z 106.8 … 119.0; the big window is z 110.9 … 114.9, sill G + 1.9),
+   stay below the sill, and are clear of the tower steps (x 16.1 … 17.6, z 120.25 … 122.45). Colour: dark green,
+   slightly varied per shrub by Tint.
+3. **Ivy keeps its outline** but gets the leaf texture instead of flat paint (tile 0.8 m, darker Tint than the shrubs)
+   and a second, smaller jagged layer 0.12 m off the wall over the lower 3 m of it, so its edge is not one flat sheet.
+4. Texture: **new generated 1024² `assets/textures/shared/shrub_leaves.jpg`**: dense small leaves on dark green,
+   seamless, opaque, made from the project's `leaf_cluster.png` the way the street-details hedge core (H1) was made
+   (`tools/prepare_shrub_leaves.py`, Pillow; original work from CC0 inputs, log in SOURCES.md). No download needed.
+   1024² so `baked-lighting` keeps the model in one merged call.
+- Optional (owner): the 1909 foreground bush on the lawn across Maple Ave (one shrub ~3 × 3 × 1.3 m at about
+  (13, 139), the library lawn south of Maple Ave); the lot is uncertain, so not recommended.
+
+*Budget.* ≤ 450 tris (shrubs ≤ 400, ivy layer ≤ 50): `street-ends.glb` 5,095 → **≤ 5,550**; materials 9 → 10, all
+1024², one merged call; GLB ≤ 1.6 MB; re-bake (new LIGHTMAP_SCALE). Shrubs are always drawn (street-ends has no
+distance hiding), +0.45k in every view.
+
+*Acceptance checks.* (1) No flat painted green polygon remains on E7. (2) Four rounded 3-D shrubs at the west wall,
+none above 1.3 m, none in front of the window glass above the sill, none on the walk or the tower steps. (3) Ivy reads
+as leaves (textured) on the north half of the west gable. (4) One draw call; ≤ 5,550 tris.
+
+#### R-c. Bloomfield Ave back lots (`sidestreet-bloomfield.glb`): grass yards, plain earth work yards
+
+*What is wrong.* The lots (`LotsN`, `LotsS`, `LotsG` in `sidestreet_bloomfield.py`) use the **road texture**
+(`ground/road_oiled_earth.jpg`, wheel tracks and all) with a yellow-green Tint (LotsN (1.0, 1.25, 0.62)): neither grass
+nor earth, and the wheel-track streaks show (preview `sidestreet-bloomfield-overview.png`).
+
+*Map (Sept 1921 sheet 2, px x 4400–6450, y 4350–6200).* North side: x 34.8 … 72 is the back of the business row
+(bakery / flats / hats & shoes, a brick "Auto" garage and a 2-storey barn: work yards); x 72 … 146 are the yards of
+houses 20, 22, 24 and the Opera House lot. South side: almost all work yards (laundry 17, Mallory machine shop, the long
+wagon shed, the garage at 21, the "Boarding" stable); house yards only behind no. 19 (x ≈ 66 … 75.5) and no. 23
+(x ≈ 98 … 108.6). G1's lot (east of Spring St) is a garage apron.
+
+*Fix* (re-run `sidestreet_bloomfield.py` + `_bake.py`; the existing lot grid already splits at these lines):
+- **Grass** = `shared/backdrop_grass.jpg`, box UVs tile 4 m, factor (0.80, 0.74, 0.80) and Tint (0.98, 0.95, 0.86)
+  exactly as `north_approach_bake.py`: LotsN x 72 … 146 (both rows); LotsS x 66 … 75.5 for z −77.3 … −63.0 and
+  x 98 … 108.6 (whole depth, incl. the z −45 … −40 piece).
+- **Plain yard earth** = `shared/backdrop_earth.jpg` (gravel_ground_01 at q70, as `back_lots_bake.py`), tile 3 m,
+  factor toward #8C7B62, Tint (1.0, 1.0, 1.0) (no green): LotsN x 34.8 … 72; every other LotsS piece; all of LotsG.
+- The road keeps `road_oiled_earth.jpg`; no lot uses it any more.
+- Optional, + ≤ 40 tris: a 1 m worn earth path strip from each house's back door to its outbuilding.
+
+*Budget.* Tris unchanged (2,728, ≤ +40); materials 7 → **9** (grass, earth added; all 1024², one merged call);
+GLB ≤ 1.8 MB; re-bake (new LIGHTMAP_SCALE). It is hidden beyond 90 m of (75, −85), so no worst view changes.
+
+*Acceptance checks.* (1) From Main St at (6, 1.75, −84) looking E: the house yards on the north side read as grass;
+the work yards behind the shops read as plain brown earth with no wheel-track stripes. (2) No lot surface uses the road
+map. (3) Grass/earth boundaries fall on the lot lines at x 72 (north) and around houses 19 and 23 (south). (4) One
+draw call, ≤ 2,770 tris.
+
+#### Open questions / guesses (all three)
+
+- West-side outbuildings ±2.5 m (sheet 6 is at half the scale); every outbuilding height and roof form; what the big
+  diagonal crosses on OE3, OE9, OW1, OW9 mean on these sheets (drawn here as plain 2-storey / 1½-storey barns).
+- Yard-tree positions are typical, not mapped (Sanborn maps draw no trees); 1913 card shows the east-side ones only.
+- OW12 (106 Capner St) looks onto Capner St, which is barely visible from Main St: owner may drop it.
+- The 1909 Methodist foreground bush (which lot) and the shrub sizes are photo estimates.
+- Bloomfield: earth vs grass split follows map use (shops vs houses), not a photo of the lots.
+
 ## People
 
 (Character specs, written by the planner. Same pipeline as the buildings: planner → asset-scout →
@@ -7935,9 +8124,66 @@ the HCHS newspaper-collection finding aid names the Killgores (father, then son 
   all if the owner wants only strong evidence (alternative real person with strong evidence: **Firman R. Williamson**,
   president of the Flemington National Bank 1915–1932, SPMC https://banklookup.spmc.org/bank/2331 , at the Bank
   Building 56–66 Main; its cashier B. H. Berkaw is listed 1901–1920 and N. Sutphin from 1921, so the Sept 1920 cashier
-  is uncertain: not proposed).
+  is uncertain: not proposed). **Superseded 2026-11-12: the planner now recommends R2-W below instead.**
+
+**R2-W (recommended fifth person). Furman R. Williamson, president of the Flemington National Bank (Bank Building,
+56–66 Main).** REAL, **strong for 1920** (two independent sources agree on the office and the dates).
+- **Status:** `owner approved (2026-11-12, "go ahead"); spelling Furman; build after A1`. Nothing built.
+- Why (sources):
+  - SPMC bank lookup, charter 2331 (Comptroller of the Currency lists): president **"Firman R. Williamson" 1915–1920
+    and 1921–1932**; cashier Bergen Horace Berkaw 1901–1920, Nedwill Sutphin 1921–1932; chartered 22 Apr 1876
+    (https://banklookup.spmc.org/bank/2331).
+  - The bank's own centennial booklet *1876 A Century of Service 1976* (https://www.butkus.org/information/flemington_nat_bank/flemington_national_bank-1976.pdf ,
+    read in full in the scratchpad): spells him **"Furman R. Williamson"**; vice president 1912–1915, "With the death of
+    John B. Case in 1915 Furman Williamson became president and served in that office until 1933. He was reputed to be
+    an unassuming gentleman and yet he found himself much involved in community projects"; "Electric lighting was
+    provided in 1895 to Flemington by a company started by Furman Williamson"; he "had been president of Flemington
+    Light and Power until it sold to New Jersey Power and Light Co., in 1921"; "In February 1898 the bank moved to its
+    new home opposite the corner where it had started in 1876"; cashier B. H. Berkaw 1900–1920, Nedwill Sutphin
+    assistant cashier from 1912 and cashier from 1921; the bank's chime clock came in 1921 (after our date: not in the
+    scene, not mentioned).
+  - Bank Building spec (this file): built 1897 by William Richards (HCHS trail), fire of 9 Feb 1901 that started in the
+    Henry Richards building and spread to the bank building (SPMC Bank Note History wiki).
+  - Not used: the booklet also calls him president of Dural Rubber Co. and the Flemington Water Company, undated; the
+    1913 water-works record gives J. A. Bullock as Water Co. president for 1911
+    (https://www.waterworkshistory.us/NJ/Flemington/), so 1920 is unknown. Goodspeed and HCHS searches found nothing more.
+- **Spot:** on the paved bank forecourt (`#bank-forecourt`, x 10.30 … 12.28, flush with the walk) **in front of bank
+  window bay 1, about (10.90, 0.15, −75.40)**, `rotation="0 -75 0"` (faces west, a little south: across the walk toward
+  visitors coming up from the south). Checks (Bank Building spec: front wall x 12.24, north wall z −77.31, 6 ground bays
+  of 3.69 m): body ≈ x 10.65 … 11.15, z −75.7 … −75.1; 1.1 m in front of the wall and its basement lights; 1.9 m south
+  of the Bloomfield Ave corner; **≥ 2.3 m north of the bank stoop** (bay 2, z −73.62 … −69.93, stoop to x ≈ 10.45);
+  **5.3 m from A2** at (8.60, −70.5), so the two 2.5 m talk radii do not overlap (integrator: re-check against A2's
+  final spot; if A2 moves north, move him to z −76.0, not closer to the corner than z −76.3). Standing.
+- **Look (distinct from Pickell: charcoal suit, dark clipped moustache, maroon tie; and Rittenhouse: dark navy suit,
+  clean-shaven, wire spectacles, bareheaded):** older, about **62** (guess: he founded a company in 1895), medium-tall
+  1.74 m, slim to medium build, upright; **white hair, short, and a full but trimmed white moustache**; no spectacles.
+  **Light warm-grey summer-weight three-piece suit** (#8A877F, fine plain weave), **white stiff wing collar with a dark
+  bow tie** (black or dark navy with a small white spot), white shirt, no watch chain; **straw boater with a black
+  ribbon band** worn on the head (early September is still straw-hat season; rigid on the Head bone like the
+  spectacles, ≤ 400 tris), dark brown oxfords. FIT 1920–29 timeline (https://fashionhistory.fitnyc.edu/1920-1929/) and
+  the Pickell research note for the suit cut; collar, bow tie and boater are period-typical guesses, not from a
+  photo of him.
+- **Lines** (all sourced, Sept 1920 viewpoint):
+  (1) "Good afternoon. Furman Williamson; I'm president of the Flemington National Bank." [SPMC; 1976 booklet]
+  (2) "We began in 1876 on the opposite corner, and moved in here in February of '98, when this building was new."
+      [1976 booklet; Bank Building spec: built 1897]
+  (3) "Mr. Berkaw has been our cashier these twenty years, and young Mr. Sutphin is his assistant." [SPMC; booklet:
+      Berkaw cashier 1900–1920, Sutphin assistant cashier 1912–1921]
+  (4) "Back in '95 I started the company that brought electric light to Flemington, and I still head the light and
+      power company." [booklet: 1895 company; president of Flemington Light and Power until the 1921 sale]
+  (5) "We came through a bad fire in February 1901 that spread from next door. Good day to you." [Bank Building spec:
+      9 Feb 1901 fire]
+- Build: same pipeline as Rittenhouse (load `npc_pickell.py` as a library; ≤ 15k tris incl. the boater; one 2K atlas;
+  Idle/Talk/Walk; `randomIdleStart`; default `hideBeyond` 60 m). Voice: a third Kokoro male voice, older and
+  steady but audibly different from `am_michael` (Pickell) and `am_onyx` (Rittenhouse); integrator picks by measurement.
+  Label "Mr. Williamson — Flemington National Bank". **Budget:** +2 draw calls / ≈ +13–14k tris only within 60 m of
+  him; no worst view changes ((0, 55) is 131 m away, (0, −170) 95 m).
+- **Uncertain:** first name **Firman** (Comptroller lists) or **Furman** (the bank's own booklet; used here, and both
+  sound nearly alike); his age and looks (no photo found); whether he was still Light and Power president in Sept 1920
+  (the booklet's wording implies yes, until the 1921 sale); which corner "opposite" means (the line avoids naming it).
 
 **A1. The grocer's boy at 35–37 Main (anonymous).** Seen in the HCHS Stryker plate c. 1906–10
+- **Status:** `owner approved (2026-11-12, "work on all of it"); build after A2.` **Built (blender-builder, 2026-11-12):** `assets/models/npc-grocer-boy.glb`, 1.23 MB, one skinned mesh, one material (doubleSided, metallic 0, roughness 0.8, no alpha), one 2048² JPEG atlas (colour × baked AO, embedded; copy `assets/textures/npc-grocer-boy-atlas.jpg`, 0.50 MB), **12,161 triangles**, 65 bones (UAL rig, uniform scale only), clips **`Idle` 6.0 s, `Talk` 3.0 s** (24 fps; loop seams 0.0°, foot drift ≤ 0.4 mm, soles −0.2 … +0.3 mm). **No `Walk`**: checked with the apron test, the UAL stride swings the knees 2–20 cm through the apron. Soles at y 0, **height 1.72 m** (top of the hair), faces +Z. MakeHuman male age 0.36 (MakeHuman's growth curve; reads as 17–18) with the height slider tuned to Pickell's 1.71 m body (0.627), slim (weight 0.42, muscle 0.45); face targets for a young open face (rounder head, small slightly upturned nose, fuller cheeks, mouth corners up = faint smile, ears a touch out); `young_caucasian_male` skin with a little sun, faint freckles, blue eyes, eyebrow010 painted in; clean-shaven; light-to-mid brown hair, full young hairline, short back and sides, fuller top, centre parting; bareheaded. Clothes: light tan duck work jacket (chore coat: four horn buttons, small V, turn-down collar lying on the shoulders, no lapels, breast patch pocket, hip-to-seat length, hangs straight from the chest); white neckband shirt (collar left off, stud at the throat; a period working-lad look; no tie); dark brown-grey trousers with turn-ups; brown work shoes; **long white grocer's apron** over the jacket, flat waistband all round, wrapping to just behind the hips, hem at mid-shin (0.385 m), flat bow and two tails at the back, faint soil low on the front and where the hands wipe. Pose: feet 0.25 m apart, toe-out 12°, the UAL's 31 cm front-to-back stagger cut to 6 cm (knees stay behind the apron), spine eased upright, level gaze (Idle head pitch −1.7° mean, Talk −3.4°), 2.5° friendly head tilt, glance to his right (toward the south) in Idle; Talk's gesturing right arm calmed 25 %. **Apron check by script (`apron_check` in `npc_grocer_boy.py`) in every 3rd frame of Idle (0–144) and Talk (0–72): 0 jacket vertices and 0 hand vertices through the apron, 0 trouser vertices through the back of the jacket; 1 trouser vertex at the very side edge of the apron (just beyond its wrap, ≤ 5.5 mm), not through the cloth.** No new assets (Pickell's CC0 cloth maps, MakeHuman CC0 system assets). Scripts `tools/blender/npc_grocer_boy.py` (loads `npc_pickell.py` as a library), `npc_grocer_boy_bake.py` (loads `npc_rittenhouse_bake.py`), `npc_grocer_boy_preview.py`; .blend `assets/models/source/npc-grocer-boy.blend`; previews `assets/models/previews/npc-grocer-boy-{front,three-quarter,closeup,talk,scale,back}.png` (lit from his front-left for readability; in the street the WSW sun is behind him). Known flaws: the chest still reads a little full in the three-quarter view (the MakeHuman chest under a straight-hanging jacket); the apron hem stands ~8 cm off the shins at the front because the UAL idle pushes the pelvis forward; from below hip height a small dark gap shows between the upper thighs under the jacket hem (not visible from standing eye height); the hair is a scalp shell with a crisp edge at the forehead (short-cropped look); the apron waistband is a plain band (no visible gathers); the shoulder seam is square where the sleeve head meets the jacket (as Pickell). Integrator: spot (−9.80, 0.15, −133.0), `rotation="0 60 0"`, `randomIdleStart`; he is 1.72 m, `voiceHeight` ≈ 1.62. Next: reviewer. **Review round 1 (reviewer, 2026-11-12): FIXES (5).** Passes: 12,161 tris, 1 mesh / 1 material (doubleSided) / one 2048² JPEG, 65 bones, 1.23 MB, soles y 0, 1.72 m, faces +Z; loads in the viewer with no console errors; Idle/Talk loop seams 0 mm, foot drift ≤ 0.7 mm (measured in the browser); level gaze, closed 0.25 m stance, no drop crotch, no wristwatch cuffs, no hairline dot; clearly a different, younger man from Pickell and Rittenhouse. To fix: (1) chest reads as a woman's bust in the three-quarter and Talk views (rounded swell each side of the buttons) — flatten the chest/pectoral volume and let the jacket front fall flat from collarbone to hem; (2) apron waistband is a stiff white ring standing proud of the jacket and wider than the body at the sides, with a 2–3 cm strip of tan jacket showing between the band and the top of the apron (front, scale previews) — make it a snug ~3 cm tape lying on the jacket with the apron top joined to it, no gap; (3) back: the apron's side edge is jagged/torn near the hem on his right (back preview) and a dark crumpled shape shows at the crotch below the jacket hem from standing eye height (back preview) — straight clean apron edges, fill/hide the crotch shape; (4) hair reads as a skullcap: soften the hard even arc at the forehead and temples (short irregular fringe or painted 1–1.5 cm fade, a little volume on top); (5) the grey-shaded shirt front below the stud reads as a thin grey tie (front, scale) — make it plain white with a faint placket. Accepted as is: neckband shirt with stud and no soft collar (fine for a working lad), apron hem ~8 cm off the shins, square shoulder seam (as Pickell), no Walk. Next: blender-builder (fixes).
 (`hchs-stryker-main-st-south-from-hall-grocery.jpg`, full-res x ≈ 3600–3700, y ≈ 1750–2000): a young man standing at
 the grocery porch under the awning, **light-coloured work jacket, bareheaded, short hair**.
 - Spot: west walk in front of the grocery porch, north of its stair, about **(−9.80, 0.15, −133.0)** (35–37: z −135.82
@@ -7952,6 +8198,7 @@ the grocery porch under the awning, **light-coloured work jacket, bareheaded, sh
   is not confirmed for 1920; owner may allow "Mr. Hall's" since the awning already says so).
 
 **A2. A woman shopping on the east walk (anonymous).** The 1914 colour card `flmngntnmainststores14.jpg` ("Main Street
+- **Status:** `owner approved (2026-11-12, "work on all of it")`. **Built (blender-builder, 2026-11-12):** `assets/models/npc-shopper.glb`, 1.29 MB, one skinned mesh, one material (doubleSided, metallic 0, roughness 0.8, no alpha), one 2048² JPEG atlas (colour × baked AO, embedded; copy `assets/textures/npc-shopper-atlas.jpg`, 0.53 MB), **13,374 triangles**, 65 bones (UAL rig, uniform scale 0.883 to her size, then its joints moved onto the MakeHuman woman's joints with every bone's orientation kept, so the UAL clips play as authored without stretching her limbs or giving her a man's shoulders), clips **`Idle` 6.0 s, `Talk` 3.0 s** (24 fps; loop seams 0.0°, foot drift ≤ 2 mm, soles −1.2 … +1.0 mm). **No `Walk`**: the UAL stride swings the legs up to 10 cm through a mid-calf skirt, so it was left out. Soles at y 0, **height 1.62 m to the crown of her head** (hat top 1.66 m), faces +Z. MakeHuman female age 0.577 (≈35 y), weight 0.52 / muscle 0.42, light face targets (oval head, cheekbones, a touch of nose and chin), `young_caucasian_female` skin, hazel-brown eyes, eyebrow004 painted in, a painted lash line, faint cheek warmth. Clothes (1920): loose white shirtwaist (Pickell's poplin) hanging straight from the bust, open V with a continuous flat turn-down collar round the back of the neck, button placket with 5 pearl buttons, long sleeves gathered into 4.5 cm buttoned cuffs; dropped waist with a wine silk sash at the hips, flat bow and two tails at her right front hip; navy serge skirt (Pickell's herringbone tinted) to mid-calf (hem 0.27 m), soft folds, slight A-line; dark lisle stockings; brown laced low shoes with a 2.4 cm Louis heel; brown hair pinned up, full over the temples, low bun at the nape under the brim; wide-brimmed plaited straw hat (brim 11.8 cm) with a navy grosgrain band and flat bow, worn low; **wicker market basket with a red-and-white checked cloth hooked over her LEFT forearm** (rigid on the forearm). Pose: feet 0.15 m apart, toes out 14°, the UAL's 27 cm front-to-back stagger cut to 7 cm, spine/neck eased upright (the UAL idle slouches with the head forward), level gaze, glance to her right in Idle; left arm in a fixed carry pose relative to the chest in every frame (upper arm hanging, forearm forward, thumb up, relaxed Idle fingers also in Talk); Talk's gesturing right arm calmed 35 % toward the Idle arm. Skirt weighted pelvis → up to 58 % thighs at the hem (split by side), with 1.6 cm extra ease over the front of the thighs. **Checked by script in every 3rd frame of Idle (0–144) and Talk (0–72): 0 leg vertices outside the skirt, 0 hand vertices in the skirt/sash, 0 basket vertices in skirt/blouse/sash.** No new assets (Pickell's CC0 cloth maps, MakeHuman CC0 system assets; straw, ribbon, wicker, gingham, sash, stockings procedural). Scripts `tools/blender/npc_shopper.py` (loads `npc_pickell.py` as a library; `shopper_check()` = the skirt/basket/hand test), `npc_shopper_bake.py` (loads `npc_rittenhouse_bake.py`), `npc_shopper_preview.py`; .blend `assets/models/source/npc-shopper.blend`; previews `assets/models/previews/npc-shopper-{front,three-quarter,closeup,talk,scale}.png`. Known flaws: under the low hat little hair shows from the front (temples and bun only); the sleeve heads read as a slight puff with a seam line at the shoulder; the collar's outer edge has a few mm-size jags at the back of the shoulders; the straw pattern is procedural rings (reads as a fine dotted plait close up); the basket hand rests open beside the handle rather than gripping it (the handle hangs on the forearm); the Talk gestures are the UAL man's, only damped; one foot may sit ~3 mm higher than the other in some frames. Integrator: spot (8.60, 0.15, −70.5), rotation −60°, `randomIdleStart`; she is 1.62 m, so `voiceHeight` ≈ 1.52. Next: reviewer. **Review round 1 (reviewer, 2026-11-12): FIXES (3).** Passes: 13,374 tris, 1 mesh / 1 material / one 2048² JPEG, 65 bones, 1.29 MB, soles y 0, 1.62 m (hat 1.66), faces +Z; loads in the viewer with no console errors; Idle/Talk loop seams 0 mm, foot drift ≤ 2.1 mm (measured in the browser); no part through skirt/blouse in browser spot-checks of Idle and Talk from both sides; none of Pickell/Rittenhouse faults (no drop crotch, no wristwatch cuffs, level gaze, no spectacles, no hairline dot); clothing per spec (mid-calf skirt, white shirtwaist, dropped-waist wine sash, straw hat with navy band, dark stockings, laced low heels, bun at the nape, basket); calm, feminine stance. To fix: (1) sleeve heads: the puffed sleeve tops with a dark notch/gap where sleeve meets bodice (front and close-up previews, both shoulders) read as torn seams and as a c. 1900 gigot puff that broadens her shoulders like a man's; make a plain set-in 1920 sleeve on a natural, sloping shoulder, no puff, no gap or dark wedge at the armhole; (2) hair from the front: under the low brim she reads almost cropped (only a dark patch at each temple); give her soft, full hair visible over the temples and the tops of the ears (1920 hair dressed low over the ears, joining the nape bun), so a lock of hair shows below the brim all round from the front and three-quarter views; (3) collar edge: smooth the saw-tooth jags on the collar/revers outer edge (visible along the front revers in the close-up as well as at the back) so the edge is one clean line. Accepted as is: procedural straw, open basket hand (handle on the forearm reads fine), damped UAL Talk, ~3 mm foot offset, no Walk. Next: blender-builder (fixes). **Round-1 fixes applied (blender-builder, 2026-11-12):** (1) sleeves: plain set-in sleeves on a natural sloping shoulder - the bodice now covers only the trunk above 1.20 m (|x| < 0.14 m), the sleeve cap has little ease and is flatter on top and slimmer round the armhole (no puff), cap rows kept 4 mm inside the bodice, bodice shoulder and sleeve both take the skin's own weights, the sleeve normals are now oriented from the arm axis (the slim cap faces had been flipped inward and baked black - that was the dark notch/wedge at the armhole), the cap end is closed and baked white; no dark wedge front or back in Idle or Talk; (2) hair: a new soft hair band all round under the brim - a light wave over the forehead, full over the temples and the tops of the ears (to 1.48 m), swept back into the nape bun, rounded lower edge; the hat sits 9 mm higher and its crown fits over the fuller hair; hair shows below the brim from front, side and back; (3) collar: its three rows are smoothed along the strip (60 samples) and lifted off the blouse only where needed: one clean outer line front and back. GLB re-exported: **1.32 MB, 14,154 triangles** (+576 hair band, +84 sleeve-cap fill), 65 bones, 1 mesh / 1 material / one 2K atlas (copy 0.52 MB), Idle 6.0 s / Talk 3.0 s unchanged, soles y 0 (-1.2 ... +1.0 mm), height 1.62 m (hat top 1.67 m); skirt/hand/basket check still 0 in all 74 sampled frames; all 5 previews re-rendered. Left as is: a 1-2 px shading seam can show at the front of her left shoulder in the close-up. Next: reviewer (round 2). **Review round 2 (reviewer, 2026-11-12): PASS.** All three fixes verified in the previews and in the browser (front at 2 m, three-quarter at 0.8 m, back): (1) plain sloping set-in sleeves, no puff, no dark gap at the armhole front or back; (2) brown hair shows below the brim all round, full over the temples and ears and joining the nape bun, so she reads clearly as a woman; (3) collar edge is one clean line (only a faint waver in the close-up). The 1-2 px shading seam at the front of her left shoulder is not visible at 0.8 m or 2 m in the viewer: accepted. No regressions: 14,154 tris (limit 15k), 1 mesh / 1 material / one 2K atlas, 1.32 MB, loads with no console errors, Idle/Talk loop seams 0 mm, foot drift <= 2.1 mm. Integrator: spot (8.60, 0.15, -70.5), rotation -60, randomIdleStart, voiceHeight ~1.52; re-check the 2.5 m talk radius against Williamson if he is placed later. Next: scene-integrator. **In scene (scene-integrator, 2026-11-12):** `#npc-shopper` at **(8.60, 0.15, −70.50)** (spec spot kept), `rotation="0 -60 0"` (faces WSW), `npc-shopper.glb?v=1`, same components as Rittenhouse (`animation-mixer` Idle↔Talk 0.4 s, `blob-shadow` 0.8 × 0.55, `npc` with `voiceHeight: 1.52`, `randomIdleStart: true`, default `hideBeyond` 60 m). Clearances: on the concrete walk (x 6.4 … 10.3), 1.85 m in front of the bank's bay-2 stoop (z −73.62 … −69.93, out to x 10.45), 1.7 m from the forecourt edge (x 10.30), 3.2 m from the parked buggy (x 5.4, z −72), 6.1 m from pole E4 / bicycle B2 (z −76.5); **5.41 m from the planned Williamson spot (10.90, −75.40)**, so the two 2.5 m talk circles do not overlap: Williamson can stay at his spec spot. Dialogue `data/dialogue/shopper.json`, header **"A shopper"** (no name): the four lines verbatim as nodes `start` (1), `nevius` (2), `vote` (3), `bye` (4); replies "It is. Are you shopping today?", "Any news in town?", "Where are you headed?", "I'll let you get on. Good day.", "Good day (to you).", ending with "[Walk on]"; sources and an AI brief (anonymous, never invents a name). **Voice: not made yet: held for the owner.** Kokoro's female voices (af_*) are not on this PC (the Hugging Face cache has only am_fenrir, am_michael, am_onyx), and fetching them is a new download that needs the owner's OK: files `voices/af_*.pt` from https://huggingface.co/hexgrad/Kokoro-82M (Apache-2.0, ≈ 0.5 MB each; the script auditions 11 candidates, or fewer if the owner prefers). Script ready: `tools/make_voice_shopper.py` (copy of the Rittenhouse one; speed 0.92; PRON for "Nevius's"; `--audition` renders all four lines in each candidate af_* voice and prints median pitch, 10–90 % range in semitones and words/s, to pick a calm ~35-year-old woman by measurement; `VOICE` is provisionally `af_sarah` until then). Until then she is text only (no `voice:` in her `npc`; no 404s). Tested on desktop: loads (14,154 tris), no console errors, opens at the 2.5 m radius with "A shopper", all four nodes reached with keys 1/2, `[Walk on]` closes; Pickell (voice timings loaded, return-visit line) and Rittenhouse (voice timings loaded) still open. Draw calls / triangles without → with her: opposite walk (−8.5, −70.5) facing E 86 / 256.5k → 88 / 270.7k; east walk (8.5, −58) facing N 61 / 179.4k → 63 / 193.6k; road (0, −70.5) facing E 71 / 231.9k → 73 / 246.0k; (8.5, −85) facing S 87 / 265.8k → 89 / 279.9k; **worst views unchanged** (she is beyond 60 m and hidden): south end (0, 55) and (0, 60) facing N 107 / 294.5k, north end (0, −170) facing S 107 / 294.5k, start (0, 18) facing N 89 / 256.0k. Previews `assets/models/previews/npc-shopper-{in-scene,dialogue,opposite}.jpg`. No js change, so scripts stay `?v=20261112c`. Next: owner OK for the voice download, then scene-integrator runs the audition, sets VOICE, makes the clips and adds `voice:`.
 looking N.") shows women in long dresses and hats and girls in white on the east walk before the Bank Building.
 - Spot: east walk before the Bank Building shop fronts, about **(8.60, 0.15, −70.5)** (`#bank-building` at x 12.24,
   forecourt x 11.48; integrator to check), `rotation="0 -60 0"`. Standing, a shopping basket or parcel.
@@ -7967,7 +8214,8 @@ looking N.") shows women in long dresses and hats and girls in white on the east
 
 **Recommended order:** **R1 Rittenhouse first** (strongest evidence; male suit pipeline reused from Pickell, so the
 cheapest), then **A2** (variety: the first woman), then **A1**, then **R2** only if the owner accepts the thin 1920
-evidence (or swap in Williamson). Not proposed: the Union Hotel's 1920 proprietor (not found; the "D. C. Muirhead"
+evidence (or swap in Williamson). **Update 2026-11-12: for the fifth person the planner recommends R2-W Furman R.
+Williamson (strong) over R2 Killgore (thin).** Not proposed: the Union Hotel's 1920 proprietor (not found; the "D. C. Muirhead"
 card is c. 1910), the Palace Theatre manager (only a 1940s name found), Jacob R. Hall by name (1920 not confirmed).
 
 ## Asset checklist
@@ -8152,3 +8400,12 @@ Check licensing for every asset and note the source in the progress log.
 | 2026-11-12 | reviewer | **R1 Rittenhouse review round 2: PASS**: spectacle arms now lie along the head to the ears, hairline dot gone; 13,172 tris, 1.33 MB, no console errors, loops and feet unchanged. Next: scene-integrator. |
 | 2026-11-12 | scene-integrator | **R1 Albert H. Rittenhouse in scene** at (9.40, 0.15, 25.10), rotation −120°, before the bank's stone pier north of the main door; dialogue `rittenhouse.json` (5 sourced lines), Kokoro voice `am_onyx` (5 clips, 302 KB), new `randomIdleStart` npc option so his Idle is out of step with Pickell's; scripts `?v=20261112b`. Worst view (south end looking north) 103 / 304.6k → 105 / 317.8k. |
 | 2026-11-12 | scene-integrator | **Distance hiding** (owner-approved): new `near-only` system; people hidden beyond 60 m (`npc` `hideBeyond`, default for every person), parked vehicles beyond 80 m, fences/hedge/small details (`#street-details`) and small street props (hydrants, hitching posts, steps, goods, boards, bicycles, gas pump, fountain) beyond 60 m, each by its own position, merged meshes still one draw call. Nevius displays not hidden (one material with the display backs; hiding opens the windows). Worst views now (0, 55) N 260k / 98 (288k walked from the start), (0, 60) N 267k / 101, (0, −170) S 250k / 96 (were 318k / 324k / 316k); start 262k / 87. Script tags `?v=20261112c`. See "Street ambiance" → Distance hiding. |
+| 2026-11-12 | planner | **Rough-spot fixes spec written** ("Background" → "Rough-spot fixes"), awaiting owner approval. R-a: the old cone/house silhouettes on the north approach are already gone (landscape.glb has 0 tris at z −160 … −340); what is left is empty yards: add 26 mapped outbuildings (sheet 2 east, sheet 6 west via LoC IIIF in the scratchpad) and wider lawns to north-approach.glb (≤ 4,750 tris), 8 old-maple yard trees, drop/replace the two leftover scaled young trees (+12k instanced tris, drawn only north of z −80). R-b: Methodist church's flat green ivy patches → 4 low-poly shrubs + leaf-textured ivy (street-ends ≤ 5,550 tris, +1 generated map). R-c: Bloomfield lots off the road texture: grass for house yards, plain earth for work yards (2 reused maps, tris unchanged). No new draw calls. |
+| 2026-11-12 | planner | **Fifth person: R2-W Furman R. Williamson recommended** (president of the Flemington National Bank 1915–1933; SPMC charter 2331 + the bank's 1976 centennial booklet), full spec under "Proposal: more townsfolk", awaiting owner approval; on the bank forecourt at (10.90, 0.15, −75.40), rotation −75°, 5.3 m from A2; light grey suit, wing collar + bow tie, straw boater, white moustache; 5 sourced lines. R2 Killgore marked superseded. |
+| 2026-11-12 | blender-builder | **A2, the woman shopping, built**: `npc-shopper.glb` 1.29 MB, 13,374 tris, 65 bones (UAL joints moved onto the MakeHuman woman's), Idle 6.0 s / Talk 3.0 s (no Walk: the stride goes through the skirt), 1.62 m (hat top 1.66), soles y 0; white shirtwaist with flat collar, wine sash at a dropped waist, navy mid-calf skirt, dark stockings, laced Louis-heel shoes, pinned-up hair with bun, wide straw hat, wicker basket on her left forearm; feet 0.15 m apart, upright spine; 0 legs/hands/basket through the clothes in any checked Idle/Talk frame. Next: reviewer. |
+| 2026-11-12 | reviewer | **A2 (woman shopping) review round 1: FIXES (3).** Budgets, browser load (no errors), loop seams and locked feet all pass; clothes and stance read as a 1920 woman. Fix: (1) puffed sleeve heads with a dark gap at the armhole (torn look, 1900 puff, mannish shoulders) → plain set-in sleeve on a sloping shoulder; (2) more hair visible under the brim over temples and ears; (3) smooth the jagged collar edge. Next: blender-builder. |
+| 2026-11-12 | blender-builder | **A1, the grocer's boy, built**: `npc-grocer-boy.glb` 1.23 MB, 12,161 tris, 65 bones, Idle 6.0 s / Talk 3.0 s (no Walk: the stride swings the knees through the apron), height 1.72 m, soles y 0, one mesh / one material / one 2K atlas; young MakeHuman male (≈17–18), tan duck chore coat, neckband shirt, long white apron over the jacket (scripted apron check: nothing through it in Idle/Talk), dark trousers, brown work shoes; no new assets. Previews `npc-grocer-boy-{front,three-quarter,closeup,talk,scale,back}.png`. Next: reviewer. |
+| 2026-11-12 | reviewer | **A1 (grocer's boy) review round 1: FIXES (5).** Budgets, browser load (no errors), loop seams and locked feet pass; reads as a young grocer's boy, distinct from Pickell/Rittenhouse. Fix: bust-like chest, floating apron waistband with jacket showing below it, torn apron edge and dark crotch shape at the back, skullcap hairline, grey tie-like shirt front. |
+| 2026-11-12 | blender-builder | **A2 round-1 fixes**: plain set-in sleeves on sloping shoulders (no puff, no dark wedge - the cap faces had been flipped inward), soft full hair under the brim all round (temples, tops of the ears, into the bun), collar edge smoothed to one line; `npc-shopper.glb` 1.32 MB, 14,154 tris, previews re-rendered. Next: reviewer (round 2). |
+| 2026-11-12 | reviewer | **A2 (woman shopping) review round 2: PASS.** Plain set-in sleeves with no armhole gap, hair visible under the brim all round, clean collar edge; 14,154 tris, 1.32 MB, no console errors, loops seamless, feet locked. Left-shoulder shading seam invisible at conversation distance. Next: scene-integrator. |
+| 2026-11-12 | scene-integrator | **A2 woman shopping in scene** at (8.60, 0.15, −70.50), rotation −60°, on the east walk 1.85 m before the Bank Building's bay-2 stoop, 5.4 m from the planned Williamson spot (talk circles clear); dialogue `shopper.json` ("A shopper", 4 lines verbatim, `[Walk on]`), `randomIdleStart`, `voiceHeight` 1.52; **text only for now: the Kokoro female voice files are not on this PC and their download awaits the owner's OK** (`tools/make_voice_shopper.py` with `--audition` ready). Near her +2 calls / +14.2k tris (e.g. opposite walk 86 / 256.5k → 88 / 270.7k); worst views unchanged (107 / 294.5k; she is hidden beyond 60 m). No js change. |

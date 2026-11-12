@@ -384,6 +384,35 @@ guide of a scalp-grown hair shell; its texture is not used). No CC-BY pack items
 | `assets/textures/npc-pickell-atlas.jpg` (2048², also embedded in the GLB) | baked by `tools/blender/npc_pickell_bake.py` (Poly Haven cloth maps from `assets/textures/npc-pickell/`, MakeHuman skin/eye/eyebrow maps, procedural hair, tie, tape, moustache) | original work; sources CC0 |
 | `data/dialogue/pickell.json` | his lines, written for this project from the web sources listed per node in the file (facts only, no quoted text) | original work |
 
+A2, the woman shopping (`npc-shopper.glb`): no new downloads. MakeHuman CC0 items from the same
+system-asset pack: base mesh (female, age 0.577, weight 0.52, muscle 0.42, caucasian 1.0, a few
+head/nose/chin/cheek/mouth targets) with the `game_engine` rig weights; skin
+`skins/young_caucasian_female` (`young_lightskinned_female_diffuse.png`); eyes `eyes/low-poly` with
+`eyes/materials/brownlight_eye.png` (iris darkened); eyebrows `eyebrows/eyebrow004` (texture painted
+into the atlas). Cloth maps reused from `assets/textures/npc-pickell/` (Poly Haven CC0: poplin blouse,
+herringbone skirt tinted navy, brown leather shoes). Straw, ribbon, wicker, checked cloth, sash and
+stockings are procedural.
+
+| Output | Made by | Licence |
+|--------|---------|---------|
+| `assets/models/npc-shopper.glb` | `tools/blender/npc_shopper.py` + `npc_shopper_bake.py` (original work on the CC0 UAL rig/clips, MakeHuman and Poly Haven sources above) | original work; sources CC0 |
+| `assets/textures/npc-shopper-atlas.jpg` (2048², also embedded in the GLB) | baked by `tools/blender/npc_shopper_bake.py` | original work; sources CC0 |
+
+A1, the grocer's boy (`npc-grocer-boy.glb`): no new downloads. MakeHuman CC0 items from the same
+system-asset pack: base mesh (male, age 0.36, height 0.627, weight 0.42, muscle 0.45, caucasian 1.0,
+a few head/nose/chin/cheek/mouth/ear targets) with the `game_engine` rig weights; skin
+`skins/young_caucasian_male` (`young_lightskinned_male_diffuse.png`); eyes `eyes/low-poly` with
+`eyes/materials/blue_eye.png`; eyebrows `eyebrows/eyebrow010` (texture painted into the atlas); hair
+`hair/short02` (only as the thickness guide of the hair shell). Cloth maps reused from
+`assets/textures/npc-pickell/` (Poly Haven CC0): white poplin tinted light tan (duck work jacket), white
+poplin (shirt, cream for the apron), charcoal herringbone tinted dark brown-grey (trousers), brown leather
+(work shoes). Hair colour, freckles and wear are procedural.
+
+| Output | Made by | Licence |
+|--------|---------|---------|
+| `assets/models/npc-grocer-boy.glb` | `tools/blender/npc_grocer_boy.py` + `npc_grocer_boy_bake.py` (original work on the CC0 UAL rig/clips, MakeHuman and Poly Haven sources above) | original work; sources CC0 |
+| `assets/textures/npc-grocer-boy-atlas.jpg` (2048², also embedded in the GLB) | baked by `tools/blender/npc_grocer_boy_bake.py` | original work; sources CC0 |
+
 ## Audio (`assets/audio/`)
 
 Street ambiance pass 1. All files: mono OGG Vorbis, 44.1 kHz, ~64 kbps, trimmed, high-passed
