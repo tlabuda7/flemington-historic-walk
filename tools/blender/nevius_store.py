@@ -15,7 +15,8 @@ decisions (1921 Sanborn sheet 3; 1909 "Nevius Store and Union Hotel" card; HABS 
 1 + 2 + 1 upper windows with the pair in a slightly projecting central section, segmental
 2nd-floor windows with stone arches and keystones, round-headed 3rd-floor windows with brick
 hood moulds on a stone sill band, brick quoins, bracketed cornice with a segmental pediment,
-painted wood shop front with a recessed double door, one striped scalloped awning.
+painted wood shop front with a recessed double door and a bracketed cornice, one plain pale
+canvas awning with a fringed scalloped valance and side curtains (1912 card, 2026-11-11 fixes).
 
 Only 6 materials, in this slot order on every part:
     0 Brick, 1 Trim, 2 Glass, 3 Dark, 4 Awning, 5 WindowBack
@@ -550,12 +551,18 @@ for k in range(1, 6):
     xb = -3.45 + 6.90 * k / 6
     P.box(xb - 0.03, xb + 0.03, SF - 0.05, SF - 0.02, 3.05, 3.55, mi=TRIM)
 P.box(-3.45, 3.45, 0.0, SF, 3.55, 3.60, mi=TRIM)                                    # fascia bottom rail
-P.box(-3.45, 3.45, 0.02, SF, 3.60, 3.95, mi=TRIM)                                   # fascia board
+P.box(-3.45, 3.45, 0.02, SF, 3.60, 4.05, mi=TRIM)                                   # frieze (fascia) 0.45
 
-# shop-front cornice 3.95 - 4.20, projecting 0.30, small bed moulding; across the piers;
-# painted dark brown (`dark` material)
-P.prism([(0.0, 3.92), (-0.08, 3.92), (-0.10, 3.97), (-0.28, 4.05), (-0.30, 4.12), (-0.30, 4.20), (0.0, 4.20)],
-        -HW - 0.05, HW + 0.05, "x", mi=DARK)   # dark brown, as in the 1909 card (review round 1)
+# shop-front cornice 4.02 - 4.20, projecting 0.35, small bed moulding; across the piers;
+# painted dark brown (`dark` material, 1909 card, review round 1). Bracketed (1912 card,
+# PLAN addendum 2026-11-11): 10 small console brackets on the frieze under the corona.
+P.prism([(0.0, 4.02), (-0.06, 4.02), (-0.08, 4.06), (-0.30, 4.10), (-0.35, 4.14), (-0.35, 4.20), (0.0, 4.20)],
+        -HW - 0.05, HW + 0.05, "x", mi=DARK)
+SHOP_BRACKET = [(0.03, 4.03), (-0.26, 4.03), (-0.26, 3.97), (-0.19, 3.93), (-0.12, 3.89), (-0.08, 3.82),
+                (-0.065, 3.74), (-0.04, 3.68), (0.03, 3.66)]                    # (y, z) side profile
+for k in range(10):
+    xb = -3.37 + 6.74 * k / 9
+    P.prism(SHOP_BRACKET, xb - 0.045, xb + 0.045, "x", mi=DARK)
 
 # entrance recess: splayed returns with bulkheads, glazed double door at the back
 for pts in ([(-0.85, SF), (-0.80, SF), (-0.70, REC), (-0.75, REC)], [(0.70, SF), (0.75, SF), (0.65, REC), (0.60, REC)]):
@@ -576,19 +583,53 @@ for z0, z1 in ((0.30, 1.20), (1.40, 2.45)):
     P.box(2.62, 3.23, SF + 0.08, SF + 0.10, z0, z1, mi=DARK)
 
 # ---------------------------------------------------------------------------
-# Awning: striped canvas x -3.40 ... +3.40, hung at 3.50 on the front, 2.70 at 1.90 m out,
-# scalloped valance down to 2.45 (zigzag-and-curve geometry, 23 scallops ~0.30 m)
+# Awning (1912 card, PLAN addendum 2026-11-11): plain pale canvas x -3.40 ... +3.40, hung at
+# 3.50 on the front, 2.70 at 1.90 m out; a deep scalloped valance (16 lobes ~0.43 m, cusps
+# 2.52, lobe bottoms 2.38) with a hanging fringe (thin teeth, 7 cm) along its lower edge;
+# side curtains at both ends, from the canvas down to 1.0 m above the step.
 # ---------------------------------------------------------------------------
 AW0, AW1 = -3.40, 3.40
-P.prism([(0.0, 3.50), (-1.90, 2.70), (-1.90, 2.68), (0.0, 3.48)], AW0, AW1, "x", mi=AWNING)
-NS = 23
+AW_FRONT = -1.90
+P.prism([(0.0, 3.50), (AW_FRONT, 2.70), (AW_FRONT, 2.68), (0.0, 3.48)], AW0, AW1, "x", mi=AWNING)
+NS = 16
 pitch = (AW1 - AW0) / NS
-val = [(AW1, 2.71), (AW0, 2.71)]
+LOBE = [(0.0, 2.52), (0.12, 2.44), (0.28, 2.395), (0.5, 2.38), (0.72, 2.395), (0.88, 2.44)]   # (t, z)
+edge = []                                     # the valance's lower edge, west to east
 for k in range(NS):
     x0 = AW0 + k * pitch
-    val += [(x0, 2.58), (x0 + 0.2 * pitch, 2.49), (x0 + 0.5 * pitch, 2.45), (x0 + 0.8 * pitch, 2.49)]
-val += [(AW1, 2.58)]
-P.prism(val, -1.91, -1.90, "y", mi=AWNING)
+    edge += [(x0 + t * pitch, z) for t, z in LOBE]
+edge += [(AW1, 2.52)]
+P.prism([(AW1, 2.71), (AW0, 2.71)] + edge, AW_FRONT - 0.01, AW_FRONT, "y", mi=AWNING)
+# fringe: one flat saw-tooth strip per lobe, 4 mm in front of the valance (the canvas material
+# exports double-sided), 0.03 wide teeth hanging 0.07 below the edge
+FR_LEN, FR_W = 0.07, 0.03
+
+
+def edge_z(x):
+    for (xa, za), (xb, zb) in zip(edge, edge[1:]):
+        if xa <= x <= xb:
+            return za + (zb - za) * (x - xa) / (xb - xa)
+    return edge[-1][1]
+
+
+for k in range(NS):
+    xa, xb = AW0 + k * pitch + 0.01, AW0 + (k + 1) * pitch - 0.01
+    n_t = max(2, int((xb - xa) / FR_W))
+    xs = [xa + (xb - xa) * i / n_t for i in range(n_t + 1)]
+    top = [(x, edge_z(x) + 0.02) for x in reversed(xs)]
+    teeth = []
+    for i in range(n_t):
+        xm = (xs[i] + xs[i + 1]) / 2
+        teeth += [(xs[i], edge_z(xs[i]) - 0.005), (xm, edge_z(xm) - FR_LEN)]
+    teeth.append((xs[-1], edge_z(xs[-1]) - 0.005))
+    P.face(teeth + top, AW_FRONT - 0.014, "y", -1, AWNING)
+# side curtains: canvas panels in the awning's end planes, from the front edge back 0.65 m
+for xc in (AW0, AW1):
+    s = 1 if xc > 0 else -1
+    z_top = lambda y: 3.50 + 0.80 * y / 1.90
+    P.prism([(AW_FRONT, SHOP_FL + 1.00), (AW_FRONT + 0.65, SHOP_FL + 1.06),
+             (AW_FRONT + 0.65, z_top(AW_FRONT + 0.65)), (AW_FRONT, z_top(AW_FRONT))],
+            xc, xc + s * 0.01, "x", mi=AWNING)
 
 # ---------------------------------------------------------------------------
 # Build objects (union the central section, boolean the openings)

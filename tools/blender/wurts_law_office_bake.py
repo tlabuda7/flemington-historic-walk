@@ -503,6 +503,24 @@ LIGHTMAP_SCALE = round(scale, 4)
 print("lightmap coverage: %.1f%% of pixels baked" % (100 * baked.mean()))
 print("LIGHTMAP_SCALE =", LIGHTMAP_SCALE, "(use baked-lighting intensity:", LIGHTMAP_SCALE, ")")
 
+# The "DR. TOMPKINS" letters are too small to bake reliably and sit flat on the name board:
+# point all their lightmap UVs at the board's front face (union_hotel_bake.py pattern).
+mat_names = [m.name for m in mesh.materials]
+white_i, glass_i = mat_names.index("WLR_White"), mat_names.index("WLR_Glass")
+lm_data = mesh.uv_layers["Lightmap"].data
+board = max((p for p in mesh.polygons if p.material_index == glass_i and p.normal.y < -0.5
+             and abs(p.center.z - NAME_Z) < 0.03 and p.center.y < FRONT_Y - 0.035), key=lambda p: p.area)
+board_uv = [sum(lm_data[li].uv[k] for li in board.loop_indices) / board.loop_total for k in (0, 1)]
+n_letters = 0
+for p in mesh.polygons:
+    c = p.center
+    if p.material_index == white_i and abs(c.x) < NAME_W / 2 and abs(c.z - NAME_Z) < NAME_H / 2 \
+            and c.y < FRONT_Y - 0.0395:
+        n_letters += 1
+        for li in p.loop_indices:
+            lm_data[li].uv = board_uv
+print("letter faces re-pointed at the name board's lightmap:", n_letters)
+
 # Remove the bake helper nodes so they are not exported.
 for mat in mesh.materials:
     for name in ("BakeTarget", "BakeUV"):

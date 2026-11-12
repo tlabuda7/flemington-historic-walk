@@ -163,6 +163,10 @@ VIEWS = {
     # HABS NJ-772-2: from the south-east, looking across the south side into the portico
     "match-habs-south":   dict(eye=(-13.0, -4.0, 1.5), target=(0.0, 4.6, 1.5), lens=38, h=919,
                                shift=(0, 0.12), level=True),
+    # "Dr. Tompkins" real-photo card: from the front walk, a little south of the axis
+    "match-tompkins":     dict(eye=(-0.35, -6.0, 1.45), target=(0.1, 1.6, 2.0), lens=28, h=1600),
+    # close-up of the 2026-11-11 photo fixes: half-glazed door, head board, name board
+    "fix-2026-11-11":     dict(eye=(0.30, -2.4, 1.75), target=(0.0, 1.6, 1.75), lens=32, h=1200),
 }
 VIEWS = globals().get("PREVIEW_VIEWS") or VIEWS     # set PREVIEW_VIEWS before exec() for other views
 written = []

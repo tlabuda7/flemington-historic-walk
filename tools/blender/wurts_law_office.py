@@ -322,25 +322,37 @@ def window(wall, cu, w=0.78, z0=1.05, z1=2.75, shutters=True, panes=3, cutter=No
         shutter_pair(wall, cu, h, z0, z1)
 
 
+DOOR_HEAD_TOP = 2.85    # top of the plain door head board (photo "Dr. Tompkins", PLAN addendum 2026-11-11)
+NAME_Z, NAME_W, NAME_H = 2.675, 0.70, 0.13   # "DR. TOMPKINS" board, centred on the head board
+
+
 def front_door():
-    """Centred door: 0.78 x 2.20 opening, 4-panel dark green leaf set 0.10 in, flat casing
-    0.08 with a capped head (top 2.75). No fanlight or sidelights (HABS)."""
+    """Centred door: 0.78 x 2.20 opening, half-glazed dark green leaf set 0.10 in (stiles
+    and rails, one big light above a mid rail at 1.15 m over the porch floor, one plain
+    panel below), flat casing 0.08, a plain head board 2.50-2.85 with the cornice cap on
+    top (top 2.95). No fanlight or sidelights. Photo: flmngtnmainstdrtompkinsoffice.jpg."""
     axis, face, out, skin = FRONT
     D = lambda k: face + out * k
     h = 0.39
     z0, z1 = PORCH, 2.50
     CUT.prism(rect(-h, h, z0 - 0.01, z1), D(0.25), D(-RECESS), axis)
     S = G["Green"]
-    S.prism(rect(-h, h, z0, z1), D(-0.10), D(-0.14), axis)
-    for u0, u1 in ((-h + 0.11, -0.05), (0.05, h - 0.11)):              # raised panels
-        for za, zb in ((z0 + 0.20, z0 + 0.78), (z0 + 0.96, z1 - 0.11)):
-            S.prism(rect(u0, u1, za, zb), D(-0.085), D(-0.10), axis)
+    S.prism(rect(-h, h, z0, z1), D(-0.10), D(-0.14), axis)              # leaf (flat panel field)
+    st, mid = 0.12, z0 + 1.15                                            # stile width, mid-rail centre
+    for a, b in ((-h, -h + st), (h - st, h)):                            # stiles
+        S.prism(rect(a, b, z0, z1), D(-0.085), D(-0.10), axis)
+    for za, zb in ((z0, z0 + 0.24), (mid - 0.08, mid + 0.08), (z1 - 0.12, z1)):   # rails
+        S.prism(rect(-h + st, h - st, za, zb), D(-0.085), D(-0.10), axis)
+    G["Glass"].prism(rect(-h + st, h - st, mid + 0.08, z1 - 0.12), D(-0.093), D(-0.10), axis)  # light
     c = 0.08
     for a, b in ((-h - c, -h), (h, h + c)):
-        W.prism(rect(a, b, z0, z1 + c), D(-0.01), D(0.025), axis)
-    W.prism(rect(-h, h, z1, z1 + c), D(-0.01), D(0.025), axis)
-    W.prism(rect(-h - c - 0.04, h + c + 0.04, z1 + c, 2.70), D(-0.01), D(0.045), axis)
-    W.prism(rect(-h - c - 0.06, h + c + 0.06, 2.70, 2.75), D(-0.01), D(0.07), axis)
+        W.prism(rect(a, b, z0, z1), D(-0.01), D(0.025), axis)
+    W.prism(rect(-h - c, h + c, z1, DOOR_HEAD_TOP), D(-0.01), D(0.025), axis)        # head board
+    W.prism(rect(-h - c - 0.04, h + c + 0.04, DOOR_HEAD_TOP, 2.92), D(-0.01), D(0.045), axis)
+    W.prism(rect(-h - c - 0.06, h + c + 0.06, 2.92, 2.95), D(-0.01), D(0.07), axis)
+    # name board (dark) on the head board; its lettering is added below as WL_Letters
+    G["Glass"].prism(rect(-NAME_W / 2, NAME_W / 2, NAME_Z - NAME_H / 2, NAME_Z + NAME_H / 2),
+                     D(0.02), D(0.04), axis)
 
 
 front_door()
@@ -516,6 +528,44 @@ for key, builder in G.items():
     else:
         builder.bm.free()
 
-tris = sum(len(p.vertices) - 2 for o in col.objects for p in o.data.polygons)
+# Lettering "DR. TOMPKINS" (light capitals on the dark name board over the door; the only
+# lettering on the building, as in the photo). Text is scaled to fill the board's width.
+_curve = bpy.data.curves.new("WL_NameText", "FONT")
+_curve.body = "DR. TOMPKINS"
+_curve.align_x = "CENTER"
+_curve.align_y = "CENTER"
+_curve.size = 0.10
+_curve.extrude = 0.004
+_curve.resolution_u = 3          # coarse curves: the letters are 6 cm tall
+_text = bpy.data.objects.new("WL_NameText_tmp", _curve)
+col.objects.link(_text)
+_text.rotation_euler = (math.radians(90), 0, 0)
+_dg = bpy.context.evaluated_depsgraph_get()
+letters = bpy.data.meshes.new_from_object(_text.evaluated_get(_dg))
+bpy.data.objects.remove(_text, do_unlink=True)
+bpy.data.curves.remove(_curve)
+_xs = [v.co.x for v in letters.vertices]
+_ys = [v.co.y for v in letters.vertices]
+_fit = min((NAME_W - 0.07) / (max(_xs) - min(_xs)), (NAME_H - 0.05) / (max(_ys) - min(_ys)))
+_cx, _cy = (max(_xs) + min(_xs)) / 2, (max(_ys) + min(_ys)) / 2
+for v in letters.vertices:          # local text plane (x, y), extrude along z -> world
+    x, y, z = v.co
+    v.co = ((x - _cx) * _fit, FRONT_Y - 0.04 - 0.004 + z * -1.0, NAME_Z + (y - _cy) * _fit)
+letters.name = "WL_Letters"
+_bm = bmesh.new()                   # text faces can come out pointing inward: make every
+_bm.from_mesh(letters)              # letter solid face outward, then drop the back caps that
+bmesh.ops.recalc_face_normals(_bm, faces=_bm.faces[:])   # lie on the board
+_bm.normal_update()
+_caps = [f for f in _bm.faces if abs(f.normal.y) > 0.5]
+_back = [f for f in _caps if f.calc_center_median().y > FRONT_Y - 0.044]
+bmesh.ops.reverse_faces(_bm, faces=[f for f in _caps if f not in _back and f.normal.y > 0])
+bmesh.ops.delete(_bm, geom=_back, context="FACES")
+_bm.to_mesh(letters)
+_bm.free()
+letters.materials.clear()
+letters.materials.append(MATS["White"])
+col.objects.link(bpy.data.objects.new("WL_Letters", letters))
+
+tris =sum(len(p.vertices) - 2 for o in col.objects for p in o.data.polygons)
 print("Wurts Law Office built:", len(col.objects), "objects,", tris, "triangles (before hidden-face removal)")
 # Materials, baked lighting and GLB export: run wurts_law_office_bake.py (it runs this file first).

@@ -10,7 +10,7 @@ Steps (pattern: bank_building_bake.py):
  2. Give every surface a CC0 colour texture tiled in real-world metres (box UVs). Seven
     materials (= seven draw calls): brick, trim, glass, dark, awning, window backs, shop interior. Brick and trim
     are multiplied by a constant colour (glTF baseColorFactor) to reach the spec colours.
-    The awning stripes run down the slope (U along the front, V down the canvas).
+    The awning canvas runs down the slope (U along the front, V down the canvas).
  3. Join the parts into one object, cut it along the wall planes and delete the faces
     nobody can see (inside walls, behind bands and quoins), then unwrap "Lightmap".
  4. Bake warm late-afternoon sun + sky (direct and bounced light) into one 2K lightmap
@@ -49,6 +49,7 @@ PROJECT = r"C:\Users\Tarik\AppFactory\Flemington Historic Walk"
 PH = PROJECT + r"\assets\textures\polyhaven" + "\\"
 CO = PROJECT + r"\assets\textures\county-offices" + "\\"
 BB = PROJECT + r"\assets\textures\bank-building" + "\\"
+NT = PROJECT + r"\assets\textures\nevius-store" + "\\"   # awning_canvas.jpg: tools/prepare_nevius_awning.py
 WB = PROJECT + r"\assets\textures\shared\window_backs"
 SI = PROJECT + r"\assets\textures\shared\shop_interior"
 WB_CELLS = json.load(open(WB + ".json"))["cells"]
@@ -85,7 +86,7 @@ LOOK = {
     "Trim":   (PH + "trim_paint_cream.jpg", 2.0, 0.7, None, tint((230, 218, 191), TRIM_TARGET)),
     "Glass":  (None, 1.0, 0.05, tuple(srgb_to_lin(c) for c in GLASS_RGB), None),
     "Dark":   (CO + "door_varnish_dark.jpg", 0.8, 0.5, None, None),
-    "Awning": (BB + "awning_stripes.jpg", 0.6, 0.9, None, None),
+    "Awning": (NT + "awning_canvas.jpg", 0.6, 0.9, None, None),   # plain pale canvas (1912 card)
     "WindowBack": (WB + ".jpg", 1.0, 0.9, None, None),       # UVs from WB_FRAMES, not tiled
     "ShopInterior": (SI + ".jpg", 1.0, 0.9, None, None),     # shop-front panes, UVs from WB_FRAMES
 }
@@ -160,7 +161,7 @@ AW_DY, AW_DZ = 1.90 / math.hypot(1.90, 0.80), 0.80 / math.hypot(1.90, 0.80)   # 
 def box_uvs(obj):
     """Project each face from its dominant axis so textures keep real-world scale; the
     tile size comes from the face's material. Sloping faces are projected along the
-    slope. Awning canvas: U along the front (x), V down the slope, so the stripes run
+    slope. Awning canvas: U along the front (x), V down the slope, so the canvas weave runs
     downhill on the top, the underside and the valance alike."""
     mesh = obj.data
     while mesh.uv_layers:
@@ -198,7 +199,9 @@ def box_uvs(obj):
             continue
         for li in poly.loop_indices:
             co = mesh.vertices[mesh.loops[li].vertex_index].co
-            if key == "Awning":
+            if key == "Awning" and abs(n.x) > 0.7:
+                u, v = co.y, co.z                               # side curtains
+            elif key == "Awning":
                 u, v = co.x, -(AW_DY * co.y + AW_DZ * co.z)    # distance down the slope
             elif 0.25 < abs(n.z) < 0.97:
                 tx, ty = -n.y / h, n.x / h
@@ -536,8 +539,8 @@ try:
     in_front = map_range(Y, -0.02, 0.0, 1.0, 0.0)
     low = map_range(Z, 0.14, 0.2, 1.0, 0.0)
     wear = map_range(mult(centre, up, in_front, low), 0.0, 1.0, 1.0, 0.82)
-    # awning: faded top, darker valance (only the canvas is out there, y < -0.4, z 2.4 - 3.6)
-    aw = mult(map_range(Y, -0.45, -0.40, 1.0, 0.0), map_range(Z, 3.6, 3.7, 1.0, 0.0), map_range(Z, 2.3, 2.4, 0.0, 1.0))
+    # awning: faded top, darker valance and fringe (only the canvas is out there, y < -0.4, z 2.2 - 3.6)
+    aw = mult(map_range(Y, -0.45, -0.40, 1.0, 0.0), map_range(Z, 3.6, 3.7, 1.0, 0.0), map_range(Z, 2.2, 2.3, 0.0, 1.0))
     fade = map_range(mult(aw, map_range(NZ, 0.3, 0.6, 0.0, 1.0)), 0.0, 1.0, 1.0, 1.07)
     valance = map_range(mult(aw, map_range(math_op("ABSOLUTE", NY), 0.8, 0.95, 0.0, 1.0)), 0.0, 1.0, 1.0, 0.86)
     grey = mult(height, blotch, streaks, soot, tymp, chim, rear, wear, fade, valance)

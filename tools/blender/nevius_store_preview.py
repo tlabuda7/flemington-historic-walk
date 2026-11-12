@@ -180,6 +180,8 @@ VIEWS = {
     "three-quarter-nw":   ((-15.0, -14.0, 1.7), (0.5, 5.0, 5.6), 24),
     "detail":             ((2.2, -6.0, 1.7), (-0.2, 0.3, 2.3), 26),        # shop front, recessed entrance
     "match-1909":         ((6.0, -19.0, 1.6), (-9.0, 2.0, 6.2), 30),       # 1909 card, from the SW, west sidewalk
+    "match-1912":         ((-18.0, -13.0, 1.6), (2.0, 1.0, 4.5), 28),      # 1912 "Some Business Blocks", from the NW
+    "fix-2026-11-11":     ((-5.0, -6.5, 1.7), (-0.6, -0.8, 3.0), 24),      # awning, fringe, curtains, shop cornice
 }
 VIEWS = globals().get("PREVIEW_VIEWS") or VIEWS     # set PREVIEW_VIEWS before exec() for other views
 PREFIX = globals().get("PREVIEW_PREFIX") or "nevius-store-"   # and PREVIEW_PREFIX for other file names
