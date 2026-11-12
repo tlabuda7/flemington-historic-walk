@@ -539,7 +539,14 @@ AFRAME.registerComponent('baked-lighting', {
     lightmap:  { default: '' },
     intensity: { default: 1.0 },
     merge:     { default: true },
-    keep:      { type: 'array', default: ['glass'] }
+    keep:      { type: 'array', default: ['glass'] },
+    // Distance hiding (near-only system above). nearNodes > 0: every top-level object
+    // of the file (one fence, one vehicle) is drawn only within that many metres of it.
+    // nearMaterials: the meshes with these material names (e.g. a shop-window display)
+    // are drawn only within nearDistance metres of them. Still one draw call when near.
+    nearNodes:     { default: 0 },
+    nearMaterials: { type: 'array', default: [] },
+    nearDistance:  { default: 30 }
   },
 
   init() {
@@ -564,6 +571,7 @@ AFRAME.registerComponent('baked-lighting', {
       if (!Array.isArray(obj.material) && this.data.keep.includes(obj.material.name)) kept.push(obj);
       else meshes.push(obj);
     });
+    const parts = this.nearParts(root, meshes.concat(kept));   // before materials change
 
     let merged = [];
     const skipped = [];
@@ -598,13 +606,62 @@ AFRAME.registerComponent('baked-lighting', {
       console.info(`baked-lighting ${name}: not merged` +
         (this.data.merge ? ` (${skipped.join(', ') || 'too few meshes'})` : ' (merge: false)') +
         (kept.length ? `; left as exported: ${kept.map((m) => m.material.name).join(', ')}` : ''));
+      this.startNearOnly(parts, null);
       return;
     }
     const nMaterials = new Set(merged.map((m) => m.material)).size;
-    this.mergeMeshes(root, merged);
+    // Always-drawn meshes first, then each near-only part's meshes together, so every
+    // part is one slice of the merged index list.
+    const order = (m) => (parts.has(m) ? parts.get(m).order : -1);
+    merged.sort((a, b) => order(a) - order(b));
+    const ranges = this.mergeMeshes(root, merged, parts);
+    this.startNearOnly(parts, ranges);
     console.info(`baked-lighting ${name}: merged ${nMaterials} materials → 1 call` +
       (skipped.length ? `; kept separate: ${skipped.join(', ')}` : '') +
       (kept.length ? `; left as exported: ${kept.map((m) => m.material.name).join(', ')}` : ''));
+  },
+
+  // Which meshes are near-only, and in which part: Map mesh -> part.
+  nearParts(root, all) {
+    const out = new Map();
+    const byKey = new Map();
+    const d = this.data;
+    for (const m of all) {
+      let key = null, dist = 0;
+      if (!Array.isArray(m.material) && d.nearMaterials.includes(m.material.name)) {
+        key = 'materials'; dist = d.nearDistance;
+      } else if (d.nearNodes > 0) {
+        let top = m;
+        while (top.parent && top.parent !== root) top = top.parent;
+        key = top; dist = d.nearNodes;
+      }
+      if (key === null) continue;
+      if (!byKey.has(key)) byKey.set(key, { order: byKey.size, distance: dist, all: [], name: key.name || key });
+      byKey.get(key).all.push(m);
+      out.set(m, byKey.get(key));
+    }
+    byKey.forEach((p) => { p.box = footprintOf(p.all); });
+    return out;
+  },
+
+  // Hand the parts to the near-only system: merged meshes become index slices,
+  // the others (glass, cut-outs) are hidden as whole meshes.
+  startNearOnly(parts, ranges) {
+    if (!parts.size) return;
+    const list = [...new Set(parts.values())].map((p) => ({ box: p.box, distance: p.distance, slices: [], meshes: [], name: p.name }));
+    const of = new Map([...new Set(parts.values())].map((p, i) => [p, list[i]]));
+    for (const [m, p] of parts) {
+      const q = of.get(p);
+      const r = ranges && ranges.get(m);
+      if (!r) { q.meshes.push(m); continue; }
+      const last = q.slices[q.slices.length - 1];
+      if (last && last.start + last.count === r.start) last.count += r.count;
+      else q.slices.push({ geo: this.merged.geometry, start: r.start, count: r.count });
+    }
+    if (ranges) this.merged.geometry.userData.nearOnlyFixed = ranges.fixed;
+    this.nearSet = this.el.sceneEl.systems['near-only'].add(list);
+    console.info(`baked-lighting ${this.el.id || 'model'}: ${list.length} part(s) drawn only when near ` +
+      `(${list.map((p) => `${p.name} ${p.distance} m`).join(', ')})`);
   },
 
   // Why a mesh can't go into the merged mesh ('' = it can).
@@ -628,7 +685,9 @@ AFRAME.registerComponent('baked-lighting', {
     return '';
   },
 
-  mergeMeshes(root, meshes) {
+  // Returns Map mesh -> { start, count } in the merged index list (+ .fixed: indices
+  // of the meshes that are not in `parts`, which come first).
+  mergeMeshes(root, meshes, parts) {
     // 1) One texture-array layer per distinct colour image.
     const layerOf = new Map();       // texture source uuid -> layer
     const images = [];
@@ -685,6 +744,8 @@ AFRAME.registerComponent('baked-lighting', {
     const v = new THREE.Vector3();
     let vo = 0;
     let io = 0;
+    const ranges = new Map();
+    ranges.fixed = 0;
     for (const m of meshes) {
       const g = m.geometry;
       const a = g.attributes;
@@ -694,6 +755,7 @@ AFRAME.registerComponent('baked-lighting', {
       const L = mat.map ? layerOf.get(mat.map.source.uuid) : -1;   // -1 = plain colour
       const c = mat.color;
       const n = a.position.count;
+      const start = io;
       for (let i = 0; i < n; i++) {
         const k = vo + i;
         v.fromBufferAttribute(a.position, i).applyMatrix4(mat4);
@@ -719,6 +781,8 @@ AFRAME.registerComponent('baked-lighting', {
         index[io++] = vo + (flip ? i1 : i2);
       }
       vo += n;
+      ranges.set(m, { start, count: io - start });
+      if (!parts || !parts.has(m)) ranges.fixed = io;
     }
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
@@ -790,10 +854,12 @@ AFRAME.registerComponent('baked-lighting', {
     mergedMesh.name = 'baked-merged';
     root.add(mergedMesh);
     this.merged = mergedMesh;
+    return ranges;
   },
 
   remove() {
     this.el.removeEventListener('model-loaded', this.onLoaded);
+    if (this.nearSet) this.el.sceneEl.systems['near-only'].remove(this.nearSet);
     this.texture.dispose();
     if (this.merged) {
       this.merged.geometry.dispose();
@@ -1043,6 +1109,108 @@ AFRAME.registerComponent('hide-beyond', {
 });
 
 /* ------------------------------------------------------------------ */
+/* near-only (system): small parts drawn only when you are close       */
+/* ------------------------------------------------------------------ */
+/*
+ * Stops drawing small things (fences, props, parked vehicles, shop-window displays)
+ * while the viewer is further than their `distance` from them. Distance is measured
+ * on the ground (x, z) from the viewer to the nearest point of the part's own footprint,
+ * so a long fence stays drawn while any of it is near. Checked 4 times a second;
+ * a part comes back at `distance` but only goes away past `distance` + 10 %
+ * (at least 3 m), so standing at the edge never makes it flicker.
+ *
+ * A part can live inside a merged mesh (baked-lighting, street-props): its triangles
+ * are a slice of that mesh's index list. The merged mesh keeps its one draw call; when
+ * a part appears or goes, the index list is rebuilt from the always-drawn slice plus
+ * the slices of the parts that are near (a quick copy, only when something changes).
+ * Separate meshes of a part (glass, cut-out leaves) are simply hidden.
+ *
+ * Use from code:
+ *   const set = scene.systems['near-only'].add(parts)   // parts: see add()
+ *   scene.systems['near-only'].remove(set)
+ */
+AFRAME.registerSystem('near-only', {
+  init() {
+    this.sets = [];
+    this.cam = new THREE.Vector3();
+    this.tick = AFRAME.utils.throttleTick(this.tick, 250, this);
+  },
+
+  /*
+   * parts: [{ box: THREE.Box3 (world), distance, slices: [{ geo, start, count }], meshes: [Object3D] }]
+   * Every geo named in a slice must have its hideable slices AFTER `fixed` indices:
+   * pass fixedCount per geo as geo.userData.nearOnlyFixed (indices always drawn).
+   */
+  add(parts) {
+    const geos = new Map();
+    for (const p of parts) {
+      p.visible = true;
+      for (const s of p.slices) {
+        if (!geos.has(s.geo)) {
+          const idx = s.geo.index;
+          geos.set(s.geo, { master: idx.array.slice(), fixed: s.geo.userData.nearOnlyFixed || 0, slices: [] });
+        }
+        geos.get(s.geo).slices.push({ part: p, start: s.start, count: s.count });
+      }
+    }
+    for (const g of geos.values()) g.slices.sort((a, b) => a.start - b.start);
+    const set = { parts, geos };
+    this.sets.push(set);
+    if (this.el.camera) this.el.camera.getWorldPosition(this.cam);
+    this.refresh(set, true);
+    return set;
+  },
+
+  remove(set) {
+    this.sets = this.sets.filter((s) => s !== set);
+  },
+
+  tick() {
+    if (!this.sets.length || !this.el.camera) return;
+    this.el.camera.getWorldPosition(this.cam);
+    for (const set of this.sets) this.refresh(set, false);
+  },
+
+  // (Not called update: that name is A-Frame's own system hook.)
+  refresh(set, force) {
+    const cx = this.cam.x, cz = this.cam.z;
+    let changed = force;
+    for (const p of set.parts) {
+      const b = p.box;
+      const dx = Math.max(b.min.x - cx, 0, cx - b.max.x);
+      const dz = Math.max(b.min.z - cz, 0, cz - b.max.z);
+      const d = Math.sqrt(dx * dx + dz * dz);
+      const limit = p.visible ? p.distance + Math.max(3, 0.1 * p.distance) : p.distance;
+      const vis = d <= limit;
+      if (vis !== p.visible || force) {
+        p.visible = vis;
+        p.meshes.forEach((m) => { m.visible = vis; });
+        changed = true;
+      }
+    }
+    if (!changed) return;
+    for (const [geo, g] of set.geos) {
+      const live = geo.index.array;
+      let n = g.fixed;
+      for (const s of g.slices) {
+        if (!s.part.visible) continue;
+        live.set(g.master.subarray(s.start, s.start + s.count), n);
+        n += s.count;
+      }
+      geo.index.needsUpdate = true;
+      geo.setDrawRange(0, n);
+    }
+  }
+});
+
+// World ground footprint (x, z) of a list of meshes, for near-only parts.
+function footprintOf(meshes) {
+  const box = new THREE.Box3();
+  meshes.forEach((m) => { m.updateWorldMatrix(true, false); box.expandByObject(m); });
+  return box;
+}
+
+/* ------------------------------------------------------------------ */
 /* paint-reflect                                                       */
 /* ------------------------------------------------------------------ */
 /*
@@ -1287,7 +1455,11 @@ AFRAME.registerComponent('street-props', {
     bands:    { default: '-20, -60' },   // band edges along z (north = -z)
     sag:      { default: 0.012 },        // wire sag as a fraction of the span
     segments: { default: 12 },           // straight pieces per wire span
-    wireColor: { type: 'color', default: '#1e1a17' }
+    wireColor: { type: 'color', default: '#1e1a17' },
+    // Distance hiding (near-only system): every prop except the `large` ones (poles,
+    // lamps: seen down the whole street) is drawn only within smallDistance metres.
+    large:         { default: 'pole pole_lamp arc_lamp' },
+    smallDistance: { default: 60 }
   },
 
   init() {
@@ -1311,6 +1483,7 @@ AFRAME.registerComponent('street-props', {
 
     const places = Array.from(this.el.children).filter((c) => c.object3D && c.dataset.prop);
     const poles = [];
+    const large = this.data.large.trim().split(/\s+/);
     let tris = 0;
     for (const c of places) {
       c.object3D.updateMatrix();
@@ -1319,28 +1492,51 @@ AFRAME.registerComponent('street-props', {
         const node = nodes.get(name);
         if (!node) { console.warn('street-props: no node', name, 'for', c.id); continue; }
         const geo = node.geometry.clone().applyMatrix4(new THREE.Matrix4().multiplyMatrices(mx, node.matrixWorld));
-        bands[bandOf(c.object3D.position.z)].push(geo);
+        const small = this.data.smallDistance > 0 && !large.includes(name);
+        bands[bandOf(c.object3D.position.z)].push({ geo, small, id: c.id });
         tris += (geo.index ? geo.index.count : geo.attributes.position.count) / 3;
         if (name === 'pole') poles.push(c);
       }
     }
 
+    // Each band is one mesh: large props first (always drawn), then the small ones,
+    // each a slice of the band's index list for the near-only system.
     const group = new THREE.Group();
+    const nearParts = [];
+    this.el.object3D.updateMatrixWorld(true);
     bands.forEach((list, i) => {
       if (!list.length) return;
-      const geo = mergeGeometries(list);   // js/kit.js
+      list.sort((a, b) => a.small - b.small);
+      const counts = list.map((p) => (p.geo.index ? p.geo.index.count : p.geo.attributes.position.count));
+      const boxes = list.map((p) => {
+        p.geo.computeBoundingBox();
+        return p.geo.boundingBox.clone().applyMatrix4(this.el.object3D.matrixWorld);
+      });
+      const geo = mergeGeometries(list.map((p) => p.geo));   // js/kit.js (non-indexed)
+      const n = geo.attributes.position.count;
+      const index = n > 65535 ? new Uint32Array(n) : new Uint16Array(n);
+      for (let k = 0; k < n; k++) index[k] = k;
+      geo.setIndex(new THREE.BufferAttribute(index, 1));
       geo.computeBoundingSphere();
+      let start = 0;
+      list.forEach((p, k) => {
+        if (p.small) nearParts.push({ box: boxes[k], distance: this.data.smallDistance, slices: [{ geo, start, count: counts[k] }], meshes: [], name: p.id });
+        else geo.userData.nearOnlyFixed = start + counts[k];
+        start += counts[k];
+      });
       const mesh = new THREE.Mesh(geo, material);
       mesh.name = `street-props-band-${i}`;
       group.add(mesh);
     });
+    if (nearParts.length) this.nearSet = this.el.sceneEl.systems['near-only'].add(nearParts);
     nodes.forEach((n) => n.geometry.dispose());
 
     const wires = this.buildWires(poles, places);
     if (wires) group.add(wires);
     this.el.setObject3D('mesh', group);
     console.info(`street-props: ${places.length} placements, ${Math.round(tris)} triangles in ` +
-      `${group.children.length - (wires ? 1 : 0)} meshes + wires`);
+      `${group.children.length - (wires ? 1 : 0)} meshes + wires; ${nearParts.length} small props ` +
+      `drawn only within ${this.data.smallDistance} m`);
   },
 
   // Points along a hanging wire from a to b (a parabola, lowest by `sag` metres mid-span).
@@ -1392,6 +1588,7 @@ AFRAME.registerComponent('street-props', {
   },
 
   remove() {
+    if (this.nearSet) this.el.sceneEl.systems['near-only'].remove(this.nearSet);
     const group = this.el.getObject3D('mesh');
     if (!group) return;
     const mats = new Set();

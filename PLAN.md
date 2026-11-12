@@ -5883,6 +5883,32 @@ Order agreed with the owner: finish 65 Main → **one test person** → 68 Main 
 (Non-building items that make the street feel lived in. Same pipeline: planner → asset-scout →
 blender-builder → reviewer → scene-integrator.)
 
+**Distance hiding (2026-11-12, owner-approved, scene-integrator):** small things are no longer drawn
+when you are too far away to see them. Distance = on the ground, from you to the nearest point of the
+item; checked 4×/s; an item comes back at its distance and only goes past distance + 10 % (≥ 3 m), so
+nothing flickers. Merged meshes keep their single draw call (the index list is rebuilt from the near
+items only when something changes). New `near-only` system in `js/components.js`, used by
+`baked-lighting` (`nearNodes: <m>` = each top-level object of the file; `nearMaterials` +
+`nearDistance` = meshes by material) and `street-props` (`smallDistance`, default 60).
+- **People** (`npc` component, new `hideBeyond`, default 60 m, so every future person gets it):
+  body and blob shadow; never hidden while talking (conversations close at 4 m anyway).
+- **Parked vehicles** (`#vehicles`, `nearNodes: 80`): each vehicle on its own (glass/enamel too).
+- **Fences, hedge, barber pole, post, waste-paper box** (`#street-details`, `nearNodes: 60`): each object on its own.
+- **Small street props** (`#street-props`): hydrants, hitching posts, carriage steps, shop goods,
+  sandwich boards, bicycles, gas pump, drinking fountain: 60 m. Poles, bracket and arc lamps and
+  wires stay (seen down the whole street).
+- **Not hidden:** buildings, window backs and glass (section-E "rooms" are textures on the window
+  backs: hiding them would open holes), trees, backdrops. **Nevius displays not hidden:** the goods,
+  display floors, partitions and the store back picture are all one material (`NVR_ShopInterior`,
+  2,008 tris); hiding it leaves the display windows see-through and bright (tested), a visible pop.
+  A split would need a model change (goods in their own material); it would save only ~1.5k tris.
+- Triangles / draw calls (before → after; "walked" = arriving from the start, so Mr. Pickell is still
+  drawn until 66 m): start (0, 18) N 278k / 88 → 262k / 87; (0, 55) N 318k / 105 → 260k / 98
+  (288k / 103 walked); (0, 60) N 324k / 108 → 267k / 101; (0, −170) S 316k / 105 → 250k / 96;
+  mid-street (0, −60) N 161k / 55 unchanged, S 224k / 75 → 210k / 73; (8, −30) N 214k / 65 → 213k / 65.
+  Pop check at the hide distances: a Model T at 80 m is a ~5 px dark speck in an 800 × 600 view; fences
+  and props at 60 m show no visible change (`assets/models/previews/neardist-*.png`, local only).
+
 ### Pass 1: sound and street props
 
 **Status:** **in scene** (scene-integrator, 2026-11-04): all 34 props placed under `#street-props` in `index.html`; new `street-props` component (js/components.js) bakes them into 3 static meshes by z band (z > −20, −20 … −60, < −60) with the GLB's own lit material, plus one `LineSegments` for the wires (6 per span along both pole lines, 12-segment parabolas, 1.2 % sag; span wires from the W1/E1 and W4/E4 eye bolts to the arc-lamp hooks). Moved from the table: fountain F1 x −7.45 → −7.70 (the bowl reaches 1.32 m in front of the origin, so at −7.45 it overhung the road by 0.27 m; now its front is at x −6.38, on the curb); goods G2 z −56 → −59 (−56 cut through the 66 Main stoop at z −57.57 … −56.17); bicycle B1 → (−7.12, −14.6) rot 180 and B2 → (7.25, −76.5) rot 0 so each leans toward its post/pole with the post mid-frame. Draw calls / triangles: start view 69 → 73 / 108k → 126k; (0, 0.15, −30) 56 → 59 / 66k → 77k; (0, 0.15, −60) 52 → 55 / 21k → 32k; 17.2k triangles placed in total. No console errors. Screenshots `assets/models/previews/street-props-scene-{start,fountain,pole,arc-lamp}.png`. Earlier: props built, round-1 fixes applied (blender-builder, 2026-11-04): `assets/models/street-props.glb`
@@ -8125,3 +8151,4 @@ Check licensing for every asset and note the source in the progress log.
 | 2026-11-12 | blender-builder | **Rittenhouse round-1 fixes**: spectacle arms now run along the head to over the ears (nothing sticking out); brownish hairline dot painted out in the atlas. GLB 1.33 MB, 13,172 tris. Next: reviewer round 2. |
 | 2026-11-12 | reviewer | **R1 Rittenhouse review round 2: PASS**: spectacle arms now lie along the head to the ears, hairline dot gone; 13,172 tris, 1.33 MB, no console errors, loops and feet unchanged. Next: scene-integrator. |
 | 2026-11-12 | scene-integrator | **R1 Albert H. Rittenhouse in scene** at (9.40, 0.15, 25.10), rotation −120°, before the bank's stone pier north of the main door; dialogue `rittenhouse.json` (5 sourced lines), Kokoro voice `am_onyx` (5 clips, 302 KB), new `randomIdleStart` npc option so his Idle is out of step with Pickell's; scripts `?v=20261112b`. Worst view (south end looking north) 103 / 304.6k → 105 / 317.8k. |
+| 2026-11-12 | scene-integrator | **Distance hiding** (owner-approved): new `near-only` system; people hidden beyond 60 m (`npc` `hideBeyond`, default for every person), parked vehicles beyond 80 m, fences/hedge/small details (`#street-details`) and small street props (hydrants, hitching posts, steps, goods, boards, bicycles, gas pump, fountain) beyond 60 m, each by its own position, merged meshes still one draw call. Nevius displays not hidden (one material with the display backs; hiding opens the windows). Worst views now (0, 55) N 260k / 98 (288k walked from the start), (0, 60) N 267k / 101, (0, −170) S 250k / 96 (were 318k / 324k / 316k); start 262k / 87. Script tags `?v=20261112c`. See "Street ambiance" → Distance hiding. |

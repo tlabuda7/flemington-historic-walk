@@ -24,6 +24,9 @@
  * (the voice keeps going); picking a reply starts the next line. If a clip is missing or the
  * sound has not started yet, the line simply appears in full, as before.
  *
+ * Far away (npc `hideBeyond`, default 60 m) a person and their shadow are not drawn, to save
+ * triangles in the long views; never while talking.
+ *
  * `animation-mixer` comes from aframe-extras (loaders bundle), loaded in index.html.
  * Adding another person = one more JSON file + one more entity like the one above.
  */
@@ -88,7 +91,11 @@ AFRAME.registerComponent('npc', {
     voiceGain:   { default: 1.3 },
     // Start the first Idle loop at a random point, so two people with the same Idle
     // clip don't breathe and glance in step.
-    randomIdleStart: { default: false }
+    randomIdleStart: { default: false },
+    // Not drawn (body and blob shadow) while you are further than this (m, horizontal):
+    // a ~13k-triangle person is a few pixels tall there. Comes back at hideBeyond, goes
+    // past hideBeyond + 10 %, so it never flickers. 0 = always drawn.
+    hideBeyond:  { default: 60 }
   },
 
   init() {
@@ -100,6 +107,7 @@ AFRAME.registerComponent('npc', {
     this.homeYaw = null;       // default facing, read from rotation on the first tick
     this.talkUntil = 0;        // play Talk until this time, then Idle
     this.lastCheck = 0;
+    this.lastHideCheck = -1e9;
     this.headPos = new THREE.Vector3();
     this.myPos = new THREE.Vector3();
     this.provider = providerFor(this.data);
@@ -167,6 +175,12 @@ AFRAME.registerComponent('npc', {
     cam.getWorldPosition(this.headPos);
     obj.getWorldPosition(this.myPos);
 
+    // 0) Distance hiding, four times a second (never while talking).
+    if (time - this.lastHideCheck > 250) {
+      this.lastHideCheck = time;
+      this.updateVisibility();
+    }
+
     // 1) Proximity check, ten times a second.
     if (time - this.lastCheck > 100 && this.dialogue) {
       this.lastCheck = time;
@@ -199,6 +213,16 @@ AFRAME.registerComponent('npc', {
       this.talkUntil = 0;
       this.setClip('Idle');
     }
+  },
+
+  updateVisibility() {
+    const far = this.data.hideBeyond;
+    if (!(far > 0)) return;
+    const obj = this.el.object3D;
+    const d = Math.hypot(this.headPos.x - this.myPos.x, this.headPos.z - this.myPos.z);
+    const limit = obj.visible ? far + Math.max(3, 0.1 * far) : far;
+    const vis = this.talking || d <= limit;
+    if (vis !== obj.visible) obj.visible = vis;   // the blob shadow is a child: it goes too
   },
 
   setClip(name) {

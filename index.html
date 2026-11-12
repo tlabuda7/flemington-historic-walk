@@ -12,13 +12,13 @@
   <script src="https://cdn.jsdelivr.net/npm/aframe-extras@7.7.0/dist/aframe-extras.loaders.min.js"></script>
   <!-- Our own code: shared components, the building kit, the modelled landmarks,
        the townspeople you can talk to, and the street sounds. -->
-  <script src="js/components.js?v=20261112b"></script>
-  <script src="js/ground.js?v=20261112b"></script>
-  <script src="js/kit.js?v=20261112b"></script>
-  <script src="js/landmarks.js?v=20261112b"></script>
-  <script src="js/people.js?v=20261112b"></script>
-  <script src="js/ambience.js?v=20261112b"></script>
-  <script src="js/minimap.js?v=20261112b"></script>
+  <script src="js/components.js?v=20261112c"></script>
+  <script src="js/ground.js?v=20261112c"></script>
+  <script src="js/kit.js?v=20261112c"></script>
+  <script src="js/landmarks.js?v=20261112c"></script>
+  <script src="js/people.js?v=20261112c"></script>
+  <script src="js/ambience.js?v=20261112c"></script>
+  <script src="js/minimap.js?v=20261112c"></script>
 
   <style>
     /* On-screen help for desktop. Not visible inside the headset. */
@@ -428,21 +428,23 @@
          tools/blender/street_details.py): wire fence at the Wurts office (from the
          "Dr. Tompkins" photo), picket fence at 65, County Offices pipe rail and board fence,
          Rea Building hedge, waste-paper box, barber pole at the hotel. Built in scene
-         coordinates, so it sits at 0 0 0. -->
+         coordinates, so it sits at 0 0 0. Each object is drawn only within 60 m of you
+         (nearNodes; PLAN.md "Street ambiance" → Distance hiding). -->
     <a-entity id="street-details" position="0 0 0" rotation="0 0 0"
       gltf-model="url(assets/models/street-details.glb)"
-      baked-lighting="lightmap: assets/textures/street-details-lightmap.jpg; intensity: 1.0005"></a-entity>
+      baked-lighting="lightmap: assets/textures/street-details-lightmap.jpg; intensity: 1.0005; nearNodes: 60"></a-entity>
     <!-- ============================================================
          PARKED VEHICLES (tools/blender/vehicles.py + vehicles_bake.py
          → assets/models/vehicles.glb; PLAN.md "Street details pass 2", F12–F14)
          Model T at the Union Hotel curb, buggy at the bank, delivery wagon at the Rea
          Building; no horses (owner decision). One file with three objects: each place is
          "name x y z turn" (y = road: stand on the crowned road surface). They face south (turn 0), the way their lighting was baked.
+         Each vehicle is drawn only within 80 m of you (nearNodes).
          ============================================================ -->
     <a-entity id="vehicles"
       gltf-places="src: url(assets/models/vehicles.glb?v=3);
                    places: model-t 5.3 road -30 0, buggy 5.4 road -72 0, delivery-wagon 5.1 road -99 0"
-      baked-lighting="lightmap: assets/textures/vehicles-lightmap.jpg?v=3; intensity: 1.5178; keep: glass, enamel"
+      baked-lighting="lightmap: assets/textures/vehicles-lightmap.jpg?v=3; intensity: 1.5178; keep: glass, enamel; nearNodes: 80"
       glass-reflect paint-reflect="intensity: 0.12"></a-entity>
     <!-- ============================================================
          STREET PROPS (tools/blender/street_props.py + street_props_bake.py
