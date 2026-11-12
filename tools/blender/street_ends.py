@@ -48,6 +48,10 @@ backdrop-tree.glb; positions in street_ends_bake.py).
 Ground: Main St road (crowned exactly as js/ground.js), walks, curbs, lots and lawns north of
 z -180 and south of z +80 (js/ground.js draws Main St from z -180 to +80), the junction with
 Branch St and Pennsylvania Ave, Capner St and Maple Ave stubs, the monument plot, the church lots.
+2026-11-12 (PLAN.md 7.9): NOT the west side z -202.4 .. -328.7 (west walk x -10.4 .. -6.4, its
+grass strip and the lawns of 1-11 Main) nor the east lawns z -192.4 .. -307.2 (2-10 Main): those
+are drawn by north-approach.glb (tools/blender/north_approach.py), which also has the houses.
+North of z -328.7 the west walk keeps the 1913 section: grass strip 2.2 m, concrete 1.8 m.
 
 Run inside Blender:
     exec(open(r"<project>/tools/blender/street_ends.py").read())
@@ -1156,8 +1160,17 @@ def build_ground_north():
     edge_skirt("RoadJ", "road", [(79.5, -306.7), (80.5, -297.2)], ROAD_Y, -0.03, (70, -302))
     # --- west walk (cut at Capner St), Capner St stub ---
     walk_strip("WalkN", [(-6.4, -180.0), (-6.4, -192.5)], [(-10.3, -180.0), (-10.3, -192.5)], ends=(False, True))
-    walk_strip("WalkN", [(-6.4, -202.4), (-6.4, -328.7), (-13.8, -355.0), (-25.2, -412.0)],
-               [(-10.6, -202.4), (-10.6, -328.7), (-16.8, -355.0), (-28.2, -412.0)])
+    # (2026-11-12, PLAN.md 7.9: z -202.4 .. -328.7 of the west walk, its grass strip and the lawns
+    #  behind it are drawn by north-approach.glb. North of z -328.7 the same 1913 section carries
+    #  on: grass strip 2.2 m at the curb, concrete walk 1.8 m, then lawn.)
+    road_w = [(-6.4, -328.7), (-13.8, -355.0), (-25.2, -412.0)]
+    prop_w = [(-10.6, -328.7), (-16.8, -355.0), (-28.2, -412.0)]
+    at = lambda t: [(rx + (px - rx) * t, rz + (pz - rz) * t) for (rx, rz), (px, pz) in zip(road_w, prop_w)]
+    strip_in, walk_in = at(2.2 / 4.2), at(4.0 / 4.2)
+    lot("LotW", "grass", road_w + list(reversed(strip_in)))
+    edge_skirt("Curb", "concrete", road_w, G, ROAD_Y - 0.03, prop_w[1])
+    edge_skirt("LotW", "grass", [road_w[-1], strip_in[-1]], G, -0.03, (-20.0, -400.0))
+    walk_strip("WalkN", strip_in, walk_in, ends=(False, True), curb=False)
     capner = [(-10.3, -192.5), (-10.3, -202.4), (-6.4, -202.4), (-6.4, -192.5)]
     poly_flat("RoadN", "road", capner, ROAD_Y, uvfn=lambda x, z: ((z + 197.45) / 6.4 + 0.5, x / 6.4))
     for a, b in zip(split(-52.0, -10.3, 14.0), split(-52.0, -10.3, 14.0)[1:]):
@@ -1176,12 +1189,11 @@ def build_ground_north():
     lot("LotN", "earth", [(-52.4, -167.9), (-10.3, -168.2), (-10.3, -165.15), (-52.4, -165.15)], skirt_edges=(2, 3))
     lot("LotN", "earth", [(-25.6, -192.5), (-13.1, -192.5), (-13.1, -168.2), (-25.6, -167.9)])
     edge_skirt("LotN", "earth", [(-52.0, -192.5), (-52.0, -165.15)], G, -0.05, (-30, -180))
-    # --- west tract north of Capner St (empty Water Co. ground on the 1921 map) ---
-    for z0, z1 in ((-202.4, -266.0), (-266.0, -328.7)):
-        lot("LotW", "grass", [(-60.0, z0), (-10.6, z0), (-10.6, z1), (-60.0, z1)], skirt_edges=(3,))
-    lot("LotW", "grass", [(-60.0, -328.7), (-10.6, -328.7), (-16.8, -355.0), (-28.2, -412.0), (-60.0, -412.0)],
+    # --- west side north of Capner St. Correction 2026-11-12 (PLAN.md 7.9): this is not empty
+    #     Water Co. ground: five houses (1-11 Main) stood here on Sept 1921 sheet 6. Their lawns
+    #     from Capner St to z -328.7 are in north-approach.glb; only the lawn north of that stays.
+    lot("LotW", "grass", [(-60.0, -328.7), walk_in[0], walk_in[1], walk_in[2], (-60.0, -412.0)],
         skirt_edges=(3, 4))
-    edge_skirt("LotW", "grass", [(-60.0, -202.4), (-10.6, -202.4)], G, -0.05, (-30, -220))
     # --- east side: walk, front strip, lots ---
     walk_strip("WalkN", [(3.51, -180.0), (3.51, -250.0), (9.8, -281.0), (24.0, -309.0), (80.5, -297.2)],
                [(6.36, -180.0), (6.0, -247.8), (12.0, -279.6), (25.7, -307.2), (80.0, -294.9)], ends=(False, True))
@@ -1189,11 +1201,9 @@ def build_ground_north():
     lot("LotE", "earth", [(10.35, -180.0), (50.0, -180.0), (50.0, -164.4), (10.35, -164.4)], skirt_edges=(1, 2))
     edge_skirt("LotE", "earth", [(6.36, -180.0), (10.35, -180.0)], G, -0.03, (8, -170))
     edge_skirt("LotE", "earth", [(10.35, -180.0), (10.35, -164.4)], G, -0.03, (20, -170))
-    for pts in ([(10.6, -180.0), (50.0, -180.0), (50.0, -215.0), (6.17, -215.0), (6.29, -192.4), (10.6, -192.4)],
-                [(6.17, -215.0), (50.0, -215.0), (50.0, -260.0), (8.4, -260.0), (6.0, -247.8)],
-                [(8.4, -260.0), (50.0, -260.0), (80.0, -260.0), (80.0, -294.9), (25.7, -307.2), (12.0, -279.6)]):
-        lot("LotE", "grass", pts)
-    edge_skirt("LotE", "grass", [(50.0, -180.0), (50.0, -260.0), (80.0, -260.0), (80.0, -294.9)], G, -0.05, (30, -250))
+    # (2026-11-12: the lawns of 2-10 Main, z -192.4 .. -307.2, are in north-approach.glb)
+    lot("LotE", "grass", [(10.6, -180.0), (50.0, -180.0), (50.0, -192.4), (10.6, -192.4)])
+    edge_skirt("LotE", "grass", [(50.0, -180.0), (50.0, -192.4)], G, -0.05, (30, -186))
     # --- church block: walks round it, lawn ---
     walk_strip("WalkC", [(-14.7, -412.0), (-3.3, -355.0), (0.2, -329.6), (22.9, -328.0), (42.6, -368.9)],
                [(-12.3, -412.0), (-0.9, -355.0), (2.8, -332.0), (21.0, -330.6), (40.4, -370.0)])

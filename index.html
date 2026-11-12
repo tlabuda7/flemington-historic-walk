@@ -129,7 +129,7 @@
          haze baked in, no fog, follows the rig at 0.85. landscape_town = fixed, fogged
          rooftop / steeple / tree silhouettes beyond the modelled blocks. -->
     <a-entity id="landscape" position="0 0 0" rotation="0 0 0"
-      gltf-model="url(assets/models/landscape.glb?v=3)" far-landscape="factor: 0.85"></a-entity>
+      gltf-model="url(assets/models/landscape.glb?v=4)" far-landscape="factor: 0.85"></a-entity>
 
     <!-- Side-street backdrops (PLAN.md "Side streets, backdrop buildings"): buildings you see
          down the side streets but cannot walk to. Each model is built in scene coordinates,
@@ -156,8 +156,8 @@
          Monument, Hotel Flemington, Vosseller and Deats buildings, library, Doric House;
          tools/blender/street_ends.py). Mostly from the owner's postcards and HABS photos. -->
     <a-entity id="street-ends" position="0 0 0" rotation="0 0 0"
-      gltf-model="url(assets/models/street-ends.glb)"
-      baked-lighting="lightmap: assets/textures/street-ends-lightmap.jpg; intensity: 1.0477"></a-entity>
+      gltf-model="url(assets/models/street-ends.glb?v=2)"
+      baked-lighting="lightmap: assets/textures/street-ends-lightmap.jpg?v=2; intensity: 1.0533"></a-entity>
     <!-- Big side-street maples: the street tree without its stone pit (backdrop-tree.glb),
          all drawn as two instanced meshes. Positions are the ones baked into the backdrops' shade. -->
     <!-- The trees are split into groups by area, so groups behind the viewer are not drawn. -->
@@ -223,6 +223,31 @@
       <a-entity id="btree-end-16" position="40 0.15 145" rotation="0 210 0" scale="2.1 2.1 2.1"></a-entity>
       <a-entity id="btree-end-17" position="16 0.15 182" rotation="0 271 0" scale="2.3 2.3 2.3"></a-entity>
       <a-entity id="btree-end-18" position="24 0.15 196" rotation="0 332 0" scale="2.2 2.2 2.2"></a-entity>
+    </a-entity>
+    <!-- North approach: the ten houses between the last shops and the hotel / monument
+         (tools/blender/north_approach.py; 5, 3, 1 and 2 Main from the owner's postcards,
+         the rest from the 1921 map and the 1980 register text). -->
+    <a-entity id="north-approach" position="0 0 0" rotation="0 0 0"
+      gltf-model="url(assets/models/north-approach.glb)"
+      baked-lighting="lightmap: assets/textures/north-approach-lightmap.jpg; intensity: 1.0734"></a-entity>
+    <!-- Its street maples (real-size old maples). Not drawn from further than 170 m, to keep
+         the long view from the south end within the triangle budget. -->
+    <a-entity id="old-maples-north" instanced-trees="src: url(assets/models/old-maple.glb)"
+      hide-beyond="x: 0; z: -250; distance: 170">
+      <a-entity id="omaple-n-1" position="-11.3 0.15 -206" rotation="0 20 0" scale="0.95 0.95 0.95"></a-entity>
+      <a-entity id="omaple-n-2" position="-11.3 0.15 -224" rotation="0 103 0" scale="1.0 1.0 1.0"></a-entity>
+      <a-entity id="omaple-n-3" position="-11.3 0.15 -241" rotation="0 186 0" scale="0.9 0.9 0.9"></a-entity>
+      <a-entity id="omaple-n-4" position="-11.3 0.15 -258" rotation="0 269 0" scale="1.0 1.0 1.0"></a-entity>
+      <a-entity id="omaple-n-5" position="-11.3 0.15 -276" rotation="0 352 0" scale="0.95 0.95 0.95"></a-entity>
+      <a-entity id="omaple-n-6" position="-11.3 0.15 -291" rotation="0 75 0" scale="1.0 1.0 1.0"></a-entity>
+      <a-entity id="omaple-n-7" position="7 0.15 -198" rotation="0 158 0" scale="1.0 1.0 1.0"></a-entity>
+      <a-entity id="omaple-n-8" position="7 0.15 -214" rotation="0 241 0" scale="0.95 0.95 0.95"></a-entity>
+      <a-entity id="omaple-n-9" position="7 0.15 -230" rotation="0 324 0" scale="1.0 1.0 1.0"></a-entity>
+      <a-entity id="omaple-n-10" position="7 0.15 -246" rotation="0 47 0" scale="0.9 0.9 0.9"></a-entity>
+      <a-entity id="omaple-n-11" position="12.4 0.15 -275" rotation="0 130 0" scale="1.0 1.0 1.0"></a-entity>
+      <a-entity id="omaple-n-12" position="20.0 0.15 -291.5" rotation="0 213 0" scale="0.95 0.95 0.95"></a-entity>
+      <a-entity id="omaple-n-13" position="-20 0.15 -300" rotation="0 296 0" scale="1.05 1.05 1.05"></a-entity>
+      <a-entity id="omaple-n-14" position="-22 0.15 -286" rotation="0 19 0" scale="1.05 1.05 1.05"></a-entity>
     </a-entity>
     <!-- The big old trees on the grass strip opposite the bank (1914 card): old-maple.glb at real size. -->
     <a-entity id="old-maples-west" instanced-trees="src: url(assets/models/old-maple.glb)">

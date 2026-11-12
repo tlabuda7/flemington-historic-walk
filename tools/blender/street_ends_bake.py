@@ -74,11 +74,20 @@ TREES = [(-7.6, -173.5, 2.0, 0.15),   # big trees on the walk in front of the ho
          (40.0, 145.0, 2.1, 0.15),    # behind the library
          (16.0, 182.0, 2.3, 0.15),    # beyond the Deats Building, closing the view south
          (24.0, 196.0, 2.2, 0.15)]
-# neighbours for the bake (GLB, index.html position, rotation y); the south-east backdrop is in
-# scene axes already
+# 2026-11-12: the north approach's mature maples (old-maple.glb, real size; the same list as
+# north_approach_bake.py TREES), so their shade falls on the road here too
+TREES += [(-11.3, -206.0, 0.95, 0.15, "maple"), (-11.3, -224.0, 1.0, 0.15, "maple"),
+          (-11.3, -241.0, 0.9, 0.15, "maple"), (-11.3, -258.0, 1.0, 0.15, "maple"),
+          (-11.3, -276.0, 0.95, 0.15, "maple"), (-11.3, -291.0, 1.0, 0.15, "maple"),
+          (7.0, -198.0, 1.0, 0.15, "maple"), (7.0, -214.0, 0.95, 0.15, "maple"),
+          (7.0, -230.0, 1.0, 0.15, "maple"), (7.0, -246.0, 0.9, 0.15, "maple"),
+          (12.4, -275.0, 1.0, 0.15, "maple"), (20.0, -291.5, 0.95, 0.15, "maple"),
+          (-20.0, -300.0, 1.05, 0.15, "maple"), (-22.0, -286.0, 1.05, 0.15, "maple")]
+# neighbours for the bake (GLB, index.html position, rotation y); the south-east backdrop and the
+# north approach are in scene axes already
 NEIGHBOURS = [("store-27.glb", (-10.30, 0.15, -158.49), 90), ("block-24-30.glb", (7.29, 0.15, -152.365), -90),
               ("store-100-102.glb", (10.30, 0.15, 52.01), -90), ("store-106.glb", (8.06, 0.15, 58.80), -90),
-              ("sidestreet-southeast.glb", (0.0, 0.0, 0.0), 0)]
+              ("sidestreet-southeast.glb", (0.0, 0.0, 0.0), 0), ("north-approach.glb", (0.0, 0.0, 0.0), 0)]
 
 # 1. Geometry -----------------------------------------------------------------
 exec(open(PROJECT + r"\tools\blender\street_ends.py", encoding="utf8").read())
@@ -389,7 +398,11 @@ for o in list(ctx.objects):
     bpy.data.objects.remove(o, do_unlink=True)
     if me and me.users == 0:
         bpy.data.meshes.remove(me)
+import os as _os
 for glb, (px, py, pz), rot in NEIGHBOURS:
+    if not _os.path.exists(PROJECT + r"\assets\models" + "\\" + glb):
+        print("bake context: missing", glb)
+        continue
     _before = set(bpy.data.objects)
     bpy.ops.import_scene.gltf(filepath=PROJECT + r"\assets\models" + "\\" + glb)
     for o in [o for o in bpy.data.objects if o not in _before]:
@@ -423,14 +436,17 @@ if TREE_SHADOWS:
     nt.links.new(tr.outputs[0], mix.inputs[1])
     nt.links.new(dif.outputs[0], mix.inputs[2])
     nt.links.new(mix.outputs[0], out.inputs["Surface"])
-    for i, (x, z, s, base) in enumerate(TREES):
-        bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=1.0, location=(x, -z, base + 7.4 * s))
+    for i, tr in enumerate(TREES):
+        x, z, s, base = tr[:4]
+        maple = len(tr) > 4 and tr[4] == "maple"      # old-maple.glb: crown ~14 m wide, top 17 m
+        cz, rh, rv, th = (11.2, 6.8, 5.6, 6.0) if maple else (7.4, 3.3, 2.9, 4.5)
+        bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=1.0, location=(x, -z, base + cz * s))
         cr = bpy.context.active_object
-        cr.scale = (3.3 * s, 3.3 * s, 2.9 * s)
+        cr.scale = (rh * s, rh * s, rv * s)
         cr.name = "EN_Crown%d" % i
         cr.data.materials.append(leaf)
-        bpy.ops.mesh.primitive_cylinder_add(vertices=8, radius=0.2 * s, depth=4.5 * s,
-                                            location=(x, -z, base + 2.25 * s))
+        bpy.ops.mesh.primitive_cylinder_add(vertices=8, radius=(0.35 if maple else 0.2) * s, depth=th * s,
+                                            location=(x, -z, base + th / 2 * s))
         tk = bpy.context.active_object
         tk.name = "EN_Trunk%d" % i
         tk.data.materials.append(occ)

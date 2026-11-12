@@ -322,17 +322,22 @@ def build_town(coll):
     # planted with backdrop trees are skipped with gone() (their random draws are kept, so every
     # other silhouette keeps its shape). The interim Presbyterian church is deleted.
     # north end (scene z -175..-250 -> Blender Y 175..250)
+    # 2026-11-12 (PLAN.md 7.9): assets/models/north-approach.glb now has the ten real houses
+    # 1-11 / 2-10 Main between the shops and the monument, and the scene instances old-maple.glb
+    # along both walks there: the remaining north-block houses (Blender y 214 and 246 east, 246
+    # west), the roadside trees at y 207/212, 222/227, 238/243 and the four big trees are gone()
+    # too. No Town item remains north of the walk.
     for i, (y, w, d, e) in enumerate([(182, 12, 14, 10), (198, 10, 12, 8.5), (214, 14, 12, 11), (246, 11, 8, 8)]):
-        (gone if y in (182, 198) else keep)(house, 20 + random.uniform(0, 3), y, w, d, e, i % 2 == 0, walls[i])
+        gone(house, 20 + random.uniform(0, 3), y, w, d, e, i % 2 == 0, walls[i])
     for i, (y, w, d, e) in enumerate([(181, 11, 12, 9), (199, 13, 14, 11), (246, 12, 8, 8.5)]):
-        (gone if y in (181, 199) else keep)(house, -20 - random.uniform(0, 3), y, w, d, e, i % 2 == 1, walls[i + 1])
+        gone(house, -20 - random.uniform(0, 3), y, w, d, e, i % 2 == 1, walls[i + 1])
     # (2026-11-11: the guessed white church + steeple that stood here, west side z -229, is gone:
     #  it was the Presbyterian church in the wrong place; street-ends.glb now has it, E8.)
     for y in (176, 191, 207, 222, 238):
-        (gone if y in (176, 191) else keep)(tree, 12.8, y)
-        (gone if y in (176, 191) else keep)(tree, -12.8, y + 5)
+        gone(tree, 12.8, y)
+        gone(tree, -12.8, y + 5)
     for (x, y) in ((36, 190), (-37, 210), (34, 226), (-36, 244)):
-        tree(x, y, 15, 6)
+        gone(tree, x, y, 15, 6)
     # south end (scene z +70..+140 -> Blender Y -70..-140): west-side houses stay; east-side houses
     # and all eight trees are replaced (E5-E7, E10, backdrop trees on the west lawns)
     for i, y in enumerate((-80, -98, -118, -134)):

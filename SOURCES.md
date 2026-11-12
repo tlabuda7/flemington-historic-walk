@@ -542,3 +542,5 @@ Back-lot buildings (`assets/models/back-lots.glb`): `assets/textures/shared/back
 `assets/textures/house-91-93-lightmap.jpg` and `house-95-97-lightmap.jpg` are baked in Blender (original work); both houses reuse existing textures only.
 
 `assets/models/old-maple.glb` is the mature street tree (`tools/blender/street_tree.py`, `TREE_OLD = True`), same textures as the street tree.
+
+`assets/textures/north-approach-lightmap.jpg` is baked in Blender (original work); the north-approach model reuses existing textures only. The Sept 1921 Sanborn sheet 6 (LoC sanborn05479_006, public domain) was consulted for the west side north of Capner St and is not in the repository.
