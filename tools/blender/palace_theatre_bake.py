@@ -7,7 +7,7 @@ Run inside Blender:
 
 Steps (pattern: block_40_46_bake.py / union_hotel_bake.py):
  1. Rebuild the geometry (palace_theatre.py).
- 2. Eight materials (merged into one draw call by `baked-lighting`):
+ 2. Eleven lightmapped materials (merged into one draw call by `baked-lighting`) and glass:
       brick        polyhaven/red_brick.jpg, tile 1.4 m (about 0.07 m courses), x factor -> dark
                    red-brown #7A4436; hoods darker and laid as soldiers (UVs turned 90 degrees),
                    A's sunlit south wall ~12% lighter (bake tints)
@@ -18,9 +18,15 @@ Steps (pattern: block_40_46_bake.py / union_hotel_bake.py):
       roof         county-offices/roof_tin_redbrown.jpg, tile 2.0 m (dulled by a bake tint)
       doors        polyhaven/door_paint_green.jpg, tile 0.8 m, x factor -> green-black #22302A
                    (fire doors darker by a bake tint)
-      dark         plain #1E2226 (glass, lobby lining, iron)
+      dark         plain #1E2226 (ticket-window glass, lobby lining, iron)
       signs        palace-theatre/signs_atlas.jpg (tools/prepare_palace_theatre_textures.py):
                    two plain, empty poster-frame backing boards (no figures, no lettering)
+    Section E windows (2026-11-12): WindowBack (shared/window_backs.jpg), ShopInterior
+    (shared/shop_interior.jpg), HotelLobby (shared/hotel_lobby.jpg), UVs from the geometry's BACKREC, lightmapped like
+    everything else; the panes are one material named exactly `glass` (#1A1916, alpha 0.40,
+    roughness 0.05, BLEND, single-sided) that the scene leaves unlit (`glass-reflect`). The glass
+    is fully transparent during the bake, ignored by the hidden-face pass, and its Lightmap UVs
+    are squeezed small (it does not use them).
  3. Split wall faces where other parts cover them, join, delete the faces nobody can see,
     unwrap "Lightmap" (front and south wall weighted up; B/C, rear and roofs down).
  4. Bake warm late-afternoon sun + sky into one 2K lightmap with Cycles. West side of Main St
@@ -48,6 +54,8 @@ LIGHTMAP = PROJECT + r"\assets\textures\palace-theatre-lightmap.jpg"
 LIGHTMAP_SIZE = 2048
 SAMPLES = 384
 TO_SUN = (-0.40, 0.90, 0.36)          # west-side building (front faces east)
+GLASS_ALPHA = 0.40
+GLASS_RGB = (0x1A, 0x19, 0x16)        # faint warm grey dust tint (as the other section-E buildings)
 COLL, RIG = "PalaceTheatre", "PT_BakeRig"
 
 # 1. Geometry -----------------------------------------------------------------
@@ -80,9 +88,14 @@ LOOK = {
     "Doors":  (TX + r"polyhaven\door_paint_green.jpg", 0.8, 0.6, None, tint((93, 107, 92), (0x22, 0x30, 0x2A))),
     "Dark":   (None, 1.0, 0.3, tuple(srgb_to_lin(c) for c in DARK_BASE), None),
     "Signs":  (TX + r"palace-theatre\signs_atlas.jpg", 1.0, 0.85, None, None),
+    "WBack":  (TX + r"shared\window_backs.jpg", 1.0, 0.9, None, None),
+    "Shop":   (TX + r"shared\shop_interior.jpg", 1.0, 0.9, None, None),
+    "HLobby": (TX + r"shared\hotel_lobby.jpg", 1.0, 0.9, None, None),
+    "Glass":  (None, 1.0, 0.05, tuple(srgb_to_lin(c) for c in GLASS_RGB), None),
 }
 FINAL_NAMES = {"Brick": "brick", "Stucco": "tile_stucco", "Trim": "trim", "Stone": "stone", "Roof": "roof",
-               "Doors": "doors", "Dark": "dark", "Signs": "signs"}
+               "Doors": "doors", "Dark": "dark", "WBack": "WindowBack", "Shop": "ShopInterior",
+               "HLobby": "HotelLobby", "Glass": "glass", "Signs": "signs"}
 
 
 def textured_material(name, image_file, roughness, colour, factor):
@@ -114,6 +127,13 @@ def textured_material(name, image_file, roughness, colour, factor):
             nt.links.new(tex.outputs["Color"], bsdf.inputs["Base Color"])
     else:
         bsdf.inputs["Base Color"].default_value = (*colour, 1)
+    if name == "glass":   # transparent, drawn with a sky reflection by the scene
+        bsdf.inputs["Alpha"].default_value = GLASS_ALPHA
+        mat.use_backface_culling = True
+        if hasattr(mat, "surface_render_method"):
+            mat.surface_render_method = "BLENDED"
+        elif hasattr(mat, "blend_method"):
+            mat.blend_method = "BLEND"
     return mat
 
 
@@ -167,6 +187,17 @@ def set_uvs(obj, kind):
     rid_attr = mesh.attributes.get("rid")
     for poly in mesh.polygons:
         n = poly.normal
+        if kind in ("WBack", "Shop", "HLobby"):          # window backs: their atlas cell
+            rec = BACKREC[rid_attr.data[poly.index].value]
+            (px, py), (nx, ny) = rec["wall"]
+            U0, V0, U1, V1 = rec["uv"]
+            for li in poly.loop_indices:
+                co = mesh.vertices[mesh.loops[li].vertex_index].co
+                u = (co.x - px) * -ny + (co.y - py) * nx
+                fu = (u - rec["u0"]) / (rec["u1"] - rec["u0"])
+                fz = (co.z - rec["z0"]) / (rec["z1"] - rec["z0"])
+                uv.data[li].uv = (U0 + (U1 - U0) * fu, V0 + (V1 - V0) * fz)
+            continue
         if kind == "Atlas":
             rid = rid_attr.data[poly.index].value if rid_attr else 0
             rec = ATLAS.get(rid)
@@ -311,7 +342,11 @@ def remove_hidden_faces(obj, rays=120):
     bm = bmesh.new()
     bm.from_mesh(obj.data)
     bm.normal_update()
-    bvh = BVHTree.FromBMesh(bm)
+    # the glass does not block the view: rays pass it to reach (or leave) the window backs
+    glass_i = [i for i, m in enumerate(obj.data.materials) if m.name == "glass"]
+    bm.verts.index_update()
+    bvh = BVHTree.FromPolygons([v.co for v in bm.verts],
+                               [[v.index for v in f.verts] for f in bm.faces if f.material_index not in glass_i])
     dirs = fibonacci(rays)
     face_tris = {}
     for t in bm.calc_loop_triangles():
@@ -367,6 +402,10 @@ for p in mesh.polygons:
     c, n = p.center, p.normal
     m = mat_names[p.material_index]
     if m == "dark":
+        f *= 0.6
+    elif m == "glass":
+        f *= 0.03                                  # not lightmapped in the scene
+    elif m in ("WindowBack", "ShopInterior", "HotelLobby"):
         f *= 0.6
     if n.z < -0.5:
         f *= 0.7                                   # soffits
@@ -514,6 +553,8 @@ def point_materials_at(img):
 for o in bpy.context.view_layer.objects:
     o.select_set(o == r_obj)
 bpy.context.view_layer.objects.active = r_obj
+glass_alpha = next(n for n in FINAL["Glass"].node_tree.nodes if n.type == "BSDF_PRINCIPLED").inputs["Alpha"]
+glass_alpha.default_value = 0.0             # light passes the panes to the window backs
 try:
     light_img = bake_target("PT_Light", True)
     point_materials_at(light_img)
@@ -670,6 +711,7 @@ try:
         mesh.materials[i] = mat
     print("grime baked")
 finally:
+    glass_alpha.default_value = GLASS_ALPHA
     for name, state in render_state.items():
         if bpy.data.collections.get(name):
             bpy.data.collections[name].hide_render = state

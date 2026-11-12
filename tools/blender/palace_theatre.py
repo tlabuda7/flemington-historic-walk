@@ -15,6 +15,14 @@ Every run deletes and rebuilds the "PalaceTheatre" collection. Materials, lightm
 export: palace_theatre_bake.py (runs this file first). Pattern: block_40_46.py / union_hotel.py
 (builders per material, closed wall shells with shallow boolean recesses).
 
+Windows (PLAN.md section E, 2026-11-12): every pane is ONE outward glass face (builder Glass ->
+material `glass`, transparent in the scene) with a window back 4 cm behind it: upstairs a cell of
+assets/textures/shared/window_backs.jpg (dim rooms and blinds, never the same cell beside or
+above / below itself), the shop window and shop-door lights the shared shop interior
+(shared/shop_interior.jpg), the lobby-door lights and transom the dim hotel-lobby rooms
+(shared/hotel_lobby.jpg). Sashes, frames, sills, poster frames and the ticket window (still the
+plain dark glass) are unchanged. The door leaves are now open frames round their lights.
+
 Sources: PLAN.md "Palace Theatre (31 Main St, old no. 518)" spec (1921 Sanborn sheet 2
 footprints and heights; facade from the card by perspective fit, +-0.3 m).
 
@@ -25,7 +33,9 @@ Coordinates (metres, Blender Z-up), origin = scene (-10.30, 0.15, -145.52), rota
 glTF export turns -Y into +Z, which matches the A-Frame scene's "front faces +Z".
 """
 
+import json
 import math
+import random
 import bpy
 import bmesh
 
@@ -83,12 +93,14 @@ def plain(name, color, rough=0.8):
 
 
 COLOURS = {"Brick": "#7A4436", "Stucco": "#A79F8B", "Trim": "#DDD5C2", "Stone": "#CDBFA2",
-           "Roof": "#5A3D34", "Doors": "#22302A", "Dark": "#1E2226", "Signs": "#D8CDB4"}
+           "Roof": "#5A3D34", "Doors": "#22302A", "Dark": "#1E2226", "Signs": "#D8CDB4",
+           "WBack": "#3A3632", "Shop": "#3A3632", "HLobby": "#3A3632", "Glass": "#1A1916"}
 MATS = {k: plain("PT_" + k, c) for k, c in COLOURS.items()}
 # builder -> material (the bake gives every builder its own UVs and tint)
 BUILDER_MAT = {"Brick": "Brick", "Hood": "Brick", "Stucco": "Stucco", "Trim": "Trim", "Globe": "Trim",
                "Stone": "Stone", "Roof": "Roof", "Doors": "Doors", "FireDoor": "Doors",
-               "Glass": "Dark", "Iron": "Dark", "Lobby": "Dark", "Atlas": "Signs"}
+               "Glass": "Glass", "Ticket": "Dark", "Iron": "Dark", "Lobby": "Dark", "Atlas": "Signs",
+               "WBack": "WBack", "Shop": "Shop", "HLobby": "HLobby"}
 
 # ---------------------------------------------------------------------------
 # Mesh builder (as block_40_46.py)
@@ -148,6 +160,16 @@ class MB:
 
     def box(self, x0, x1, y0, y1, z0, z1):
         self.prism([(x0, z0), (x1, z0), (x1, z1), (x0, z1)], y0, y1)
+
+    def face(self, wall, pts, d):
+        """ONE single-sided face (outline [(u, z), ...] on a wall plane, d out from the wall
+        face), facing outward. Used for glass panes and window backs."""
+        f = self.bm.faces.new([self.bm.verts.new(wall.pt(u, z, d)) for u, z in pts])
+        f.normal_update()
+        if f.normal.x * wall.n[0] + f.normal.y * wall.n[1] < 0:
+            f.normal_flip()
+        f[self.rid_layer] = self.rid
+        return f
 
     def wprism(self, wall, pts, d0, d1):
         self._extrude([wall.pt(u, z, d0) for u, z in pts], [wall.pt(u, z, d1) for u, z in pts])
@@ -243,9 +265,9 @@ def fresh_collection(name):
 
 col = fresh_collection("PalaceTheatre")
 G = {k: MB() for k in BUILDER_MAT}
-BR, HD, SU, T, GB, ST, R, DR, FD, GL, IR, LB, AT = (
+BR, HD, SU, T, GB, ST, R, DR, FD, GL, IR, LB, AT, TK, WB, SH, HL = (
     G[k] for k in ("Brick", "Hood", "Stucco", "Trim", "Globe", "Stone", "Roof", "Doors", "FireDoor",
-                   "Glass", "Iron", "Lobby", "Atlas"))
+                   "Glass", "Iron", "Lobby", "Atlas", "Ticket", "WBack", "Shop", "HLobby"))
 # wall shells (closed solids) and their cutters: name -> (shell, cutter, material)
 SHELLS = {k: (MB(), MB(), m) for k, m in (("ShellA", "Brick"), ("ShellB", "Stucco"), ("ShellC", "Stucco"))}
 SA, SB, SC = (SHELLS[k][0] for k in SHELLS)
@@ -269,6 +291,50 @@ FRONT = Wall((0.0, 0.0), (0, -1), KA)          # u = X (north to the right)
 SOUTH_A = Wall((AX0, 0.0), (-1, 0), KA)        # u = -Y
 SOUTH_B = Wall((BX0, 0.0), (-1, 0), KB)
 REAR_C = Wall((0.0, CY1), (0, 1), KC)          # u = -X
+
+# ---------------------------------------------------------------------------
+# Glass panes and window backs (PLAN.md section E)
+# ---------------------------------------------------------------------------
+PROJECT = r"C:\Users\Tarik\AppFactory\Flemington Historic Walk"
+CELLS = {}                      # cell name -> (builder, uv) over the three shared atlases
+for _f, _mb in (("shop_interior", "Shop"), ("hotel_lobby", "HLobby"), ("window_backs", "WBack")):
+    for _k, _v in json.load(open(PROJECT + r"\assets\textures\shared\%s.json" % _f))["cells"].items():
+        CELLS.setdefault(_k, (_mb, _v["uv"]))
+GAP = 0.04                      # window back this far behind the glass
+# theatre upper floor (offices, store rooms over the lobby): dim rooms and blinds
+UPPER = {"dark_room": 3, "dark_room_frame": 3, "blind_cream_high": 2, "blind_cream_half": 2,
+         "blind_cream_low": 1, "blind_green_high": 2, "blind_green_half": 2, "blind_green_low": 1}
+_wb_rng = random.Random(1918)
+_wb_grid = {}
+BACKREC = {}                    # rid -> record (read by palace_theatre_bake.py)
+
+
+def pick(weights, row, colm):
+    """A cell for the window at (row, column) of the front that differs from its neighbours."""
+    avoid = {_wb_grid.get((row, colm - 1)), _wb_grid.get((row, colm + 1)),
+             _wb_grid.get((row - 1, colm)), _wb_grid.get((row + 1, colm))}
+    names = [n for n in weights if n not in avoid]
+    cell = _wb_rng.choices(names, weights=[weights[n] for n in names])[0]
+    _wb_grid[(row, colm)] = cell
+    return cell
+
+
+def pane(wall, u0, u1, z0, z1, d_glass, cell, grow=0.03, crop=None, gap=GAP):
+    """Glass face (u0..u1 x z0..z1) at depth d_glass (negative = into the wall) and its window
+    back `gap` behind it, `grow` larger all round where frames hide its edge; crop = (fu0, fu1,
+    fv0, fv1) part of the atlas cell (v up)."""
+    GL.face(wall, rect(u0, u1, z0, z1), d_glass)
+    mb_key, (U0, V0, U1, V1) = CELLS[cell]
+    if crop:
+        U0, U1, V0, V1 = (U0 + (U1 - U0) * crop[0], U0 + (U1 - U0) * crop[1],
+                          V0 + (V1 - V0) * crop[2], V0 + (V1 - V0) * crop[3])
+    b = (u0 - grow, u1 + grow, z0 - grow, z1 + grow)
+    rid = len(BACKREC) + 1
+    BACKREC[rid] = dict(wall=(wall.p0, wall.n), u0=b[0], u1=b[1], z0=b[2], z1=b[3], uv=(U0, V0, U1, V1))
+    mb = G[mb_key]
+    mb.rid = rid
+    mb.face(wall, rect(*b), d_glass - gap)
+    mb.rid = 0
 
 # ---------------------------------------------------------------------------
 # Shells
@@ -304,12 +370,14 @@ def segment_top(cx, half, z_end, z_crown, segs=8):
     return arc_pts(cx, zc, r, a, math.pi - a, segs)
 
 
-def window_pair(cx):
+def window_pair(cx, colm):
     hw = WIN_W / 2
     z0, z1 = WIN_Z0, WIN_Z1
     zm = (z0 + z1) / 2
     KA.box(cx - hw, cx + hw, -0.25, RECESS, z0, z1)                         # recess 0.25
-    GL.box(cx - hw, cx + hw, 0.17, 0.19, z0, z1)                            # glass
+    # one glass face per 1/1 window (1 cm behind the sashes), a window back behind each
+    for k, (a, b) in enumerate(((cx - hw + 0.07, cx - 0.04), (cx + 0.04, cx + hw - 0.07))):
+        pane(FRONT, a, b, z0 + 0.06, z1 - 0.07, -0.18, pick(UPPER, 1, 2 * colm + k))
     # frame: jambs, head, sill rail, centre mullion 0.08
     T.box(cx - hw, cx - hw + 0.07, 0.10, RECESS, z0, z1)
     T.box(cx + hw - 0.07, cx + hw, 0.10, RECESS, z0, z1)
@@ -332,8 +400,8 @@ def window_pair(cx):
     ST.prism([(cx - 0.09, 7.10), (cx + 0.09, 7.10), (cx + 0.11, 7.55), (cx - 0.11, 7.55)], -0.09, 0.05)
 
 
-for x in WIN_X:
-    window_pair(x)
+for i, x in enumerate(WIN_X):
+    window_pair(x, i)
 
 # belt course 4.25-4.80, plain brick band projecting 0.15 across the full front
 BR.box(AX0, AX1, -BELT_OUT, 0.02, BELT0, BELT1)
@@ -380,7 +448,10 @@ KA.box(s0, s1, -0.25, RECESS, 0.15, GF_HEAD)
 ST.box(s0 - 0.06, s1 + 0.06, -0.10, 0.10, SKIRT, 0.17)                  # low ledge
 ST.box(s0, s1, 0.08, RECESS, 0.15, 0.60)                                # bulkhead
 T.box(s0, s1, 0.06, RECESS, 0.60, 0.66)                                 # sill rail
-GL.box(s0, s1, 0.16, 0.18, 0.66, BAND0)
+# plate glass either side of the mullion, the shared shop interior behind (narrow south light:
+# shop_b; wide north light: shop_a cropped to its proportions)
+pane(FRONT, s0 + 0.08, -4.18, 0.66, BAND0 - 0.07, -0.17, "shop_b")
+pane(FRONT, -4.10, s1 - 0.08, 0.66, BAND0 - 0.07, -0.17, "shop_a", crop=(0.0, 1.0, 0.12, 0.79))
 T.box(s0, s0 + 0.08, 0.10, RECESS, 0.60, BAND0)
 T.box(s1 - 0.08, s1, 0.10, RECESS, 0.60, BAND0)
 T.box(s0, s1, 0.10, RECESS, BAND0 - 0.07, BAND0)                       # head rail
@@ -394,9 +465,12 @@ ST.box(d0, d1, -0.04, RECESS, SKIRT, 0.02)
 T.box(d0, d0 + 0.10, 0.12, RECESS, 0.0, BAND0)
 T.box(d1 - 0.10, d1, 0.12, RECESS, 0.0, BAND0)
 T.box(d0, d1, 0.12, RECESS, 2.72, BAND0)
-for a, b in ((d0 + 0.10, (d0 + d1) / 2), ((d0 + d1) / 2, d1 - 0.10)):
-    DR.box(a, b, 0.18, 0.23, 0.02, 2.72)                                # leaf
-    GL.box(a + 0.11, b - 0.11, 0.175, 0.22, 1.05, 2.58)                 # glazed upper
+for k, (a, b) in enumerate(((d0 + 0.10, (d0 + d1) / 2), ((d0 + d1) / 2, d1 - 0.10))):
+    DR.box(a, b, 0.18, 0.23, 0.02, 1.05)                                # leaf: lower part
+    DR.box(a, a + 0.11, 0.18, 0.23, 1.05, 2.58)                         # stiles round the light
+    DR.box(b - 0.11, b, 0.18, 0.23, 1.05, 2.58)
+    DR.box(a, b, 0.18, 0.23, 2.58, 2.72)                                # top rail
+    pane(FRONT, a + 0.11, b - 0.11, 1.05, 2.58, -0.20, ("door_l", "door_r")[k], grow=0.04)   # glazed upper
     DR.box(a + 0.13, b - 0.13, 0.165, 0.18, 0.24, 0.90)                 # raised lower panel
 T.box((d0 + d1) / 2 - 0.02, (d0 + d1) / 2 + 0.02, 0.16, 0.18, 0.02, 2.72)   # meeting astragal
 panel_band(d0, d1, 2)
@@ -417,15 +491,21 @@ T.box(LD0 - 0.08, LD0, LDY - 0.05, LDY, 0.02, 2.70)
 T.box(LD1, LD1 + 0.08, LDY - 0.05, LDY, 0.02, 2.70)
 T.box(LD0 - 0.08, LD1 + 0.08, LDY - 0.05, LDY, 2.30, 2.38)
 T.box(LD0 - 0.08, LD1 + 0.08, LDY - 0.05, LDY, 2.70, 2.78)
-GL.box(LD0, LD1, LDY - 0.03, LDY, 2.38, 2.70)
-for a, b in ((LD0, (LD0 + LD1) / 2), ((LD0 + LD1) / 2, LD1)):
-    DR.box(a, b, LDY - 0.05, LDY, 0.02, 2.30)
-    GL.box(a + 0.12, b - 0.12, LDY - 0.055, LDY, 1.30, 2.12)
+# lights: glass 1 cm into the leaf, the dim foyer (hotel_lobby.jpg) 3.5 cm behind it, just in
+# front of the lobby lining
+pane(FRONT, LD0, LD1, 2.38, 2.70, -(LDY - 0.04), "lobby_4", grow=0.04, crop=(0.0, 1.0, 0.72, 0.98), gap=0.035)
+for k, (a, b) in enumerate(((LD0, (LD0 + LD1) / 2), ((LD0 + LD1) / 2, LD1))):
+    DR.box(a, b, LDY - 0.05, LDY, 0.02, 1.30)                           # leaf: lower part
+    DR.box(a, a + 0.12, LDY - 0.05, LDY, 1.30, 2.12)                    # stiles round the light
+    DR.box(b - 0.12, b, LDY - 0.05, LDY, 1.30, 2.12)
+    DR.box(a, b, LDY - 0.05, LDY, 2.12, 2.30)                           # top rail
+    pane(FRONT, a + 0.12, b - 0.12, 1.30, 2.12, -(LDY - 0.04), ("lobby_4", "lobby_6")[k], grow=0.04,
+         crop=(0.0, 1.0, 0.05, 0.85), gap=0.035)
     DR.box(a + 0.14, b - 0.14, LDY - 0.065, LDY - 0.05, 0.22, 1.10)
 # small ticket opening in the lobby back wall (guess): frame, glass, shelf
 TK0, TK1 = 2.72, 3.20
 T.box(TK0 - 0.06, TK1 + 0.06, LDY - 0.04, LDY, 1.00, 1.62)
-GL.box(TK0, TK1, LDY - 0.05, LDY - 0.035, 1.06, 1.56)
+TK.box(TK0, TK1, LDY - 0.05, LDY - 0.035, 1.06, 1.56)                   # plain dark glass (as built)
 ST.box(TK0 - 0.08, TK1 + 0.08, LDY - 0.20, LDY, 1.00, 1.05)
 # two poster frames on the piers beside the entrance (artistic): dark frame, plain empty backing board
 for i, pc in enumerate(((SHOP_DOOR[1] + ENTR[0]) / 2, (ENTR[1] + AX1) / 2)):
@@ -534,5 +614,5 @@ for key, builder in G.items():
 
 tris = sum(len(p.vertices) - 2 for o in col.objects for p in o.data.polygons)
 print("Palace Theatre built:", len(col.objects), "objects,", tris, "triangles (before hidden-face removal)",
-      "| atlas records", len(ATLAS))
+      "| atlas records", len(ATLAS), "| panes", len(BACKREC))
 # Materials, baked lighting and GLB export: run palace_theatre_bake.py (it runs this file first).

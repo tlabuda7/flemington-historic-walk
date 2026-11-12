@@ -47,8 +47,56 @@ def sock(socks, name):
     return next(x for x in socks if x.name == name and x.type == "RGBA")
 
 
+SKY = PROJECT + r"\assets\textures\sky\sky-late-afternoon.jpg"
+REFLECT = 1.2                                     # glass-reflect intensity (js/components.js)
+
+
+def glass_preview(src):
+    """Glass (section E): not lightmapped in the scene; dark tint over the window backs at its
+    own alpha, plus the glass-reflect sky reflection (Fresnel, IOR 1.5, x REFLECT) on top."""
+    bsdf = next(n for n in src.node_tree.nodes if n.type == "BSDF_PRINCIPLED")
+    mat = bpy.data.materials.new("OFP_" + src.name)
+    mat.use_nodes = True
+    nt = mat.node_tree
+    nt.nodes.clear()
+    N, L = nt.nodes.new, nt.links.new
+    out = N("ShaderNodeOutputMaterial")
+    emit = N("ShaderNodeEmission")
+    emit.inputs["Color"].default_value = bsdf.inputs["Base Color"].default_value
+    tr = N("ShaderNodeBsdfTransparent")
+    mix = N("ShaderNodeMixShader")
+    mix.inputs["Fac"].default_value = bsdf.inputs["Alpha"].default_value
+    L(tr.outputs[0], mix.inputs[1])
+    L(emit.outputs[0], mix.inputs[2])
+    tc = N("ShaderNodeTexCoord")
+    env = N("ShaderNodeTexEnvironment")
+    env.image = bpy.data.images.load(SKY, check_existing=True)
+    L(tc.outputs["Reflection"], env.inputs["Vector"])
+    fres = N("ShaderNodeFresnel")
+    fres.inputs["IOR"].default_value = 1.5
+    refl = N("ShaderNodeEmission")
+    L(env.outputs["Color"], refl.inputs["Color"])
+    k = N("ShaderNodeMath")
+    k.operation = "MULTIPLY"
+    L(fres.outputs[0], k.inputs[0])
+    k.inputs[1].default_value = REFLECT
+    L(k.outputs[0], refl.inputs["Strength"])
+    add = N("ShaderNodeAddShader")
+    L(mix.outputs[0], add.inputs[0])
+    L(refl.outputs[0], add.inputs[1])
+    L(add.outputs[0], out.inputs["Surface"])
+    mat.use_backface_culling = True
+    if hasattr(mat, "surface_render_method"):
+        mat.surface_render_method = "BLENDED"
+    elif hasattr(mat, "blend_method"):
+        mat.blend_method = "BLEND"
+    return mat
+
+
 def preview_material(src):
     """Unlit copy: emission = base colour (texture x factor, or plain) x lightmap x scale."""
+    if src.name == "glass":
+        return glass_preview(src)
     mat = bpy.data.materials.new("OFP_" + src.name)
     mat.use_nodes = True
     nt = mat.node_tree
@@ -169,7 +217,18 @@ VIEWS = {
     # from the visitor's start (0, 0.15, 18): the front and the south wall at a slant
     "start":         dict(eye=(8.91, -10.30, 1.6), target=(-1.0, 2.0, 5.5), lens=22, h=900),
 }
+# Section E (windows) pictures, 2026-11-12: run with
+#   PREVIEW_VIEWS = "windows"; PREVIEW_PREFIX = "odd-fellows-hall-windows-after"
+WINDOW_VIEWS = {
+    # straight on from the middle of the street, eye 1.6 m above the walk
+    "":        dict(eye=(0.0, -14.5, 1.6), target=(0.0, 0.0, 5.6), lens=20, h=960),
+    # south shop door and display window close up, glass with the sky reflection
+    "-detail": dict(eye=(2.4, -3.6, 1.6), target=(4.1, 0.5, 1.9), lens=24, h=860),
+}
 VIEWS = globals().get("PREVIEW_VIEWS") or VIEWS     # set PREVIEW_VIEWS before exec() for other views
+if VIEWS == "windows":
+    VIEWS = WINDOW_VIEWS
+PREFIX = globals().get("PREVIEW_PREFIX") or "odd-fellows-hall-"
 written = []
 try:
     for name, v in VIEWS.items():
@@ -181,7 +240,7 @@ try:
         cam_data.lens = v["lens"]
         cam_data.shift_x, cam_data.shift_y = v.get("shift", (0, 0))
         scene.render.resolution_x, scene.render.resolution_y = 1280, v.get("h", 960)
-        scene.render.filepath = PREV + "odd-fellows-hall-" + name + ".png"
+        scene.render.filepath = PREV + PREFIX + name + ".png"
         bpy.ops.render.render(write_still=True)
         written.append(scene.render.filepath)
 finally:

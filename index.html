@@ -161,22 +161,22 @@
     <!-- Big side-street maples: the street tree without its stone pit (backdrop-tree.glb),
          all drawn as two instanced meshes. Positions are the ones baked into the backdrops' shade. -->
     <!-- The trees are split into groups by area, so groups behind the viewer are not drawn. -->
-    <a-entity id="backdrop-trees-court" instanced-trees="src: url(assets/models/backdrop-tree.glb)"
+    <a-entity id="backdrop-trees-court" instanced-trees="src: url(assets/models/old-maple.glb)"
       hide-beyond="x: -75; z: 5; distance: 90">
-      <a-entity id="btree-court-n-1" position="-90 0.575 -1.3" rotation="0 0 0" scale="2.1 2.1 2.1"></a-entity>
-      <a-entity id="btree-court-n-2" position="-101 0.575 -1.3" rotation="0 77 0" scale="2.3 2.3 2.3"></a-entity>
-      <a-entity id="btree-court-n-3" position="-112 0.575 -1.3" rotation="0 154 0" scale="2.2 2.2 2.2"></a-entity>
-      <a-entity id="btree-court-n-4" position="-123 0.575 -1.3" rotation="0 231 0" scale="2.35 2.35 2.35"></a-entity>
-      <a-entity id="btree-court-n-5" position="-134 0.575 -1.3" rotation="0 308 0" scale="2.15 2.15 2.15"></a-entity>
-      <a-entity id="btree-court-n-6" position="-145 0.575 -1.3" rotation="0 25 0" scale="2.3 2.3 2.3"></a-entity>
-      <a-entity id="btree-court-n-7" position="-156 0.575 -1.3" rotation="0 102 0" scale="2.2 2.2 2.2"></a-entity>
-      <a-entity id="btree-court-n-8" position="-167 0.575 -1.3" rotation="0 179 0" scale="2.25 2.25 2.25"></a-entity>
-      <a-entity id="btree-court-s-1" position="-94.4 0.175 11.2" rotation="0 256 0" scale="2.2 2.2 2.2"></a-entity>
-      <a-entity id="btree-court-s-2" position="-111.5 0.175 11.2" rotation="0 333 0" scale="2.3 2.3 2.3"></a-entity>
-      <a-entity id="btree-court-s-3" position="-123.5 0.175 11.2" rotation="0 50 0" scale="2.15 2.15 2.15"></a-entity>
-      <a-entity id="btree-court-s-4" position="-140 0.175 11.2" rotation="0 127 0" scale="2.3 2.3 2.3"></a-entity>
-      <a-entity id="btree-court-s-5" position="-155 0.175 11.2" rotation="0 204 0" scale="2.2 2.2 2.2"></a-entity>
-      <a-entity id="btree-court-s-6" position="-168.5 0.175 11.2" rotation="0 281 0" scale="2.25 2.25 2.25"></a-entity>
+      <a-entity id="btree-court-n-1" position="-90 0.575 -1.3" rotation="0 0 0" scale="0.95 0.95 0.95"></a-entity>
+      <a-entity id="btree-court-n-2" position="-101 0.575 -1.3" rotation="0 77 0" scale="1.05 1.05 1.05"></a-entity>
+      <a-entity id="btree-court-n-3" position="-112 0.575 -1.3" rotation="0 154 0" scale="1.0 1.0 1.0"></a-entity>
+      <a-entity id="btree-court-n-4" position="-123 0.575 -1.3" rotation="0 231 0" scale="1.07 1.07 1.07"></a-entity>
+      <a-entity id="btree-court-n-5" position="-134 0.575 -1.3" rotation="0 308 0" scale="0.98 0.98 0.98"></a-entity>
+      <a-entity id="btree-court-n-6" position="-145 0.575 -1.3" rotation="0 25 0" scale="1.05 1.05 1.05"></a-entity>
+      <a-entity id="btree-court-n-7" position="-156 0.575 -1.3" rotation="0 102 0" scale="1.0 1.0 1.0"></a-entity>
+      <a-entity id="btree-court-n-8" position="-167 0.575 -1.3" rotation="0 179 0" scale="1.02 1.02 1.02"></a-entity>
+      <a-entity id="btree-court-s-1" position="-94.4 0.175 11.2" rotation="0 256 0" scale="1.0 1.0 1.0"></a-entity>
+      <a-entity id="btree-court-s-2" position="-111.5 0.175 11.2" rotation="0 333 0" scale="1.05 1.05 1.05"></a-entity>
+      <a-entity id="btree-court-s-3" position="-123.5 0.175 11.2" rotation="0 50 0" scale="0.98 0.98 0.98"></a-entity>
+      <a-entity id="btree-court-s-4" position="-140 0.175 11.2" rotation="0 127 0" scale="1.05 1.05 1.05"></a-entity>
+      <a-entity id="btree-court-s-5" position="-155 0.175 11.2" rotation="0 204 0" scale="1.0 1.0 1.0"></a-entity>
+      <a-entity id="btree-court-s-6" position="-168.5 0.175 11.2" rotation="0 281 0" scale="1.02 1.02 1.02"></a-entity>
     </a-entity>
     <a-entity id="backdrop-trees-bloomfield" instanced-trees="src: url(assets/models/backdrop-tree.glb)"
       hide-beyond="x: 75; z: -85; distance: 90">
@@ -224,10 +224,13 @@
       <a-entity id="btree-end-17" position="16 0.15 182" rotation="0 271 0" scale="2.3 2.3 2.3"></a-entity>
       <a-entity id="btree-end-18" position="24 0.15 196" rotation="0 332 0" scale="2.2 2.2 2.2"></a-entity>
     </a-entity>
+    <!-- The big old trees on the grass strip opposite the bank (1914 card): old-maple.glb at real size. -->
+    <a-entity id="old-maples-west" instanced-trees="src: url(assets/models/old-maple.glb)">
+      <a-entity id="omaple-w-1" position="-7.3 0.15 -62" rotation="0 40 0" scale="0.82 0.82 0.82"></a-entity>
+      <a-entity id="omaple-w-2" position="-7.3 0.15 -70" rotation="0 160 0" scale="0.78 0.78 0.78"></a-entity>
+      <a-entity id="omaple-w-3" position="-7.3 0.15 -77" rotation="0 280 0" scale="0.85 0.85 0.85"></a-entity>
+    </a-entity>
     <a-entity id="backdrop-trees-west-lawns" instanced-trees="src: url(assets/models/backdrop-tree.glb)">
-      <a-entity id="btree-w-62" position="-7.3 0.15 -62" rotation="0 40 0" scale="1.6 1.4 1.6"></a-entity>
-      <a-entity id="btree-w-70" position="-7.3 0.15 -70" rotation="0 160 0" scale="1.55 1.35 1.55"></a-entity>
-      <a-entity id="btree-w-77" position="-7.3 0.15 -77" rotation="0 280 0" scale="1.6 1.45 1.6"></a-entity>
       <a-entity id="btree-co-1" position="-13.5 0.015 -33.5" rotation="0 70 0" scale="1.0 1.1 1.0"></a-entity>
       <a-entity id="btree-co-2" position="-12.5 0.015 -25.5" rotation="0 200 0" scale="0.55 0.55 0.55"></a-entity>
     </a-entity>
@@ -582,8 +585,9 @@
          Position = centre of the front on the property line at sidewalk level. Front block z -151.82 … -139.22,
          auditorium and stage back to x -73.08; 3.5 m open alley to no. 35 on the south. -->
     <a-entity id="palace-theatre" position="-10.3 0.15 -145.52" rotation="0 90 0"
-      gltf-model="url(assets/models/palace-theatre.glb)"
-      baked-lighting="lightmap: assets/textures/palace-theatre-lightmap.jpg; intensity: 0.9901"></a-entity>
+      gltf-model="url(assets/models/palace-theatre.glb?v=2)"
+      baked-lighting="lightmap: assets/textures/palace-theatre-lightmap.jpg?v=2; intensity: 0.9893"
+      glass-reflect></a-entity>
     <!-- 27 placeholder: z -164.7 … -152.2, extended south to cover the Palace's dark north wall (map gap ~0.4 m) -->
     <!-- 27 Main, dry goods and clothing store (1921 state, plain guessed front):
          tools/blender/store_27.py + store_27_bake.py. Position = centre of the front at sidewalk level. -->
@@ -600,8 +604,9 @@
          North wall z 1.33 (4.66 m alley to Nevius), south wall z 16.86, rear x 31.56;
          awnings reach 1.61 m over the sidewalk. -->
     <a-entity id="bldg-82-84-main" position="10.3 0.15 9.09" rotation="0 -90 0"
-      gltf-model="url(assets/models/odd-fellows-hall.glb)"
-      baked-lighting="lightmap: assets/textures/odd-fellows-hall-lightmap.jpg; intensity: 1.2485"></a-entity>
+      gltf-model="url(assets/models/odd-fellows-hall.glb?v=2)"
+      baked-lighting="lightmap: assets/textures/odd-fellows-hall-lightmap.jpg?v=2; intensity: 1.2495"
+      glass-reflect></a-entity>
     <!-- Masonic Hall / Hunterdon County National Bank (90–94 Main), Sept 1921 state:
          tools/blender/masonic_hall.py + masonic_hall_bake.py. Position = centre of the stone front face. -->
     <a-entity id="bldg-90-94-main" position="10.00 0.15 30.92" rotation="0 -90 0"

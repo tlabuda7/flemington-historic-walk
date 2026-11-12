@@ -540,3 +540,5 @@ Back-lot buildings (`assets/models/back-lots.glb`): `assets/textures/shared/back
 `assets/textures/store-79-lightmap.jpg` is baked in Blender (original work); 79 Main reuses existing textures only.
 
 `assets/textures/house-91-93-lightmap.jpg` and `house-95-97-lightmap.jpg` are baked in Blender (original work); both houses reuse existing textures only.
+
+`assets/models/old-maple.glb` is the mature street tree (`tools/blender/street_tree.py`, `TREE_OLD = True`), same textures as the street tree.

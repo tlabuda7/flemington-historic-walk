@@ -32,6 +32,19 @@ builds the same tree WITHOUT the pit (no soil disc) and with the trunk
 running on 0.3 m below ground (so it never floats on uneven lawn), in the "BackdropTree"
 collection, and exports assets/models/backdrop-tree.glb. Same materials, textures, leaf cards
 and bark (same random sequences); only the bottom trunk ring moves from -0.03 to -0.30 m.
+
+Old-maple variant (PLAN.md "Street details pass 2", split E: the very large old trees of the
+1914 card, the grass strip opposite the bank and the Court St maples meeting overhead):
+    TREE_OLD = True
+    exec(open(r"<project>/tools/blender/street_tree.py").read())
+builds a mature sugar maple at REAL size (the scene does not scale it) in the "OldMaple"
+collection and exports assets/models/old-maple.glb: no pit, trunk running 0.3 m below ground,
+trunk ~0.8 m thick at chest height with a buttressed root flare (~1.15 m at the ground), a
+central leader to ~13 m, four heavy scaffold limbs leaving at 3.2-4.3 m and spreading out and
+up, each with three secondary branches; a broad rounded, slightly lumpy crown about 14 m
+across and 17.5 m tall (leaf-card tips) of ~300 larger leaf cards. Same two meshes
+("<name>_Bark", "<name>_Leaves"), materials, textures and card method; under 1,600 triangles.
+Its own random seeds, so the young tree and the backdrop tree are unchanged.
 """
 
 import math
@@ -41,9 +54,11 @@ import bmesh
 from mathutils import Vector, Matrix
 
 PROJECT = r"C:\Users\Tarik\AppFactory\Flemington Historic Walk"
-BACKDROP = bool(globals().get("TREE_BACKDROP", False))   # True: no pit, trunk sunk 0.3 m
-OUT = PROJECT + (r"\assets\models\backdrop-tree.glb" if BACKDROP else r"\assets\models\street-tree.glb")
-NAME = "BackdropTree" if BACKDROP else "StreetTree"
+OLD = bool(globals().get("TREE_OLD", False))             # True: the mature old maple (no pit)
+BACKDROP = bool(globals().get("TREE_BACKDROP", False)) or OLD   # True: no pit, trunk sunk 0.3 m
+OUT = PROJECT + (r"\assets\models\old-maple.glb" if OLD else
+                 r"\assets\models\backdrop-tree.glb" if BACKDROP else r"\assets\models\street-tree.glb")
+NAME = "OldMaple" if OLD else "BackdropTree" if BACKDROP else "StreetTree"
 TEX = PROJECT + r"\assets\textures"
 LEAF_TEX = TEX + r"\leaf_cluster.png"
 BARK_TEX = TEX + r"\street-tree\bark_willow_02_q85.jpg"
@@ -55,6 +70,16 @@ CANOPY_CENTRE = Vector((0, 0, 7.4))
 CANOPY_RADII = Vector((3.3, 3.3, 2.9))
 CARDS = 120
 CARD_SIZE = 1.8
+if OLD:
+    # broad rounded crown, wider than deep: 12.6 m across (about 14 m to the card tips), from
+    # ~6 m up to ~16.4 m (~5 ... 17.4 m to the card tips); its rim hangs a little lower
+    CANOPY_CENTRE = Vector((0, 0, 11.6))
+    CANOPY_RADII = Vector((6.3, 6.3, 4.8))
+    LOWER_RZ = 5.0                      # vertical radius of the crown's lower half
+    RIM_DROP = 1.0                      # outer edge of the crown this much lower (spreading habit)
+    CARDS = 300
+    CARD_SIZE = 2.6
+    BARK_TILE = 2.6                     # coarser plates on the old trunk
 
 PIT = 1.2          # round soil opening, diameter (m)
 PIT_SIDES = 16
@@ -106,6 +131,11 @@ def material(name, image=None, alpha=False, roughness=0.85):
 rng = random.Random(1920)
 for _ in range(10):
     rng.random()
+if OLD:
+    rng = random.Random(1880)
+    # a few broad bulges over the crown (the heavy limbs' leaf masses), so it is not one smooth egg
+    LUMPS = [(Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), rng.uniform(-0.3, 1))).normalized(),
+              rng.uniform(0.06, 0.11)) for _ in range(7)]
 
 bm = bmesh.new()
 uv_layer = bm.loops.layers.uv.new("UVMap")
@@ -115,7 +145,14 @@ for _ in range(CARDS):
         if 0.05 < d.length <= 1:
             break
     d = d.normalized() * (0.55 + 0.45 * rng.random() ** 0.5)
-    pos = CANOPY_CENTRE + Vector((d.x * CANOPY_RADII.x, d.y * CANOPY_RADII.y, d.z * CANOPY_RADII.z))
+    if OLD:
+        dn = d.normalized()
+        d = d * (0.94 + sum(s * math.exp(-((1 - dn.dot(ld)) / 0.18) ** 2) for ld, s in LUMPS))
+        pos = CANOPY_CENTRE + Vector((d.x * CANOPY_RADII.x, d.y * CANOPY_RADII.y,
+                                      d.z * (CANOPY_RADII.z if d.z > 0 else LOWER_RZ)
+                                      - RIM_DROP * min(1.0, d.x * d.x + d.y * d.y)))
+    else:
+        pos = CANOPY_CENTRE + Vector((d.x * CANOPY_RADII.x, d.y * CANOPY_RADII.y, d.z * CANOPY_RADII.z))
     outward = (pos - CANOPY_CENTRE).normalized()
     m = (outward + Vector((rng.uniform(-.6, .6), rng.uniform(-.6, .6), rng.uniform(-.6, .6)))) \
         .normalized().to_track_quat("Z", "Y").to_matrix() @ Matrix.Rotation(rng.uniform(0, 6.283), 3, "Z")
@@ -141,7 +178,7 @@ leaf_mesh.normals_split_custom_set(loop_normals)
 # ================================================================================
 # Bark
 # ================================================================================
-rng = random.Random(1921)
+rng = random.Random(1881 if OLD else 1921)
 bm = bmesh.new()
 buv = bm.loops.layers.uv.new("UVMap")
 
@@ -204,13 +241,20 @@ sway_dir = Vector((-lean_dir.y, lean_dir.x, 0))
 def axis(z):
     """Trunk centre line: a gentle lean that curves back a little higher up."""
     zz = max(0.0, z)
+    if OLD:     # old maple: a slight lean, the leader wandering a little more up in the crown
+        return Vector((0, 0, z)) + lean_dir * (0.22 * (zz / 4.0) ** 1.3) \
+            + sway_dir * (0.30 * math.sin(zz / 13.0 * math.pi))
     return Vector((0, 0, z)) + lean_dir * (0.16 * (zz / 4.0) ** 1.4) \
         + sway_dir * (0.08 * math.sin(zz / 7.6 * math.pi))
 
 
 def trunk_r(z):
-    """Base radius of the trunk (0.185 m at chest height, ~0.37 m diameter)."""
+    """Base radius of the trunk (0.185 m at chest height, ~0.37 m diameter; old maple 0.40 m,
+    ~0.8 m)."""
     table = ((0.0, 0.195), (1.3, 0.185), (2.8, 0.165), (4.0, 0.135), (5.4, 0.095), (6.6, 0.06), (7.6, 0.03))
+    if OLD:     # trunk to the fork at ~4 m, then the leader thinning up into the crown
+        table = ((0.0, 0.42), (1.3, 0.40), (2.4, 0.38), (3.3, 0.36), (4.1, 0.29), (6.0, 0.20),
+                 (8.5, 0.12), (11.0, 0.065), (13.0, 0.03))
     for (z0, r0), (z1, r1) in zip(table, table[1:]):
         if z <= z1:
             t = max(0.0, (z - z0) / (z1 - z0))
@@ -221,6 +265,10 @@ def trunk_r(z):
 TRUNK_Z = (-0.30 if BACKDROP else -0.03, 0.08, 0.20, 0.45, 1.3, 2.4, 3.4, 4.4, 5.4, 6.5, 7.6)
 FLARE = (1.70, 1.40, 1.16, 1.0)          # radius factor of the bottom rings
 BUTTRESS = (0.36, 0.26, 0.10, 0.0)       # buttress bulge strength of the bottom rings
+if OLD:
+    TRUNK_Z = (-0.30, 0.06, 0.22, 0.55, 1.3, 2.4, 3.3, 4.1, 6.0, 8.5, 11.0, 13.0)
+    FLARE = (1.40, 1.32, 1.14, 1.03)      # ~1.1 m across at the ground, buttresses beyond
+    BUTTRESS = (0.38, 0.30, 0.12, 0.0)
 butt_angles = [i * 2 * math.pi / 5 + rng.uniform(-0.35, 0.35) for i in range(5)]
 butt_size = [rng.uniform(0.7, 1.0) for _ in range(5)]
 
@@ -261,7 +309,7 @@ LIMBS = (  # (height, tip distance out, tip height)
     (3.85, 1.85, 7.2),
     (4.40, 1.60, 7.7),
     (4.95, 1.30, 8.2),
-)
+) if not OLD else ()          # the old maple's limbs are built below
 az0 = rng.uniform(0, 2 * math.pi)
 for i, (h, out, tz) in enumerate(LIMBS):
     az = az0 + i * math.radians(137.5) + rng.uniform(-0.25, 0.25)
@@ -286,6 +334,41 @@ for i, (h, out, tz) in enumerate(LIMBS):
     bmid = p + (btip - p) * 0.5 + Vector((0, 0, 0.12))
     br = r0 * 0.45
     tube([p - tdir * 0.05, bmid, btip], [br, br * 0.6, 0.014], 5, noise=0.03, v0=rng.random())
+
+
+def cubic(a, b, c, d, t):
+    s = 1 - t
+    return a * s ** 3 + b * 3 * s * s * t + c * 3 * s * t * t + d * t ** 3
+
+
+if OLD:
+    # four heavy scaffold limbs: out at ~45 degrees from the fork, then curving up into the
+    # crown; (height, start radius, tip distance out, tip height)
+    OLD_LIMBS = ((3.25, 0.27, 5.4, 10.2), (3.55, 0.255, 5.0, 11.0), (3.85, 0.24, 4.6, 11.8),
+                 (4.30, 0.21, 4.2, 12.6))
+    for i, (h, r0, out, tz) in enumerate(OLD_LIMBS):
+        az = az0 + i * math.radians(90 + rng.uniform(-14, 14))
+        d = Vector((math.cos(az), math.sin(az), 0))
+        start = axis(h)
+        tip = into_crown(Vector((d.x * out, d.y * out, tz)), 0.80)
+        c1 = start + d * 1.5 + Vector((0, 0, 1.3))                     # leaves the fork at ~45 deg
+        c2 = start + d * (0.80 * out) + Vector((0, 0, 0.45 * (tz - h)))  # spreads, then turns up
+        ts = (0.0, 0.22, 0.48, 0.75, 1.0)
+        pts = [cubic(start, c1, c2, tip, t) for t in ts]
+        tube(pts, [r0, r0 * 0.86, r0 * 0.66, r0 * 0.42, 0.04], 8, noise=0.05, v0=rng.random())
+        # three secondary branches along the outer two thirds, alternating sides, the lowest
+        # spreading nearly level, the higher ones climbing
+        for j, t in enumerate((0.38, 0.58, 0.78)):
+            p = cubic(start, c1, c2, tip, t)
+            tdir = (cubic(start, c1, c2, tip, t + 0.04) - cubic(start, c1, c2, tip, t - 0.04)).normalized()
+            side = 1 if (i + j) % 2 else -1
+            flat = Vector((tdir.x, tdir.y, 0)).normalized()
+            bdir = (Matrix.Rotation(side * math.radians(rng.uniform(45, 70)), 3, "Z") @ flat
+                    + Vector((0, 0, (0.15, 0.45, 0.8)[j]))).normalized()
+            btip = into_crown(p + bdir * rng.uniform(2.2, 3.0), 0.86)
+            bmid = p + (btip - p) * 0.5 + Vector((0, 0, 0.25))
+            br = r0 * (0.55, 0.45, 0.38)[j] * (1 - 0.3 * t)
+            tube([p - tdir * 0.08, bmid, btip], [br, br * 0.55, 0.016], 5, noise=0.03, v0=rng.random())
 
 bark_mesh = bpy.data.meshes.new(NAME + "_Bark")
 bm.to_mesh(bark_mesh)
