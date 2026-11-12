@@ -517,3 +517,5 @@ cornices, darkened by a colour factor), `polyhaven/trim_paint_cream.jpg` (sash, 
 | `signs.jpg` | none: drawn by `tools/prepare_democrat_building_textures.py` with Pillow (original work, no download). Lettering set in Rockwell Bold (`ROCKB.TTF`, installed with Windows / Office; rendered into the image and condensed sideways, no font file is shipped) | — | original work | face of the white "DEMOCRAT" sign board over the north door (1024 × 256, one material) |
 
 `assets/textures/democrat-building-lightmap.jpg` is baked in Blender by `tools/blender/democrat_building_bake.py` (original work).
+
+`assets/textures/vehicles-top-fabric.jpg` (512 px weave for the car and buggy tops) is drawn by `tools/blender/vehicles_bake.py` (original work, no download). `assets/textures/vehicles-lightmap.jpg` is baked in Blender by the same script. The vehicles reuse `wood_table_worn` and `weathered_planks` (Poly Haven, CC0, listed above).

@@ -290,6 +290,18 @@
       <a-entity id="tree-west-5"  position="-7.5 0.175 -60"   rotation="0 270 0" scale="1 1 1"        ></a-entity>
     </a-entity>
     <!-- ============================================================
+         PARKED VEHICLES (tools/blender/vehicles.py + vehicles_bake.py
+         → assets/models/vehicles.glb; PLAN.md "Street details pass 2", F12–F14)
+         Model T at the Union Hotel curb, buggy at the bank, delivery wagon at the Rea
+         Building; no horses (owner decision). One file with three objects: each place is
+         "name x y z turn". They face south (turn 0), the way their lighting was baked.
+         ============================================================ -->
+    <a-entity id="vehicles"
+      gltf-places="src: url(assets/models/vehicles.glb);
+                   places: model-t 5.3 0 -30 0, buggy 5.4 0 -72 0, delivery-wagon 5.1 0 -99 0"
+      baked-lighting="lightmap: assets/textures/vehicles-lightmap.jpg; intensity: 1.526; keep: glass, enamel"
+      glass-reflect paint-reflect="intensity: 0.3"></a-entity>
+    <!-- ============================================================
          STREET PROPS (tools/blender/street_props.py + street_props_bake.py
          → assets/models/street-props.glb; PLAN.md "Street ambiance", pass 1)
          Wooden utility poles along both curbs (1905–1910 cards), bracket lamps, two arc

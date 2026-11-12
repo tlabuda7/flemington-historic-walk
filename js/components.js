@@ -950,6 +950,105 @@ AFRAME.registerComponent('glass-reflect', {
 });
 
 /* ------------------------------------------------------------------ */
+/* gltf-places                                                         */
+/* ------------------------------------------------------------------ */
+/*
+ * Loads ONE .glb that holds several separate objects (root nodes) and stands each
+ * named node at its own spot, so the file, its textures and its lightmap are loaded
+ * once. Each place is "node-name x y z turn" (scene metres; turn = degrees about Y),
+ * separated by commas. Nodes that are not listed are left out.
+ *
+ *   <a-entity gltf-places="src: url(assets/models/vehicles.glb);
+ *                          places: model-t 5.3 0 -30 0, buggy 5.4 0 -72 0"
+ *             baked-lighting="lightmap: ...; intensity: 1.5; keep: glass, enamel"
+ *             glass-reflect paint-reflect></a-entity>
+ *
+ * The nodes are moved BEFORE 'model-loaded' fires, so baked-lighting (which merges the
+ * meshes in place) and the reflection components see them where they stand.
+ */
+AFRAME.registerComponent('gltf-places', {
+  schema: {
+    src:    { default: '' },
+    places: { default: '' }
+  },
+
+  init() {
+    const src = this.data.src.replace(/^url\((.*)\)$/, '$1');
+    const places = this.data.places.split(',').map((s) => s.trim().split(/\s+/)).filter((p) => p.length >= 4);
+    new THREE.GLTFLoader().load(src, (gltf) => {
+      const root = new THREE.Group();
+      for (const [name, x, y, z, turn] of places) {
+        const node = gltf.scene.getObjectByName(name);
+        if (!node) { console.warn(`gltf-places: no node "${name}" in ${src}`); continue; }
+        node.position.set(+x, +y, +z);
+        node.rotation.set(0, THREE.MathUtils.degToRad(+turn || 0), 0);
+        root.add(node);
+      }
+      this.el.setObject3D('mesh', root);
+      this.el.emit('model-loaded', { format: 'gltf', model: root });
+    }, undefined, (err) => console.warn(`gltf-places: could not load ${src}`, err));
+  },
+
+  remove() {
+    this.el.removeObject3D('mesh');
+  }
+});
+
+/* ------------------------------------------------------------------ */
+/* paint-reflect                                                       */
+/* ------------------------------------------------------------------ */
+/*
+ * Glossy paint (a car's enamel): keeps the baked lightmap for its shading and adds a
+ * reflection of the sky on top, from the same environment map the window glass uses.
+ * Needs baked-lighting on the same entity with the paint's material name in its `keep`
+ * list (so it is not flattened into the merged unlit mesh).
+ */
+AFRAME.registerComponent('paint-reflect', {
+  schema: {
+    materials: { type: 'array', default: ['enamel'] },
+    intensity: { default: 0.8 }      // strength of the sky reflection
+  },
+
+  init() {
+    this.onLoaded = () => this.apply();
+    this.el.addEventListener('model-loaded', this.onLoaded);
+    if (this.el.getObject3D('mesh')) this.apply();
+  },
+
+  update() {
+    if (this.paint) this.paint.forEach((m) => { m.envMapIntensity = this.data.intensity; });
+  },
+
+  apply() {
+    const root = this.el.getObject3D('mesh');
+    const baked = this.el.components['baked-lighting'];
+    if (!root) return;
+    const mats = new Set();
+    root.traverse((obj) => {
+      if (obj.isMesh && !Array.isArray(obj.material) && obj.material.isMeshStandardMaterial &&
+          this.data.materials.includes(obj.material.name)) mats.add(obj.material);
+    });
+    if (!mats.size) return;
+    this.el.sceneEl.systems['glass-reflect'].getEnvMap().then((env) => {
+      if (!env) return;
+      mats.forEach((mat) => {
+        if (baked) { mat.lightMap = baked.texture; mat.lightMapIntensity = baked.data.intensity; }
+        mat.envMap = env.texture;
+        mat.envMapIntensity = this.data.intensity;
+        if (mat.envMapRotation) mat.envMapRotation.set(0, env.rotationY, 0);
+        mat.needsUpdate = true;
+      });
+      this.paint = [...mats];
+      console.info(`paint-reflect ${this.el.id || 'model'}: ${mats.size} paint material(s) reflect the sky`);
+    });
+  },
+
+  remove() {
+    this.el.removeEventListener('model-loaded', this.onLoaded);
+  }
+});
+
+/* ------------------------------------------------------------------ */
 /* ground-patches                                                      */
 /* ------------------------------------------------------------------ */
 /*
