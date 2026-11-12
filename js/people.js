@@ -85,7 +85,10 @@ AFRAME.registerComponent('npc', {
     ai:          { default: false }, // future: use the AI provider (see AI HOOK above)
     voice:       { default: '' },   // folder with <node-id>.ogg + timings.json ('' = text only)
     voiceHeight: { default: 1.65 }, // mouth height above the feet (m)
-    voiceGain:   { default: 1.3 }
+    voiceGain:   { default: 1.3 },
+    // Start the first Idle loop at a random point, so two people with the same Idle
+    // clip don't breathe and glance in step.
+    randomIdleStart: { default: false }
   },
 
   init() {
@@ -107,6 +110,7 @@ AFRAME.registerComponent('npc', {
     this.voiceTurn = 0;
     this.prefetched = false;
     this.predecoded = false;
+    this.idleOffsetDone = !this.data.randomIdleStart;
 
     if (this.data.voice) {
       fetch(this.data.voice + 'timings.json')
@@ -142,9 +146,22 @@ AFRAME.registerComponent('npc', {
   ambience() { return this.el.sceneEl.components['street-ambience'] || null; },
   clipUrl(nodeId) { return this.data.voice + nodeId + '.ogg'; },
 
+  // Once the mixer has started Idle: jump it to a random time within the clip.
+  offsetIdle() {
+    const mixer = this.el.components['animation-mixer'];
+    const actions = mixer && mixer.activeActions;
+    if (!actions || !actions.length) return;   // not playing yet: try again next frame
+    actions.forEach((a) => {
+      const clip = a.getClip();
+      if (clip.name === 'Idle') a.time = Math.random() * clip.duration;
+    });
+    this.idleOffsetDone = true;
+  },
+
   tick(time, delta) {
     const obj = this.el.object3D;
     if (this.homeYaw === null) this.homeYaw = obj.rotation.y;
+    if (!this.idleOffsetDone) this.offsetIdle();
     const cam = this.el.sceneEl.camera;
     if (!cam) return;
     cam.getWorldPosition(this.headPos);

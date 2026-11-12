@@ -1,0 +1,489 @@
+{
+ "start": {
+  "duration_s": 5.62,
+  "words": [
+   {
+    "w": "Good",
+    "start": 0.096,
+    "end": 0.246
+   },
+   {
+    "w": "afternoon.",
+    "start": 0.246,
+    "end": 0.946
+   },
+   {
+    "w": "Albert",
+    "start": 1.021,
+    "end": 1.421
+   },
+   {
+    "w": "Rittenhouse,",
+    "start": 1.421,
+    "end": 2.146
+   },
+   {
+    "w": "cashier",
+    "start": 2.233,
+    "end": 2.896
+   },
+   {
+    "w": "of",
+    "start": 2.896,
+    "end": 2.983
+   },
+   {
+    "w": "the",
+    "start": 2.983,
+    "end": 3.071
+   },
+   {
+    "w": "Hunterdon",
+    "start": 3.071,
+    "end": 3.521
+   },
+   {
+    "w": "County",
+    "start": 3.521,
+    "end": 3.946
+   },
+   {
+    "w": "National",
+    "start": 3.946,
+    "end": 4.471
+   },
+   {
+    "w": "Bank.",
+    "start": 4.471,
+    "end": 5.1
+   }
+  ]
+ },
+ "cashier": {
+  "duration_s": 6.351,
+  "words": [
+   {
+    "w": "I",
+    "start": 0.098,
+    "end": 0.186
+   },
+   {
+    "w": "have",
+    "start": 0.186,
+    "end": 0.298
+   },
+   {
+    "w": "been",
+    "start": 0.298,
+    "end": 0.511
+   },
+   {
+    "w": "cashier",
+    "start": 0.511,
+    "end": 1.098
+   },
+   {
+    "w": "here",
+    "start": 1.098,
+    "end": 1.323
+   },
+   {
+    "w": "since",
+    "start": 1.323,
+    "end": 1.548
+   },
+   {
+    "w": "1895.",
+    "start": 1.548,
+    "end": 3.098
+   },
+   {
+    "w": "Mr.",
+    "start": 3.236,
+    "end": 3.611
+   },
+   {
+    "w": "John",
+    "start": 3.611,
+    "end": 4.036
+   },
+   {
+    "w": "A.",
+    "start": 4.036,
+    "end": 4.286
+   },
+   {
+    "w": "Bullock",
+    "start": 4.286,
+    "end": 4.786
+   },
+   {
+    "w": "is",
+    "start": 4.786,
+    "end": 4.911
+   },
+   {
+    "w": "our",
+    "start": 4.911,
+    "end": 5.048
+   },
+   {
+    "w": "president.",
+    "start": 5.048,
+    "end": 5.85
+   }
+  ]
+ },
+ "hall": {
+  "duration_s": 8.774,
+  "words": [
+   {
+    "w": "Mr.",
+    "start": 0.123,
+    "end": 0.398
+   },
+   {
+    "w": "Hopewell",
+    "start": 0.398,
+    "end": 0.798
+   },
+   {
+    "w": "put",
+    "start": 0.798,
+    "end": 0.935
+   },
+   {
+    "w": "up",
+    "start": 0.935,
+    "end": 1.098
+   },
+   {
+    "w": "this",
+    "start": 1.098,
+    "end": 1.298
+   },
+   {
+    "w": "hall",
+    "start": 1.298,
+    "end": 1.548
+   },
+   {
+    "w": "for",
+    "start": 1.548,
+    "end": 1.66
+   },
+   {
+    "w": "the",
+    "start": 1.66,
+    "end": 1.748
+   },
+   {
+    "w": "bank",
+    "start": 1.748,
+    "end": 2.06
+   },
+   {
+    "w": "in",
+    "start": 2.06,
+    "end": 2.135
+   },
+   {
+    "w": "the",
+    "start": 2.135,
+    "end": 2.248
+   },
+   {
+    "w": "1860s:",
+    "start": 2.248,
+    "end": 3.648
+   },
+   {
+    "w": "stores",
+    "start": 3.785,
+    "end": 4.248
+   },
+   {
+    "w": "below,",
+    "start": 4.248,
+    "end": 4.773
+   },
+   {
+    "w": "offices,",
+    "start": 4.885,
+    "end": 5.673
+   },
+   {
+    "w": "and",
+    "start": 5.748,
+    "end": 5.86
+   },
+   {
+    "w": "the",
+    "start": 5.86,
+    "end": 5.948
+   },
+   {
+    "w": "Masons'",
+    "start": 5.948,
+    "end": 6.548
+   },
+   {
+    "w": "rooms",
+    "start": 6.548,
+    "end": 6.985
+   },
+   {
+    "w": "on",
+    "start": 6.985,
+    "end": 7.085
+   },
+   {
+    "w": "the",
+    "start": 7.085,
+    "end": 7.173
+   },
+   {
+    "w": "top",
+    "start": 7.173,
+    "end": 7.51
+   },
+   {
+    "w": "floor.",
+    "start": 7.51,
+    "end": 8.23
+   }
+  ]
+ },
+ "rooms": {
+  "duration_s": 8.41,
+  "words": [
+   {
+    "w": "The",
+    "start": 0.096,
+    "end": 0.171
+   },
+   {
+    "w": "bank",
+    "start": 0.171,
+    "end": 0.471
+   },
+   {
+    "w": "bought",
+    "start": 0.471,
+    "end": 0.709
+   },
+   {
+    "w": "the",
+    "start": 0.709,
+    "end": 0.796
+   },
+   {
+    "w": "whole",
+    "start": 0.796,
+    "end": 1.071
+   },
+   {
+    "w": "building",
+    "start": 1.071,
+    "end": 1.409
+   },
+   {
+    "w": "a",
+    "start": 1.409,
+    "end": 1.496
+   },
+   {
+    "w": "couple",
+    "start": 1.496,
+    "end": 1.784
+   },
+   {
+    "w": "of",
+    "start": 1.784,
+    "end": 1.871
+   },
+   {
+    "w": "years",
+    "start": 1.871,
+    "end": 2.171
+   },
+   {
+    "w": "ago,",
+    "start": 2.171,
+    "end": 2.721
+   },
+   {
+    "w": "and",
+    "start": 2.846,
+    "end": 2.959
+   },
+   {
+    "w": "this",
+    "start": 2.959,
+    "end": 3.196
+   },
+   {
+    "w": "year",
+    "start": 3.196,
+    "end": 3.546
+   },
+   {
+    "w": "we",
+    "start": 3.546,
+    "end": 3.696
+   },
+   {
+    "w": "are",
+    "start": 3.696,
+    "end": 3.796
+   },
+   {
+    "w": "making",
+    "start": 3.796,
+    "end": 4.171
+   },
+   {
+    "w": "new",
+    "start": 4.171,
+    "end": 4.346
+   },
+   {
+    "w": "banking",
+    "start": 4.346,
+    "end": 4.771
+   },
+   {
+    "w": "rooms",
+    "start": 4.771,
+    "end": 5.121
+   },
+   {
+    "w": "out",
+    "start": 5.121,
+    "end": 5.284
+   },
+   {
+    "w": "of",
+    "start": 5.284,
+    "end": 5.359
+   },
+   {
+    "w": "the",
+    "start": 5.359,
+    "end": 5.446
+   },
+   {
+    "w": "north",
+    "start": 5.446,
+    "end": 5.896
+   },
+   {
+    "w": "and",
+    "start": 5.896,
+    "end": 6.034
+   },
+   {
+    "w": "centre",
+    "start": 6.034,
+    "end": 6.421
+   },
+   {
+    "w": "stores,",
+    "start": 6.421,
+    "end": 7.046
+   },
+   {
+    "w": "with",
+    "start": 7.121,
+    "end": 7.259
+   },
+   {
+    "w": "a",
+    "start": 7.259,
+    "end": 7.359
+   },
+   {
+    "w": "stone",
+    "start": 7.359,
+    "end": 7.821
+   },
+   {
+    "w": "front.",
+    "start": 7.821,
+    "end": 8.34
+   }
+  ]
+ },
+ "bye": {
+  "duration_s": 5.128,
+  "words": [
+   {
+    "w": "We",
+    "start": 0.115,
+    "end": 0.202
+   },
+   {
+    "w": "have",
+    "start": 0.202,
+    "end": 0.315
+   },
+   {
+    "w": "been",
+    "start": 0.315,
+    "end": 0.477
+   },
+   {
+    "w": "a",
+    "start": 0.477,
+    "end": 0.565
+   },
+   {
+    "w": "national",
+    "start": 0.565,
+    "end": 1.09
+   },
+   {
+    "w": "bank",
+    "start": 1.09,
+    "end": 1.44
+   },
+   {
+    "w": "since",
+    "start": 1.44,
+    "end": 1.665
+   },
+   {
+    "w": "1865.",
+    "start": 1.665,
+    "end": 3.115
+   },
+   {
+    "w": "Good",
+    "start": 3.252,
+    "end": 3.49
+   },
+   {
+    "w": "day",
+    "start": 3.49,
+    "end": 3.802
+   },
+   {
+    "w": "to",
+    "start": 3.802,
+    "end": 3.952
+   },
+   {
+    "w": "you.",
+    "start": 3.952,
+    "end": 4.765
+   }
+  ]
+ },
+ "_meta": {
+  "model": "hexgrad/Kokoro-82M",
+  "voice": "am_onyx",
+  "speed": 0.85,
+  "sample_rate": 22050,
+  "note": "words = on-screen tokens in order; times in seconds from clip start"
+ }
+}

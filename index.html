@@ -12,13 +12,13 @@
   <script src="https://cdn.jsdelivr.net/npm/aframe-extras@7.7.0/dist/aframe-extras.loaders.min.js"></script>
   <!-- Our own code: shared components, the building kit, the modelled landmarks,
        the townspeople you can talk to, and the street sounds. -->
-  <script src="js/components.js?v=20261112a"></script>
-  <script src="js/ground.js?v=20261112a"></script>
-  <script src="js/kit.js?v=20261112a"></script>
-  <script src="js/landmarks.js?v=20261112a"></script>
-  <script src="js/people.js?v=20261112a"></script>
-  <script src="js/ambience.js?v=20261112a"></script>
-  <script src="js/minimap.js?v=20261112a"></script>
+  <script src="js/components.js?v=20261112b"></script>
+  <script src="js/ground.js?v=20261112b"></script>
+  <script src="js/kit.js?v=20261112b"></script>
+  <script src="js/landmarks.js?v=20261112b"></script>
+  <script src="js/people.js?v=20261112b"></script>
+  <script src="js/ambience.js?v=20261112b"></script>
+  <script src="js/minimap.js?v=20261112b"></script>
 
   <style>
     /* On-screen help for desktop. Not visible inside the headset. */
@@ -62,7 +62,7 @@
     <b>Sound</b> starts with your first click or key press (or Enter VR); M mutes / unmutes.
   </div>
   <div id="credits">
-    Mr. Pickell's voice: synthetic speech (Kokoro-82M, voice am_michael),
+    Voices of Mr. Pickell and Mr. Rittenhouse: synthetic speech (Kokoro-82M, voices am_michael and am_onyx),
     <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener">Apache-2.0</a>,
     <a href="https://huggingface.co/hexgrad/Kokoro-82M" target="_blank" rel="noopener">huggingface.co/hexgrad/Kokoro-82M</a>.
   </div>
@@ -541,6 +541,19 @@
       gltf-model="url(assets/models/npc-pickell.glb)"
       animation-mixer="clip: Idle; crossFadeDuration: 0.4"
       npc="dialogue: data/dialogue/pickell.json; voice: assets/audio/voices/pickell/; radius: 2.5; closeRadius: 4"
+      blob-shadow="width: 0.9; depth: 0.6; opacity: 0.6"></a-entity>
+    <!-- Albert H. Rittenhouse, cashier of the Hunterdon County National Bank 1895-1934, on the
+         east walk in front of the stone pier between the bank's north window and its main
+         door (Masonic Hall, #bldg-90-94-main below: north wall z 21.67, window 1 z 22.77-24.82,
+         main door z 26.17-27.97, stone face x 10.00, sills x 9.92, door hood above 2.6 m only):
+         his body spans z 24.7-25.6, x 8.9-9.8, so the door stays clear. Built by tools/blender/npc_rittenhouse.py
+         + npc_rittenhouse_bake.py. Faces WNW, toward the start point. Same Idle clip as
+         Pickell, so randomIdleStart keeps the two out of step.
+         Voice: assets/audio/voices/rittenhouse/ (tools/make_voice_rittenhouse.py). -->
+    <a-entity id="npc-rittenhouse" position="9.4 0.15 25.1" rotation="0 -120 0"
+      gltf-model="url(assets/models/npc-rittenhouse.glb?v=1)"
+      animation-mixer="clip: Idle; crossFadeDuration: 0.4"
+      npc="dialogue: data/dialogue/rittenhouse.json; voice: assets/audio/voices/rittenhouse/; radius: 2.5; closeRadius: 4; voiceHeight: 1.62; randomIdleStart: true"
       blob-shadow="width: 0.9; depth: 0.6; opacity: 0.6"></a-entity>
 
     <!-- ============================================================

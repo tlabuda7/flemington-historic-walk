@@ -454,6 +454,20 @@ scratch on LibriTTS only. Rejected: `ryan` and `hfc_male` (CC BY-NC-SA data), `a
 licence). Public-domain alternatives if ever needed: `en_US-norman-medium` (LibriVox, trained from
 scratch).
 
+### Voice of Mr. Rittenhouse (`assets/audio/voices/rittenhouse/`)
+
+Kokoro-82M, voice **`am_onyx`** (2026-11-12, chosen by the scene-integrator by pitch measurement:
+the lowest, steadiest male voice already cached, for an older, measured man; owner to judge by ear).
+Synthetic speech, made offline by `tools/make_voice_rittenhouse.py` (5 clips `<node-id>.ogg` = his
+5 dialogue lines, plus `timings.json`), speed 0.85. Same format and loudness as Mr. Pickell's clips:
+mono OGG Vorbis, 22.05 kHz, 64 kbps, about −18 to −19 LUFS (true peak ≤ −2 dBFS). Neither the model
+nor the TTS program is stored in the repo.
+
+| File | Source | URL | Licence | Used for |
+|------|--------|-----|---------|----------|
+| `<node-id>.ogg` × 5, `timings.json` | **Kokoro-82M** v1.0 model weights and voice pack **`am_onyx`** (hexgrad), from the Hugging Face cache (downloaded earlier by the `kokoro` package) | https://huggingface.co/hexgrad/Kokoro-82M | **Apache-2.0** (no attribution required; credited in `#credits` anyway) | Mr. Rittenhouse's spoken lines |
+| (tool, not shipped) | `kokoro` 0.9.4, `misaki` 0.9.4, spaCy `en_core_web_sm` 3.8.0 (re-installed automatically by misaki on this run), espeak-ng: the same tools as Mr. Pickell's voice above | see Mr. Pickell's table | Apache-2.0 / MIT / GPL-3.0 (program only) | generating the clips |
+
 ## Code libraries (loaded from CDNs, not stored in the repo)
 
 | Library | Version | URL | Licence | Used for |
