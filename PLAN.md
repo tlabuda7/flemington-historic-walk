@@ -1043,7 +1043,7 @@ out; shop awning lettering is unreadable and omitted; the entrances may have cha
 
 ### Nevius Store / Fulper's Dry Goods Building (78 Main St)
 
-**Status:** photo fixes built (blender-builder, 2026-11-11), not reviewed, not integrated, not committed: awning now plain pale canvas (`nevius-store/awning_canvas.jpg` #E3DCCB, de-striped from awning_stripes.jpg by `tools/prepare_nevius_awning.py`) with a deeper scalloped valance (16 lobes to 2.38) and a 7 cm hanging fringe, side curtains at both ends down to 1.0 m above the step; shop-front cornice bracketed (frieze 3.60-4.05, corona projecting 0.35, top 4.20, 10 dark console brackets). Optional items 3-4 not done (not approved). Window treatment and `glass` untouched. 7,149 -> 8,177 tris, 7 materials, 1.52 -> 1.59 MB, **LIGHTMAP_SCALE 1.1076 -> 1.1183**; previews re-rendered plus `nevius-store-match-1912.png` and `nevius-store-fix-2026-11-11.png`; backups `assets/models/source/nevius-store-*before-photo-fixes.*`. Next: reviewer, then integrator (`#bldg-78-main` intensity 1.1183). Earlier: window realism v2 built, not yet in the scene (blender-builder, 2026-11-10): darker window backs with reveal shadows, muted blinds, dusty `glass`, new `NVR_ShopInterior` material + `shared/shop_interior.jpg` for the shop front; GLB 7,149 tris, 7 materials, 1.52 MB, LIGHTMAP_SCALE 1.1076; previews `nevius-windows-v2*.png`; next: integrator/reviewer (see Later phases E). Earlier: **in scene** — scene-integrator placed the GLB at (10.30, 0.15, −7.33), rotation 0 −90 0, intensity 1.1072, replacing the code-built `#bldg-78-main` placeholder (id kept); side gaps show the ground, no floating or overlaps; committed and pushed (scene-integrator, 2026-11-03). Earlier: round-1 fixes applied — asset-scout skipped (no new downloads; reused red_brick, trim_paint_cream, door_varnish_dark, awning_stripes); blender-builder raised the 3rd-floor front windows (spring 8.95, crown ~9.40, hoods and end blocks raised; central section and quoins now to 9.50), tightened the cornice (bed moulding 9.50–9.58, frieze from 9.58; dentils 10.15, top 10.70 unchanged) and put the shop-front cornice on the dark material; re-baked and re-exported `assets/models/nevius-store.glb` (6,954 triangles, 5 materials, 1.3 MB, 2K lightmap, LIGHTMAP_SCALE 1.1072), previews re-rendered (blender-builder, 2026-11-03). Reviewer round 1: FIXES (3rd-floor front windows too short vs the 1909 card). Reviewer round 2: **PASS** — loads cleanly at intensity 1.1072, no console errors, colour factors and lightmap intact; upper floors now match the 1909 card; bracket pendants resting on the pair's hood moulds accepted; next: scene-integrator (reviewer, 2026-11-03).
+**Status:** window displays trial spec written — awaiting owner approval (planner, 2026-11-11; addendum at the end of this section). Before that: photo fixes built (blender-builder, 2026-11-11), not reviewed, not integrated, not committed: awning now plain pale canvas (`nevius-store/awning_canvas.jpg` #E3DCCB, de-striped from awning_stripes.jpg by `tools/prepare_nevius_awning.py`) with a deeper scalloped valance (16 lobes to 2.38) and a 7 cm hanging fringe, side curtains at both ends down to 1.0 m above the step; shop-front cornice bracketed (frieze 3.60-4.05, corona projecting 0.35, top 4.20, 10 dark console brackets). Optional items 3-4 not done (not approved). Window treatment and `glass` untouched. 7,149 -> 8,177 tris, 7 materials, 1.52 -> 1.59 MB, **LIGHTMAP_SCALE 1.1076 -> 1.1183**; previews re-rendered plus `nevius-store-match-1912.png` and `nevius-store-fix-2026-11-11.png`; backups `assets/models/source/nevius-store-*before-photo-fixes.*`. Next: reviewer, then integrator (`#bldg-78-main` intensity 1.1183). Earlier: window realism v2 built, not yet in the scene (blender-builder, 2026-11-10): darker window backs with reveal shadows, muted blinds, dusty `glass`, new `NVR_ShopInterior` material + `shared/shop_interior.jpg` for the shop front; GLB 7,149 tris, 7 materials, 1.52 MB, LIGHTMAP_SCALE 1.1076; previews `nevius-windows-v2*.png`; next: integrator/reviewer (see Later phases E). Earlier: **in scene** — scene-integrator placed the GLB at (10.30, 0.15, −7.33), rotation 0 −90 0, intensity 1.1072, replacing the code-built `#bldg-78-main` placeholder (id kept); side gaps show the ground, no floating or overlaps; committed and pushed (scene-integrator, 2026-11-03). Earlier: round-1 fixes applied — asset-scout skipped (no new downloads; reused red_brick, trim_paint_cream, door_varnish_dark, awning_stripes); blender-builder raised the 3rd-floor front windows (spring 8.95, crown ~9.40, hoods and end blocks raised; central section and quoins now to 9.50), tightened the cornice (bed moulding 9.50–9.58, frieze from 9.58; dentils 10.15, top 10.70 unchanged) and put the shop-front cornice on the dark material; re-baked and re-exported `assets/models/nevius-store.glb` (6,954 triangles, 5 materials, 1.3 MB, 2K lightmap, LIGHTMAP_SCALE 1.1072), previews re-rendered (blender-builder, 2026-11-03). Reviewer round 1: FIXES (3rd-floor front windows too short vs the 1909 card). Reviewer round 2: **PASS** — loads cleanly at intensity 1.1072, no console errors, colour factors and lightmap intact; upper floors now match the 1909 card; bracket pendants resting on the pair's hood moulds accepted; next: scene-integrator (reviewer, 2026-11-03).
 
 **What it is**: a tall, narrow (25 ft) **3-storey red-brick Italianate store** on the east side,
 just south of the Union Hotel, opposite the Court House. A store has stood on the lot since
@@ -1296,6 +1296,121 @@ Optional (medium confidence, owner choice):
 4. The 2nd-floor heads (pale arches with keystones) look **nearly semicircular** in this card, not segmental;
    the reviewer accepted segmental from the 1909 card. Leave unless the owner wants to change it.
 The card also confirms carriage steps C1 (in front of 78) and C2 (by pole E1) of the street-props pass.
+
+#### Window displays trial (owner, 2026-11-11)
+**Status:** spec written — awaiting user approval (planner, 2026-11-11). Trial on this one store; roll out only if the owner
+likes it. Problem: each display window is a flat picture (`shop_a` / `shop_b` of shared `shop_interior.jpg`) 2.5 cm behind
+the glass, so it reads as a poster; the door lights are the same. Fix: real shallow 3D displays + a short store void.
+
+**Current layout (script `tools/blender/nevius_store.py`, local coords: +X south, −Y street, z from sidewalk top)**
+- Shop-front plane SF y 0.10; the shell behind is **solid brick** (one closed solid), so every space below must be a new cutter.
+- North display: glass x −3.35 … −0.93 (2.42 m), mullion x −2.14 (0.08); bulkhead 0.12–0.60, sill rail 0.66–0.72;
+  glass z 0.72–2.95 at y 0.055; picture box (`shop_a`) y 0.08–0.10. South display: x +0.83 … +2.42 (1.59 m), mullion
+  x +1.625, same heights, `shop_b`. Jamb posts −3.45…−3.35, −0.93…−0.85, 0.75…0.83, 2.42…2.50.
+- Recess: front x −0.85…+0.75 narrowing to −0.75…+0.65 at REC y 1.30; splayed return glass on the lines
+  (−0.80, 0.10)→(−0.70, 1.30) and (0.70, 0.10)→(0.60, 1.30), z 0.70–2.85, pictures `return_n`/`return_s` on the recess
+  cutter's side faces; door leaves y 1.25–1.30, glass z 1.05–2.58 at y 1.22, pictures `door_l`/`door_r` at y 1.235.
+- Transom band 3.05–3.55 (6 lights, `transom` picture) and door transom 2.75–2.92: **unchanged**. Upper-floor door x 2.50–3.35: unchanged.
+
+**Photos** (local only): `flmgtnmainststores.jpg` (1912 "Some Business Blocks", sharpest; same view as `flmngtnbizblocks12.jpg`):
+north window has **two pale dress forms in long white dresses** standing together, and a **pale roller shade inside the
+glass pulled down to ~45 % of the glass height**; the two south lights have **shades down ~40 %**, a **small pale object on a
+thin stand** and **two or three tall pale upright items** (bolts on end or boxes) low behind the glass; the door glass shows a
+**pale shade in its upper part**; interior otherwise dark. `flmngtnneviusstoreandununionhtl09.jpg` (1909): north window with
+pale shades drawn at the top, **one white standing figure** (form) in the left light and a **low white stack** in the right
+light. (Lettering on the 1912 awning is not modelled; rule unchanged.) Web, period practice: G. S. Cole, *Dictionary of Dry
+Goods* (https://chestofbooks.com/reference/Dictionary-of-Dry-Goods/Window-Trimming.html and
+https://chestofbooks.com/reference/Dictionary-of-Dry-Goods/Dress-Goods-Drapery.html): dress goods draped over forms/"drums" in
+skirt shape, window floor covered with a medium-shade cloth, tiers ~30 in.; L. F. Baum, *The Art of Decorating Dry Goods
+Windows* (1900, https://gutenberg.org/ebooks/73606).
+
+**Geometry (new)**
+1. **Display spaces** (cutters, display floor at sill height **z 0.70**, ceiling **z 3.00**, **depth 1.20 m**, y 0.05 → 1.32;
+   1.20 rather than 0.8–1.0 so the full-length glazed returns look into the display, as a real recessed front does):
+   north plan polygon (−3.40, 0.05), (−0.83, 0.05), (−0.73, 1.32), (−3.40, 1.32); south (0.73, 0.05), (2.45, 0.05),
+   (2.45, 1.32), (0.63, 1.32). The 2 cm overlap into the recess removes the recess side faces, so the return glass becomes the
+   only divider (bulkheads and head rails stay). Cutter faces: floor → `ShopInterior` cell `floor_cloth` (drab cloth
+   #7A6F5E, TYPICAL); sides and ceiling → `Trim` (painted wood). Delete the `shop_a`/`shop_b` picture boxes, the
+   `return_n`/`return_s` frames and the door picture boxes `door_l`/`door_r`.
+2. **Window back**: low panelled partition per display, `Dark` (varnished), y 1.26–1.30, from z 0.12 to **1.80** (1.10 above
+   the display floor), full display width; 2 raised panels per metre (boxes 1 cm proud, display side only); 3 cm cap rail at
+   1.80. TYPICAL. Above it the display is open to the store.
+3. **Store void** (cutter) x −3.40 … +2.40, y 1.28 → **2.80**, z 0.12 → 3.40: floor `Dark` (boards), side walls and ceiling
+   `Trim` (bakes dim). Back face y 2.80 = the **existing interior picture moved back** (keep it, further back): one frame
+   `store_back` across x −3.40 … +2.40, z 0.12–3.40 (see textures). Seen above the partitions and through the door glass.
+4. **Roller shades** inside each display light (PHOTO, 1909 + 1912): flat panel at y 0.11, `Awning` canvas (ecru), from the
+   head 2.95 down to **2.00** (north lights x −3.33…−2.18, −2.10…−0.95) and **2.05** (south lights 0.85…1.585,
+   1.665…2.40), each with a 3 × 2 cm `Dark` bottom slat. Door leaves (PHOTO, unclear): same shade on each door light at
+   y 1.20, from 2.58 down to **2.10**.
+
+**Goods** (no lettering, tickets, labels or brands anywhere; plain colours; all ≥ 0.10 m behind the glass, on the floor z 0.70)
+- North display:
+  - N1 PHOTO: **2 dress forms**, headless with a turned knob, on a single pole + 3-foot base; bust/waist lathe + long flared
+    skirt to the floor; total 1.55 m above the display floor (top z 2.25, hidden just under the shade from far away).
+    Positions (x, y): (−2.85, 0.70) white lawn #E6E0D2, turned 15° north; (−2.40, 0.90) cream #D9CFB8, turned 10° south.
+    12-sided lathe, ~220 tris each.
+  - N2 TYPICAL: **draped bolt** (Cole): a plain box stand 0.50 × 0.35 × 0.45 h (`Trim`) at (−1.50, 0.85) with a bolt
+    0.65 × 0.20 × 0.06 lying on top and a length of cloth falling from it over the front edge to the floor in one curved
+    sheet 0.45 wide (6–8 segments); navy serge #2E3448.
+  - N3 PHOTO (1909 low white stack): **folded table linens**, 4 slabs 0.35 × 0.25 × 0.03, slightly offset, white #E9E5DC,
+    at (−1.15, 0.45).
+  - N4 TYPICAL: **3 bolts stacked flat** 0.65 × 0.20 × 0.06 at (−1.80, 0.40), brown #6B4E35, grey #8A8780, dark green #3E4F3C.
+- South display:
+  - S1 PHOTO (unclear): **hat stand** (turned pole 0.03 dia, 0.22 dia base, 1.10 tall) with a plain wide-brimmed hat
+    (brim 0.36 dia, crown 0.16 dia × 0.10; cream straw #CDBB8E, plain dark band) at (1.30, 0.75).
+  - S2 PHOTO (unclear): **3 bolts standing on end**, 0.65 tall, leaning in a fan against each other at (2.05, 0.90):
+    cream muslin #E2DACA, chambray #8FA3B8, cream #D9CFB8.
+  - S3 TYPICAL: **2 plain card boxes** stacked 0.40 × 0.28 × 0.08, grey-brown #8C7D68, at (1.15, 0.35); a pair of folded
+    white towels 0.30 × 0.20 × 0.05 on top.
+- Door / vestibule: nothing added; through the door glass you see the store floor and the back picture 1.5 m behind.
+
+**Glass**: new material **`glass_shop`** for the 2 display windows (4 lights), 2 returns and 2 door lights: base #141412,
+**alpha 0.25**, roughness 0.05, BLEND, single-sided; the transoms and all upper windows keep `glass` (#1A1916, alpha 0.40)
+untouched. Reflection stays `glass-reflect` intensity 1.2 (the component adds the reflection independent of alpha, so the sky
+still shows); the integrator sets `glass-reflect="materials: glass, glass_shop"`. Cost **+1 draw call** (7 → 8). Fallback if
+the owner wants no extra call: keep one `glass` and change it to alpha 0.30 everywhere.
+
+**Bake**: `glass_shop` alpha 0 during the bake like `glass`, and excluded from the hidden-face ray test (extend the
+`GLASS_NAME` checks to both). Build the displays, void and goods in their own part list and **skip them in
+`remove_hidden_faces`** (they stay occluders) so nothing deep inside is deleted. Light enters only through the openings:
+the sun "to sun" (0.40, −0.90, 0.36) passes under the awning (front edge z 2.70 at y −1.90) onto the lower goods and the
+front of the display floor; shades, awning and transom bar shadow the upper part; the void stays dim. Lightmap: goods and
+display floors **not shrunk** (scale 1.0, own islands); void walls/floor/back 0.5; give `ShopInterior` faces per-face
+shrink instead of the current 0.6 for the whole material. Expect LIGHTMAP_SCALE to change; report it.
+
+**Textures**: shared `shop_interior.jpg` is used by 4 other buildings: **do not modify it**. New Nevius-only 1K atlas
+`assets/textures/nevius-store/shop_display.jpg` (+ `.json`) made by a new Pillow script `tools/prepare_nevius_display.py`:
+copies the `transom` and `transom_door` cells from `shop_interior.jpg`; a `store_back` cell (≈ 6.0 × 3.3 m; shop_a + shop_b
+side by side, resized, darkened ~15 %); and flat swatch cells with a faint weave noise for every goods colour above plus
+`floor_cloth`. `NVR_ShopInterior` points at it (draw calls unchanged for this). Goods UVs: box-projected inside their swatch
+cell with a 4 px inset. Shades reuse `awning_canvas.jpg`; partitions/slats `door_varnish_dark.jpg`. **No downloads;
+asset-scout not needed.** Log the new atlas in SOURCES.md (own work).
+
+**Budget (owner-visible exception)**: displays ≤ **2,500 extra triangles** (estimate ~1.5k: forms 440, bolts/linens/boxes
+~200, drape 120, hat stand 150, partitions 150, shades 60, cutters/void ~200, minus the removed picture boxes); **this
+building's cap raised from 10k to 11k for the trial**. Materials 7 → 8 (only `glass_shop`). GLB ≤ 5 MB (expect ~1.7 MB).
+Keep backups `assets/models/source/nevius-store-before-displays.glb` / `-lightmap-before-displays.jpg`; previews
+`nevius-displays-{before,after}.png` from the sidewalk (1.6 m eye height, 1.5 m from the north glass) and from the
+road centre ~10 m away.
+
+**Acceptance checks**
+1. From x −1.5 (1.5 m in front of the north glass) at 1.6 m eye height, stepping 0.5 m sideways visibly moves the dress forms
+   against the partition and the partition against the back picture (true parallax; no flat poster behind the glass).
+2. North window: two pale dress forms standing together; pale shades in the top ~40–45 % of every display light; south window
+   hat stand and upright bolts; matches `flmgtnmainststores.jpg` in arrangement and tone.
+3. Nothing lettered: no tickets, labels, brands or signs on any goods, boxes or partitions.
+4. Door glass shows a dim floor and store depth (back ~1.5 m behind the door), not a grey panel; door shades upper part only.
+5. Lit believably: lower goods and front of the display floor brighter, darker toward the partition and up under the shades;
+   no black displays, no glowing goods; no goods touch or cross the glass; nothing changed above z 3.05.
+6. ≤ 11,000 triangles (≤ 8,177 + 2,500), 8 materials, GLB ≤ 5 MB; `shop_interior.jpg` unchanged (git diff clean);
+   upper-floor windows and transoms look exactly as before.
+
+**Open questions (owner)**
+1. Accept the separate `glass_shop` (+1 draw call), or keep one glass at alpha 0.30?
+2. The 1912 card puts the entry north of centre with a narrower north window; the trial keeps the model's current layout
+   (earlier optional item 3, not approved), so the dress forms stand in the wider north window.
+3. GUESSES: what the south window's pale objects are (hat stand, upright bolts), the partition (could be an open back or a
+   curtain), the forms' exact dress shapes, door shades, all colours except "white/pale".
 
 ### Frame Dwelling "D" at 65 Main St (65 Main St, old no. 510)
 
@@ -7147,3 +7262,5 @@ Check licensing for every asset and note the source in the progress log.
 | 2026-11-11 | planner: **owner's third photo batch checked** (local only; notes in `research/new-photos-2026-11-11-batch3.md`, "Planner pass"). Wurts (59): the "Dr. Tompkins" card (c. 1910–25) is this office; addendum with 2 fixes (half-glazed door, taller door head) + owner decision on the "DR. TOMPKINS" board; pass-2 fence at 59 corrected to a wire hoop-top fence with white posts and an urn (owner to confirm). Nevius (78): 1912 card addendum (plain pale awning with fringe and side curtains, bracketed shop cornice; 2 optional). Odd Fellows: no change. County Hotel 1906 tinted card: already cited, no change. "Hotel Flemington" / "Hotel Hunterdon" = one hotel at the Capner corner = street-end E1 (now PHOTO-BASED). Deats Building = E11 (PHOTO-BASED, footprint corrected). "Fire House" card = post-1922 Lyceum, not K1. Not built, not committed. |
 | 2026-11-11 | orchestrator | OWNER DECISIONS 2026-11-11 (evening), third photo batch: APPROVED the Wurts fixes (half-glazed door, door head board, **add the "DR. TOMPKINS" name board**), the **wire hoop-top fence with white posts and urn at 59 Main instead of pickets**, and the Nevius fixes (plain pale awning with scalloped fringe and side curtains, bracketed shop cornice; the 2 optional items not approved). Queued for blender-builder after the vehicles batch. |
 | 2026-11-11 | orchestrator | Vehicles batch C built by blender-builder (`assets/models/vehicles.glb`, 5.4k tris total, LIGHTMAP_SCALE 1.2069), NOT placed. **Owner 2026-11-11: "too blocky, like a video game polygon; make them more realistic".** Decision: rebuild at a higher budget (Model T ≤ 15k, buggy ≤ 8k, wagon ≤ 6k; smooth shading, round wheels and tyres, curved fenders and body panels, bevelled edges, real top bows and folds, glossy enamel with sky reflection). Queued after the Wurts/Nevius fixes. |
+| 2026-11-11 | planner | Nevius (78) **window displays trial** spec written (PLAN.md, Nevius section, "Window displays trial (owner, 2026-11-11)"): 1.2 m-deep 3D displays with floor at sill height 0.70, panelled partition to 1.80, 1.5 m store void with the interior picture moved back, roller shades (photo), 2 dress forms + linens + bolts (north), hat stand + upright bolts + boxes (south), new `glass_shop` alpha 0.25 (+1 draw call), Nevius-only 1K atlas `nevius-store/shop_display.jpg`; budget +2.5k tris, cap raised to 11k as an owner-visible exception. Awaiting owner approval. |
+| 2026-11-11 | orchestrator | Nevius window displays trial: owner approved a one-store trial ("Yes one store so i can see"). Orchestrator decisions on the planner questions: (1) accept one extra draw call for `glass_shop` (scene is at about 101 of 150); (2) entry position stays as built (the optional 1912 item was not approved). Build queued after the vehicles rebuild. |
