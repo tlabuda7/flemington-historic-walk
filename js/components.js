@@ -980,8 +980,20 @@ AFRAME.registerComponent('gltf-places', {
       for (const [name, x, y, z, turn] of places) {
         const node = gltf.scene.getObjectByName(name);
         if (!node) { console.warn(`gltf-places: no node "${name}" in ${src}`); continue; }
-        node.position.set(+x, +y, +z);
-        node.rotation.set(0, THREE.MathUtils.degToRad(+turn || 0), 0);
+        const t = THREE.MathUtils.degToRad(+turn || 0);
+        let py = +y, roll = 0;
+        if (y === 'road' && window.STREET_GROUND) {
+          // Stand on the crowned road: height under the left and right wheels (0.7 m
+          // either side of the centre line) gives the height and the sideways lean.
+          const rx = Math.cos(t) * 0.7, rz = -Math.sin(t) * 0.7;
+          const yR = STREET_GROUND.roadY(+x + rx, +z + rz);
+          const yL = STREET_GROUND.roadY(+x - rx, +z - rz);
+          py = (yR + yL) / 2;
+          roll = Math.atan2(yR - yL, 1.4);
+        } else if (y === 'road') py = 0;
+        node.position.set(+x, py, +z);
+        node.rotation.order = 'YXZ';
+        node.rotation.set(0, t, roll);
         root.add(node);
       }
       this.el.setObject3D('mesh', root);

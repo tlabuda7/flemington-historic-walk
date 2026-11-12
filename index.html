@@ -12,13 +12,13 @@
   <script src="https://cdn.jsdelivr.net/npm/aframe-extras@7.7.0/dist/aframe-extras.loaders.min.js"></script>
   <!-- Our own code: shared components, the building kit, the modelled landmarks,
        the townspeople you can talk to, and the street sounds. -->
-  <script src="js/components.js?v=20261111d"></script>
-  <script src="js/ground.js?v=20261111d"></script>
-  <script src="js/kit.js?v=20261111d"></script>
-  <script src="js/landmarks.js?v=20261111d"></script>
-  <script src="js/people.js?v=20261111d"></script>
-  <script src="js/ambience.js?v=20261111d"></script>
-  <script src="js/minimap.js?v=20261111d"></script>
+  <script src="js/components.js?v=20261111e"></script>
+  <script src="js/ground.js?v=20261111e"></script>
+  <script src="js/kit.js?v=20261111e"></script>
+  <script src="js/landmarks.js?v=20261111e"></script>
+  <script src="js/people.js?v=20261111e"></script>
+  <script src="js/ambience.js?v=20261111e"></script>
+  <script src="js/minimap.js?v=20261111e"></script>
 
   <style>
     /* On-screen help for desktop. Not visible inside the headset. */
@@ -294,11 +294,11 @@
          → assets/models/vehicles.glb; PLAN.md "Street details pass 2", F12–F14)
          Model T at the Union Hotel curb, buggy at the bank, delivery wagon at the Rea
          Building; no horses (owner decision). One file with three objects: each place is
-         "name x y z turn". They face south (turn 0), the way their lighting was baked.
+         "name x y z turn" (y = road: stand on the crowned road surface). They face south (turn 0), the way their lighting was baked.
          ============================================================ -->
     <a-entity id="vehicles"
       gltf-places="src: url(assets/models/vehicles.glb);
-                   places: model-t 5.3 0 -30 0, buggy 5.4 0 -72 0, delivery-wagon 5.1 0 -99 0"
+                   places: model-t 5.3 road -30 0, buggy 5.4 road -72 0, delivery-wagon 5.1 road -99 0"
       baked-lighting="lightmap: assets/textures/vehicles-lightmap.jpg; intensity: 1.526; keep: glass, enamel"
       glass-reflect paint-reflect="intensity: 0.6"></a-entity>
     <!-- ============================================================
