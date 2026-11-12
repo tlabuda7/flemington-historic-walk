@@ -168,6 +168,30 @@
       "z": -130.755,
       "atX": 8.6,
       "atZ": -130.755
+    },
+    {
+      "name": "Democrat Building",
+      "addr": "No. 96–98",
+      "x": 21.3,
+      "z": 43.85,
+      "atX": 10.3,
+      "atZ": 43.85
+    },
+    {
+      "name": "Brick House · Shops",
+      "addr": "No. 57",
+      "x": -23.4,
+      "z": -84.94,
+      "atX": -12.4,
+      "atZ": -84.94
+    },
+    {
+      "name": "Millinery · Sweets · Barber",
+      "addr": "No. 24–30",
+      "x": 18.29,
+      "z": -152.365,
+      "atX": 7.29,
+      "atZ": -152.365
     }
   ],
   "people": [
