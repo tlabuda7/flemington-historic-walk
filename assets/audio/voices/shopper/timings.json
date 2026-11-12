@@ -1,0 +1,199 @@
+{
+ "start": {
+  "duration_s": 2.857,
+  "words": [
+   {
+    "w": "Good",
+    "start": 0.062,
+    "end": 0.187
+   },
+   {
+    "w": "afternoon.",
+    "start": 0.187,
+    "end": 0.93
+   },
+   {
+    "w": "Warm",
+    "start": 1.187,
+    "end": 1.537
+   },
+   {
+    "w": "for",
+    "start": 1.537,
+    "end": 1.662
+   },
+   {
+    "w": "September,",
+    "start": 1.662,
+    "end": 2.187
+   },
+   {
+    "w": "isn't",
+    "start": 2.237,
+    "end": 2.487
+   },
+   {
+    "w": "it?",
+    "start": 2.487,
+    "end": 2.78
+   }
+  ]
+ },
+ "nevius": {
+  "duration_s": 2.485,
+  "words": [
+   {
+    "w": "I'm",
+    "start": 0.051,
+    "end": 0.214
+   },
+   {
+    "w": "on",
+    "start": 0.214,
+    "end": 0.314
+   },
+   {
+    "w": "my",
+    "start": 0.314,
+    "end": 0.476
+   },
+   {
+    "w": "way",
+    "start": 0.476,
+    "end": 0.676
+   },
+   {
+    "w": "to",
+    "start": 0.676,
+    "end": 0.801
+   },
+   {
+    "w": "Nevius's",
+    "start": 0.801,
+    "end": 1.476
+   },
+   {
+    "w": "for",
+    "start": 1.476,
+    "end": 1.601
+   },
+   {
+    "w": "dress",
+    "start": 1.601,
+    "end": 1.901
+   },
+   {
+    "w": "goods.",
+    "start": 1.901,
+    "end": 2.41
+   }
+  ]
+ },
+ "vote": {
+  "duration_s": 3.749,
+  "words": [
+   {
+    "w": "This",
+    "start": 0.084,
+    "end": 0.309
+   },
+   {
+    "w": "November",
+    "start": 0.309,
+    "end": 0.96
+   },
+   {
+    "w": "we",
+    "start": 1.134,
+    "end": 1.346
+   },
+   {
+    "w": "women",
+    "start": 1.346,
+    "end": 1.671
+   },
+   {
+    "w": "vote",
+    "start": 1.671,
+    "end": 1.984
+   },
+   {
+    "w": "for",
+    "start": 1.984,
+    "end": 2.109
+   },
+   {
+    "w": "President",
+    "start": 2.109,
+    "end": 2.684
+   },
+   {
+    "w": "for",
+    "start": 2.684,
+    "end": 2.796
+   },
+   {
+    "w": "the",
+    "start": 2.796,
+    "end": 2.896
+   },
+   {
+    "w": "first",
+    "start": 2.896,
+    "end": 3.209
+   },
+   {
+    "w": "time.",
+    "start": 3.209,
+    "end": 3.67
+   }
+  ]
+ },
+ "bye": {
+  "duration_s": 1.968,
+  "words": [
+   {
+    "w": "Mind",
+    "start": 0.094,
+    "end": 0.357
+   },
+   {
+    "w": "the",
+    "start": 0.357,
+    "end": 0.444
+   },
+   {
+    "w": "motor",
+    "start": 0.444,
+    "end": 0.769
+   },
+   {
+    "w": "cars",
+    "start": 0.769,
+    "end": 1.132
+   },
+   {
+    "w": "when",
+    "start": 1.132,
+    "end": 1.257
+   },
+   {
+    "w": "you",
+    "start": 1.257,
+    "end": 1.344
+   },
+   {
+    "w": "cross.",
+    "start": 1.344,
+    "end": 1.9
+   }
+  ]
+ },
+ "_meta": {
+  "model": "hexgrad/Kokoro-82M",
+  "voice": "af_heart",
+  "speed": 0.92,
+  "sample_rate": 22050,
+  "note": "words = on-screen tokens in order; times in seconds from clip start"
+ }
+}

@@ -62,7 +62,7 @@
     <b>Sound</b> starts with your first click or key press (or Enter VR); M mutes / unmutes.
   </div>
   <div id="credits">
-    Voices of Mr. Pickell and Mr. Rittenhouse: synthetic speech (Kokoro-82M, voices am_michael and am_onyx),
+    Voices of Mr. Pickell, Mr. Rittenhouse and the shopper: synthetic speech (Kokoro-82M, voices am_michael, am_onyx and af_heart),
     <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener">Apache-2.0</a>,
     <a href="https://huggingface.co/hexgrad/Kokoro-82M" target="_blank" rel="noopener">huggingface.co/hexgrad/Kokoro-82M</a>.
   </div>
@@ -564,12 +564,12 @@
          coming up from the south. Built by tools/blender/npc_shopper.py + npc_shopper_bake.py
          (preview: npc_shopper_preview.py). 1.62 m tall, so voiceHeight 1.52.
          Leave her 2.5 m talk circle clear of the planned Mr. Williamson at (10.90, -75.40),
-         5.4 m away. Voice (tools/make_voice_shopper.py): not yet made, so she is text only;
-         when it is, add "voice: assets/audio/voices/shopper/" to npc. -->
+         5.4 m away. Voice: assets/audio/voices/shopper/ (Kokoro af_heart,
+         tools/make_voice_shopper.py). -->
     <a-entity id="npc-shopper" position="8.6 0.15 -70.5" rotation="0 -60 0"
       gltf-model="url(assets/models/npc-shopper.glb?v=1)"
       animation-mixer="clip: Idle; crossFadeDuration: 0.4"
-      npc="dialogue: data/dialogue/shopper.json; radius: 2.5; closeRadius: 4; voiceHeight: 1.52; randomIdleStart: true"
+      npc="dialogue: data/dialogue/shopper.json; voice: assets/audio/voices/shopper/; radius: 2.5; closeRadius: 4; voiceHeight: 1.52; randomIdleStart: true"
       blob-shadow="width: 0.8; depth: 0.55; opacity: 0.6"></a-entity>
 
     <!-- ============================================================

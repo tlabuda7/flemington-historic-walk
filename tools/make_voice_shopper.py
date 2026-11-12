@@ -45,7 +45,7 @@ OUT = ROOT / "assets" / "audio" / "voices" / "shopper"
 
 # ---- voice settings ---------------------------------------------------------------------
 REPO = "hexgrad/Kokoro-82M"
-VOICE = "af_sarah"        # PROVISIONAL until --audition is run (see the docstring)
+VOICE = "af_heart"        # calm, clear woman: mid pitch ~203 Hz, 7.7 st range, unhurried (see PLAN.md A2)
 SPEED = 0.92              # <1 = slower; calm, unhurried small talk
 KOKORO_SR = 24000         # Kokoro's own output rate
 OUT_SR = 22050            # clips are stored at the same rate as before

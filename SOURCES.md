@@ -497,6 +497,21 @@ nor the TTS program is stored in the repo.
 | `<node-id>.ogg` × 5, `timings.json` | **Kokoro-82M** v1.0 model weights and voice pack **`am_onyx`** (hexgrad), from the Hugging Face cache (downloaded earlier by the `kokoro` package) | https://huggingface.co/hexgrad/Kokoro-82M | **Apache-2.0** (no attribution required; credited in `#credits` anyway) | Mr. Rittenhouse's spoken lines |
 | (tool, not shipped) | `kokoro` 0.9.4, `misaki` 0.9.4, spaCy `en_core_web_sm` 3.8.0 (re-installed automatically by misaki on this run), espeak-ng: the same tools as Mr. Pickell's voice above | see Mr. Pickell's table | Apache-2.0 / MIT / GPL-3.0 (program only) | generating the clips |
 
+### Voice of the woman shopping (`assets/audio/voices/shopper/`)
+
+Kokoro-82M, voice **`af_heart`** (2026-11-12, chosen by the scene-integrator by measurement among the 11
+American female voices, `tools/make_voice_shopper.py --audition`: mid pitch for an adult woman
+(median ≈ 203 Hz), a moderate, even 7.7-semitone range and an unhurried 2.65 words/s, and the
+top-graded voice of the pack; owner to judge by ear). The 11 `af_*` voice files (≈ 0.5 MB each) were
+downloaded on 2026-11-12 with the owner's OK into the user's Hugging Face cache (not the repo).
+4 clips `<node-id>.ogg` (her 4 lines) + `timings.json`, speed 0.92; same format and loudness as the
+other voices: mono OGG Vorbis, 22.05 kHz, 64 kbps, −18.0 … −18.1 LUFS, true peak ≤ −2.3 dBFS.
+
+| File | Source | URL | Licence | Used for |
+|------|--------|-----|---------|----------|
+| `<node-id>.ogg` × 4, `timings.json` | **Kokoro-82M** v1.0 model weights and voice pack **`af_heart`** (hexgrad), voice files `voices/af_*.pt` downloaded by the `kokoro` package | https://huggingface.co/hexgrad/Kokoro-82M | **Apache-2.0** (credited in `#credits`) | the shopper's spoken lines |
+| (tool, not shipped) | `kokoro` 0.9.4, `misaki` 0.9.4, spaCy `en_core_web_sm`, espeak-ng: the same tools as above | see Mr. Pickell's table | Apache-2.0 / MIT / GPL-3.0 (program only) | generating the clips |
+
 ## Code libraries (loaded from CDNs, not stored in the repo)
 
 | Library | Version | URL | Licence | Used for |
