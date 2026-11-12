@@ -303,6 +303,18 @@ def build_town(coll):
             face([(ax, ay, base - 0.6), (bx, by, base - 0.6), (bx, by, zt), (ax, ay, zt)], "#ece8de")
             face([(ax, ay, zt), (bx, by, zt), (cx, cy, zs)], "#4a4a4e")
 
+    def presbyterian():
+        stone, slate = "#6e6c68", "#4a4e55"
+        house(19.65, 366.0, 30.5, 22.0, 6.0, False, stone, roof=slate)    # front block, gable to the south
+        house(20.0, 391.0, 18.0, 30.0, 5.0, False, stone, roof=slate)     # chapel behind (lower)
+        cx, cy, s = 7.5, 368.0, 2.6                                         # SW tower + spire
+        zt, zs = 15.5, 33.5
+        c = [(cx - s, cy - s), (cx + s, cy - s), (cx + s, cy + s), (cx - s, cy + s)]
+        for k in range(4):
+            (ax, ay), (bx, by) = c[k], c[(k + 1) % 4]
+            face([(ax, ay, -0.6), (bx, by, -0.6), (bx, by, zt), (ax, ay, zt)], stone)
+            face([(ax, ay, zt), (bx, by, zt), (cx, cy, zs)], slate)
+
     CREAM, WHITE, BRICK = "#e2d9bf", "#ece8de", "#8a4b3a"
     walls = [CREAM, WHITE, BRICK, CREAM, WHITE]
     # north end (scene z -175..-250 -> Blender Y 175..250)
@@ -310,8 +322,8 @@ def build_town(coll):
         house(20 + random.uniform(0, 3), y, w, d, e, i % 2 == 0, walls[i])
     for i, (y, w, d, e) in enumerate([(181, 11, 12, 9), (199, 13, 14, 11), (246, 12, 8, 8.5)]):
         house(-20 - random.uniform(0, 3), y, w, d, e, i % 2 == 1, walls[i + 1])
-    house(-27, 229, 22, 14, 9, True, WHITE)          # church (ridge across the street axis)
-    steeple(-14.5, 229)
+    # (2026-11-11: the guessed white church + steeple that stood here, west side z -229, is gone:
+    #  it was the Presbyterian church in the wrong place; see presbyterian() below.)
     for y in (176, 191, 207, 222, 238):
         tree(12.8, y); tree(-12.8, y + 5)
     for (x, y) in ((36, 190), (-37, 210), (34, 226), (-36, 244)):
@@ -323,20 +335,23 @@ def build_town(coll):
         house(20 + random.uniform(0, 3), y, 11, 12, random.uniform(7.5, 9), i % 2 == 1, walls[i + 2])
     for y in (-74, -91, -110, -126):
         tree(12.8, y); tree(-12.8, y - 6)
-    # Court St (west, scene z 0..12.2 -> Blender Y 0..-12.2)
-    for i, x in enumerate((-72, -98, -128, -160)):
-        house(x, 9, 10, 9, 8, True, walls[i])
-    for i, x in enumerate((-80, -112, -148)):
-        house(x, -21, 10, 9, 8, True, walls[i + 1])
-    for x in (-64, -88, -114, -140, -176):
-        tree(x, 2.2, 15, 6); tree(x - 9, -14.6, 14, 5.5)
-    # Bloomfield Ave (east, scene z -89.8..-77.6 -> Blender Y 77.6..89.8), land falls to the east
-    for i, x in enumerate((75, 102, 132, 168)):
+    # Court St west: removed 2026-11-11 (assets/models/sidestreet-court.glb now carries
+    #   the real buildings and the scene's backdrop-tree instances the maples).
+    # Bloomfield Ave (east, scene z -89.8..-77.6 -> Blender Y 77.6..89.8), land falls to the east.
+    #   x 60..146 removed 2026-11-11 (assets/models/sidestreet-bloomfield.glb: B1-B9, A8-A13, G1);
+    #   only the silhouettes beyond the Opera House / G1 stay.
+    for i, x in ((3, 168),):
         house(x, 97, 10, 10, 8, True, walls[i], base=-(x - 65) * 0.03)
-    for i, x in enumerate((86, 120, 156)):
+    for i, x in ((2, 156),):
         house(x, 70.5, 10, 10, 8, True, walls[i + 1], base=-(x - 65) * 0.03)
-    for x in (70, 92, 116, 142, 185):
+    tree(150, 75.8, 13, 5, base=-(150 - 65) * 0.03)
+    for x in (185,):
         tree(x, 91.6, 14, 5.5, base=-(x - 65) * 0.03); tree(x + 8, 75.8, 13, 5, base=-(x - 65) * 0.03)
+    # Presbyterian church (PLAN.md side streets 7.1 / E8, Sept 1921 sheet 5): at the head of
+    # Main St beyond the Soldiers' Monument, front z -357..-352, x 4.4..34.9, to z -406;
+    # dark grey stone, "SPIRE 110'" (33.5 m) on the SW tower at about (7.5, -368).
+    # Interim silhouette: delete it when street-ends.glb carries E8.
+    presbyterian()
 
     ob = new_obj("landscape_town", verts, faces, coll)
     a = ob.data.color_attributes.new("Col", "FLOAT_COLOR", "CORNER")

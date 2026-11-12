@@ -129,7 +129,49 @@
          haze baked in, no fog, follows the rig at 0.85. landscape_town = fixed, fogged
          rooftop / steeple / tree silhouettes beyond the modelled blocks. -->
     <a-entity id="landscape" position="0 0 0" rotation="0 0 0"
-      gltf-model="url(assets/models/landscape.glb)" far-landscape="factor: 0.85"></a-entity>
+      gltf-model="url(assets/models/landscape.glb?v=2)" far-landscape="factor: 0.85"></a-entity>
+
+    <!-- Side-street backdrops (PLAN.md "Side streets, backdrop buildings"): buildings you see
+         down the side streets but cannot walk to. Each model is built in scene coordinates,
+         so it sits at 0 0 0. Court St west: plain fire house, park edge with its white rail,
+         houses with picket fences (tools/blender/sidestreet_court.py). -->
+    <a-entity id="sidestreet-court" position="0 0 0" rotation="0 0 0"
+      gltf-model="url(assets/models/sidestreet-court.glb)"
+      baked-lighting="lightmap: assets/textures/sidestreet-court-lightmap.jpg; intensity: 1.0366"></a-entity>
+
+    <!-- Bloomfield Ave east: Opera House, garages incl. the 1909 concrete-block garage at
+         Spring St (from the owner's postcards), houses (tools/blender/sidestreet_bloomfield.py). -->
+    <a-entity id="sidestreet-bloomfield" position="0 0 0" rotation="0 0 0"
+      gltf-model="url(assets/models/sidestreet-bloomfield.glb)"
+      baked-lighting="lightmap: assets/textures/sidestreet-bloomfield-lightmap.jpg; intensity: 1.0571"></a-entity>
+    <!-- Big side-street maples: the street tree without its stone pit (backdrop-tree.glb),
+         all drawn as two instanced meshes. Positions are the ones baked into the backdrops' shade. -->
+    <a-entity id="backdrop-trees" instanced-trees="src: url(assets/models/backdrop-tree.glb)">
+      <a-entity id="btree-court-n-1" position="-90 0.575 -1.3" rotation="0 0 0" scale="2.1 2.1 2.1"></a-entity>
+      <a-entity id="btree-court-n-2" position="-101 0.575 -1.3" rotation="0 77 0" scale="2.3 2.3 2.3"></a-entity>
+      <a-entity id="btree-court-n-3" position="-112 0.575 -1.3" rotation="0 154 0" scale="2.2 2.2 2.2"></a-entity>
+      <a-entity id="btree-court-n-4" position="-123 0.575 -1.3" rotation="0 231 0" scale="2.35 2.35 2.35"></a-entity>
+      <a-entity id="btree-court-n-5" position="-134 0.575 -1.3" rotation="0 308 0" scale="2.15 2.15 2.15"></a-entity>
+      <a-entity id="btree-court-n-6" position="-145 0.575 -1.3" rotation="0 25 0" scale="2.3 2.3 2.3"></a-entity>
+      <a-entity id="btree-court-n-7" position="-156 0.575 -1.3" rotation="0 102 0" scale="2.2 2.2 2.2"></a-entity>
+      <a-entity id="btree-court-n-8" position="-167 0.575 -1.3" rotation="0 179 0" scale="2.25 2.25 2.25"></a-entity>
+      <a-entity id="btree-court-s-1" position="-94.4 0.175 11.2" rotation="0 256 0" scale="2.2 2.2 2.2"></a-entity>
+      <a-entity id="btree-court-s-2" position="-111.5 0.175 11.2" rotation="0 333 0" scale="2.3 2.3 2.3"></a-entity>
+      <a-entity id="btree-court-s-3" position="-123.5 0.175 11.2" rotation="0 50 0" scale="2.15 2.15 2.15"></a-entity>
+      <a-entity id="btree-court-s-4" position="-140 0.175 11.2" rotation="0 127 0" scale="2.3 2.3 2.3"></a-entity>
+      <a-entity id="btree-court-s-5" position="-155 0.175 11.2" rotation="0 204 0" scale="2.2 2.2 2.2"></a-entity>
+      <a-entity id="btree-court-s-6" position="-168.5 0.175 11.2" rotation="0 281 0" scale="2.25 2.25 2.25"></a-entity>
+      <a-entity id="btree-bloom-1" position="71 0.15 -96" rotation="0 358 0" scale="2.0 2.0 2.0"></a-entity>
+      <a-entity id="btree-bloom-2" position="78.5 0.15 -93" rotation="0 75 0" scale="2.2 2.2 2.2"></a-entity>
+      <a-entity id="btree-bloom-3" position="93.8 0.15 -92.6" rotation="0 152 0" scale="2.1 2.1 2.1"></a-entity>
+      <a-entity id="btree-bloom-4" position="104.9 0.15 -92.4" rotation="0 229 0" scale="2.0 2.0 2.0"></a-entity>
+      <a-entity id="btree-bloom-5" position="114.9 0.15 -93.6" rotation="0 306 0" scale="2.15 2.15 2.15"></a-entity>
+      <a-entity id="btree-bloom-6" position="133.5 0.15 -95" rotation="0 23 0" scale="2.25 2.25 2.25"></a-entity>
+      <a-entity id="btree-bloom-7" position="45 0.15 -70" rotation="0 100 0" scale="2.2 2.2 2.2"></a-entity>
+      <a-entity id="btree-bloom-8" position="65.15 0.15 -71" rotation="0 177 0" scale="1.9 1.9 1.9"></a-entity>
+      <a-entity id="btree-bloom-9" position="95.9 0.15 -76" rotation="0 254 0" scale="2.1 2.1 2.1"></a-entity>
+      <a-entity id="btree-bloom-10" position="107 0.15 -70" rotation="0 331 0" scale="2.0 2.0 2.0"></a-entity>
+    </a-entity>
 
     <!-- Road, sidewalks, curbs, grass strips and lane mouths: `street-ground` (js/ground.js)
          builds them from the 1921 Sanborn outlines as one mesh per texture (7 draw calls).

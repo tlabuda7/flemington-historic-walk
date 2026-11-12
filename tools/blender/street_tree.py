@@ -21,6 +21,14 @@ Under 1,000 triangles:
   0.12 m granite edging whose top sits 1 cm proud of the sidewalk.
 Vertex colours ("Col") darken bark near the ground and the inside of the crown.
 Materials are plain Principled (lit in the scene, no lightmap).
+
+Backdrop variant (for lawns and yards, e.g. the big Court St maples scaled 2.1-2.35):
+    TREE_BACKDROP = True
+    exec(open(r"<project>/tools/blender/street_tree.py").read())
+builds the same tree WITHOUT the pit (no soil square, no granite edging) and with the trunk
+running on 0.3 m below ground (so it never floats on uneven lawn), in the "BackdropTree"
+collection, and exports assets/models/backdrop-tree.glb. Same materials, textures, leaf cards
+and bark (same random sequences); only the bottom trunk ring moves from -0.03 to -0.30 m.
 """
 
 import math
@@ -30,7 +38,9 @@ import bmesh
 from mathutils import Vector, Matrix
 
 PROJECT = r"C:\Users\Tarik\AppFactory\Flemington Historic Walk"
-OUT = PROJECT + r"\assets\models\street-tree.glb"
+BACKDROP = bool(globals().get("TREE_BACKDROP", False))   # True: no pit, trunk sunk 0.3 m
+OUT = PROJECT + (r"\assets\models\backdrop-tree.glb" if BACKDROP else r"\assets\models\street-tree.glb")
+NAME = "BackdropTree" if BACKDROP else "StreetTree"
 TEX = PROJECT + r"\assets\textures"
 LEAF_TEX = TEX + r"\leaf_cluster.png"
 BARK_TEX = TEX + r"\street-tree\bark_willow_02_q85.jpg"
@@ -49,7 +59,7 @@ EDGE_W = 0.12      # edging width
 SOIL_Z = -0.02     # soil surface
 EDGE_TOP = 0.01    # edging top
 
-col = bpy.data.collections.get("StreetTree")
+col = bpy.data.collections.get(NAME)
 if col:
     for o in list(col.objects):
         mesh = o.data
@@ -57,7 +67,7 @@ if col:
         if mesh and mesh.users == 0:
             bpy.data.meshes.remove(mesh)
 else:
-    col = bpy.data.collections.new("StreetTree")
+    col = bpy.data.collections.new(NAME)
     bpy.context.scene.collection.children.link(col)
 
 
@@ -113,7 +123,7 @@ for _ in range(CARDS):
     face = bm.faces.new([bm.verts.new(c) for c in corners])
     for loop, uv in zip(face.loops, ((0, 0), (1, 0), (1, 1), (0, 1))):
         loop[uv_layer].uv = uv
-leaf_mesh = bpy.data.meshes.new("StreetTree_Leaves")
+leaf_mesh = bpy.data.meshes.new(NAME + "_Leaves")
 bm.to_mesh(leaf_mesh)
 bm.free()
 leaf_mesh.materials.append(material("Tree_Leaves", LEAF_TEX, alpha=True))
@@ -207,7 +217,7 @@ def trunk_r(z):
     return table[-1][1]
 
 
-TRUNK_Z = (-0.03, 0.08, 0.20, 0.45, 1.3, 2.4, 3.4, 4.4, 5.4, 6.5, 7.6)
+TRUNK_Z = (-0.30 if BACKDROP else -0.03, 0.08, 0.20, 0.45, 1.3, 2.4, 3.4, 4.4, 5.4, 6.5, 7.6)
 FLARE = (1.70, 1.40, 1.16, 1.0)          # radius factor of the bottom rings
 BUTTRESS = (0.36, 0.26, 0.10, 0.0)       # buttress bulge strength of the bottom rings
 butt_angles = [i * 2 * math.pi / 5 + rng.uniform(-0.35, 0.35) for i in range(5)]
@@ -276,7 +286,7 @@ for i, (h, out, tz) in enumerate(LIMBS):
     br = r0 * 0.45
     tube([p - tdir * 0.05, bmid, btip], [br, br * 0.6, 0.014], 5, noise=0.03, v0=rng.random())
 
-bark_mesh = bpy.data.meshes.new("StreetTree_Bark")
+bark_mesh = bpy.data.meshes.new(NAME + "_Bark")
 bm.to_mesh(bark_mesh)
 bm.free()
 for p in bark_mesh.polygons:
@@ -344,7 +354,7 @@ for s in range(4):
         f.material_index = 1
         for loop in f.loops:
             loop[puv].uv = uvf(loop.vert.co)
-pit_mesh = bpy.data.meshes.new("StreetTree_Pit")
+pit_mesh = bpy.data.meshes.new(NAME + "_Pit")
 bm.to_mesh(pit_mesh)
 bm.free()
 pit_mesh.materials.append(material("Tree_Soil", SOIL_TEX, roughness=1.0))
@@ -391,10 +401,14 @@ paint(leaf_mesh, leaf_col)
 paint(bark_mesh, bark_col)
 paint(pit_mesh, pit_col)
 
-bark = bpy.data.objects.new("StreetTree_Bark", bark_mesh)
-leaves = bpy.data.objects.new("StreetTree_Leaves", leaf_mesh)
-pit = bpy.data.objects.new("StreetTree_Pit", pit_mesh)
-TREE = (bark, leaves, pit)
+bark = bpy.data.objects.new(NAME + "_Bark", bark_mesh)
+leaves = bpy.data.objects.new(NAME + "_Leaves", leaf_mesh)
+if BACKDROP:            # no tree pit: drop the soil square and the edging
+    bpy.data.meshes.remove(pit_mesh)
+    TREE = (bark, leaves)
+else:
+    pit = bpy.data.objects.new(NAME + "_Pit", pit_mesh)
+    TREE = (bark, leaves, pit)
 for o in TREE:
     col.objects.link(o)
 
@@ -407,4 +421,4 @@ bpy.ops.export_scene.gltf(filepath=OUT, export_format="GLB", use_selection=True,
 for o in TREE:
     o.location.x = 80
 tris = {o.name: sum(len(p.vertices) - 2 for p in o.data.polygons) for o in TREE}
-print("street tree exported:", OUT, "|", sum(tris.values()), "triangles", tris)
+print(NAME, "exported:", OUT, "|", sum(tris.values()), "triangles", tris)
