@@ -512,6 +512,21 @@ other voices: mono OGG Vorbis, 22.05 kHz, 64 kbps, −18.0 … −18.1 LUFS, tru
 | `<node-id>.ogg` × 4, `timings.json` | **Kokoro-82M** v1.0 model weights and voice pack **`af_heart`** (hexgrad), voice files `voices/af_*.pt` downloaded by the `kokoro` package | https://huggingface.co/hexgrad/Kokoro-82M | **Apache-2.0** (credited in `#credits`) | the shopper's spoken lines |
 | (tool, not shipped) | `kokoro` 0.9.4, `misaki` 0.9.4, spaCy `en_core_web_sm`, espeak-ng: the same tools as above | see Mr. Pickell's table | Apache-2.0 / MIT / GPL-3.0 (program only) | generating the clips |
 
+### Voice of the grocer's boy (`assets/audio/voices/grocer-boy/`)
+
+Kokoro-82M, voice **`am_fenrir`** (2026-11-12, chosen by the scene-integrator by measurement among the
+male voices already on this PC, `tools/make_voice_grocer_boy.py --audition`: the highest and liveliest
+(median ≈ 129 Hz, 13-semitone range, against am_michael ≈ 117 Hz / 8.6 st and am_onyx ≈ 85 Hz / 4 st),
+so he sounds young and distinct from Mr. Pickell and Mr. Rittenhouse; owner to judge by ear). No new
+download (voice file already in the Hugging Face cache; generated offline). 4 clips `<node-id>.ogg`
+(his 4 lines) + `timings.json`, speed 1.0; mono OGG Vorbis, 22.05 kHz, 64 kbps, −17.9 … −18.3 LUFS,
+true peak ≤ −1.9 dBFS.
+
+| File | Source | URL | Licence | Used for |
+|------|--------|-----|---------|----------|
+| `<node-id>.ogg` × 4, `timings.json` | **Kokoro-82M** v1.0 model weights and voice pack **`am_fenrir`** (hexgrad), from the Hugging Face cache | https://huggingface.co/hexgrad/Kokoro-82M | **Apache-2.0** (credited in `#credits`) | the grocer's boy's spoken lines |
+| (tool, not shipped) | the same tools as above | see Mr. Pickell's table | Apache-2.0 / MIT / GPL-3.0 (program only) | generating the clips |
+
 ## Code libraries (loaded from CDNs, not stored in the repo)
 
 | Library | Version | URL | Licence | Used for |

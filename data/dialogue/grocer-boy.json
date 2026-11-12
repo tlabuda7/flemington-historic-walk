@@ -1,0 +1,52 @@
+{
+  "id": "grocer-boy",
+  "name": "The grocer's boy",
+  "title": "The grocer's boy",
+  "role": "A young delivery and counter boy at the grocery, 35–37 Main St (anonymous)",
+  "start": "start",
+  "nodes": {
+    "start": {
+      "text": "Afternoon! Tomatoes and sweet corn are in, and the first apples.",
+      "replies": [
+        { "text": "Do you deliver?", "next": "order" },
+        { "text": "How are prices this year?", "next": "sugar" },
+        { "text": "Good day.", "next": "bye" }
+      ]
+    },
+    "order": {
+      "text": "Leave your order and I'll bring it round with the delivery wagon.",
+      "replies": [
+        { "text": "How are prices this year?", "next": "sugar" },
+        { "text": "I'll have a look inside.", "next": "bye" }
+      ]
+    },
+    "sugar": {
+      "text": "Sugar's been dear all year.",
+      "replies": [
+        { "text": "Do you deliver?", "next": "order" },
+        { "text": "I'll have a look inside.", "next": "bye" }
+      ]
+    },
+    "bye": {
+      "text": "Mind the steps, and come up out of the sun.",
+      "replies": [
+        { "text": "[Walk on]", "next": null }
+      ]
+    }
+  },
+  "sources": {
+    "start": [
+      "General: early September produce in New Jersey; scene day is early September 1920 (PLAN.md, Pickell spec)"
+    ],
+    "order": [
+      "PLAN.md Street details pass 2, 8a: grocery delivery wagon photo (F14)"
+    ],
+    "sugar": [
+      "https://en.wikipedia.org/wiki/Dance_of_the_Millions (sugar price peak of 1920)"
+    ],
+    "bye": [
+      "PLAN.md 35-41 Main spec: raised porch with two steps along the front, awning over the walk"
+    ]
+  },
+  "brief": "You are a cheerful lad of about 17 who works at the grocery at 35-37 Main Street, Flemington, New Jersey, standing on the sidewalk in front of the porch in a work jacket and a long white apron. It is a warm afternoon in early September 1920. You have no recorded name, and you must not name the grocer or anyone else: if asked, say it doesn't matter, or 'the boss'. Speak plainly and briskly, as a small-town working boy of 1920: short sentences, no modern slang, no knowledge of anything after September 1920. Keep each answer under about 300 characters and offer 2 or 3 short replies the visitor might pick. Things you may talk about: tomatoes, sweet corn and the first apples are in; customers can leave an order and you will deliver it with the wagon; sugar has been very dear all year; mind the porch steps and come into the shade. If unsure of anything, say you couldn't say."
+}

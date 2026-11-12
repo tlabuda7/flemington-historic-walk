@@ -1,0 +1,219 @@
+{
+ "start": {
+  "duration_s": 3.666,
+  "words": [
+   {
+    "w": "Afternoon!",
+    "start": 0.051,
+    "end": 0.676
+   },
+   {
+    "w": "Tomatoes",
+    "start": 0.751,
+    "end": 1.326
+   },
+   {
+    "w": "and",
+    "start": 1.326,
+    "end": 1.464
+   },
+   {
+    "w": "sweet",
+    "start": 1.464,
+    "end": 1.77
+   },
+   {
+    "w": "corn",
+    "start": 1.776,
+    "end": 2.076
+   },
+   {
+    "w": "are",
+    "start": 2.076,
+    "end": 2.226
+   },
+   {
+    "w": "in,",
+    "start": 2.226,
+    "end": 2.476
+   },
+   {
+    "w": "and",
+    "start": 2.514,
+    "end": 2.614
+   },
+   {
+    "w": "the",
+    "start": 2.614,
+    "end": 2.714
+   },
+   {
+    "w": "first",
+    "start": 2.714,
+    "end": 3.051
+   },
+   {
+    "w": "apples.",
+    "start": 3.051,
+    "end": 3.59
+   }
+  ]
+ },
+ "order": {
+  "duration_s": 3.406,
+  "words": [
+   {
+    "w": "Leave",
+    "start": 0.075,
+    "end": 0.312
+   },
+   {
+    "w": "your",
+    "start": 0.312,
+    "end": 0.45
+   },
+   {
+    "w": "order",
+    "start": 0.45,
+    "end": 0.9
+   },
+   {
+    "w": "and",
+    "start": 0.912,
+    "end": 1.037
+   },
+   {
+    "w": "I'll",
+    "start": 1.037,
+    "end": 1.237
+   },
+   {
+    "w": "bring",
+    "start": 1.237,
+    "end": 1.475
+   },
+   {
+    "w": "it",
+    "start": 1.475,
+    "end": 1.637
+   },
+   {
+    "w": "round",
+    "start": 1.637,
+    "end": 2.075
+   },
+   {
+    "w": "with",
+    "start": 2.075,
+    "end": 2.212
+   },
+   {
+    "w": "the",
+    "start": 2.212,
+    "end": 2.3
+   },
+   {
+    "w": "delivery",
+    "start": 2.3,
+    "end": 2.825
+   },
+   {
+    "w": "wagon.",
+    "start": 2.825,
+    "end": 3.31
+   }
+  ]
+ },
+ "sugar": {
+  "duration_s": 1.485,
+  "words": [
+   {
+    "w": "Sugar's",
+    "start": 0.088,
+    "end": 0.438
+   },
+   {
+    "w": "been",
+    "start": 0.438,
+    "end": 0.613
+   },
+   {
+    "w": "dear",
+    "start": 0.613,
+    "end": 0.838
+   },
+   {
+    "w": "all",
+    "start": 0.838,
+    "end": 1.038
+   },
+   {
+    "w": "year.",
+    "start": 1.038,
+    "end": 1.41
+   }
+  ]
+ },
+ "bye": {
+  "duration_s": 2.073,
+  "words": [
+   {
+    "w": "Mind",
+    "start": 0.055,
+    "end": 0.293
+   },
+   {
+    "w": "the",
+    "start": 0.293,
+    "end": 0.38
+   },
+   {
+    "w": "steps,",
+    "start": 0.38,
+    "end": 0.755
+   },
+   {
+    "w": "and",
+    "start": 0.793,
+    "end": 0.905
+   },
+   {
+    "w": "come",
+    "start": 0.905,
+    "end": 1.118
+   },
+   {
+    "w": "up",
+    "start": 1.118,
+    "end": 1.268
+   },
+   {
+    "w": "out",
+    "start": 1.268,
+    "end": 1.393
+   },
+   {
+    "w": "of",
+    "start": 1.393,
+    "end": 1.468
+   },
+   {
+    "w": "the",
+    "start": 1.468,
+    "end": 1.568
+   },
+   {
+    "w": "sun.",
+    "start": 1.568,
+    "end": 1.99
+   }
+  ]
+ },
+ "_meta": {
+  "model": "hexgrad/Kokoro-82M",
+  "voice": "am_fenrir",
+  "speed": 1.0,
+  "sample_rate": 22050,
+  "note": "words = on-screen tokens in order; times in seconds from clip start"
+ }
+}

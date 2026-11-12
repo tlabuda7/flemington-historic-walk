@@ -62,7 +62,7 @@
     <b>Sound</b> starts with your first click or key press (or Enter VR); M mutes / unmutes.
   </div>
   <div id="credits">
-    Voices of Mr. Pickell, Mr. Rittenhouse and the shopper: synthetic speech (Kokoro-82M, voices am_michael, am_onyx and af_heart),
+    Voices of Mr. Pickell, Mr. Rittenhouse, the shopper and the grocer's boy: synthetic speech (Kokoro-82M, voices am_michael, am_onyx, af_heart and am_fenrir),
     <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener">Apache-2.0</a>,
     <a href="https://huggingface.co/hexgrad/Kokoro-82M" target="_blank" rel="noopener">huggingface.co/hexgrad/Kokoro-82M</a>.
   </div>
@@ -571,6 +571,20 @@
       animation-mixer="clip: Idle; crossFadeDuration: 0.4"
       npc="dialogue: data/dialogue/shopper.json; voice: assets/audio/voices/shopper/; radius: 2.5; closeRadius: 4; voiceHeight: 1.52; randomIdleStart: true"
       blob-shadow="width: 0.8; depth: 0.55; opacity: 0.6"></a-entity>
+    <!-- The grocer's boy (anonymous, about 17, light tan work jacket, long white apron; seen at
+         this porch in the HCHS Stryker plate c. 1906-10), on the west walk in front of the grocery
+         porch at 35-37 Main (#bldg-35-41-main: porch front x -11.12, its two steps out to x -10.52,
+         columns on the porch front, awning valance 2.25 m up out to x -9.82; porch z -129.42 ...
+         -135.82, stair inside the porch at its south end): he stands 0.5 m clear of the steps,
+         under the awning's edge (he is 1.72 m), facing ESE toward visitors coming from the south.
+         He never names the grocer. Built by tools/blender/npc_grocer_boy.py + npc_grocer_boy_bake.py
+         (preview: npc_grocer_boy_preview.py). Voice: assets/audio/voices/grocer-boy/ (Kokoro
+         am_fenrir, tools/make_voice_grocer_boy.py). -->
+    <a-entity id="npc-grocer-boy" position="-9.8 0.15 -133" rotation="0 60 0"
+      gltf-model="url(assets/models/npc-grocer-boy.glb?v=1)"
+      animation-mixer="clip: Idle; crossFadeDuration: 0.4"
+      npc="dialogue: data/dialogue/grocer-boy.json; voice: assets/audio/voices/grocer-boy/; radius: 2.5; closeRadius: 4; voiceHeight: 1.62; randomIdleStart: true"
+      blob-shadow="width: 0.9; depth: 0.6; opacity: 0.6"></a-entity>
 
     <!-- ============================================================
          BEYOND THE STARTER BLOCK: simple placeholders.
