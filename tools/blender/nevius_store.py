@@ -18,8 +18,11 @@ hood moulds on a stone sill band, brick quoins, bracketed cornice with a segment
 painted wood shop front with a recessed double door and a bracketed cornice, one plain pale
 canvas awning with a fringed scalloped valance and side curtains (1912 card, 2026-11-11 fixes).
 
-Only 6 materials, in this slot order on every part:
-    0 Brick, 1 Trim, 2 Glass, 3 Dark, 4 Awning, 5 WindowBack
+Material slots, in this order on every part:
+    0 Brick, 1 Trim, 2 Glass, 3 Dark, 4 Awning, 5 WindowBack, 6 Display, 7 GlassShop
+(Display = goods, display floors and the store's back picture: cells of the Nevius-only atlas
+assets/textures/nevius-store/shop_display.jpg, exported as NVR_ShopInterior; GlassShop = the
+see-through shop-window glass `glass_shop`; window displays trial, owner 2026-11-11).
 Glass is a thin pane (its own material `glass`, see nevius_store_bake.py) a few cm in front
 of a "window back" (shared atlas assets/textures/shared/window_backs.jpg: blinds, lace,
 curtains, dark rooms); WB_FRAMES records where each back is and which atlas cell it
@@ -64,8 +67,8 @@ S2, SP2, RISE2 = 4.55, 6.45, 0.25          # 2nd floor: sill, spring, segmental 
 BAND0, BAND1 = 7.25, 7.45                  # 3rd floor sill band
 S3, SP3 = 7.45, 8.95                       # 3rd floor: sill, spring (semicircular; crown ~9.40, review round 1)
 
-BRICK, TRIM, GLASS, DARK, AWNING, WBACK = range(6)
-NAMES = ["Brick", "Trim", "Glass", "Dark", "Awning", "WindowBack"]
+BRICK, TRIM, GLASS, DARK, AWNING, WBACK, DISPLAY, GLASS_SHOP = range(8)
+NAMES = ["Brick", "Trim", "Glass", "Dark", "Awning", "WindowBack", "Display", "GlassShop"]
 
 # ---------------------------------------------------------------------------
 # Materials (plain stand-ins; nevius_store_bake.py swaps in the textures)
@@ -93,7 +96,7 @@ def plain(name, color, rough=0.8):
     return mat
 
 
-COLOURS = ["#8e4632", "#d8cdb4", "#1e2226", "#3a2a1f", "#b06050", "#3a3028"]
+COLOURS = ["#8e4632", "#d8cdb4", "#1e2226", "#3a2a1f", "#b06050", "#3a3028", "#7a6f5e", "#141412"]
 MATS = [plain("NV_" + n, c) for n, c in zip(NAMES, COLOURS)]
 
 # ---------------------------------------------------------------------------
@@ -143,6 +146,7 @@ class MB:
             f.material_index = ms[i]
             faces.append(f)
         bmesh.ops.recalc_face_normals(bm, faces=faces)
+        return faces
 
     def face(self, pts, d, axis, outward, mi):
         """One flat n-gon (outline [(u, v), ...] at depth d) whose normal points along
@@ -166,7 +170,7 @@ class MB:
         return f
 
     def box(self, x0, x1, y0, y1, z0, z1, mi=TRIM):
-        self.prism([(x0, z0), (x1, z0), (x1, z1), (x0, z1)], y0, y1, "y", mi)
+        return self.prism([(x0, z0), (x1, z0), (x1, z1), (x0, z1)], y0, y1, "y", mi)
 
     def arc_band(self, cu, cv, r_in, r_out, a0, a1, d0, d1, axis="y", segs=8, mi=TRIM):
         """Curved band between radii r_in and r_out, angles a0..a1 (0 = +u, pi/2 = up)."""
@@ -510,13 +514,11 @@ SF = 0.10                      # shop-front plane behind the brick face
 REC = SF + 1.20                # back of the entrance recess
 CUT.prism(rect(-3.45, 3.45, SHOP_FL, 3.95), -0.25, SF, "y", mi=(TRIM, TRIM, [TRIM, BRICK, TRIM, BRICK]))
 CUT.prism([(-0.85, -0.25), (0.75, -0.25), (0.75, SF), (0.65, REC), (-0.75, REC), (-0.85, SF)], SHOP_FL, 2.95, "z",
-          mi=(TRIM, TRIM, [TRIM, TRIM, WBACK, TRIM, WBACK, TRIM]))
-# the splayed glass returns: shop interior behind, glass on the bulkheads' inner line
-for a, b, inner, out, cell in (((-0.85, SF), (-0.75, REC), ((-0.80, SF), (-0.70, REC)), (1, 0), "return_n"),
-                               ((0.65, REC), (0.75, SF), ((0.60, REC), (0.70, SF)), (-1, 0), "return_s")):
-    wb_frame(a, ((b[0] - a[0]) / math.dist(a, b), (b[1] - a[1]) / math.dist(a, b)), math.dist(a, b), 0.70, 2.85,
-             out, cell)
-    P.quad3(inner[0], inner[1], 0.70, 2.85, out, GLASS)
+          mi=(TRIM, TRIM, [TRIM, TRIM, TRIM, TRIM, TRIM, TRIM]))
+# the splayed glass returns on the bulkheads' inner line: since the displays trial the only
+# divider between the recess and the 3D display spaces (their cutters overlap the recess)
+for inner, out in ((((-0.80, SF), (-0.70, REC)), (1, 0)), (((0.60, REC), (0.70, SF)), (-1, 0))):
+    P.quad3(inner[0], inner[1], 0.70, 2.85, out, GLASS_SHOP)
 CUT.prism(rect(2.50, 3.35, SHOP_FL, SHOP_FL + 2.50), -0.25, SF + 0.10, "y", mi=(TRIM, DARK, TRIM))
 
 # stone step along the front
@@ -527,20 +529,18 @@ for x0, x1 in ((-3.45, -3.35), (-0.93, -0.85), (0.75, 0.83), (2.42, 2.50), (3.35
     P.box(x0, x1, 0.0, SF, SHOP_FL, 2.95, mi=TRIM)
 
 
-def display(x0, x1, cell):
+def display(x0, x1):
     """Display window between x0 and x1: panelled bulkhead, sill rail, glass with one
-    central mullion."""
+    central mullion. Behind the glass: a real 3D display space (see "Window displays")."""
     P.box(x0 + 0.08, x1 - 0.08, SF - 0.02, SF, SHOP_FL + 0.10, 0.60, mi=TRIM)      # raised bulkhead panel
     P.box(x0, x1, SF - 0.05, SF, 0.66, 0.72, mi=TRIM)                              # sill rail
-    P.box(x0, x1, SF - 0.02, SF, 0.72, 2.95, mi=WBACK)                             # shop interior behind the glass
-    wb_frame((x0, SF - 0.02), (1, 0), x1 - x0, 0.72, 2.95, (0, -1), cell)
-    P.face(rect(x0, x1, 0.72, 2.95), SF - 0.045, "y", -1, GLASS)                     # display glass
+    P.face(rect(x0, x1, 0.72, 2.95), SF - 0.045, "y", -1, GLASS_SHOP)                # display glass
     xm = (x0 + x1) / 2
     P.box(xm - 0.04, xm + 0.04, SF - 0.05, SF - 0.02, 0.72, 2.95, mi=TRIM)          # mullion
 
 
-display(-3.35, -0.93, "shop_a")
-display(0.83, 2.42, "shop_b")
+display(-3.35, -0.93)
+display(0.83, 2.42)
 
 # transom bar, 6 transom lights, fascia (plain, no lettering)
 P.box(-3.45, 3.45, 0.0, SF, 2.95, 3.05, mi=TRIM)
@@ -567,13 +567,23 @@ for k in range(10):
 # entrance recess: splayed returns with bulkheads, glazed double door at the back
 for pts in ([(-0.85, SF), (-0.80, SF), (-0.70, REC), (-0.75, REC)], [(0.70, SF), (0.75, SF), (0.65, REC), (0.60, REC)]):
     P.prism(pts, SHOP_FL, 0.70, "z", mi=TRIM)                                       # bulkheads
-    P.prism(pts, 2.85, 2.95, "z", mi=TRIM)                                          # head rail
-for x0, x1, cell in ((-0.75, -0.055, "door_l"), (-0.045, 0.65, "door_r")):
-    P.box(x0, x1, REC - 0.05, REC, SHOP_FL, SHOP_FL + 2.60, mi=DARK)               # leaves
-    P.box(x0 + 0.09, x1 - 0.09, REC - 0.065, REC - 0.05, 1.05, 2.58, mi=WBACK)     # shop seen through the door
-    wb_frame((x0 + 0.09, REC - 0.065), (1, 0), x1 - x0 - 0.18, 1.05, 2.58, (0, -1), cell)
-    P.face(rect(x0 + 0.09, x1 - 0.09, 1.05, 2.58), REC - 0.08, "y", -1, GLASS)       # glass upper two-thirds
+    P.prism(pts, 2.85, 3.00, "z", mi=TRIM)                                          # head rail (up to the display ceilings)
+# glazed double door: real glazed openings looking into the dim store space behind
+# (displays trial); frames, lower panels, glass in the leaf's middle plane, a pale roller
+# shade inside on the upper part of each light (1912 card)
+for x0, x1 in ((-0.75, -0.055), (-0.045, 0.65)):
+    DY0, DY1 = REC - 0.05, REC
+    P.box(x0, x1, DY0, DY1, SHOP_FL, 1.05, mi=DARK)                                # lower part + lock rail
+    P.box(x0, x0 + 0.09, DY0, DY1, 1.05, 2.58, mi=DARK)                            # stiles
+    P.box(x1 - 0.09, x1, DY0, DY1, 1.05, 2.58, mi=DARK)
+    P.box(x0, x1, DY0, DY1, 2.58, SHOP_FL + 2.60, mi=DARK)                         # top rail
+    P.face(rect(x0 + 0.09, x1 - 0.09, 1.05, 2.58), REC - 0.025, "y", -1, GLASS_SHOP)   # glass upper two-thirds
     P.box(x0 + 0.09, x1 - 0.09, REC - 0.065, REC - 0.05, 0.25, 0.90, mi=DARK)      # raised lower panel
+    P.face(rect(x0 + 0.09, x1 - 0.09, 2.10, 2.58), REC + 0.005, "y", -1, AWNING)     # door shade, inside
+    P.box(x0 + 0.09, x1 - 0.09, REC + 0.003, REC + 0.023, 2.085, 2.115, mi=DARK)   # its bottom slat
+P.box(-0.06, -0.04, REC - 0.055, REC, SHOP_FL, SHOP_FL + 2.60, mi=DARK)           # astragal over the meeting stiles
+P.box(-0.75, 0.65, REC - 0.05, REC, SHOP_FL + 2.60, 2.75, mi=TRIM)                  # rail under the door transom
+P.box(-0.75, 0.65, REC - 0.05, REC, 2.92, 2.95, mi=TRIM)                            # rail over it
 P.box(-0.75, 0.65, REC - 0.02, REC, 2.75, 2.92, mi=WBACK)                           # door transom
 wb_frame((-0.75, REC - 0.02), (1, 0), 1.40, 2.75, 2.92, (0, -1), "transom_door")
 P.face(rect(-0.75, 0.65, 2.75, 2.92), REC - 0.04, "y", -1, GLASS)
@@ -581,6 +591,244 @@ P.face(rect(-0.75, 0.65, 2.75, 2.92), REC - 0.04, "y", -1, GLASS)
 # upper-floor street door: two raised panels on the door face (0.20 behind the front plane)
 for z0, z1 in ((0.30, 1.20), (1.40, 2.45)):
     P.box(2.62, 3.23, SF + 0.08, SF + 0.10, z0, z1, mi=DARK)
+
+# ---------------------------------------------------------------------------
+# Window displays trial (owner, 2026-11-11; PLAN.md "Window displays trial"): real shallow
+# 3D display spaces behind the shop glass, panelled window backs, a short dim store space
+# behind them (the old interior picture moved to its back wall), roller shades, and plain
+# dry goods (nothing lettered). Display parts go into DSP (object NV_Displays): the bake keeps
+# all of them (no hidden-face removal) and lightmaps them at full scale. Goods faces carry
+# the face attribute `nv_cell` = an atlas cell of assets/textures/nevius-store/shop_display.json
+# (tools/prepare_nevius_display.py); the bake script maps their UVs into that cell.
+# ---------------------------------------------------------------------------
+from mathutils import Matrix, Vector
+
+DSP_FL, DSP_CEIL = 0.70, 3.00                 # display floor (sill height) and ceiling
+VOID_Y0, VOID_Y1, VOID_X0, VOID_X1 = 1.28, 2.80, -3.42, 2.42
+VOID_FL, VOID_TOP = 0.11, 3.40                # store floor 1 cm under the shop floor (no coplanar cut)
+NORTH_DSP = [(-3.40, 0.05), (-0.83, 0.05), (-0.73, 1.32), (-3.40, 1.32)]
+SOUTH_DSP = [(0.73, 0.05), (2.45, 0.05), (2.45, 1.32), (0.63, 1.32)]
+# display spaces: floor = drab cloth (atlas cell floor_cloth), sides and ceiling painted wood;
+# 2 cm overlap into the recess removes the recess side faces there (the return glass divides)
+for poly in (NORTH_DSP, SOUTH_DSP):
+    CUT.prism(poly, DSP_FL, DSP_CEIL, "z", mi=(DISPLAY, TRIM, TRIM))
+# store space behind: board floor (Dark), painted walls and ceiling, back wall = the old
+# interior picture (cell store_back)
+CUT.prism(rect(VOID_X0, VOID_X1, VOID_FL, VOID_TOP), VOID_Y0, VOID_Y1, "y",
+          mi=(TRIM, DISPLAY, [DARK, TRIM, TRIM, TRIM]))
+
+DSP = MB()
+CELL_NAMES = ["floor_cloth", "form_white", "form_cream", "navy_serge", "linen_white", "bolt_brown", "bolt_grey",
+              "bolt_green", "straw", "hat_band", "muslin", "chambray", "card_box", "wood_dark", "store_back"]
+CID = {n: i + 1 for i, n in enumerate(CELL_NAMES)}
+_CL = DSP.bm.faces.layers.int.new("nv_cell")
+
+
+def add_mesh(verts, polys, M, cell, smooth=True, flat=()):
+    """Local verts/polys -> DSP through the 4x4 matrix M; polys listed in `flat` stay flat."""
+    bm = DSP.bm
+    vs = [bm.verts.new(M @ Vector(v)) for v in verts]
+    out = []
+    for i, p in enumerate(polys):
+        f = bm.faces.new([vs[k] for k in p])
+        f[_CL] = CID[cell[i] if isinstance(cell, (list, tuple)) else cell]
+        f.material_index = DISPLAY
+        f.smooth = smooth and i not in flat
+        out.append(f)
+    return out
+
+
+def lathe(prof, segs, M, cells, sxy=None, ripple=None):
+    """Surface of revolution about local z. prof [(r, z)] ordered so that the outside is on
+    the right (going up = outward normal, going outward = downward normal); r = 0 ends make
+    a fan. cells: one cell or one per profile band. sxy(z) -> (sx, sy) ellipse scale;
+    ripple(z, theta) -> extra radius (skirt folds). Smooth shaded."""
+    verts, polys, pc, ring_idx = [], [], [], []
+    for r, z in prof:
+        if r == 0:
+            ring_idx.append([len(verts)])
+            verts.append((0.0, 0.0, z))
+            continue
+        sx, sy = sxy(z) if sxy else (1.0, 1.0)
+        idx = []
+        for k in range(segs):
+            t = 2 * math.pi * k / segs
+            rr = r + (ripple(z, t) if ripple else 0.0)
+            idx.append(len(verts))
+            verts.append((rr * math.cos(t) * sx, rr * math.sin(t) * sy, z))
+        ring_idx.append(idx)
+    for b in range(len(prof) - 1):
+        a, c = ring_idx[b], ring_idx[b + 1]
+        cell = cells[b] if isinstance(cells, (list, tuple)) else cells
+        for k in range(segs):
+            k1 = (k + 1) % segs
+            if len(a) == 1:
+                polys.append((a[0], c[k1], c[k]))
+            elif len(c) == 1:
+                polys.append((a[k], a[k1], c[0]))
+            else:
+                polys.append((a[k], a[k1], c[k1], c[k]))
+            pc.append(cell)
+    return add_mesh(verts, polys, M, pc)
+
+
+def place(x, y, z=DSP_FL, yaw_deg=0.0, tilt=None):
+    """Matrix: optional tilt (axis, deg), then yaw about z, then move to (x, y, z)."""
+    M = Matrix.Translation((x, y, z)) @ Matrix.Rotation(math.radians(yaw_deg), 4, "Z")
+    if tilt:
+        M = M @ Matrix.Rotation(math.radians(tilt[1]), 4, tilt[0])
+    return M
+
+
+def soft_slab(length, w, t, M, cell, n_round=3):
+    """Cloth bolt / folded linen: a slab `length` (local x) x `w` (y) x `t` (z) whose long
+    edges are rounded (stadium section), flat ends; bottom at local z 0."""
+    r = t / 2
+    sec = []
+    for i in range(n_round + 1):                        # front round edge (-y), bottom to top
+        a = -math.pi / 2 - math.pi * i / n_round
+        sec.append((-(w / 2 - r) + r * math.cos(a), r + r * math.sin(a)))
+    for i in range(n_round + 1):                        # back round edge (+y), top to bottom
+        a = math.pi / 2 - math.pi * i / n_round
+        sec.append(((w / 2 - r) + r * math.cos(a), r + r * math.sin(a)))
+    n = len(sec)
+    verts = [(-length / 2, y, z) for y, z in sec] + [(length / 2, y, z) for y, z in sec]
+    polys = [(i, (i + 1) % n, n + (i + 1) % n, n + i) for i in range(n)]
+    polys.append(tuple(reversed(range(n))))
+    polys.append(tuple(range(n, 2 * n)))
+    faces = add_mesh(verts, polys, M, cell, flat=(n, n + 1))
+    bmesh.ops.recalc_face_normals(DSP.bm, faces=faces)
+    return faces
+
+
+def plain_box(x0, x1, y0, y1, z0, z1, M, cell):
+    v = [(x0, y0, z0), (x1, y0, z0), (x1, y1, z0), (x0, y1, z0), (x0, y0, z1), (x1, y0, z1), (x1, y1, z1), (x0, y1, z1)]
+    p = [(0, 1, 5, 4), (1, 2, 6, 5), (2, 3, 7, 6), (3, 0, 4, 7), (4, 5, 6, 7)]     # no bottom (stands on something)
+    faces = add_mesh(v, p, M, cell, smooth=False)
+    for f in faces:                                     # outward
+        f.normal_update()
+        c = sum((v.co for v in f.verts), Vector()) / 4
+        ctr = M @ Vector(((x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2))
+        if f.normal.dot(c - ctr) < 0:
+            f.normal_flip()
+    return faces
+
+
+# --- window backs: low panelled partitions (varnished), open to the store above 1.80 ------
+PART_Y0, PART_Y1, PART_Z0, PART_TOP = 1.26, 1.30, 0.60, 1.80
+for x0, x1 in ((-3.40, -0.74), (0.645, 2.45)):
+    DSP.box(x0, x1, PART_Y0, PART_Y1, PART_Z0, PART_TOP, mi=DARK)
+    DSP.box(x0, x1, PART_Y0 - 0.015, PART_Y1 + 0.015, PART_TOP, PART_TOP + 0.03, mi=DARK)     # cap rail
+    n = max(1, round((x1 - x0) * 2))                                                         # 2 panels per metre
+    pw = (x1 - x0) / n
+    for k in range(n):
+        faces = DSP.box(x0 + k * pw + 0.05, x0 + (k + 1) * pw - 0.05, PART_Y0 - 0.01, PART_Y0, 0.80, 1.68, mi=DARK)
+        bmesh.ops.delete(DSP.bm, geom=[f for f in faces if f.normal.y > 0.9], context="FACES")   # back: on the partition
+
+# --- roller shades inside every display light (1909 + 1912 cards), ecru canvas + slat -----
+for x0, x1, zb in ((-3.33, -2.18, 2.00), (-2.10, -0.95, 2.00), (0.85, 1.585, 2.05), (1.665, 2.40, 2.05)):
+    DSP.face(rect(x0, x1, zb, 2.95), 0.11, "y", -1, AWNING)
+    DSP.box(x0, x1, 0.10, 0.12, zb - 0.015, zb + 0.015, mi=DARK)
+
+# --- N1 two dress forms in long pale dresses (1912 card), headless with a turned knob ------
+# (r, z) above the display floor, top 1.55: long flared skirt, a narrow belt (own colour) at the
+# waist, full blouse, rounded shoulders, neck and a small turned knob
+FORM = [(0.285, 0.0), (0.258, 0.34), (0.205, 0.68), (0.158, 0.86), (0.112, 0.99), (0.114, 1.035), (0.150, 1.13),
+        (0.176, 1.24), (0.174, 1.33), (0.158, 1.40), (0.118, 1.437), (0.065, 1.460), (0.044, 1.475), (0.044, 1.505),
+        (0.0, 1.55)]
+FORM_BELT = 4                                                    # band index of the belt (0.99 - 1.035)
+
+
+def form_scale(z):
+    """Skirt nearly round, torso wider than deep (shoulders)."""
+    t = min(1.0, max(0.0, (z - 0.84) / 0.30))
+    return 1.0 + 0.22 * t, 0.90 - 0.18 * t
+
+
+def form_folds(z, th):
+    """Soft vertical folds in the skirt, deepest at the hem, gone by the hips."""
+    a = 0.012 * min(1.0, max(0.0, (0.85 - z) / 0.85)) ** 0.8
+    return a * math.cos(5 * th + 0.4)
+
+
+for x, y, yaw, cell, belt in ((-2.85, 0.72, -15.0, "form_white", "navy_serge"),
+                              (-2.40, 0.92, 10.0, "form_cream", "bolt_brown")):
+    cells = [cell] * 13 + ["wood_dark"]
+    cells[FORM_BELT] = belt
+    lathe(FORM, 22, place(x, y, yaw_deg=yaw), cells, sxy=form_scale, ripple=form_folds)
+
+# --- N2 draped bolt (Cole): box stand, bolt lying on it, navy serge falling to the floor ---
+ST_X, ST_Y, ST_W, ST_D, ST_H = -1.50, 0.85, 0.50, 0.35, 0.45
+DSP.box(ST_X - ST_W / 2, ST_X + ST_W / 2, ST_Y - ST_D / 2, ST_Y + ST_D / 2, DSP_FL, DSP_FL + ST_H, mi=TRIM)
+soft_slab(0.65, 0.20, 0.06, place(ST_X, ST_Y + 0.03, DSP_FL + ST_H), "navy_serge", n_round=2)
+# the cloth: a smooth sheet following a path (y, z) over the bolt's front, the stand's edge,
+# down its front and out across the floor; vertical folds (forward only) grow toward the floor
+SY = ST_Y - ST_D / 2                                    # stand front 0.675
+PATH = [(0.80, 1.212), (0.755, 1.200), (0.742, 1.170), (0.700, 1.153), (SY - 0.005, 1.138), (SY - 0.014, 1.10),
+        (SY - 0.016, 1.00), (SY - 0.017, 0.90), (SY - 0.020, 0.80), (SY - 0.036, 0.728), (SY - 0.085, 0.706),
+        (SY - 0.150, 0.703)]
+NC = 8
+drape_v, drape_p = [], []
+for i, (py, pz) in enumerate(PATH):
+    s = i / (len(PATH) - 1)
+    if i == 0:
+        ty, tz = PATH[1][0] - py, PATH[1][1] - pz
+    elif i == len(PATH) - 1:
+        ty, tz = py - PATH[i - 1][0], pz - PATH[i - 1][1]
+    else:
+        ty, tz = PATH[i + 1][0] - PATH[i - 1][0], PATH[i + 1][1] - PATH[i - 1][1]
+    tl = math.hypot(ty, tz)
+    ny, nz = tz / tl, -ty / tl                            # outward: forward (-y) on the hanging part, up on the floor
+    amp = 0.030 * min(1.0, max(0.0, (s - 0.30) / 0.45))   # folds start below the stand's edge
+    half = 0.225 + 0.035 * min(1.0, max(0.0, (s - 0.35) / 0.6))
+    for k in range(NC + 1):
+        u = k / NC
+        fold = amp * 0.5 * (1 + math.cos(2 * math.pi * 2.5 * u + 0.6))
+        edge_curl = 0.010 * min(1.0, max(0.0, (s - 0.4) / 0.4)) * (abs(2 * u - 1) ** 6)
+        off = fold + edge_curl
+        z = pz + nz * off
+        if s > 0.85:
+            z = max(z, DSP_FL + 0.003)
+        drape_v.append((ST_X - half + 2 * half * u, py + ny * off, z))
+for i in range(len(PATH) - 1):
+    for k in range(NC):
+        a = i * (NC + 1) + k
+        drape_p.append((a, a + NC + 1, a + NC + 2, a + 1))     # normals face the street / the sky
+add_mesh(drape_v, drape_p, Matrix.Identity(4), "navy_serge")
+
+# --- N3 folded table linens (1909 low white stack) ---------------------------------------
+for k, (dx, dy, yaw) in enumerate(((0.0, 0.0, 2.0), (0.012, -0.008, -3.0), (-0.010, 0.006, 4.0), (0.006, 0.010, -1.5))):
+    soft_slab(0.35, 0.25, 0.03, place(-1.08 + dx, 0.42 + dy, DSP_FL + 0.03 * k, yaw), "linen_white", n_round=2)
+
+# --- N4 three bolts stacked flat ----------------------------------------------------------
+for k, (cell, yaw) in enumerate((("bolt_brown", 1.5), ("bolt_grey", -3.0), ("bolt_green", 2.5))):
+    soft_slab(0.65, 0.20, 0.06, place(-1.80 + 0.01 * k, 0.40, DSP_FL + 0.06 * k, yaw), cell, n_round=2)
+
+# --- S1 hat stand with a plain wide-brimmed straw hat ---------------------------------------
+STAND = [(0.110, 0.0), (0.110, 0.014), (0.092, 0.030), (0.040, 0.046), (0.016, 0.070), (0.015, 1.03),
+         (0.024, 1.050), (0.0, 1.075)]
+lathe(STAND, 8, place(1.30, 0.75), "wood_dark")
+HAT = [(0.0, -0.008), (0.075, -0.008), (0.180, -0.026), (0.182, -0.016), (0.080, 0.004), (0.080, 0.030),
+       (0.078, 0.092), (0.066, 0.102), (0.0, 0.106)]
+lathe(HAT, 16, place(1.30, 0.75, DSP_FL + 1.08), ["straw", "straw", "straw", "straw", "hat_band", "straw", "straw", "straw"])
+
+# --- S2 three bolts standing on end, fanned ---------------------------------------------------
+for dx, tilt, yaw, cell in ((-0.21, -8.0, 8.0, "muslin"), (0.0, 0.0, -4.0, "chambray"), (0.21, 8.0, -9.0, "form_cream")):
+    # slab long axis (local x) turned upright, wide face to the street, then tilted sideways
+    M = (place(2.00 + dx, 0.92, DSP_FL, yaw, tilt=("Y", tilt)) @ Matrix.Rotation(math.radians(90), 4, "Z")
+         @ Matrix.Rotation(math.radians(-90), 4, "Y"))
+    faces = soft_slab(0.65, 0.20, 0.06, M @ Matrix.Translation((0.325, 0, -0.03)), cell, n_round=3)
+    vs = {v for f in faces for v in f.verts}
+    lo = min(v.co.z for v in vs)
+    for v in vs:
+        v.co.z += DSP_FL - lo
+
+# --- S3 two plain card boxes with a pair of folded towels on top -----------------------------
+plain_box(-0.20, 0.20, -0.14, 0.14, 0.0, 0.08, place(1.15, 0.36, DSP_FL, 1.5), "card_box")
+plain_box(-0.20, 0.20, -0.14, 0.14, 0.0, 0.08, place(1.16, 0.355, DSP_FL + 0.08, -4.0), "card_box")
+for k in range(2):
+    soft_slab(0.30, 0.20, 0.025, place(1.15 + 0.01 * k, 0.36 - 0.005 * k, DSP_FL + 0.16 + 0.025 * k, 3.0 - 5 * k),
+              "linen_white", n_round=2)
 
 # ---------------------------------------------------------------------------
 # Awning (1912 card, PLAN addendum 2026-11-11): plain pale canvas x -3.40 ... +3.40, hung at
@@ -666,6 +914,7 @@ def build_shell(name):
 
 build_shell("NV_Shell")
 P.to_object("NV_Parts", col)
+DSP.to_object("NV_Displays", col)
 
 tris = sum(len(p.vertices) - 2 for o in col.objects for p in o.data.polygons)
 print("Nevius Store built:", len(col.objects), "objects,", tris, "triangles (before hidden-face removal)")

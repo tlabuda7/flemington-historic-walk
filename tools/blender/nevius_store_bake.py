@@ -35,6 +35,14 @@ the shop-front panes (display windows, door glass, returns, transoms) moved to a
 material NVR_ShopInterior with the dedicated assets/textures/shared/shop_interior.jpg
 (tools/prepare_shop_interior.py: perspective view of a dim dry-goods store); the glass
 colour is a faint warm grey dust tint (GLASS_RGB).
+Window displays trial (owner, 2026-11-11): behind the shop glass are real 3D display
+spaces, partitions, goods and a short dim store space (nevius_store.py, object
+NV_Displays). The shop-window glass is its own material `glass_shop` (GLASS_SHOP_RGB,
+alpha 0.25; +1 draw call), and NVR_ShopInterior now points at the Nevius-only atlas
+assets/textures/nevius-store/shop_display.jpg (tools/prepare_nevius_display.py: transoms,
+the store's back picture, goods swatches; the shared shop_interior.jpg is no longer used
+here). Display/store faces are never removed as hidden, are lightmapped at full scale
+(store walls 0.5), and get no grime. Both glass materials are transparent during the bake.
 """
 
 import json
@@ -51,9 +59,12 @@ CO = PROJECT + r"\assets\textures\county-offices" + "\\"
 BB = PROJECT + r"\assets\textures\bank-building" + "\\"
 NT = PROJECT + r"\assets\textures\nevius-store" + "\\"   # awning_canvas.jpg: tools/prepare_nevius_awning.py
 WB = PROJECT + r"\assets\textures\shared\window_backs"
-SI = PROJECT + r"\assets\textures\shared\shop_interior"
+SI = PROJECT + r"\assets\textures\nevius-store\shop_display"   # displays trial: Nevius-only atlas
 WB_CELLS = json.load(open(WB + ".json"))["cells"]
-SI_CELLS = json.load(open(SI + ".json"))["cells"]      # shop-front panes: dedicated, sharper texture
+SI_CELLS = json.load(open(SI + ".json"))["cells"]      # transoms, store back, goods swatches
+SI_INSET = 4 / 1024
+GLASS_SHOP_ALPHA = 0.25
+GLASS_SHOP_RGB = (0x14, 0x14, 0x12)     # displays trial: clearer shop-window glass
 GLASS_ALPHA = 0.40
 GLASS_RGB = (0x1A, 0x19, 0x16)       # v2: a faint warm grey dust tint (was a clean blue-black 0E1114)
 GLB = PROJECT + r"\assets\models\nevius-store.glb"
@@ -61,6 +72,7 @@ LIGHTMAP = PROJECT + r"\assets\textures\nevius-store-lightmap.jpg"
 LIGHTMAP_SIZE = 2048
 SAMPLES = 384
 TO_SUN = (0.40, -0.90, 0.36)          # east-side building (front faces west)
+STORE_FILL_W = 120.0                   # displays trial: area light in the store space ceiling (W)
 COLL, RIG, PREFIX = "NeviusStore", "NV_BakeRig", "NV_"
 
 # 1. Geometry -----------------------------------------------------------------
@@ -88,8 +100,11 @@ LOOK = {
     "Dark":   (CO + "door_varnish_dark.jpg", 0.8, 0.5, None, None),
     "Awning": (NT + "awning_canvas.jpg", 0.6, 0.9, None, None),   # plain pale canvas (1912 card)
     "WindowBack": (WB + ".jpg", 1.0, 0.9, None, None),       # UVs from WB_FRAMES, not tiled
-    "ShopInterior": (SI + ".jpg", 1.0, 0.9, None, None),     # shop-front panes, UVs from WB_FRAMES
+    "ShopInterior": (SI + ".jpg", 1.0, 0.9, None, None),     # transoms (UVs from WB_FRAMES) + displays
+    "Display": (SI + ".jpg", 1.0, 0.9, None, None),          # same final material as ShopInterior
+    "GlassShop": (None, 1.0, 0.05, tuple(srgb_to_lin(c) for c in GLASS_SHOP_RGB), None),
 }
+GLASS_KEYS = {"Glass": "glass", "GlassShop": "glass_shop"}
 
 
 def textured_material(name, image_file, roughness, colour, factor):
@@ -124,14 +139,46 @@ def textured_material(name, image_file, roughness, colour, factor):
     return mat
 
 
-FINAL = {k: textured_material("glass" if k == "Glass" else "NVR_" + k, LOOK[k][0], *LOOK[k][2:]) for k in LOOK}
-_g = FINAL["Glass"]
-next(n for n in _g.node_tree.nodes if n.type == "BSDF_PRINCIPLED").inputs["Alpha"].default_value = GLASS_ALPHA
-_g.use_backface_culling = True
-if hasattr(_g, "surface_render_method"):
-    _g.surface_render_method = "BLENDED"
-elif hasattr(_g, "blend_method"):
-    _g.blend_method = "BLEND"
+FINAL = {k: textured_material(GLASS_KEYS.get(k, "NVR_" + k), LOOK[k][0], *LOOK[k][2:]) for k in LOOK if k != "Display"}
+FINAL["Display"] = FINAL["ShopInterior"]            # goods, display floors, store back: same atlas
+bpy.data.images.load(SI + ".jpg", check_existing=True).reload()   # re-read after prepare_nevius_display.py
+for _k, _a in (("Glass", GLASS_ALPHA), ("GlassShop", GLASS_SHOP_ALPHA)):
+    _g = FINAL[_k]
+    next(n for n in _g.node_tree.nodes if n.type == "BSDF_PRINCIPLED").inputs["Alpha"].default_value = _a
+    _g.use_backface_culling = True
+    if hasattr(_g, "surface_render_method"):
+        _g.surface_render_method = "BLENDED"
+    elif hasattr(_g, "blend_method"):
+        _g.blend_method = "BLEND"
+
+
+def in_display(c):
+    """Centre inside the display spaces / store space volume (behind the shop-front plane)."""
+    return -3.47 < c.x < 2.52 and 0.105 < c.y < 2.85 and 0.05 < c.z < 3.45
+
+
+def display_uv(poly, mesh, cid):
+    """Atlas UVs for a Display face: goods (face attribute nv_cell), display floors
+    (floor_cloth) or the store's back wall (store_back, the whole cell across the wall)."""
+    n = poly.normal
+    if cid:
+        cell = CELL_NAMES[cid - 1]
+    elif n.z > 0.9:
+        cell = "floor_cloth"
+    else:
+        cell = "store_back"
+    u0, v0, u1, v1 = SI_CELLS[cell]["uv"]
+    cos = [mesh.vertices[mesh.loops[li].vertex_index].co for li in poly.loop_indices]
+    if cell == "store_back":
+        st = [((c.x - VOID_X0) / (VOID_X1 - VOID_X0), (c.z - VOID_FL) / (VOID_TOP - VOID_FL)) for c in cos]
+    else:
+        u0, v0, u1, v1 = u0 + SI_INSET, v0 + SI_INSET, u1 - SI_INSET, v1 - SI_INSET
+        ax = max(range(3), key=lambda i: abs(n[i]))
+        pr = [(c.y, c.z) if ax == 0 else (c.x, c.z) if ax == 1 else (c.x, c.y) for c in cos]
+        mn = [min(p[i] for p in pr) for i in (0, 1)]
+        ext = max(0.35, max(max(p[i] for p in pr) - mn[i] for i in (0, 1)))   # weave ~0.35 m per cell
+        st = [((p[0] - mn[0]) / ext, (p[1] - mn[1]) / ext) for p in pr]
+    return [(u0 + (u1 - u0) * min(1, max(0, a)), v0 + (v1 - v0) * min(1, max(0, b))) for a, b in st]
 
 
 def wb_uv(co, n):
@@ -170,12 +217,29 @@ def box_uvs(obj):
     keys = [m.name[len(PREFIX):] for m in mesh.materials]
     unmatched = 0
     si_slot = None
+    cell_attr = mesh.attributes.get("nv_cell")
+    cells_of = [d.value for d in cell_attr.data] if cell_attr else None
+
+    def to_si(poly):
+        nonlocal si_slot
+        if si_slot is None:
+            si_mat = (bpy.data.materials.get(PREFIX + "ShopInterior")
+                      or bpy.data.materials.new(PREFIX + "ShopInterior"))
+            mesh.materials.append(si_mat)
+            si_slot = len(mesh.materials) - 1
+        poly.material_index = si_slot
+
     for poly in mesh.polygons:
         key = keys[poly.material_index]
         tile = LOOK[key][1]
         n = poly.normal
         h = math.hypot(n.x, n.y)
         ax = max(range(3), key=lambda i: abs(n[i]))
+        if key == "Display":
+            for li, uvp in zip(poly.loop_indices, display_uv(poly, mesh, cells_of[poly.index] if cells_of else 0)):
+                uv.data[li].uv = uvp
+            to_si(poly)
+            continue
         if key == "WindowBack":
             # each corner is mapped in the frame of the window back it lies on
             c = poly.center
@@ -189,18 +253,14 @@ def box_uvs(obj):
                 uv.data[li].uv = uvp[:2]
                 cells.add(uvp[2])
             if cells & set(SI_CELLS):
-                # a shop-front pane: its own material with the shop_interior texture
-                if si_slot is None:
-                    si_mat = (bpy.data.materials.get(PREFIX + "ShopInterior")
-                              or bpy.data.materials.new(PREFIX + "ShopInterior"))
-                    mesh.materials.append(si_mat)
-                    si_slot = len(mesh.materials) - 1
-                poly.material_index = si_slot
+                to_si(poly)                    # a transom pane: the Nevius shop_display atlas
             continue
         for li in poly.loop_indices:
             co = mesh.vertices[mesh.loops[li].vertex_index].co
             if key == "Awning" and abs(n.x) > 0.7:
                 u, v = co.y, co.z                               # side curtains
+            elif key == "Awning" and poly.center.y > 0.05:
+                u, v = co.x, co.z                               # roller shades behind the shop glass
             elif key == "Awning":
                 u, v = co.x, -(AW_DY * co.y + AW_DZ * co.z)    # distance down the slope
             elif 0.25 < abs(n.z) < 0.97:
@@ -222,7 +282,7 @@ for obj in parts:
     box_uvs(obj)                                  # reads the NV_<key> slot names
     for i, m in enumerate(obj.data.materials):
         obj.data.materials[i] = FINAL[m.name[len(PREFIX):]]
-GLASS_NAME = FINAL["Glass"].name
+GLASS_NAMES = {FINAL["Glass"].name, FINAL["GlassShop"].name}
 
 # 3. Join, drop hidden faces, unwrap the lightmap UVs --------------------------
 nv_obj = bpy.data.objects["NV_Shell"]
@@ -230,6 +290,26 @@ with bpy.context.temp_override(active_object=nv_obj, selected_objects=parts, sel
     bpy.ops.object.join()
 nv_obj.name = nv_obj.data.name = COLL
 mesh = nv_obj.data
+
+
+def drop_unused_slots():
+    used = {p.material_index for p in mesh.polygons}
+    for i in reversed(range(len(mesh.materials))):
+        if i not in used:
+            nv_obj.active_material_index = i
+            with bpy.context.temp_override(object=nv_obj, active_object=nv_obj):
+                bpy.ops.object.material_slot_remove()
+
+
+# one slot per material (the join can leave duplicate / empty NVR_ShopInterior slots)
+first = {}
+for i, m in enumerate(mesh.materials):
+    first.setdefault(m.name, i)
+remap = [first[m.name] for m in mesh.materials]
+for p in mesh.polygons:
+    p.material_index = remap[p.material_index]
+drop_unused_slots()
+print("materials:", [m.name for m in mesh.materials])
 
 
 def fibonacci(n):
@@ -281,10 +361,11 @@ def remove_hidden_faces(obj, rays=120):
                                plane_co=co, plane_no=no)
     bm.normal_update()
     # the glass does not block the view: build the ray test without it
-    gi = [m.name for m in obj.data.materials].index(GLASS_NAME)
+    gi = {i for i, m in enumerate(obj.data.materials) if m.name in GLASS_NAMES}
+    cl = bm.faces.layers.int.get("nv_cell")
     bm.verts.index_update()
     bvh = BVHTree.FromPolygons([v.co.copy() for v in bm.verts],
-                               [[v.index for v in f.verts] for f in bm.faces if f.material_index != gi])
+                               [[v.index for v in f.verts] for f in bm.faces if f.material_index not in gi])
     dirs = fibonacci(rays)
     face_tris = {}
     for t in bm.calc_loop_triangles():
@@ -295,6 +376,8 @@ def remove_hidden_faces(obj, rays=120):
         c = f.calc_center_median()
         if n.z < -0.9 and c.z < 0.01:                     # undersides at or below grade
             dead.append(f)
+            continue
+        if in_display(c) or (cl is not None and f[cl]):                # displays trial: keep the whole display
             continue
         hemi = [d for d in dirs if d.dot(n) > 0.04]
         samples = face_samples(f, face_tris.get(f, []), rng)
@@ -338,14 +421,22 @@ bpy.ops.uv.smart_project(angle_limit=math.radians(66), island_margin=0.004,
                          area_weight=0.0, correct_aspect=True, scale_to_bounds=False)
 bpy.ops.object.mode_set(mode="OBJECT")
 # Give the lightmap's pixels to what matters: shrink dark, hidden-from-the-street parts.
-LM_SHRINK = {GLASS_NAME: 0.03, "NVR_Dark": 0.6, "NVR_WindowBack": 0.6, "NVR_ShopInterior": 0.6}   # glass: not lightmapped in the scene
+LM_SHRINK = {"glass": 0.03, "glass_shop": 0.03, "NVR_Dark": 0.6, "NVR_WindowBack": 0.6,
+             "NVR_ShopInterior": 0.6}   # glass: not lightmapped in the scene
 lm_data = mesh.uv_layers["Lightmap"].data
 mat_names = [m.name for m in mesh.materials]
+_ca = mesh.attributes.get("nv_cell")
+cell_of = [d.value for d in _ca.data] if _ca else [0] * len(mesh.polygons)
 for p in mesh.polygons:
     name = mat_names[p.material_index]
     f = LM_SHRINK.get(name)
     c = p.center
-    if name == "NVR_Dark" and p.normal.z > 0.5 and c.z > 9.0:
+    if name in GLASS_NAMES:
+        pass
+    elif cell_of[p.index] or in_display(c):
+        # displays trial: goods, display floors and partitions at full scale, store space 0.5
+        f = 0.5 if (c.y > 1.33 and not cell_of[p.index]) else None
+    elif name == "NVR_Dark" and p.normal.z > 0.5 and c.z > 9.0:
         f = 0.2                                  # roof (never seen from the street)
     elif f is None and p.normal.z > 0.5 and c.z > 10.0 and c.y > 0.5:
         f = 0.3                                  # parapet and cornice tops, chimney top
@@ -378,6 +469,19 @@ sun.data.color = (1.0, 0.80, 0.58)
 sun.data.angle = math.radians(1.5)
 to_sun = Vector(TO_SUN).normalized()            # about 21 degrees above the horizon
 sun.rotation_euler = (-to_sun).to_track_quat("-Z", "Y").to_euler()
+
+# displays trial: dim light from the rest of the (unmodelled, 32 m deep) store, so the short
+# store space behind the displays and the door reads as a dim room, not a black hole
+fill = bpy.data.objects.get("NV_StoreFill")
+if not fill:
+    fill = bpy.data.objects.new("NV_StoreFill", bpy.data.lights.new("NV_StoreFill", "AREA"))
+    rig.objects.link(fill)
+fill.data.shape = "RECTANGLE"
+fill.data.size, fill.data.size_y = VOID_X1 - VOID_X0 - 0.2, 1.0
+fill.data.energy = STORE_FILL_W
+fill.data.color = (1.0, 0.86, 0.68)
+fill.location = ((VOID_X0 + VOID_X1) / 2, 1.65, VOID_TOP - 0.05)
+fill.rotation_euler = (math.radians(35), 0.0, 0.0)    # shines down and back onto the store's back wall
 
 ground = bpy.data.objects.get("NV_Ground")
 if not ground:
@@ -458,8 +562,10 @@ def point_materials_at(img):
         nt.nodes.active = node
 
 
-glass_alpha = next(n for n in FINAL["Glass"].node_tree.nodes if n.type == "BSDF_PRINCIPLED").inputs["Alpha"]
-glass_alpha.default_value = 0.0             # light passes the panes to the window backs
+glass_alphas = [(next(n for n in FINAL[k].node_tree.nodes if n.type == "BSDF_PRINCIPLED").inputs["Alpha"], a)
+                for k, a in (("Glass", GLASS_ALPHA), ("GlassShop", GLASS_SHOP_ALPHA))]
+for _s, _a in glass_alphas:
+    _s.default_value = 0.0                  # light passes the panes to the window backs and displays
 try:
     light_img = bake_target("NV_Light", True)
     point_materials_at(light_img)
@@ -544,8 +650,14 @@ try:
     fade = map_range(mult(aw, map_range(NZ, 0.3, 0.6, 0.0, 1.0)), 0.0, 1.0, 1.0, 1.07)
     valance = map_range(mult(aw, map_range(math_op("ABSOLUTE", NY), 0.8, 0.95, 0.0, 1.0)), 0.0, 1.0, 1.0, 0.86)
     grey = mult(height, blotch, streaks, soot, tymp, chim, rear, wear, fade, valance)
+    # displays trial: no grime inside the display / store spaces (behind the shop-front plane)
+    inside = mult(map_range(Y, 0.105, 0.12, 0.0, 1.0), map_range(Y, 2.85, 2.90, 1.0, 0.0),
+                  map_range(X, -3.48, -3.46, 0.0, 1.0), map_range(X, 2.50, 2.52, 1.0, 0.0),
+                  map_range(Z, 3.44, 3.46, 1.0, 0.0))
+    grey = math_op("ADD", grey, mult(inside, math_op("SUBTRACT", 1.0, grey), 0.85))
     # shaded north wall: cooler and a little greener at the base (damp)
-    damp = mult(map_range(NX, -0.9, -0.6, 1.0, 0.0), map_range(Z, 0.0, 2.5, 1.0, 0.0))
+    damp = mult(map_range(NX, -0.9, -0.6, 1.0, 0.0), map_range(Z, 0.0, 2.5, 1.0, 0.0),
+                math_op("SUBTRACT", 1.0, inside))
     gc = N("ShaderNodeCombineXYZ")
     L(mult(grey, map_range(damp, 0, 1, 1.0, 0.86)), gc.inputs["X"])
     L(mult(grey, map_range(damp, 0, 1, 1.0, 0.95)), gc.inputs["Y"])
@@ -568,7 +680,8 @@ try:
         mesh.materials[i] = mat
     print("grime baked")
 finally:
-    glass_alpha.default_value = GLASS_ALPHA
+    for _s, _a in glass_alphas:
+        _s.default_value = _a
     for name, state in render_state.items():
         if bpy.data.collections.get(name):
             bpy.data.collections[name].hide_render = state

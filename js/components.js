@@ -1036,6 +1036,16 @@ AFRAME.registerComponent('paint-reflect', {
         mat.envMap = env.texture;
         mat.envMapIntensity = this.data.intensity;
         if (mat.envMapRotation) mat.envMapRotation.set(0, env.rotationY, 0);
+        // The baked lightmap already holds the daylight. Without this the scene's own
+        // lights are added on top and black paint turns primer-grey. Keep only the
+        // lights' mirror-like highlight (the sun glint), drop their diffuse part.
+        mat.onBeforeCompile = (shader) => {
+          shader.fragmentShader = shader.fragmentShader.replace('#include <lights_fragment_begin>',
+            `#include <lights_fragment_begin>
+            irradiance = vec3(0.0);
+            reflectedLight.directDiffuse = vec3(0.0);`);
+        };
+        mat.customProgramCacheKey = () => 'paint-reflect';
         mat.needsUpdate = true;
       });
       this.paint = [...mats];

@@ -10,6 +10,10 @@ emission of colour x lightmap x LIGHTMAP_SCALE - the same maths as the web page'
 the pictures match what the headset shows. The brick and trim tints (glTF baseColorFactor)
 are included. Writes assets/models/previews/nevius-store-*.png (1280 px wide). The camera,
 engine, view transform, resolution and the building's own materials are restored.
+Glass (`glass` and, since the window displays trial, `glass_shop`) is drawn as the scene's
+glass-reflect component shows it: the exported tint at its alpha over what is behind, plus
+a Fresnel sky reflection (the scene's sky photo, envMapIntensity 1.2) added on top.
+Displays trial views: assets/models/previews/nevius-displays-*.png (DISPLAY_VIEWS).
 """
 
 import bpy
@@ -18,6 +22,9 @@ from mathutils import Vector
 PROJECT = r"C:\Users\Tarik\AppFactory\Flemington Historic Walk"
 PREV = PROJECT + r"\assets\models\previews" + "\\"
 LIGHTMAP = PROJECT + r"\assets\textures\nevius-store-lightmap.jpg"
+SKY = PROJECT + r"\assets\textures\sky\sky-late-afternoon.jpg"
+GLASS_NAMES = ("glass", "glass_shop")
+REFLECT = 1.2                                     # glass-reflect intensity (js/components.js)
 
 scene = bpy.context.scene
 nv_obj = bpy.data.objects["NeviusStore"]
@@ -45,8 +52,8 @@ def sock(socks, name):
 
 
 def glass_preview(src):
-    """The `glass` material: not lightmapped in the scene; plain dark tint over the
-    window backs at its own alpha (the scene adds the sky reflection later)."""
+    """Glass: not lightmapped in the scene; dark tint over what is behind at its own alpha,
+    plus the glass-reflect sky reflection (Fresnel, IOR 1.5, x REFLECT) added on top."""
     bsdf = next(n for n in src.node_tree.nodes if n.type == "BSDF_PRINCIPLED")
     mat = bpy.data.materials.new("NVP_" + src.name)
     mat.use_nodes = True
@@ -61,14 +68,34 @@ def glass_preview(src):
     mix.inputs["Fac"].default_value = bsdf.inputs["Alpha"].default_value
     L(tr.outputs[0], mix.inputs[1])
     L(emit.outputs[0], mix.inputs[2])
-    L(mix.outputs[0], out.inputs["Surface"])
+    tc = N("ShaderNodeTexCoord")
+    env = N("ShaderNodeTexEnvironment")
+    env.image = bpy.data.images.load(SKY, check_existing=True)
+    L(tc.outputs["Reflection"], env.inputs["Vector"])
+    fres = N("ShaderNodeFresnel")
+    fres.inputs["IOR"].default_value = 1.5
+    refl = N("ShaderNodeEmission")
+    L(env.outputs["Color"], refl.inputs["Color"])
+    k = N("ShaderNodeMath")
+    k.operation = "MULTIPLY"
+    L(fres.outputs[0], k.inputs[0])
+    k.inputs[1].default_value = REFLECT
+    L(k.outputs[0], refl.inputs["Strength"])
+    add = N("ShaderNodeAddShader")
+    L(mix.outputs[0], add.inputs[0])
+    L(refl.outputs[0], add.inputs[1])
+    L(add.outputs[0], out.inputs["Surface"])
     mat.use_backface_culling = True
+    if hasattr(mat, "surface_render_method"):
+        mat.surface_render_method = "BLENDED"
+    elif hasattr(mat, "blend_method"):
+        mat.blend_method = "BLEND"
     return mat
 
 
 def preview_material(src):
     """Unlit copy: emission = base colour (texture x tint, or plain) x lightmap x scale."""
-    if src.name == "glass":
+    if src.name in GLASS_NAMES:
         return glass_preview(src)
     mat = bpy.data.materials.new("NVP_" + src.name)
     mat.use_nodes = True
@@ -183,11 +210,24 @@ VIEWS = {
     "match-1912":         ((-18.0, -13.0, 1.6), (2.0, 1.0, 4.5), 28),      # 1912 "Some Business Blocks", from the NW
     "fix-2026-11-11":     ((-5.0, -6.5, 1.7), (-0.6, -0.8, 3.0), 24),      # awning, fringe, curtains, shop cornice
 }
-VIEWS = globals().get("PREVIEW_VIEWS") or VIEWS     # set PREVIEW_VIEWS before exec() for other views
-PREFIX = globals().get("PREVIEW_PREFIX") or "nevius-store-"   # and PREVIEW_PREFIX for other file names
+# Window displays trial (owner, 2026-11-11): eye 1.6 m, 1.5 m in front of the glass (y 0.055),
+# straight on; parallax pair 0.5 m apart sideways; the door; from across the street (road centre)
+NX_C, SX_C, GY = -2.14, 1.625, 0.055
+DISPLAY_VIEWS = {
+    "north":      ((NX_C, GY - 1.5, 1.6), (NX_C, 1.0, 1.75), 20),
+    "south":      ((SX_C, GY - 1.5, 1.6), (SX_C, 1.0, 1.75), 20),
+    "parallax-a": ((NX_C - 0.25, GY - 1.5, 1.6), (NX_C - 0.25, 1.0, 1.75), 22),
+    "parallax-b": ((NX_C + 0.25, GY - 1.5, 1.6), (NX_C + 0.25, 1.0, 1.75), 22),
+    "door":       ((-0.05, -1.3, 1.6), (-0.05, 1.3, 1.6), 24),
+    "10m":        ((-0.5, -10.3, 1.45), (-0.5, 0.0, 2.0), 30),
+}
+JOBS = [(n, v, globals().get("PREVIEW_PREFIX") or "nevius-store-")
+        for n, v in (globals().get("PREVIEW_VIEWS") or VIEWS).items()]   # PREVIEW_VIEWS / _PREFIX: other views
+if not globals().get("PREVIEW_VIEWS"):
+    JOBS += [(n, v, "nevius-displays-") for n, v in DISPLAY_VIEWS.items()]
 written = []
 try:
-    for name, (eye, target, lens) in VIEWS.items():
+    for name, (eye, target, lens), PREFIX in JOBS:
         cam.location = eye
         cam.rotation_euler = (Vector(target) - Vector(eye)).to_track_quat("-Z", "Y").to_euler()
         cam_data.lens = lens

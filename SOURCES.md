@@ -319,6 +319,13 @@ The kit also reuses, unchanged, `polyhaven/metal_plate_02.jpg` (iron) and
 | `bank_hall.jpg` (+ `bank_hall.json` cell layout) | none: ray-traced from a simple box model of the Bank Building's ground floor by `tools/prepare_bank_hall.py` (run inside Blender, numpy; original work, no download, no lettering or signs) | own work (CC0) | 1K texture of what shows through the Bank Building's (56–66 Main) ground-floor glass c. 1920, one perspective cell per pane: the Flemington National Bank's banking room (counter with grille, desks, vault door, back room) behind the bank window, door and the 11 Bloomfield Ave windows; the four shops (men's furnishings, drugs, boots & shoes, confectionery) behind the display windows, transoms and door lights. Used by `bank-building.glb` (material `BKR_BankHall`). |
 | `restaurant_interior.jpg` (+ `restaurant_interior.json` cell layout) | none: ray-traced from a simple box model of Lovell's Restaurant's dining room by `tools/prepare_restaurant_interior.py` (run inside Blender, numpy; original work, no download, no lettering or signs) | own work (CC0) | 1K texture of what shows through Lovell's Restaurant's (68 Main) ground-floor glass c. 1920, one perspective cell per pane: plain dining room with small clothed tables and chairs, a panelled counter with stools and a back bar of plain jars and crockery, a display platform with jars and covered cake stands, dark kitchen doorway. Used by `lovells-restaurant.glb` (material `restaurant_interior`). |
 
+### Nevius Store, 78 Main St (`assets/textures/nevius-store/`)
+
+| File | Source | Licence | Used for |
+|---|---|---|---|
+| `awning_canvas.jpg` | none: de-striped from the generated `bank-building/awning_stripes.jpg` and laid over #E3DCCB by `tools/prepare_nevius_awning.py` (Pillow; original work, no download) | own work (CC0) | plain pale awning canvas, side curtains and (since 2026-11-11) the roller shades inside the shop windows |
+| `shop_display.jpg` (+ `shop_display.json` cell layout) | none: made by `tools/prepare_nevius_display.py` (Pillow; original work, no download, no lettering): transom cells copied from `shared/shop_interior.jpg` (unchanged), a store back wall recomposed and lifted from its `shop_a`/`shop_b` cells, plain colour swatches with a faint weave | own work (CC0) | window displays trial (2026-11-11): goods (dress forms, bolts, linens, hat, boxes), display floors, the back wall of the store space and the transoms; `nevius-store.glb` material `NVR_ShopInterior` |
+
 ### Street ground (`assets/textures/ground/`)
 
 Road, sidewalk and curb maps for the `street-ground` component (`js/ground.js`), all made by
