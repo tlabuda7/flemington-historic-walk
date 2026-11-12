@@ -1,7 +1,7 @@
 """
 street_tree.py - a light-weight deciduous street tree (maple/elm type) for the scene,
-like the row in front of the Union Hotel in the 1920s postcards, standing in a square
-soil pit cut into the concrete sidewalk.
+like the row in front of the Union Hotel in the 1920s postcards, standing in a plain
+round soil pit cut into the concrete sidewalk.
 
 Run inside Blender:
     exec(open(r"<project>/tools/blender/street_tree.py").read())
@@ -17,15 +17,18 @@ Under 1,000 triangles:
   Cylinder UVs in real metres (U around, V up the wood) on bark_willow_02.
 - Leaves: ~120 crossed leaf cards (leaf_cluster.png, alpha cut-out) - unchanged from
   the first version (same random sequence), normals point out from the crown centre.
-- Pit: a 1.2 m square of soil (mud_forest) 2 cm below the sidewalk, framed by a
-  0.12 m granite edging whose top sits 1 cm proud of the sidewalk.
+- Pit: a plain round soil opening 1.2 m across (mud_forest), flush with the walk, no
+  edging stones and no tree guard (PLAN.md "Street details pass 2", F8; 1908 and c. 1910
+  cards). Its rim sits at z = -0.02, i.e. 5 mm above the 0.15 walk when the scene stands
+  the tree at y = 0.175. (Until 2026-11-11 it was a square pit with granite edging; that
+  version is kept locally as assets/models/source/street-tree-before-pits.glb.)
 Vertex colours ("Col") darken bark near the ground and the inside of the crown.
 Materials are plain Principled (lit in the scene, no lightmap).
 
 Backdrop variant (for lawns and yards, e.g. the big Court St maples scaled 2.1-2.35):
     TREE_BACKDROP = True
     exec(open(r"<project>/tools/blender/street_tree.py").read())
-builds the same tree WITHOUT the pit (no soil square, no granite edging) and with the trunk
+builds the same tree WITHOUT the pit (no soil disc) and with the trunk
 running on 0.3 m below ground (so it never floats on uneven lawn), in the "BackdropTree"
 collection, and exports assets/models/backdrop-tree.glb. Same materials, textures, leaf cards
 and bark (same random sequences); only the bottom trunk ring moves from -0.03 to -0.30 m.
@@ -46,18 +49,16 @@ LEAF_TEX = TEX + r"\leaf_cluster.png"
 BARK_TEX = TEX + r"\street-tree\bark_willow_02_q85.jpg"
 # the pit only covers ~1.4 m, so its maps are 512 px (keeps the GLB under 1 MB)
 SOIL_TEX = TEX + r"\street-tree\mud_forest_512_q85.jpg"
-EDGE_TEX = TEX + r"\street-tree\granite_tile_03_512_q85.jpg"
-BARK_TILE, SOIL_TILE, EDGE_TILE = 2.15, 2.35, 1.8   # real-world size of one texture tile (m)
+BARK_TILE, SOIL_TILE = 2.15, 2.35   # real-world size of one texture tile (m)
 
 CANOPY_CENTRE = Vector((0, 0, 7.4))
 CANOPY_RADII = Vector((3.3, 3.3, 2.9))
 CARDS = 120
 CARD_SIZE = 1.8
 
-PIT = 1.2          # soil square (m)
-EDGE_W = 0.12      # edging width
-SOIL_Z = -0.02     # soil surface
-EDGE_TOP = 0.01    # edging top
+PIT = 1.2          # round soil opening, diameter (m)
+PIT_SIDES = 16
+SOIL_Z = -0.02     # soil rim: the scene stands the tree at y 0.175, so this is 5 mm above the 0.15 walk
 
 col = bpy.data.collections.get(NAME)
 if col:
@@ -295,70 +296,43 @@ bark_mesh.materials.append(material("Tree_Bark", BARK_TEX, roughness=0.9))
 
 
 # ================================================================================
-# Tree pit: soil square + granite edging
+# Tree pit: a plain round soil opening, flush with the walk, no edging (PLAN.md "Street
+# details pass 2", F8: the 1908 "north from hotel" and c. 1910 courthouse cards show dark
+# round soil pits about 1.2 m across cut straight into the concrete, no stones, no guards).
 # ================================================================================
 bm = bmesh.new()
 puv = bm.loops.layers.uv.new("UVMap")
 h = PIT / 2
-H = h + EDGE_W
 
-# soil: 4 x 4 grid, a little uneven, mounded slightly toward the trunk
-N = 4
-grid = []
-for j in range(N + 1):
-    row = []
-    for i in range(N + 1):
-        x, y = -h + PIT * i / N, -h + PIT * j / N
-        edge = i in (0, N) or j in (0, N)
-        z = SOIL_Z if edge else SOIL_Z + 0.012 * max(0.0, 1 - (x * x + y * y) ** 0.5 / h) + rng.uniform(-0.004, 0.004)
-        row.append(bm.verts.new((x, y, z)))
-    grid.append(row)
-for j in range(N):
-    for i in range(N):
-        f = bm.faces.new([grid[j][i], grid[j][i + 1], grid[j + 1][i + 1], grid[j + 1][i]])
-        f.material_index = 0
-        for loop in f.loops:
-            co = loop.vert.co
-            loop[puv].uv = (co.x / SOIL_TILE + 0.3, co.y / SOIL_TILE + 0.2)
-
-# edging: a square ring; top trapezoids, inner and outer walls
-corners = ((-1, -1), (1, -1), (1, 1), (-1, 1))
-inner_top = [bm.verts.new((cx * h, cy * h, EDGE_TOP)) for cx, cy in corners]
-outer_top = [bm.verts.new((cx * H, cy * H, EDGE_TOP)) for cx, cy in corners]
-inner_bot = [bm.verts.new((cx * h, cy * h, SOIL_Z - 0.01)) for cx, cy in corners]
-outer_bot = [bm.verts.new((cx * H, cy * H, -0.03)) for cx, cy in corners]
-
-for s in range(4):
-    s2 = (s + 1) % 4
-    a, b = Vector(corners[s]), Vector(corners[s2])
-    along = (b - a).normalized()              # direction of this side
-    out = Vector((along.y, -along.x))         # outward normal in plan (for CCW corners)
-    # each side gets its own stretch of the granite image so the joints differ
-    u_off = 0.07 + 0.31 * s
-
-    def uv_top(co):
-        c = Vector((co.x, co.y))
-        return (u_off + (c.dot(along) + H) / EDGE_TILE * 0.55, 0.02 + (c.dot(out) - h) / EDGE_TILE)
-
-    def uv_wall(co, inner):
-        c = Vector((co.x, co.y))
-        return (u_off + (c.dot(along) + H) / EDGE_TILE * 0.55, 0.55 + (EDGE_TOP - co.z) / EDGE_TILE * (1 if inner else -1))
-
-    quads = (
-        ([inner_top[s], outer_top[s], outer_top[s2], inner_top[s2]], lambda co: uv_top(co)),
-        ([inner_bot[s2], inner_bot[s], inner_top[s], inner_top[s2]], lambda co: uv_wall(co, True)),
-        ([outer_top[s], outer_bot[s], outer_bot[s2], outer_top[s2]], lambda co: uv_wall(co, False)),
-    )
-    for verts, uvf in quads:
-        f = bm.faces.new(verts)
-        f.material_index = 1
-        for loop in f.loops:
-            loop[puv].uv = uvf(loop.vert.co)
+# the outline wanders a little (+-3 %) so it reads as a hand-cut opening, not a stamped disc
+rim_f = [1.0 + rng.uniform(-0.03, 0.03) for _ in range(PIT_SIDES)]
+centre = bm.verts.new((0, 0, SOIL_Z + 0.012))
+rings = []
+for rf, hump in ((0.45, 0.008), (1.0, 0.0)):        # inner ring mounded toward the trunk, rim flat
+    ring = []
+    for k in range(PIT_SIDES):
+        a = 2 * math.pi * k / PIT_SIDES
+        r = h * rf * (rim_f[k] if rf == 1.0 else 1.0)
+        z = SOIL_Z + hump + (0.0 if rf == 1.0 else rng.uniform(-0.003, 0.003))
+        ring.append(bm.verts.new((r * math.cos(a), r * math.sin(a), z)))
+    rings.append(ring)
+for k in range(PIT_SIDES):
+    k2 = (k + 1) % PIT_SIDES
+    bm.faces.new([centre, rings[0][k], rings[0][k2]])
+    bm.faces.new([rings[0][k], rings[1][k], rings[1][k2], rings[0][k2]])
+for f in bm.faces:
+    f.material_index = 0
+    for loop in f.loops:
+        co = loop.vert.co
+        loop[puv].uv = (co.x / SOIL_TILE + 0.3, co.y / SOIL_TILE + 0.2)
+bm.normal_update()
+for f in bm.faces:                                   # every face up
+    if f.normal.z < 0:
+        f.normal_flip()
 pit_mesh = bpy.data.meshes.new(NAME + "_Pit")
 bm.to_mesh(pit_mesh)
 bm.free()
 pit_mesh.materials.append(material("Tree_Soil", SOIL_TEX, roughness=1.0))
-pit_mesh.materials.append(material("Tree_Edging", EDGE_TEX, roughness=0.75))
 
 
 # ================================================================================
@@ -389,12 +363,10 @@ def bark_col(co, poly):
 
 
 def pit_col(co, poly):
-    if poly.material_index == 0:                 # soil: darker toward the edging
-        edge = max(abs(co.x), abs(co.y)) / h
-        v = 0.95 - 0.25 * max(0.0, edge - 0.75) / 0.25
-    else:                                        # edging: darker low down
-        v = 0.95 if co.z > 0.0 else 0.7
-    return (v, v, v, 1.0)
+    # soil: dark and damp-looking, a little darker at the rim where it meets the concrete
+    edge = (co.x * co.x + co.y * co.y) ** 0.5 / h
+    v = 0.80 - 0.22 * max(0.0, edge - 0.6) / 0.4
+    return (v, v * 0.97, v * 0.94, 1.0)
 
 
 paint(leaf_mesh, leaf_col)
@@ -403,7 +375,7 @@ paint(pit_mesh, pit_col)
 
 bark = bpy.data.objects.new(NAME + "_Bark", bark_mesh)
 leaves = bpy.data.objects.new(NAME + "_Leaves", leaf_mesh)
-if BACKDROP:            # no tree pit: drop the soil square and the edging
+if BACKDROP:            # no tree pit: drop the soil disc
     bpy.data.meshes.remove(pit_mesh)
     TREE = (bark, leaves)
 else:

@@ -208,6 +208,12 @@
       <a-entity id="btree-end-16" position="40 0.15 145" rotation="0 210 0" scale="2.1 2.1 2.1"></a-entity>
       <a-entity id="btree-end-17" position="16 0.15 182" rotation="0 271 0" scale="2.3 2.3 2.3"></a-entity>
       <a-entity id="btree-end-18" position="24 0.15 196" rotation="0 332 0" scale="2.2 2.2 2.2"></a-entity>
+      <!-- Big old trees on the grass strip opposite the bank (1914 card) and on the County Offices lawn: no pit -->
+      <a-entity id="btree-w-62" position="-7.3 0.15 -62" rotation="0 40 0" scale="1.6 1.4 1.6"></a-entity>
+      <a-entity id="btree-w-70" position="-7.3 0.15 -70" rotation="0 160 0" scale="1.55 1.35 1.55"></a-entity>
+      <a-entity id="btree-w-77" position="-7.3 0.15 -77" rotation="0 280 0" scale="1.6 1.45 1.6"></a-entity>
+      <a-entity id="btree-co-1" position="-13.5 0.015 -33.5" rotation="0 70 0" scale="1.0 1.1 1.0"></a-entity>
+      <a-entity id="btree-co-2" position="-12.5 0.015 -25.5" rotation="0 200 0" scale="0.55 0.55 0.55"></a-entity>
     </a-entity>
 
     <!-- Road, sidewalks, curbs, grass strips and lane mouths: `street-ground` (js/ground.js)
@@ -348,17 +354,14 @@
          STREET TREES (tools/blender/street_tree.py → assets/models/street-tree.glb)
          1920s postcards show a row of trees at the curb in front of the Union Hotel.
          The west-side trees follow the 1906–1912 courthouse and county building views.
-         Each model includes its square soil pit with granite edging (1.44 m, origin at the
-         base, pit top at y = 0). The soil dips to y = −0.02, so the trees stand at y = 0.175
-         (2.5 cm above the 0.15 sidewalk top) or the sidewalk hides the soil; the granite
-         edging then stands ~3.5 cm proud of the paving, like a real curb. x = ±7.5 keeps
-         the largest pit (scale 1.15 → half-width 0.83 m) clear of the curb (inner edge ±6.64).
-         Rotations are multiples of 90° so the pits line up with the street; the scales
-         vary so the trees don't look stamped.
+         Each model includes a plain round soil pit, 1.2 m across, flush with the walk and
+         without edging (1908 and c. 1910 cards; origin at the base). The trees stand at
+         y = 0.175, so the soil sits just above the 0.15 sidewalk top. The scales vary so
+         the trees don't look stamped.
          Each child below marks one tree. `instanced-trees` (js/components.js) loads the model
-         once and draws all the trees together (4 draw calls in total instead of 4 per tree).
+         once and draws all the trees together (3 draw calls in total instead of 3 per tree).
          ============================================================ -->
-    <a-entity id="street-trees" instanced-trees="src: url(assets/models/street-tree.glb)">
+    <a-entity id="street-trees" instanced-trees="src: url(assets/models/street-tree.glb?v=2)">
       <a-entity id="tree-hotel-1" position="7.5 0.175 -44"   rotation="0 0 0"  scale="1.05 1.05 1.05"></a-entity>
       <a-entity id="tree-hotel-2" position="7.5 0.175 -39.8" rotation="0 90 0" scale="0.92 0.95 0.92"></a-entity>
       <a-entity id="tree-hotel-3" position="7.5 0.175 -35.6" rotation="0 180 0"  scale="1.1 1.08 1.1"  ></a-entity>
@@ -366,11 +369,11 @@
       <a-entity id="tree-hotel-5" position="7.5 0.175 -27.2" rotation="0 90 0" scale="1.02 0.94 1.02"></a-entity>
       <a-entity id="tree-hotel-6" position="7.5 0.175 -23"   rotation="0 0 0" scale="0.9 0.9 0.9"   ></a-entity>
       <a-entity id="tree-hotel-7" position="7.5 0.175 -18.8" rotation="0 180 0"  scale="1.12 1.1 1.12" ></a-entity>
-      <a-entity id="tree-west-1"  position="-7.5 0.175 -2.6"  rotation="0 270 0" scale="0.85 0.88 0.85"></a-entity>
-      <a-entity id="tree-west-2"  position="-7.5 0.175 -11.5" rotation="0 0 0" scale="0.9 0.92 0.9"  ></a-entity>
+      <a-entity id="tree-west-1"  position="-7.5 0.175 -3.5"  rotation="0 270 0" scale="0.85 0.88 0.85"></a-entity>
+      <a-entity id="tree-west-2"  position="-7.5 0.175 -12.9" rotation="0 0 0" scale="0.9 0.92 0.9"  ></a-entity>
       <a-entity id="tree-west-3"  position="-7.5 0.175 -24"   rotation="0 90 0"   scale="1.15 1.12 1.15"></a-entity>
       <a-entity id="tree-west-4"  position="-7.5 0.175 -33"   rotation="0 180 0" scale="1.05 1.1 1.05" ></a-entity>
-      <a-entity id="tree-west-5"  position="-7.5 0.175 -60"   rotation="0 270 0" scale="1 1 1"        ></a-entity>
+      <a-entity id="tree-44-46" position="6.7 0.175 -110.5" rotation="0 180 0" scale="1.05 1.2 1.05"></a-entity>
     </a-entity>
     <!-- Back-lot buildings (PLAN.md "Street details pass 2", batch D; tools/blender/back_lots.py):
          blacksmith, auto repair shop and shed, brick garage, barn, harness shop, wagon shed.
