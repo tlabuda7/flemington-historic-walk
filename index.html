@@ -144,6 +144,11 @@
     <a-entity id="sidestreet-bloomfield" position="0 0 0" rotation="0 0 0"
       gltf-model="url(assets/models/sidestreet-bloomfield.glb)"
       baked-lighting="lightmap: assets/textures/sidestreet-bloomfield-lightmap.jpg; intensity: 1.0571"></a-entity>
+    <!-- South-east: the lane at No. 80 (feed, ice and wagon houses), the yard at No. 86 and
+         Higgins Ave (tools/blender/sidestreet_southeast.py). All plain guesses from the 1921 map. -->
+    <a-entity id="sidestreet-southeast" position="0 0 0" rotation="0 0 0"
+      gltf-model="url(assets/models/sidestreet-southeast.glb)"
+      baked-lighting="lightmap: assets/textures/sidestreet-southeast-lightmap.jpg; intensity: 1.0015"></a-entity>
     <!-- Big side-street maples: the street tree without its stone pit (backdrop-tree.glb),
          all drawn as two instanced meshes. Positions are the ones baked into the backdrops' shade. -->
     <a-entity id="backdrop-trees" instanced-trees="src: url(assets/models/backdrop-tree.glb)">
@@ -171,6 +176,14 @@
       <a-entity id="btree-bloom-8" position="65.15 0.15 -71" rotation="0 177 0" scale="1.9 1.9 1.9"></a-entity>
       <a-entity id="btree-bloom-9" position="95.9 0.15 -76" rotation="0 254 0" scale="2.1 2.1 2.1"></a-entity>
       <a-entity id="btree-bloom-10" position="107 0.15 -70" rotation="0 331 0" scale="2.0 2.0 2.0"></a-entity>
+      <a-entity id="btree-se-1" position="44 0.15 12.5" rotation="0 30 0" scale="1.9 1.9 1.9"></a-entity>
+      <a-entity id="btree-se-2" position="100 0.15 -20" rotation="0 127 0" scale="2.2 2.2 2.2"></a-entity>
+      <a-entity id="btree-se-3" position="88 0.15 30" rotation="0 224 0" scale="2.3 2.3 2.3"></a-entity>
+      <a-entity id="btree-se-4" position="127.5 0 -1" rotation="0 321 0" scale="2.2 2.2 2.2"></a-entity>
+      <a-entity id="btree-se-5" position="56 0.15 59" rotation="0 58 0" scale="2.1 2.1 2.1"></a-entity>
+      <a-entity id="btree-se-6" position="57.5 0.15 70.5" rotation="0 155 0" scale="2.0 2.0 2.0"></a-entity>
+      <a-entity id="btree-se-7" position="78 0.15 73" rotation="0 252 0" scale="2.2 2.2 2.2"></a-entity>
+      <a-entity id="btree-se-8" position="127.5 0 66" rotation="0 349 0" scale="2.1 2.1 2.1"></a-entity>
     </a-entity>
 
     <!-- Road, sidewalks, curbs, grass strips and lane mouths: `street-ground` (js/ground.js)
