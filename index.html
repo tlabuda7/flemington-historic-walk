@@ -368,6 +368,12 @@
       <a-entity id="tree-west-4"  position="-7.5 0.175 -33"   rotation="0 180 0" scale="1.05 1.1 1.05" ></a-entity>
       <a-entity id="tree-west-5"  position="-7.5 0.175 -60"   rotation="0 270 0" scale="1 1 1"        ></a-entity>
     </a-entity>
+    <!-- Back-lot buildings (PLAN.md "Street details pass 2", batch D; tools/blender/back_lots.py):
+         blacksmith, auto repair shop and shed, brick garage, barn, harness shop, wagon shed.
+         Plain guesses from the 1921 map; seen through the lanes. -->
+    <a-entity id="back-lots" position="0 0 0" rotation="0 0 0"
+      gltf-model="url(assets/models/back-lots.glb)"
+      baked-lighting="lightmap: assets/textures/back-lots-lightmap.jpg; intensity: 1.0203"></a-entity>
     <!-- Fences and small props (PLAN.md "Street details pass 2", batch B;
          tools/blender/street_details.py): wire fence at the Wurts office (from the
          "Dr. Tompkins" photo), picket fence at 65, County Offices pipe rail and board fence,

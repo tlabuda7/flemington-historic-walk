@@ -532,3 +532,5 @@ Side-street backdrops: `assets/textures/shared/backdrop_windows.jpg` (+ `.json`)
 `assets/textures/sidestreet-southeast-lightmap.jpg` and `street-ends-lightmap.jpg` are baked in Blender (original work); both models reuse the shared backdrop textures above.
 
 `assets/textures/street-details/details_atlas.jpg` and `stone_pale.jpg` are made from textures already in the project by `tools/prepare_street_details_textures.py` (no download); `assets/textures/street-details-lightmap.jpg` is baked in Blender (original work).
+
+Back-lot buildings (`assets/models/back-lots.glb`): `assets/textures/shared/backdrop_earth.jpg` is a quality-70 copy of `polyhaven/gravel_ground_01.jpg` (Poly Haven `gravel_ground_01`, CC0, listed above), made with Pillow (no download); `assets/textures/back-lots-lightmap.jpg` is baked in Blender by `tools/blender/back_lots_bake.py` (original work). The model otherwise reuses `wurts-law-office/planks_grey.jpg`, `house-65-main/clapboard_cream.jpg`, `polyhaven/red_brick.jpg`, `county-offices/roof_tin_redbrown.jpg` and `shared/backdrop_windows.jpg` (all listed above).
