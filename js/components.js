@@ -1011,6 +1011,38 @@ AFRAME.registerComponent('gltf-places', {
 });
 
 /* ------------------------------------------------------------------ */
+/* hide-beyond                                                         */
+/* ------------------------------------------------------------------ */
+/*
+ * Stops drawing an entity while the viewer is further than `distance` metres from the
+ * point (x, z). For side-street backdrops and their trees: they can only be seen from
+ * near their own street mouth, but would otherwise be drawn (hidden behind the Main St
+ * buildings) from everywhere. Checked twice a second.
+ *
+ *   <a-entity gltf-model="..." hide-beyond="x: -75; z: 5; distance: 90"></a-entity>
+ */
+AFRAME.registerComponent('hide-beyond', {
+  schema: {
+    x:        { default: 0 },
+    z:        { default: 0 },
+    distance: { default: 90 }
+  },
+
+  init() {
+    this.pos = new THREE.Vector3();
+    this.tick = AFRAME.utils.throttleTick(this.tick, 500, this);
+  },
+
+  tick() {
+    const cam = this.el.sceneEl.camera;
+    if (!cam) return;
+    cam.getWorldPosition(this.pos);
+    const dx = this.pos.x - this.data.x, dz = this.pos.z - this.data.z;
+    this.el.object3D.visible = dx * dx + dz * dz <= this.data.distance * this.data.distance;
+  }
+});
+
+/* ------------------------------------------------------------------ */
 /* paint-reflect                                                       */
 /* ------------------------------------------------------------------ */
 /*

@@ -538,3 +538,5 @@ Back-lot buildings (`assets/models/back-lots.glb`): `assets/textures/shared/back
 `assets/textures/block-83-87/shutter_louvres.jpg` is drawn by `tools/prepare_block_83_87_textures.py` from the existing CC0 `door_paint_green.jpg` (no download); `assets/textures/block-83-87-lightmap.jpg` is baked in Blender (original work). The reference card for 83–87 Main (Goodspeed Histories, "Main Street looking S.") was viewed only and is not in the repository.
 
 `assets/textures/store-79-lightmap.jpg` is baked in Blender (original work); 79 Main reuses existing textures only.
+
+`assets/textures/house-91-93-lightmap.jpg` and `house-95-97-lightmap.jpg` are baked in Blender (original work); both houses reuse existing textures only.

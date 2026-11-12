@@ -12,13 +12,13 @@
   <script src="https://cdn.jsdelivr.net/npm/aframe-extras@7.7.0/dist/aframe-extras.loaders.min.js"></script>
   <!-- Our own code: shared components, the building kit, the modelled landmarks,
        the townspeople you can talk to, and the street sounds. -->
-  <script src="js/components.js?v=20261111f"></script>
-  <script src="js/ground.js?v=20261111f"></script>
-  <script src="js/kit.js?v=20261111f"></script>
-  <script src="js/landmarks.js?v=20261111f"></script>
-  <script src="js/people.js?v=20261111f"></script>
-  <script src="js/ambience.js?v=20261111f"></script>
-  <script src="js/minimap.js?v=20261111f"></script>
+  <script src="js/components.js?v=20261112a"></script>
+  <script src="js/ground.js?v=20261112a"></script>
+  <script src="js/kit.js?v=20261112a"></script>
+  <script src="js/landmarks.js?v=20261112a"></script>
+  <script src="js/people.js?v=20261112a"></script>
+  <script src="js/ambience.js?v=20261112a"></script>
+  <script src="js/minimap.js?v=20261112a"></script>
 
   <style>
     /* On-screen help for desktop. Not visible inside the headset. */
@@ -137,18 +137,21 @@
          houses with picket fences (tools/blender/sidestreet_court.py). -->
     <a-entity id="sidestreet-court" position="0 0 0" rotation="0 0 0"
       gltf-model="url(assets/models/sidestreet-court.glb)"
-      baked-lighting="lightmap: assets/textures/sidestreet-court-lightmap.jpg; intensity: 1.0366"></a-entity>
+      baked-lighting="lightmap: assets/textures/sidestreet-court-lightmap.jpg; intensity: 1.0366"
+      hide-beyond="x: -75; z: 5; distance: 90"></a-entity>
 
     <!-- Bloomfield Ave east: Opera House, garages incl. the 1909 concrete-block garage at
          Spring St (from the owner's postcards), houses (tools/blender/sidestreet_bloomfield.py). -->
     <a-entity id="sidestreet-bloomfield" position="0 0 0" rotation="0 0 0"
       gltf-model="url(assets/models/sidestreet-bloomfield.glb)"
-      baked-lighting="lightmap: assets/textures/sidestreet-bloomfield-lightmap.jpg; intensity: 1.0571"></a-entity>
+      baked-lighting="lightmap: assets/textures/sidestreet-bloomfield-lightmap.jpg; intensity: 1.0571"
+      hide-beyond="x: 75; z: -85; distance: 90"></a-entity>
     <!-- South-east: the lane at No. 80 (feed, ice and wagon houses), the yard at No. 86 and
          Higgins Ave (tools/blender/sidestreet_southeast.py). All plain guesses from the 1921 map. -->
     <a-entity id="sidestreet-southeast" position="0 0 0" rotation="0 0 0"
       gltf-model="url(assets/models/sidestreet-southeast.glb)"
-      baked-lighting="lightmap: assets/textures/sidestreet-southeast-lightmap.jpg; intensity: 1.0015"></a-entity>
+      baked-lighting="lightmap: assets/textures/sidestreet-southeast-lightmap.jpg; intensity: 1.0015"
+      hide-beyond="x: 70; z: 30; distance: 90"></a-entity>
     <!-- Street ends: what closes the views north and south along Main St (churches, Soldiers'
          Monument, Hotel Flemington, Vosseller and Deats buildings, library, Doric House;
          tools/blender/street_ends.py). Mostly from the owner's postcards and HABS photos. -->
@@ -157,7 +160,9 @@
       baked-lighting="lightmap: assets/textures/street-ends-lightmap.jpg; intensity: 1.0477"></a-entity>
     <!-- Big side-street maples: the street tree without its stone pit (backdrop-tree.glb),
          all drawn as two instanced meshes. Positions are the ones baked into the backdrops' shade. -->
-    <a-entity id="backdrop-trees" instanced-trees="src: url(assets/models/backdrop-tree.glb)">
+    <!-- The trees are split into groups by area, so groups behind the viewer are not drawn. -->
+    <a-entity id="backdrop-trees-court" instanced-trees="src: url(assets/models/backdrop-tree.glb)"
+      hide-beyond="x: -75; z: 5; distance: 90">
       <a-entity id="btree-court-n-1" position="-90 0.575 -1.3" rotation="0 0 0" scale="2.1 2.1 2.1"></a-entity>
       <a-entity id="btree-court-n-2" position="-101 0.575 -1.3" rotation="0 77 0" scale="2.3 2.3 2.3"></a-entity>
       <a-entity id="btree-court-n-3" position="-112 0.575 -1.3" rotation="0 154 0" scale="2.2 2.2 2.2"></a-entity>
@@ -172,6 +177,9 @@
       <a-entity id="btree-court-s-4" position="-140 0.175 11.2" rotation="0 127 0" scale="2.3 2.3 2.3"></a-entity>
       <a-entity id="btree-court-s-5" position="-155 0.175 11.2" rotation="0 204 0" scale="2.2 2.2 2.2"></a-entity>
       <a-entity id="btree-court-s-6" position="-168.5 0.175 11.2" rotation="0 281 0" scale="2.25 2.25 2.25"></a-entity>
+    </a-entity>
+    <a-entity id="backdrop-trees-bloomfield" instanced-trees="src: url(assets/models/backdrop-tree.glb)"
+      hide-beyond="x: 75; z: -85; distance: 90">
       <a-entity id="btree-bloom-1" position="71 0.15 -96" rotation="0 358 0" scale="2.0 2.0 2.0"></a-entity>
       <a-entity id="btree-bloom-2" position="78.5 0.15 -93" rotation="0 75 0" scale="2.2 2.2 2.2"></a-entity>
       <a-entity id="btree-bloom-3" position="93.8 0.15 -92.6" rotation="0 152 0" scale="2.1 2.1 2.1"></a-entity>
@@ -182,6 +190,9 @@
       <a-entity id="btree-bloom-8" position="65.15 0.15 -71" rotation="0 177 0" scale="1.9 1.9 1.9"></a-entity>
       <a-entity id="btree-bloom-9" position="95.9 0.15 -76" rotation="0 254 0" scale="2.1 2.1 2.1"></a-entity>
       <a-entity id="btree-bloom-10" position="107 0.15 -70" rotation="0 331 0" scale="2.0 2.0 2.0"></a-entity>
+    </a-entity>
+    <a-entity id="backdrop-trees-southeast" instanced-trees="src: url(assets/models/backdrop-tree.glb)"
+      hide-beyond="x: 70; z: 30; distance: 90">
       <a-entity id="btree-se-1" position="44 0.15 12.5" rotation="0 30 0" scale="1.9 1.9 1.9"></a-entity>
       <a-entity id="btree-se-2" position="100 0.15 -20" rotation="0 127 0" scale="2.2 2.2 2.2"></a-entity>
       <a-entity id="btree-se-3" position="88 0.15 30" rotation="0 224 0" scale="2.3 2.3 2.3"></a-entity>
@@ -190,6 +201,8 @@
       <a-entity id="btree-se-6" position="57.5 0.15 70.5" rotation="0 155 0" scale="2.0 2.0 2.0"></a-entity>
       <a-entity id="btree-se-7" position="78 0.15 73" rotation="0 252 0" scale="2.2 2.2 2.2"></a-entity>
       <a-entity id="btree-se-8" position="127.5 0 66" rotation="0 349 0" scale="2.1 2.1 2.1"></a-entity>
+    </a-entity>
+    <a-entity id="backdrop-trees-north-end" instanced-trees="src: url(assets/models/backdrop-tree.glb)">
       <a-entity id="btree-end-1" position="-7.6 0.15 -173.5" rotation="0 15 0" scale="2.0 2.0 2.0"></a-entity>
       <a-entity id="btree-end-2" position="-7.6 0.15 -187" rotation="0 76 0" scale="2.1 2.1 2.1"></a-entity>
       <a-entity id="btree-end-3" position="10 0.15 -262" rotation="0 137 0" scale="2.1 2.1 2.1"></a-entity>
@@ -198,6 +211,8 @@
       <a-entity id="btree-end-6" position="40 0.15 -326" rotation="0 320 0" scale="2.2 2.2 2.2"></a-entity>
       <a-entity id="btree-end-7" position="14 0.15 -337.5" rotation="0 21 0" scale="2.3 2.3 2.3"></a-entity>
       <a-entity id="btree-end-8" position="0 0.15 -378" rotation="0 82 0" scale="2.2 2.2 2.2"></a-entity>
+    </a-entity>
+    <a-entity id="backdrop-trees-south-end" instanced-trees="src: url(assets/models/backdrop-tree.glb)">
       <a-entity id="btree-end-9" position="-10.8 0.15 70" rotation="0 143 0" scale="2.2 2.2 2.2"></a-entity>
       <a-entity id="btree-end-10" position="-10.8 0.15 89" rotation="0 204 0" scale="2.3 2.3 2.3"></a-entity>
       <a-entity id="btree-end-11" position="-10.8 0.15 108" rotation="0 265 0" scale="2.2 2.2 2.2"></a-entity>
@@ -208,7 +223,8 @@
       <a-entity id="btree-end-16" position="40 0.15 145" rotation="0 210 0" scale="2.1 2.1 2.1"></a-entity>
       <a-entity id="btree-end-17" position="16 0.15 182" rotation="0 271 0" scale="2.3 2.3 2.3"></a-entity>
       <a-entity id="btree-end-18" position="24 0.15 196" rotation="0 332 0" scale="2.2 2.2 2.2"></a-entity>
-      <!-- Big old trees on the grass strip opposite the bank (1914 card) and on the County Offices lawn: no pit -->
+    </a-entity>
+    <a-entity id="backdrop-trees-west-lawns" instanced-trees="src: url(assets/models/backdrop-tree.glb)">
       <a-entity id="btree-w-62" position="-7.3 0.15 -62" rotation="0 40 0" scale="1.6 1.4 1.6"></a-entity>
       <a-entity id="btree-w-70" position="-7.3 0.15 -70" rotation="0 160 0" scale="1.55 1.35 1.55"></a-entity>
       <a-entity id="btree-w-77" position="-7.3 0.15 -77" rotation="0 280 0" scale="1.6 1.45 1.6"></a-entity>
@@ -234,11 +250,10 @@
          0.1 m under the stoop feet at x -15.3 so no gap shows). Then 65 Main (1.3 m walk from
          the sidewalk to under its porch steps) and the
          Wurts law office (1.2 m walk from the sidewalk to 0.1 m under its front step).
-         Last two: guessed 1.2 m paths across the front yards of 91-93 and 95-97 Main. -->
+         (The walks to 91-93 and 95-97 Main are in `paths-91-97`, next to those houses.) -->
     <a-entity id="paths" ground-patches="y: 0.03; color: #b9b0a0;
       rects: -12.85 -24.07 5.1 1.6, -12.85 -27.87 5.1 1.6, -12.85 -31.67 5.1 1.6,
-             -12.63 -51.19 4.75 1.3, -12.5 -68.69 4.5 1.2,
-             -10.55 38.4 5.3 1.2, -10.45 52.8 5.1 1.2"></a-entity>
+             -12.63 -51.19 4.75 1.3, -12.5 -68.69 4.5 1.2"></a-entity>
 
     <!-- ============================================================
          STARTER BLOCK: Bloomfield Ave to Court St
@@ -631,10 +646,20 @@
       gltf-model="url(assets/models/block-83-87.glb)"
       baked-lighting="lightmap: assets/textures/block-83-87-lightmap.jpg; intensity: 1.0332"
       glass-reflect></a-entity>
-    <a-entity id="bldg-91-93-main" position="-13.2 0 38.4" rotation="0 90 0"
-      building="width: 8.2; height: 6.5; depth: 9; stories: 2; color: #d9cdb0; wall: wood; photo: "></a-entity>
-    <a-entity id="bldg-95-97-main" position="-13.0 0 52.8" rotation="0 90 0"
-      building="width: 7.8; height: 6.5; depth: 10; stories: 2; color: #a0604a; wall: brick; photo: "></a-entity>
+    <!-- 91-93 Main: frame house used as offices, with a dwelling ell (tools/blender/house_91_93.py).
+         95-97 Main: brick house with a small frame office (tools/blender/house_95_97.py).
+         Both are plain guesses on the 1921 map footprints (no photo shows them). -->
+    <a-entity id="bldg-91-93-main" position="-13.18 0.02 38.63" rotation="0 90 0"
+      gltf-model="url(assets/models/house-91-93.glb)"
+      baked-lighting="lightmap: assets/textures/house-91-93-lightmap.jpg; intensity: 1.0927"
+      glass-reflect></a-entity>
+    <a-entity id="bldg-95-97-main" position="-13.00 0.02 54.01" rotation="0 90 0"
+      gltf-model="url(assets/models/house-95-97.glb)"
+      baked-lighting="lightmap: assets/textures/house-95-97-lightmap.jpg; intensity: 1.0812"
+      glass-reflect></a-entity>
+    <!-- Front walks from the sidewalk to the two houses' steps and to the office door. -->
+    <a-entity id="paths-91-97" ground-patches="y: 0.03; color: #b9b0a0;
+      rects: -10.31 38.63 4.73 1.2, -10.04 54.01 4.33 1.2, -12.33 48.61 8.92 1.0"></a-entity>
 
     <!-- ============================================================
          PLAYER RIG
