@@ -619,12 +619,12 @@
          stand back behind small front yards. Specs for the real buildings come later. -->
     <a-entity id="bldg-79-main" position="-8.13 0 14.2" rotation="0 90 0"
       building="width: 7.6; height: 9.75; depth: 25; stories: 3; color: #e8e1cf; wall: wood; photo: "></a-entity>
-    <a-entity id="bldg-83-87-main" position="-8.67 0 23.1" rotation="0 90 0"
-      building="width: 6.6; height: 9.75; depth: 17; stories: 3; color: #8e4a36; wall: brick; photo: "></a-entity>
-    <!-- 83-87's porch: roof slab from the front (x -8.67) to the curb, three posts at x -4.65. -->
-    <a-entity id="bldg-83-87-porch" box-group="color: #e6dfd0;
-      boxes: -6.6 3.3 23.1 4.14 0.2 6.6, -4.65 1.675 20.0 0.14 3.05 0.14,
-             -4.65 1.675 23.1 0.14 3.05 0.14, -4.65 1.675 26.2 0.14 3.05 0.14"></a-entity>
+    <!-- 83-87 Main: brick grocery with roof arch and sidewalk porch (tools/blender/block_83_87.py;
+         from the c. 1905-12 "Main Street looking S." card; upper shutters closed as on the card). -->
+    <a-entity id="bldg-83-87-main" position="-4.58 0.15 23.11" rotation="0 90 0"
+      gltf-model="url(assets/models/block-83-87.glb)"
+      baked-lighting="lightmap: assets/textures/block-83-87-lightmap.jpg; intensity: 1.0332"
+      glass-reflect></a-entity>
     <a-entity id="bldg-91-93-main" position="-13.2 0 38.4" rotation="0 90 0"
       building="width: 8.2; height: 6.5; depth: 9; stories: 2; color: #d9cdb0; wall: wood; photo: "></a-entity>
     <a-entity id="bldg-95-97-main" position="-13.0 0 52.8" rotation="0 90 0"
