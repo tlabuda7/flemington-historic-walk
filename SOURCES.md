@@ -530,3 +530,5 @@ cornices, darkened by a colour factor), `polyhaven/trim_paint_cream.jpg` (sash, 
 Side-street backdrops: `assets/textures/shared/backdrop_windows.jpg` (+ `.json`) and `backdrop_grass.jpg` are drawn by `tools/prepare_backdrop_windows.py` (original work, no download). `assets/textures/shared/backdrop_block_rockfaced.jpg` is a quality-60 copy of the bank's rock-faced stone (Poly Haven `sandstone_blocks_05`, CC0, listed above). `assets/textures/sidestreet-court-lightmap.jpg` and `sidestreet-bloomfield-lightmap.jpg` are baked in Blender (original work). `assets/models/backdrop-tree.glb` is the street tree without its pit (`tools/blender/street_tree.py`, `TREE_BACKDROP = True`).
 
 `assets/textures/sidestreet-southeast-lightmap.jpg` and `street-ends-lightmap.jpg` are baked in Blender (original work); both models reuse the shared backdrop textures above.
+
+`assets/textures/street-details/details_atlas.jpg` and `stone_pale.jpg` are made from textures already in the project by `tools/prepare_street_details_textures.py` (no download); `assets/textures/street-details-lightmap.jpg` is baked in Blender (original work).

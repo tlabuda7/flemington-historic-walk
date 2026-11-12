@@ -12,13 +12,13 @@
   <script src="https://cdn.jsdelivr.net/npm/aframe-extras@7.7.0/dist/aframe-extras.loaders.min.js"></script>
   <!-- Our own code: shared components, the building kit, the modelled landmarks,
        the townspeople you can talk to, and the street sounds. -->
-  <script src="js/components.js?v=20261111e"></script>
-  <script src="js/ground.js?v=20261111e"></script>
-  <script src="js/kit.js?v=20261111e"></script>
-  <script src="js/landmarks.js?v=20261111e"></script>
-  <script src="js/people.js?v=20261111e"></script>
-  <script src="js/ambience.js?v=20261111e"></script>
-  <script src="js/minimap.js?v=20261111e"></script>
+  <script src="js/components.js?v=20261111f"></script>
+  <script src="js/ground.js?v=20261111f"></script>
+  <script src="js/kit.js?v=20261111f"></script>
+  <script src="js/landmarks.js?v=20261111f"></script>
+  <script src="js/people.js?v=20261111f"></script>
+  <script src="js/ambience.js?v=20261111f"></script>
+  <script src="js/minimap.js?v=20261111f"></script>
 
   <style>
     /* On-screen help for desktop. Not visible inside the headset. */
@@ -368,6 +368,14 @@
       <a-entity id="tree-west-4"  position="-7.5 0.175 -33"   rotation="0 180 0" scale="1.05 1.1 1.05" ></a-entity>
       <a-entity id="tree-west-5"  position="-7.5 0.175 -60"   rotation="0 270 0" scale="1 1 1"        ></a-entity>
     </a-entity>
+    <!-- Fences and small props (PLAN.md "Street details pass 2", batch B;
+         tools/blender/street_details.py): wire fence at the Wurts office (from the
+         "Dr. Tompkins" photo), picket fence at 65, County Offices pipe rail and board fence,
+         Rea Building hedge, waste-paper box, barber pole at the hotel. Built in scene
+         coordinates, so it sits at 0 0 0. -->
+    <a-entity id="street-details" position="0 0 0" rotation="0 0 0"
+      gltf-model="url(assets/models/street-details.glb)"
+      baked-lighting="lightmap: assets/textures/street-details-lightmap.jpg; intensity: 1.0005"></a-entity>
     <!-- ============================================================
          PARKED VEHICLES (tools/blender/vehicles.py + vehicles_bake.py
          → assets/models/vehicles.glb; PLAN.md "Street details pass 2", F12–F14)
@@ -426,6 +434,7 @@
       <!-- Granite carriage steps (1907 card): in front of Nevius and by pole E1 -->
       <a-entity id="step-C1" data-prop="carriage_step" position="6.89 0.15 -7.3" rotation="0 -90 0"></a-entity>
       <a-entity id="step-C2" data-prop="carriage_step" position="6.89 0.15 1.6"  rotation="0 -90 0"></a-entity>
+      <a-entity id="step-C3" data-prop="carriage_step" position="5.94 0.15 -119.5" rotation="0 -90 0"></a-entity>
       <!-- Hydrants: the two "T.H." on the 1921 Sanborn map -->
       <a-entity id="hydrant-Y1" data-prop="hydrant" position="-6.85 0.15 -4.4" rotation="0 90 0"></a-entity>
       <a-entity id="hydrant-Y2" data-prop="hydrant" position="6.85 0.15 -90.9" rotation="0 -90 0"></a-entity>
@@ -442,6 +451,7 @@
       <!-- Bicycles leaning on hitching post H2 (1909 card) and pole E4 (1907 card) -->
       <a-entity id="bicycle-B1" data-prop="bicycle" position="-7.12 0.15 -14.6" rotation="0 180 0"></a-entity>
       <a-entity id="bicycle-B2" data-prop="bicycle" position="7.25 0.15 -76.5"></a-entity>
+      <a-entity id="bicycle-B3" data-prop="bicycle" position="-7.25 0.15 -118" rotation="0 180 0"></a-entity>
       <!-- Curb gasoline pump at 100–102 Main (Sanborn sheet 3: buried 500 gal tank) -->
       <a-entity id="pump-P1" data-prop="gas_pump" position="6.95 0.15 47.2" rotation="0 -90 0"></a-entity>
     </a-entity>

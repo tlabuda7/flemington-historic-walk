@@ -584,7 +584,11 @@ AFRAME.registerComponent('baked-lighting', {
         map: old.map,
         color: old.color,
         lightMap: this.texture,
-        lightMapIntensity: this.data.intensity   // undoes the bake's 0..1 scaling
+        lightMapIntensity: this.data.intensity,  // undoes the bake's 0..1 scaling
+        alphaTest: old.alphaTest,                // keep cut-outs (hedge leaves) cut out
+        side: old.side,
+        transparent: old.transparent,
+        opacity: old.opacity
       });
       old.dispose();
     }
