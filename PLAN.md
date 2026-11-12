@@ -534,7 +534,7 @@ previews `assets/models/previews/county-offices-*.png`. ≤ 10 materials.
 
 ### Wurts Law Office (59 Main St)
 
-**Status:** in scene (scene-integrator, 2026-11-03): `#wurts-law-office` at (−14.95, 0.02, −68.69), rotation 0 90 0, GLB + baked lightmap (intensity 1.1647), replacing the kit placeholder; front path now `-12.5 -68.69 4.5 1.2` (sidewalk to 0.1 m under the step at x −14.65). No console errors; loaded bounds x −24.23 … −14.65, z −71.36 … −66.02, y −0.18 … 6.52 (no float, no z-fight with lawn or path). Draw calls / triangles: start view 162 / 61.5k → 160 / 69.0k. Screenshot `assets/models/previews/wurts-law-office-in-scene.png`. Shaded east front reads slightly cooler than the warm cream 65 Main, but acceptable next to its neighbours. Earlier: reviewer round 1: **PASS** (2026-11-03): GLB loads in the browser viewer with no errors (7,627 tris, 5 materials, 1.24 MB, TEXCOORD_0+1, 4 × 1K JPEG, 1K lightmap clean); matches both HABS views. Minor notes only: the shaded east front reads slightly cool/grey, the wreaths look octagonal up close, the chimney may sit ~0.3 m too far forward. Next: scene-integrator. Earlier: built and baked (blender-builder, 2026-11-03). Asset-scout skipped (nothing new needed; the four reused textures confirmed; grey copy `wurts-law-office/planks_grey.jpg` made by `tools/prepare_wurts_textures.py`). `assets/models/wurts-law-office.glb`: 7,627 triangles, 5 materials, 1.2 MB; lightmap `wurts-law-office-lightmap.jpg` 1024² (no seams seen, 2048 not needed), LIGHTMAP_SCALE 1.1647; previews `assets/models/previews/wurts-law-office-*.png`.
+**Status:** **addendum 2026-11-11 (planner): period photo found, 2 model fixes + 1 owner decision listed below — awaiting owner** (not built). Earlier: in scene (scene-integrator, 2026-11-03): `#wurts-law-office` at (−14.95, 0.02, −68.69), rotation 0 90 0, GLB + baked lightmap (intensity 1.1647), replacing the kit placeholder; front path now `-12.5 -68.69 4.5 1.2` (sidewalk to 0.1 m under the step at x −14.65). No console errors; loaded bounds x −24.23 … −14.65, z −71.36 … −66.02, y −0.18 … 6.52 (no float, no z-fight with lawn or path). Draw calls / triangles: start view 162 / 61.5k → 160 / 69.0k. Screenshot `assets/models/previews/wurts-law-office-in-scene.png`. Shaded east front reads slightly cooler than the warm cream 65 Main, but acceptable next to its neighbours. Earlier: reviewer round 1: **PASS** (2026-11-03): GLB loads in the browser viewer with no errors (7,627 tris, 5 materials, 1.24 MB, TEXCOORD_0+1, 4 × 1K JPEG, 1K lightmap clean); matches both HABS views. Minor notes only: the shaded east front reads slightly cool/grey, the wreaths look octagonal up close, the chimney may sit ~0.3 m too far forward. Next: scene-integrator. Earlier: built and baked (blender-builder, 2026-11-03). Asset-scout skipped (nothing new needed; the four reused textures confirmed; grey copy `wurts-law-office/planks_grey.jpg` made by `tools/prepare_wurts_textures.py`). `assets/models/wurts-law-office.glb`: 7,627 triangles, 5 materials, 1.2 MB; lightmap `wurts-law-office-lightmap.jpg` 1024² (no seams seen, 2048 not needed), LIGHTMAP_SCALE 1.1647; previews `assets/models/previews/wurts-law-office-*.png`.
 
 **What it is**: the Alexander Wurts (a.k.a. Samuel Southard) law office, a tiny 1-storey frame
 office built c. 1811 as a plain clapboard building and remodelled c. 1840 by builder Mahlon
@@ -741,6 +741,36 @@ board, a white door, shrubs and a concrete walk; possibly a raised grade around 
 5. Porch floor height (0.30) and step size — the HABS ground may be higher than in 1920.
 6. Chimney present in 1920 and its cap detail.
 7. Front-yard tree and path width.
+
+#### Addendum 2026-11-11 (planner): the "Dr. Tompkins" photo
+- **Photo**: local `flmngtnmainstdrtompkinsoffice.jpg` (West Jersey History, real-photo card, 491 × 768,
+  undated). **It is this building** (square pillars, wreath frieze over a dentil band, flush-board front,
+  W-D-W), from the front walk, looking west. **Date estimate c. 1910–1925** (boy in knickerbockers, cap and
+  tie; concrete walk; a bare electric bulb on a wire under the porch ceiling; real-photo card era); the
+  occupant board reads **"DR. TOMPKINS"**; no web source dates him (one search, nothing found). The late-1920s
+  restroom use (HCHS) comes after it, so it is the closest view to 1920 we have.
+- **Matches the model (no change)**: 4 square pillars, wreaths, dentils, 6/6 sash in both front windows
+  (3 × 2 panes per sash, sizes agree within the photo's accuracy), white paint, one step, porch floor ≈ 0.3 m.
+  **Shutters**: only the outer leaf of each window shows; the inner leaves would sit exactly behind the two
+  middle pillars, so the photo neither shows nor rules them out: keep both leaves. Shutter tone is mid-grey
+  (left, sunlit) to dark (right): dark green stays plausible.
+- **Differs from the model** (fix list for blender-builder):
+  1. **Door: half-glazed, not 4-panel.** Leaf 0.78 × 2.20 as now, with a **mid rail at ≈ 1.15 m above the
+     porch floor**; above it one large glazed panel (dark glass, a pale blind/curtain hint allowed in the
+     atlas-free `glass` colour, no new texture); below it one plain flat panel. Same dark green material.
+     (The dark mesh look in the photo may be a summer screen door over it; do not model a screen.)
+  2. **Taller door head**: the door casing has a plain **head board ≈ 0.35 m tall** above the opening
+     (z 2.50 → 2.85) with the small cornice cap on top (cap top ≈ 2.95, i.e. ≈ 0.2 m above the window
+     caps, which stay at 2.75). This is where the name board sits.
+  3. **Owner decision: name board "DR. TOMPKINS"** (black board ≈ 0.75 × 0.12 m, white capitals, centred on
+     the head board). The photo shows it, but the date is c. 1910–25, not proven for 1920. Options: (a) add it
+     (photo evidence, closest view to 1920), (b) leave it off (owner rule: no lettering unless sure). Planner:
+     slight preference for (a). If (b), no blank board either.
+- **Not model fixes (scene / street details)**: the front walk is **concrete** (smooth grey, wider at the step,
+  ≈ 1.5 m, narrowing to ≈ 1.2 m toward the street); the scene path patch `-12.5 -68.69 4.5 1.2` can stay,
+  concrete-coloured. The front fence is a **wire hoop-top fence, not pickets**: see Street details pass 2,
+  section 4, row "59 Main". A mature leafy tree overhangs the porch from the south (left) side (trunk out of
+  frame); the optional tree in the integrator notes may go on the south side instead of the north (guess).
 
 ### Bank Building / Flemington National Bank (56–66 Main St)
 
@@ -1248,6 +1278,24 @@ front with lettering, a display window cut into the north wall; the 1909 awning 
 5. Pediment height (1.25 m) and chord; frieze panels and dentils.
 6. Colours: cream trim, awning stripes (1909 tint shows a mostly pale awning).
 7. Exact width 8.00 m (sheet 3) vs 7.62 m (Pickell, 25 ft) vs 8.31 m (sheet 2 overlap strip).
+
+#### Addendum 2026-11-11 (planner): 1912 "Some Business Blocks" card
+Local `flmngtnbizblocks12.jpg` (1912, sepia, from the west sidewalk looking south-east; 78 at the left, sharper
+than the 1909 card). Upper floors, quoins, cornice brackets and crest agree with the model. Differences the card
+shows clearly (fix list for blender-builder; owner to approve):
+1. **Awning: plain pale canvas, no stripes** (Odd Fellows' awnings in the same card do show stripes, so this is
+   not the print). **Deep scalloped valance with a hanging fringe**, and **side curtains** hanging at both ends
+   to about 1.0 m above the step. Swap the `awning` material to a plain off-white canvas (tint the existing
+   texture to ≈ #E3DCCB or reuse Lovell's plain canvas; no lettering: anything on the valance is unreadable).
+2. **Shop-front cornice is bracketed**: a frieze ≈ 0.45 m with a row of **≈ 10 small console brackets** under
+   a cornice projecting ≈ 0.35 m, across the full shop front (model: plain 0.25 m cornice). Keep the top at 4.20.
+Optional (medium confidence, owner choice):
+3. Shop-front layout: the recessed entry sits **north of centre** (about x −2.0 … −0.4), with a narrow display
+   window north of it and **two wide lights** south of it; the separate upper-floor door at the south end is not
+   visible (it may be behind the awning curtain). Model: entry x −0.85 … +0.75.
+4. The 2nd-floor heads (pale arches with keystones) look **nearly semicircular** in this card, not segmental;
+   the reviewer accepted segmental from the 1909 card. Leave unless the owner wants to change it.
+The card also confirms carriage steps C1 (in front of 78) and C2 (by pole E1) of the street-props pass.
 
 ### Frame Dwelling "D" at 65 Main St (65 Main St, old no. 510)
 
@@ -3085,6 +3133,13 @@ may still have used the upper floors in 1920; nothing on the outside shows it, s
    the start. Windows could be added if the owner prefers, but no source shows any.
 6. Awnings in 1920 (seen 1907–1910s), and that the shop fronts did not change by 1920.
 7. North-shop door position, the stair door, double doors.
+
+**Addendum 2026-11-11 (planner)**: local `flmngtnbizblocks12.jpg` (1912, from the NW) checked against the model:
+7 + 7 front windows with hoods, belt course, arched crest with a round vent, clapboard north wall with one window
+per floor (ground one shuttered), two awnings and two signboards all agree. **No model change.** The signboards
+carry unreadable lettering (owner's blank choice stands); the awnings read striped in this card (the model's faded
+stripes are fine). The building beyond is the Masonic Hall **before its 1921 stone front** (brick, gabled, arched
+windows): the owner chose the 1921 front, no change.
 
 ### Block at 35–41 Main St: frame "Gro." (35–37, old no. 517) and brick "Cobbler" (39–41, old no. 516)
 
@@ -5566,7 +5621,7 @@ Lanes are earth strips from the property line back to the mapped building (y 0, 
 | **County Offices pipe-rail fence** | 1908–1912 cards | along x −10.3 from z −39.2 to −21.0, open at the three walks (z −24.07, −27.87, −31.67), with 3 m returns beside each walk | iron posts 0.05 × 0.70 m every 2.4 m, one 0.04 pipe rail on top, dark paint; a pale square stone post 0.30 × 0.30 × 1.2 m at its north end (z −39.2) | PHOTO |
 | County Offices lawn trees | 1909, 1912 cards | large shade tree at about (−13.5, −33.5); smaller at (−12.5, −25.5) | large 12 m; small 6 m | PHOTO |
 | **65 Main picket fence** | 1908 "north from hotel" | along x −10.3 from z −58.7 to −39.2 (lot lines from the map), gate at the path z −51.19 | 1.0 m high, square posts 0.12 × 1.2 m every 2.4 m, two rails, pointed pickets 0.06 m wide at 0.12 m centres, white paint, worn; gate 1.1 m | PHOTO (form), MAP (ends) |
-| **59 Main (Wurts) front fence** | 1908 card (picket fence runs on north); Stryker (low iron fence in shade); 1914 (dark fence) | along x −10.3 from z −78.5 to −58.7, gate at the path z −68.69 | type not settled by the photos: **picket as at 65** (recommended, one module) or low iron | PHOTO (a fence), type = guess (decision 3) |
+| **59 Main (Wurts) front fence** — **corrected 2026-11-11 (planner): not picket** | **`flmngtnmainstdrtompkinsoffice.jpg` (c. 1910–25, close-up, from the walk)**; also Stryker (low iron fence in shade) and 1914 (dark fence), which now agree | along x −10.3 from z −78.5 to −58.7 (line = guess: the photo does not show the setback; the lot-line ends are MAP), **open entrance (no gate leaf seen)** at the path z −68.69, as wide as the walk (≈ 1.2 m) | **low woven-wire hoop-top fence ≈ 0.9 m high**: vertical wires ≈ 0.10 m apart ending in **overlapping round hoops** (each hoop ≈ 0.2 m wide) along the top, a horizontal wire ≈ 0.25 m below the top and one near the ground; metal, mid-grey (galvanised or dark paint). **Two square white wooden gate posts ≈ 0.18 × 0.18 × 1.05 m** at the walk; the **north post carries a turned urn finial ≈ 0.35 m** (the south post shows a flat cap). Build as a new kit panel (hoops as an alpha-cutout texture on one quad per 2.4 m panel, cheap) + post + urn; the owner's earlier choice "picket as at 65" was made before this photo: **owner to confirm the switch** (recommended) | **PHOTO** (form, posts, urn), line = guess |
 | Lawns | cards above | existing `#lawn-west`; add the grass strip of section 3 | grass texture instead of flat colour | PHOTO |
 | Side yards between 57 / 59 / 65 / County Offices | map: open ground | z −78.5 … −71, −66.3 … −55.5, −45.7 … −34.8 | lawn; no objects known | MAP |
 | Rea Building hedge (east side, on Bloomfield Ave) | 1910 colour card | along the Rea south wall, x 14 … 30, z −89.8 … −89.0 | clipped hedge 0.8 m wide × 0.9 m high; grass strip between walk and road, hydrant Y2 in it | PHOTO |
@@ -5704,6 +5759,8 @@ scene coordinates (origin at 0,0,0), one material with a small atlas (clapboard,
    layout now (road and walks narrower at the start area; the three placeholder houses move to the real
    line and become 79–97 Main later), or leave it for a later pass?
 3. **Fence at 59 Main (Wurts).** Picket like 65 (recommended), low iron, or none until a better photo turns up?
+   **Update 2026-11-11: a close photo now shows a wire hoop-top fence with white posts and an urn (section 4 row);
+   recommend that instead of pickets.**
 4. **Parked vehicles and horses.** (a) none; (b) one Model T, one buggy, one wagon, no horses (recommended:
    all three are in photos, and a standing horse is costly to do well); (c) with standing horses.
 5. **Dirt level.** Horse droppings and litter: none / light (recommended) / as thick as the Stryker plate.
@@ -6162,6 +6219,8 @@ committed. **Section 7 overrides sections 1–3 where they differ.** Findings: `
 **Update 2026-11-11 (planner): owner's second photo batch (26 cards) checked — section 7.2 rows and new 7.5; notes in
 `research/new-photos-2026-11-11.md`.** New: G1 Flemington Garage (cement block, Bloomfield / Spring), E10 library, E11
 Club Room / Post Office; park, E6–E9 now photo-backed; band stand position corrected.
+**Update 2026-11-11 (planner, third batch): see 7.7** — E1 = former Hotel Flemington and E11 = Deats Building, both
+now PHOTO-BASED (E11 footprint corrected); the "Fire House" card is the post-1922 Lyceum, not K1.
 
 **Owner wish (2026-11-11):** "start building side streets, but maybe just the buildings and not walkable yet."
 
@@ -6415,7 +6474,7 @@ the map, everything else typical (section 3 standard). NRHP-1980 items stay PLAI
 - **Fire house K1: drop the hose tower.** The slim tower in `flmngtncountycrthousvu09.jpg` stands north-west of the
   courthouse (camera is north-east of it; 79 Main is on the left), so it is not the fire house (south-west). The
   "Fire House, Flemington" postcard on Goodspeed shows the **Lyceum at Court St / Park Ave after the borough bought
-  it in 1922**; do not use it for K1. K1 = the 1862 2-storey brick engine house with the company's meeting room
+  it in 1922**; do not use it for K1 (**confirmed 2026-11-11, see 7.7**). K1 = the 1862 2-storey brick engine house with the company's meeting room
   upstairs (Snell 1881, 1902 Sanborn, 1898 booklet). Still PLAIN-GUESS front.
 - **Opera House B5**: the Sept 1921 sheet 4 letters it **"OPERA HO. — Damaged By Fire"**. It stood (repaired and used
   by a congregation from 1922; demolished 1965). Model the shell; see decision 7.3-1.
@@ -6431,7 +6490,7 @@ the map, everything else typical (section 3 standard). NRHP-1980 items stay PLAI
 
 | Id | Building | Class | Form to build (adjusted) | Evidence |
 |---|---|---|---|---|
-| K1 | Fire Dept House, 7 Court | PLAIN-GUESS | 2-storey brick box on the map footprint, 6.7 m eave, **front gable to Court St** (narrow deep plan, 30°, slate); ground floor: **two wide arched-or-square engine doors** (each ≈ 2.8 m × 3.2 m) side by side on the brick front; upper floor: three windows (meeting room); no tower, no lettering; frame lean-to as mapped (shed roof) | history: Snell 1881, Goodspeed, HCHS 1902 map note, 1898 booklet; borough moved it to the Lyceum in 1922 |
+| K1 | Fire Dept House, 7 Court | PLAIN-GUESS | 2-storey brick box on the map footprint, 6.7 m eave, **front gable to Court St** (narrow deep plan, 30°, slate); ground floor: **two wide arched-or-square engine doors** (each ≈ 2.8 m × 3.2 m) side by side on the brick front; upper floor: three windows (meeting room); no tower, no lettering; frame lean-to as mapped (shed roof) | history: Snell 1881, Goodspeed, HCHS 1902 map note, 1898 booklet; borough moved it to the Lyceum in 1922. **2026-11-11: `flmngtnfirehs28.jpg` is NOT K1** (see 7.7); front stays PLAIN-GUESS |
 | K2 | Stone cutting, 6 Court | PLAIN-GUESS (NRHP-1980) | brick part: **1½ storeys, low-pitched slate gable, windows of mixed sizes** (old carriage house, later "Grand Jury Room"); frame part as before | NRHP-1980 #6 Court |
 | K3 | Am. Legion Room, 8 Court | PLAIN-GUESS (NRHP-1980) | ground storey **red brick with brick pilasters and a pale painted metal classical entablature** across the front; upper storey **stucco** (light grey-cream); flat roof behind a plain parapet | NRHP-1980 #8 Court (addition already shown on the 1921 map) |
 | K4 | Double dwelling 10–12 Court | PLAIN-GUESS | as section 3 | — |
@@ -6451,7 +6510,7 @@ the map, everything else typical (section 3 standard). NRHP-1980 items stay PLAI
 | B8, B9, L1–L7, A15 | Mallory shop, Boarding stable, alley-80 sheds | PLAIN-GUESS | as section 3 | nothing found |
 | H1 | Choir School (3 Higgins / Chorister Pl) | PLAIN-GUESS | 2-storey stuccoed, as mapped | HCHS trail stop 13 |
 | H2 | Dwelling 5 Higgins | PLAIN-GUESS | as section 3 | — |
-| E1 | Capner corner block | PLAIN-GUESS | as section 1f (replaced by a 1-storey building before 1980; no photo) | — |
+| E1 | Capner corner block = **former Hotel Flemington / "Hotel Hunterdon"** (old 520–522; 1921 "Off.", "Vac.", "D") | **PHOTO-BASED (1908 cards; updated 2026-11-11, see 7.7)** | 3 storeys + basement, **red brick**, flat roof behind a bracketed cornice; **full-length 2-storey frame porch** on the Main St front (square posts, pierced lattice frieze under each tier, turned-baluster railings on both decks, deck raised ≈ 0.9 m on the basement), **two small gabled entrance hoods with steps** (one south of centre, one near the north end); ≈ 9 windows across the 3rd floor above the porch roof; plain brick north wall on Capner St with 3 rows of windows. **No lettering** (hotel signs pre-date the 1921 vacancy) | 1910 sheet 5 "HOTEL FLEMINGTON"; local `flmngtnhtlflemingtonvu08.jpg`, `flmngtnmainstrtvuwthhotel08.jpg`, `flmngtnhotelhntrdon00s10s.jpg` |
 | E2 | 12–16 Main | PLAIN-GUESS (NRHP-1980) | 3-storey frame with a **2-storey front porch on plain square posts** | NRHP-1980 #14 Main |
 | E3/E4 | 18–22 Main | PLAIN-GUESS (NRHP-1980) | 2-storey frame Italianate, **low-pitched slate gable, bracketed wide eaves, bargeboards; a wide hanging oriel at one end bay upstairs; 3-bay porch** | NRHP-1980 #18–22 Main |
 | E5 | 108–112 Main | PLAIN-GUESS (NRHP-1980) | 3-storey brick, flat roof, **bracketed cornice**, segment-arched brick window hoods | NRHP-1980 #110 Main |
@@ -6460,7 +6519,7 @@ the map, everything else typical (section 3 standard). NRHP-1980 items stay PLAI
 | E8 | **Presbyterian Church**, 10 East Main (new) | **PHOTO-BASED** (1898, c. 1909, 1913) | **dark grey stone**, Gothic; footprint per 7.1 (≈ 30 m wide front block, chapel behind with canted ends, 41 m deep); eaves 5–6 m ("16'–20'"); **square SW tower with a tall slender spire to 33.5 m**; steep main gable facing south with a **round rose window**, in front of it a lower front range with a row of small round-headed windows and a small gabled entrance porch; small gables on the south roof slope; chapel with hipped roofs and a large stone chimney; ivy on the lower walls. **1923 card (closest to 1920) confirms**: spire with **small gabled lucarnes** and a weathervane at the west end; south front with a large pointed-arch window, a **row of five small round-headed windows**, a **round window high in the gable**; in front a **landscaped lawn with a curving path, flower beds, young conifers and tall trees** that hide most of the church | `booklets/booklet1910-presbyterian-church.jpg`, `booklets/booklet1898-churches.jpg`, local `flmngtnmainstnorth13.jpg`, **`flempreschch23.jpg` (1923, from the S)**, `flemngtnmainstatbranchst10.jpg` (1910); FPC c. 1910 card (web); Sept 1921 sheet 5 |
 | E9 | **Soldiers' Monument** (new) | **PHOTO-BASED** | at (8.2, −312.6) on the sheet-2 triangle; ≈ 6 m (20 ft): pale grey-white granite stepped base, die, tall pedestal, standing Union soldier; low iron railing round the triangular grass plot; no cannon or flagpole (later). **1910 colour card**: monument white / very pale grey; plot **raised, with a stone curb**, low dark spear-top railing, **one dark iron post at the railing's east corner** (lamp or hitching post, guess); big trees round it, bare earth road | `booklets/booklet1898-main-and-broad-monument.jpg`, `booklets/booklet1910-soldiers-monument.jpg`, local 1913 card, **local `flemngtnmainstatbranchst10.jpg` (1910)**; Waymarking (1892, granite) |
 | E10 | **Public Library**, 118 Main (SE corner of Maple Ave) — new | **PHOTO-BASED** (undated card, c. 1910s) + MAP (Sept 1921 sheet 3: brick, "2", "28'") | **x 16.8 … 33.1, z 136.3 … 147.3** (10.9 m on Main St, 16.3 m on Maple Ave; front 6.5 m behind the Main St line, on the Maple Ave line); 2 storeys, 8.5 m to the cornice; **dark red brick with pale stone pilasters** at corners and between bays, stone base and band course, **frieze lettered "FLEMINGTON PUBLIC LIBRARY"** on the 4-bay (Maple Ave, guess) face, projecting cornice, **low hipped roof**; ground-floor paired 1/1 windows under **brick relieving arches**, upper 6/6 windows; a door with transom and steps on each face (3-bay face: door left). Lettering is legible in the photo, but at 80+ m a plain frieze is fine | local `flemington_-_library_building.jpg`; sheet 3 px x 4150–4462, y 3893–4103 |
-| E11 | **Club Room / Post Office**, 120–124 Main — new | MAP only (PLAIN-GUESS form) | **x 10.8 … 37.4, z 151.2 … 160.2**, on the street line; **3 storeys brick, "40'" (12.2 m)**, "Club Room" (north half), "**Post Office**" (south half), "Meeting Halls 3d"; flat roof behind a parapet (guess). **This is where the Post Office was in Sept 1921** | sheet 3 px x 4035–4545, y 4178–4350 |
+| E11 | **Club Room / Post Office**, 120–124 Main = the **Deats Building** (1908 "Free Library – Deats Building") — new | **PHOTO-BASED (1908; updated 2026-11-11, see 7.7)** + MAP | **corrected 2026-11-11: x 10.8 … 32.3, z 151.2 … 165.4** (14.2 m on Main St × 21.5 m; the earlier box was misread), front ≈ 2.3 m behind the map's street line; **3 storeys brick, "40'" (12.2 m)**, "Club Room" (north half), "**Post Office**" (south half), "Meeting Halls 3d". **Photo (1908)**: Main St front ≈ 5 bays with a **small central pediment** on a bracketed cornice; flat/low roof; **4 chimneys** along the south wall; pale stone window hoods (eared on the 2nd floor), paired windows on the long south side, tall ground-floor windows with stone lintels and basement windows there; ground floor of the front a shop front with a cornice band and an entrance with steps (1921: post office; keep it plain, no lettering) | sheet 3 px **x 4035–4447, y 4178–4450**; local `flmngtndeatsbldg08.jpg` |
 
 E8 and E9 go into `street-ends.glb` (budget: church ≤ 1,500 tris, monument ≤ 300; the GLB cap rises to 6,800).
 E10 (≤ 300 tris) and E11 (≤ 150, tier 2) also go into `street-ends.glb` (cap 7,250); G1 (≤ 150, tier 2) into
@@ -6472,7 +6531,9 @@ Colours: Methodist stone mid grey (#8A8780 area, warm), Presbyterian darker grey
    is not described), or with boarded-up windows?
 2. **Lyceum at Court St / Park Ave** (the end of the Court St view, 160+ m): add a tier-2 2-storey box with a front
    gable (no engine doors; those came in 1922), or leave the view ending at Park Ave as now (recommended: leave;
-   its position is off our map sheets)?
+   its position is off our map sheets)? *(2026-11-11: the "Fire House" card is the converted Lyceum, c. 1922–28;
+   its engine doors and "FLEMINGTON FIRE DEPT" lettering are from the 1922 conversion (stucco date unknown), so
+   even if built it stays plain.)*
 3. **Doric House E6**: build its portico (columns + entablature, about +400 tris) since it is a known landmark, or
    keep the plain-dwelling standard (recommended: build the portico)?
 
@@ -6509,6 +6570,36 @@ in `research/new-photos-2026-11-11.md`). Results:
 2. **E10 library and E11 Club Room / Post Office**: add to `street-ends.glb` (recommended if decision 4 = yes)?
 3. **Band stand**: still optional (hidden from Main St). Build it now that four photos show it, or keep it for the
    walkable side-street stage (recommended: keep for later)?
+
+**7.7 Owner's third photo batch (planner, 2026-11-11).** Notes per card: `research/new-photos-2026-11-11-batch3.md`
+("Planner pass").
+- **Fire house card (`flmngtnfirehs28.jpg`, c. 1928) is not K1.** On the Sept 1921 sheet 2 (px x 2567–2750,
+  y 6610–6895) K1 has the 1-storey frame lean-to along its whole west side and the 20' stone jail-yard wall and
+  courthouse on its east; the card shows a free-standing stucco building with a long windowed side along a walk
+  and a 2½-storey frame house as its neighbour. With HCHS ("bought the Lyceum in 1922 for a Borough Hall and Fire
+  Department") it is the converted **Lyceum at Court St / Park Ave after 1922**; its date plaque is unreadable.
+  It did **not** look like this in 1920–21 (no engine doors, no lettering). K1 stays PLAIN-GUESS; decision 7.3-2
+  unchanged.
+- **E11 = the Deats Building**, now PHOTO-BASED (row updated, footprint corrected to x 10.8 … 32.3,
+  z 151.2 … 165.4). The 1908 card is taken from the south-west on the west side: the Methodist church (E7) shows
+  behind its north end across Maple Ave, with **no library yet** on the 118 Main lot, so the E10 library was
+  built between 1908 and 1921 (the Free Library was in the Deats Building in 1908).
+- **E1 = the former Hotel Flemington** (1910 sheet 5 label; 1921 "Off.", "Vac.", "D", same outline with its
+  2-storey porch). The "Main Street looking South from Hotel Hunterdon" cards (1908 colour and an undated copy)
+  show the same building from Capner St: brick north wall with a painted "HOTEL" sign, the same lattice-frieze
+  porch and gabled entrance hood, so **"Hotel Hunterdon" is another name for the same hotel**. Neither name is
+  the Union Hotel (70–76) or the County Hotel (47–49). Row updated; E1 is 8 m beyond the north walk limit, so it
+  is the most visible street-end building. Budget for E1 in `street-ends.glb`: ≤ 800 tris (porch as posts +
+  flat lattice-frieze quads).
+- **E7 Methodist church**: two more cards (`flmngtnmechch09.jpg` colour 1909, `flmngtnmethodistchrchat.jpg`)
+  agree with the row (SW tower with pinnacles and spire, two gables with traceried windows, ivy, green-tinted
+  roofs); the second also shows the Doric House's flat-roofed portico (E6) at its left. No change.
+- **E8 Presbyterian** (`flmngtn1stpreschch10.jpg`, 1910): agrees with the row. No change.
+- **Park band stand** (`flmngtnfestivalatpark.jpg`, colour, carnival): white posts and railing, **green-tinted
+  octagonal roof**, tall pole finial: agrees with 7.2. No change (still optional).
+- **No change** from the Baptist church (4 cards, landscape silhouette only), Main St residence cards (north of
+  Capner St or south of 126 Main, outside the modelled street ends; useful later), the Large / Emmet / Newell /
+  Underlin houses, and Mine, Broad, Church and Branch St views (none on a modelled street).
 
 #### Open questions / guesses
 
@@ -7053,3 +7144,4 @@ Check licensing for every asset and note the source in the progress log.
 | 2026-11-11 | blender-builder: **Brick house with shop fronts (57 Main) built** (not reviewed, not integrated, not committed; index.html untouched): `tools/blender/store_57.py` + `_bake.py` + `_preview.py`, `assets/models/source/store-57.blend`. Massing as the spec table: house 16.34 × 10.28 m (Y 3.64–13.92), brick walls to 7.00, plain boxed cornice 6.70–7.00 projecting 0.35 on all four sides (front run only south of the D.G. block), no brackets; straight slate mansard (Union Hotel's `roof_slates_03`, 1.5 m tile) from the wall top to a flat tin deck 1.25 m in at 9.75 with a 0.10 curb; 8 flat-topped dormers (front 4 over the 2nd-floor windows, 2 north, 2 south at Y 6.9/10.6), painted cheeks, tin tops, 1/1 sash 0.75 × 1.30; D.G. front X 2.20–8.17, flat tin roof 8.10 inside a parapet, two-course corbel band 7.70–7.90, stone coping to 8.53, three 1/1 upper windows + one on the north side; Conf'y and Gro. 1-storey, roof 3.95, front and south parapet with a projecting course at 4.00 and stone coping to 4.27; four 2/2 house windows over the shops, three 2/2 per floor on each house side; stone lintels and sills; three shop fronts per the spec X ranges: brick piers 0.35, dark painted fronts recessed 0.10, panelled bulkheads, 2-pane plate glass 0.65–2.60, transom lights 2.66–3.00, half-glazed doors set back 0.18; one plain cream fascia 3.10–3.45 projecting 0.29 over all three (blank). Rear wing F (2 storeys, shed 6.40→6.10), G (1 storey, 3.00→2.80), H clapboard shed; forecourt paving to Y −2.10. **Deviations**: wing F's south door moved to its rear face and its south ground floor has one window (Y 23.2) — the spec's door at Y 15.5 and windows at Y 17/21.5 would open into the low part G; G door on its rear face, window on its south face; house rear door at X −5.5. Shop-front texture `polyhaven/door_paint_green.jpg` × #34342A instead of `door_varnish_dark.jpg` (tinted to #2E2E26 it read as blotchy rock; as 100–102); the shop brick is `red_brick.jpg` × #B79C8E as a glTF colour factor (no tinted copy, nothing new to log in SOURCES.md). Section-E glass (`glass` BLEND 0.40, rough 0.05, #1A1916, backs from `shared/window_backs.jpg`, shop cells in show windows, doors and transoms). Bake: to-sun (−0.40, 0.90, 0.36), occluder boxes for the County Hotel and the Wurts office per the spec; grime: dirt band, sootier house brick, dark band under the cornice, lighter patch on the house front above the shop roofs, mottled slate. **LIGHTMAP_SCALE 1.1581**; entity (−12.40, 0.15, −84.94) rot 0 90 0, id `bldg-57-main`, add `glass-reflect`. Previews `store-57-{front,three-quarter,detail,ne,se,context}.png` (no photo of the 1921 fronts, so no match view). Next: reviewer. |
 | 2026-11-11 | blender-builder: **Houses and shops at 24–30 Main built** (not reviewed, not integrated, not committed; index.html untouched): `tools/blender/block_24_30.py` + `_bake.py` + `_preview.py`, `assets/models/source/block-24-30.blend`. One GLB, three frame buildings on the map footprints: 24 (gable end to the street, slate, 4-post porch, door with transom, 2/2 windows, 2-storey rear part + 1-storey rear + shingle rear porch), 26 (shed roof, 5-facet ground-floor bay shop window, half-glazed door, deep porch at FULL map depth on 3 posts at the curb, deck only Y 0–1.41), open 2.66 m gap, 28–30 (two shop fronts, two-tier porch with 5 posts per tier and a picket rail on the upper tier only, upper door + window per unit, rear notch and rear addition). No signs, lettering, awnings, shutters, brackets, pole or chimneys. Section-E windows as 100–102 (22 window backs from shared/window_backs.jpg incl. the shop cells; `glass` BLEND 0.40). 3,400 tris (5,696 before hidden-face removal), 10 materials (clap_24, clap_26, clap_2830, trim, roof_tin, roof_slate, shopfront, deck, WindowBack, glass), all reused 1K textures, GLB 1.51 MB, TEXCOORD_0 + 1; LIGHTMAP_SCALE **1.1509**; bake occluder = block-32-38.glb shifted into place, sidewalk rig on the slanted new road edge. Deviation: paint colours pushed apart slightly so the three fronts read as different (24 = the clapboard map untinted, avg #E5DFCC; 26 #D9C9A3; 28–30 #BBAE90; spec ≈ #E2DED2 / #D8CFB8 / #C4B99F were too close to tell apart). Entity (7.29, 0.15, −152.365), rotation 0 −90 0; integrator moves pole-E7 per addendum 9.3. |
 | 2026-11-11 | planner: **owner's second photo batch (26 West Jersey History cards, local only) checked** — `research/new-photos-2026-11-11.md` (one section per card) and side-streets section 7.5 / 7.6. The 1909 "Flemington Garage" card is the 1-storey cement-block garage at the SE corner of Bloomfield Ave and Spring St (Nov 1910 sheet 4 nos. 317–318; new item **G1**, x 124.2 … 145.8, z −77.6 … −55.7), not the 2-storey brick garage at 21 Bloomfield (B6). Now photo-backed: park + band stand (re-measured centre (−117.7, −22.5), 5.0 m), Doric House portico (1906), Methodist church (1906, 1909 colour), Presbyterian church (1923), Soldiers' Monument (1910 colour); new street-end items **E10** public library (118 Main, photo + map) and **E11** Club Room / Post Office (120–124 Main, map: the P.O.'s 1921 home). No real contradiction with built buildings; options listed (Rea 1909 upper-window awnings and "FLEMINGTON / GARAGE CO." arrow sign: suggest leave out; Rea spec text: P.O. at 124 Main by 1921). index.html untouched, nothing committed. |
+| 2026-11-11 | planner: **owner's third photo batch checked** (local only; notes in `research/new-photos-2026-11-11-batch3.md`, "Planner pass"). Wurts (59): the "Dr. Tompkins" card (c. 1910–25) is this office; addendum with 2 fixes (half-glazed door, taller door head) + owner decision on the "DR. TOMPKINS" board; pass-2 fence at 59 corrected to a wire hoop-top fence with white posts and an urn (owner to confirm). Nevius (78): 1912 card addendum (plain pale awning with fringe and side curtains, bracketed shop cornice; 2 optional). Odd Fellows: no change. County Hotel 1906 tinted card: already cited, no change. "Hotel Flemington" / "Hotel Hunterdon" = one hotel at the Capner corner = street-end E1 (now PHOTO-BASED). Deats Building = E11 (PHOTO-BASED, footprint corrected). "Fire House" card = post-1922 Lyceum, not K1. Not built, not committed. |

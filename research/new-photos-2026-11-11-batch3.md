@@ -59,3 +59,44 @@ spec changes.
 - Buggy and horse-drawn floats: `flmngtnforanfoundryfairfloat11`,
   `flmngtnfaireliasvossellerandastryer` (elsewhere/).
 - Picket fences in front of houses: `flmngtnemmethouse07`, `flmngtnhouseinviewsunderlin`.
+
+## Planner pass (2026-11-11)
+
+All named cards viewed at full size; 1921 sheets 2 and 3 and 1910 sheet 5 checked with gridded crops.
+
+1. **`flmngtnmainstdrtompkinsoffice.jpg` = Wurts Law Office (59 Main), confirmed.** Real-photo card, undated;
+   estimate **c. 1910–25** (boy's knickerbockers/cap/tie, concrete walk, bare electric bulb under the porch
+   ceiling). Agrees with the model: pillars, wreaths, dentils, 6/6 sash, step, white paint. Only the outer
+   shutter leaves show; the inner ones would be hidden behind the middle pillars, so both leaves stay.
+   Differs: **half-glazed door** (mid rail, glazed upper part; not 4-panel), **taller plain door head board**
+   carrying a black **"DR. TOMPKINS"** board (owner decision: date not proven for 1920), concrete walk, and a
+   **wire hoop-top fence with square white posts, urn finial on the north gate post**, open entrance (no gate
+   leaf). PLAN: Wurts addendum (fixes 1–3) and pass-2 section 4 row "59 Main" corrected. One web search for
+   Dr. Tompkins found nothing.
+2. **`flmngtnbizblocks12.jpg`**: Odd Fellows matches the model, no change. Nevius: **plain pale awning (no
+   stripes) with a fringed scalloped valance and side curtains**, and a **bracketed shop cornice**: fixes in the
+   Nevius addendum; entry north of centre and near-semicircular 2nd-floor heads are optional (medium
+   confidence). Carriage steps C1/C2 confirmed. Masonic Hall pre-1921 front: no change (owner chose 1921).
+3. **`flmngtnfirehs28.jpg` is not the 1921 fire house (K1).** 1921 sheet 2: K1 has a frame lean-to along its
+   whole west side and the jail-yard wall / courthouse on its east; the card shows a free-standing stucco
+   building beside a 2½-storey frame house. It is the **Lyceum (Court St / Park Ave) after the borough bought it
+   in 1922** (HCHS trail; https://hunterdonhistory.org/wp-content/uploads/2018/08/Flemington-TRAIL-online8-1.pdf).
+   Plaque date unreadable. In 1920–21 it had no engine doors or lettering. K1 stays PLAIN-GUESS.
+4. **`flmngtndeatsbldg08.jpg`: the Deats Building = E11 (120–124 Main, "Club Room" / "Post Office" in 1921).**
+   Taken from the SW; the Methodist church (E7) is behind its north end across Maple Ave, and the 118 Main lot
+   between them is still empty (library E10 built 1908–21). **E11 footprint corrected** from sheet 3 to
+   px x 4035–4447, y 4178–4450 → scene x 10.8 … 32.3, z 151.2 … 165.4 (14.2 m front, 21.5 m deep; the earlier
+   x 37.4 / z 160.2 was a misread). Shows 5-bay front with a small central pediment, bracketed cornice, 4
+   chimneys on the south wall, pale eared window hoods, shop front with steps.
+5. **`flmngtncountyhtl06.jpg`** is the same 1906 tinted card already cited in the County Hotel spec ("salmon/red
+   walls, green shutters"). Hand-tinted, and older than the 1908 card that shows pale painted walls: **low
+   weight; no change.** Green shutters agree with the model.
+6. **"Hotel Flemington" and "Hotel Hunterdon" are one building: the hotel at the SW corner of Capner St and
+   Main (1910 sheet 5 "HOTEL FLEMINGTON", old 520–522; 1921 "Off.", "Vac.", "D")** = street-end item **E1**.
+   The Hunterdon cards look south from Capner St past its brick north wall (painted "HOTEL" sign) along the
+   same lattice-frieze 2-storey porch with a gabled entrance hood. Not the Union or County Hotel; no Union
+   Hotel comparison needed. E1 row now PHOTO-BASED (no lettering: vacant in 1921).
+7. **Churches / residences / side streets**: Methodist (2 cards) and Presbyterian (1910) agree with E7 / E8;
+   the carnival card shows the band stand with a green-tinted roof (agrees). Baptist, residence-section, Large,
+   Emmet, Newell, Underlin houses, Mine / Broad / Church / Branch St: not on modelled streets, no change.
+   PLAN side streets 7.7 added.
