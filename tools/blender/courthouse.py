@@ -19,9 +19,21 @@ Coordinates (metres, Blender Z-up):
        y = -1.65 (toward the street); the body runs back to y = 24.91.
     Z  up from the foot of the steps (forecourt level).
 glTF export turns -Y into +Z, which matches the A-Frame scene's "front faces +Z".
+
+Windows (PLAN.md "E. Windows that don't read as flat black", rolled out here 2026-11-11, Rea /
+County Hotel method): every pane is ONE outward glass face (builder Glass -> material `glass`,
+transparent, see courthouse_bake.py) 4 cm in front of ONE rectangular window back (builder
+WBack) showing a cell of the shared atlas assets/textures/shared/window_backs.jpg: county
+offices downstairs and the courtroom upstairs, so cream / green blinds at varied heights and
+plain dark rooms; attic lights, tympanum windows, the door fanlight, the jail kitchen and the
+jail building dark rooms. No window repeats the cell of one within 4 m of it on the same wall.
+The main doors stay solid 6-panel leaves (no lights). The cupola's louvred openings are not
+glazed. BACKREC[rid] tells the bake which atlas rectangle each back shows.
 """
 
 import math
+import json
+import random
 import bpy
 import bmesh
 from mathutils import Matrix
@@ -93,7 +105,8 @@ COLOURS = {
     "RockWall": "#77736b",
     "Door": "#3f5443",
     "Sash": "#1e2621",        # dark green-black sash, frames, louvre backs, wing trim
-    "Glass": "#15191d",
+    "Glass": "#1a1916",       # section-E glass (exported as `glass`)
+    "WBack": "#2a2420",       # window backs
     "Iron": "#1b1b1b",
     "Alarm": "#8a2a20",       # fire-alarm post
 }
@@ -109,6 +122,19 @@ class MB:
 
     def __init__(self):
         self.bm = bmesh.new()
+        self.rid_layer = self.bm.faces.layers.int.new("rid")
+        self.rid = 0
+
+    def face(self, pts, d, axis, out):
+        """ONE single-sided face (outline [(u, v), ...] at depth d), facing `out` along the
+        axis (+1 / -1). Used for glass panes and window backs."""
+        f = self.bm.faces.new([self.bm.verts.new(self._pt(axis, u, d, v)) for u, v in pts])
+        f.normal_update()
+        k = 1 if axis == "y" else 0
+        if f.normal[k] * out < 0:
+            f.normal_flip()
+        f[self.rid_layer] = self.rid
+        return f
 
     def _closed(self, faces):
         bmesh.ops.recalc_face_normals(self.bm, faces=faces)
@@ -243,15 +269,75 @@ REAR_TYMPANUM = ("y", BACK, 1)
 WING_EAST = ("y", 5.11, -1)
 
 
-def window(wall, cu, w, h, z_sill, cols=3, rows=2, sashes=2, sill="Brownstone", cut=None):
-    """Rectangular double-hung window: opening, glass, dark sash with muntins, stone sill.
-    cols x rows panes in each of `sashes` sashes (6/6 = cols 3, rows 2, sashes 2)."""
+# ---------------------------------------------------------------------------
+# Glass panes and window backs (PLAN.md section E)
+# ---------------------------------------------------------------------------
+PROJECT = r"C:\Users\Tarik\AppFactory\Flemington Historic Walk"
+WB_CELLS = json.load(open(PROJECT + r"\assets\textures\shared\window_backs.json"))["cells"]
+GAP = 0.04                      # window back this far behind the glass
+# county offices (ground floor) and the courtroom (upper floor): blinds, plain dark rooms
+OFFICE = {"blind_cream_high": 3, "blind_cream_half": 3, "blind_cream_low": 2, "blind_cream_full": 1,
+          "blind_green_high": 2, "blind_green_half": 2, "blind_green_low": 1,
+          "dark_room": 2, "dark_room_frame": 2}
+DIM = {"dark_room": 1, "dark_room_frame": 1}          # attic, tympana, fanlight, jail
+_wb_rng = random.Random(1828)
+_wb_seen = {}
+BACKREC = {}                    # rid -> record (read by courthouse_bake.py)
+
+
+def pick(weights, wall, u, near=4.0):
+    """A cell that differs from every window already placed within `near` metres along the
+    same wall (beside it, or on the floor above / below)."""
+    seen = _wb_seen.setdefault(wall, [])
+    avoid = {c for uu, c in seen if abs(uu - u) < near}
+    names = [n for n in weights if n not in avoid] or list(weights)
+    cell = _wb_rng.choices(names, weights=[weights[n] for n in names])[0]
+    seen.append((u, cell))
+    return cell
+
+
+def crop_for(w, h):
+    """Part of a 0.4-aspect atlas cell that fits a w x h pane at the cell's own scale."""
+    a = w / h
+    if a > 0.4:                       # wider: full width, a band of the height (a little above centre)
+        f = 0.4 / a
+        return (0.0, 1.0, 0.55 - f / 2, 0.55 + f / 2) if f < 0.98 else None
+    f = a / 0.4                       # narrower: full height, the middle of the width
+    return (0.5 - f / 2, 0.5 + f / 2, 0.0, 1.0) if f < 0.98 else None
+
+
+def pane(wall, outline, k_glass, cell, crop="fit"):
+    """Glass face (the pane's outline) k_glass from the wall face (negative = inside) and its
+    window back GAP behind it: the outline's bounding box (corners beyond an arch sit in the
+    wall); crop = (fu0, fu1, fv0, fv1) part of the atlas cell, "fit" = crop_for the pane."""
+    axis, face, out = wall
+    D = lambda k: face + out * k
+    G["Glass"].face(outline, D(k_glass), axis, out)
+    us, vs = [p[0] for p in outline], [p[1] for p in outline]
+    u0, u1, v0, v1 = min(us), max(us), min(vs), max(vs)
+    if crop == "fit":
+        crop = crop_for(u1 - u0, v1 - v0)
+    U0, V0, U1, V1 = WB_CELLS[cell]["uv"]
+    if crop:
+        U0, U1, V0, V1 = (U0 + (U1 - U0) * crop[0], U0 + (U1 - U0) * crop[1],
+                          V0 + (V1 - V0) * crop[2], V0 + (V1 - V0) * crop[3])
+    rid = len(BACKREC) + 1
+    BACKREC[rid] = dict(axis=axis, u0=u0, u1=u1, z0=v0, z1=v1, uv=(U0, V0, U1, V1))
+    G["WBack"].rid = rid
+    G["WBack"].face(rect(u0, u1, v0, v1), D(k_glass - GAP), axis, out)
+    G["WBack"].rid = 0
+
+
+def window(wall, cu, w, h, z_sill, cols=3, rows=2, sashes=2, sill="Brownstone", cut=None, rooms=None):
+    """Rectangular double-hung window: opening, glass + window back (section E), dark sash
+    with muntins, stone sill. cols x rows panes in each of `sashes` sashes (6/6 = cols 3,
+    rows 2, sashes 2)."""
     axis, face, out = wall
     D = lambda k: face + out * k        # k > 0 is outside the wall, k < 0 inside
     z_top = z_sill + h
     u0, u1 = cu - w / 2, cu + w / 2
     (cut or CUT).prism(rect(u0, u1, z_sill, z_top), D(0.25), D(-RECESS), axis)
-    G["Glass"].prism(rect(u0, u1, z_sill, z_top), D(-0.20), D(-0.23), axis)
+    pane(wall, rect(u0, u1, z_sill, z_top), -0.205, pick(rooms or OFFICE, wall, cu))
     S = G["Sash"]
     f = 0.06                                                    # frame
     S.prism(rect(u0, u0 + f, z_sill, z_top), D(-0.12), D(-0.20), axis)
@@ -279,7 +365,7 @@ def arched_door(wall, cu, w, z0, zs, cut=None):
     r = w / 2
     f = 0.09
     (cut or CUT).prism(arched(cu, w, z0 - 0.05, zs, 14), D(0.25), D(-RECESS), axis)
-    G["Glass"].prism(arched(cu, w - 2 * f, zs - 0.14, zs, 14), D(-0.22), D(-0.25), axis)
+    pane(wall, arched(cu, w - 2 * f, zs - 0.14, zs, 14), -0.225, "dark_room_frame")     # fanlight: dark hall
     # radiating bars and a small half-round hub
     for a in (math.pi / 6, math.pi / 3, math.pi / 2, 2 * math.pi / 3, 5 * math.pi / 6):
         ca, sa = math.cos(a), math.sin(a)
@@ -342,7 +428,7 @@ arched_door(FRONT_WALL, 0.0, 1.85, PODIUM, 2.92)
 for x in (-3.7, 3.7):
     window(FRONT_WALL, x, 1.1, 1.8, 2.0)
     window(FRONT_WALL, x, 1.1, 1.9, 4.45)
-    window(FRONT_WALL, x, 0.9, 0.6, 6.55, cols=3, rows=1, sashes=2)
+    window(FRONT_WALL, x, 0.9, 0.6, 6.55, cols=3, rows=1, sashes=2, rooms=DIM)
 window(FRONT_WALL, 0.0, 1.1, 1.9, 4.45)
 
 # Side walls: 3.5 m blank at the front, then 5 bays. The wing hides two north ground bays.
@@ -458,8 +544,8 @@ TYMP_APEX = RIDGE - 0.30
 WALLS.prism([(-HW, EAVE), (HW, EAVE), (0, TYMP_APEX)], FRONT_FACE, FRONT_FACE + 0.55)
 WALLS.prism([(-HW, EAVE), (HW, EAVE), (0, TYMP_APEX)], BACK - 0.55, BACK)
 for x in (-2.1, 2.1):                       # two 6-light windows (cross-check: 0.95 x 1.45, sill 9.4)
-    window(TYMPANUM, x, 0.95, 1.45, 9.4, cols=2, rows=3, sashes=1, sill="Trim")
-window(REAR_TYMPANUM, 0.0, 0.95, 1.45, 9.4, cols=2, rows=3, sashes=1, sill="Trim")
+    window(TYMPANUM, x, 0.95, 1.45, 9.4, cols=2, rows=3, sashes=1, sill="Trim", rooms=DIM)
+window(REAR_TYMPANUM, 0.0, 0.95, 1.45, 9.4, cols=2, rows=3, sashes=1, sill="Trim", rooms=DIM)
 
 
 def rake_band(top_off, bot_off, y0, y1, mb):
@@ -614,7 +700,7 @@ G["Stucco"].prism([(WX0 - 0.05, PODIUM), (WXS, PODIUM), (WXS, wing_top(WXS)), (W
                   WY0, WY1)
 G["Brownstone"].box(WX0, WXS, WY0 - 0.04, WY1 + 0.04, 0.0, PODIUM)
 WING.prism([(WXS, 0.45), (WX1, 0.45), (WX1, wing_top(WX1)), (WXS, wing_top(WXS))], WY0, WY1)
-window(WING_EAST, 9.70, 1.4, 1.2, 1.0, cols=3, rows=2, sashes=2, sill="Sash", cut=CUT_WING)
+window(WING_EAST, 9.70, 1.4, 1.2, 1.0, cols=3, rows=2, sashes=2, sill="Sash", cut=CUT_WING, rooms=DIM)
 # plain door with four panels under a shed hood
 CUT_WING.prism(rect(7.85, 8.75, 0.45, 2.55), WY0 - 0.25, WY0 + 0.15)
 G["Door"].prism(rect(7.85, 8.75, 0.45, 2.55), WY0 + 0.08, WY0 + 0.12)
@@ -659,9 +745,13 @@ for s in (-1, 1):
     ye = BY0 - 0.3 if s < 0 else BY1 + 0.3
     pts = [(ye, BE - 0.17 + 0.1), (BYM, BE + 1.2 + 0.1), (BYM, BE + 1.2), (ye, BE - 0.17)]
     G["Slate"].prism(pts if s < 0 else list(reversed(pts)), BX0 - 0.3, BX1 + 0.3, axis="x")
-for i, x in enumerate((-4.6, -2.0)):                             # yard-side windows (dark panes, no cut)
-    for z in (1.2, 3.9):
-        G["Glass"].box(x - 0.45, x + 0.45, BY1, BY1 + 0.03, z, z + 1.5)
+JAIL_W = ("y", BY1, 1)
+for i, x in enumerate((-4.6, -2.0)):                             # yard-side windows (no cut: the back on
+    for z in (1.2, 3.9):                                         # the boards, the glass 4.3 cm out)
+        pane(JAIL_W, rect(x - 0.45, x + 0.45, z, z + 1.5), 0.043, pick(DIM, JAIL_W, x + z, near=0.5))
+        for a, b in ((x - 0.50, x - 0.45), (x + 0.45, x + 0.50)):
+            G["Sash"].box(a, b, BY1, BY1 + 0.05, z, z + 1.5)         # side casings round the glass edge
+        G["Sash"].box(x - 0.50, x + 0.50, BY1, BY1 + 0.05, z + 1.5, z + 1.56)
         G["Sash"].box(x - 0.55, x + 0.55, BY1, BY1 + 0.05, z - 0.08, z)
 
 # ---------------------------------------------------------------------------

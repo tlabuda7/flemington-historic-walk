@@ -17,6 +17,13 @@ Steps (pattern: union_hotel_bake.py):
  5. Bake a grime mask (darker near the ground, blotches, faint vertical streaks, damp tint
     above the base course, soot at the chimney tops) and multiply it in.
  6. Export the GLB. Other buildings' collections are hidden from render during the bake.
+
+Windows (PLAN.md section E, 2026-11-11): the window backs (material CHR_WBack, cells of
+assets/textures/shared/window_backs.jpg, UVs from BACKREC) are lightmapped like everything
+else; the panes are one material named exactly `glass` (#1A1916, alpha 0.40, roughness 0.05,
+BLEND, single-sided) that the scene leaves unlit and gives a sky reflection (`glass-reflect`).
+The glass is fully transparent during the bake, ignored by the hidden-face pass, and its
+Lightmap UVs are squeezed small (it does not use them).
 """
 
 import math
@@ -33,6 +40,7 @@ GLB = PROJECT + r"\assets\models\courthouse.glb"
 LIGHTMAP = PROJECT + r"\assets\textures\courthouse-lightmap.jpg"
 LIGHTMAP_SIZE = 2048
 SAMPLES = 384
+GLASS_ALPHA = 0.40
 TO_SUN = (-0.40, 0.90, 0.36)          # west-side building (front faces east)
 
 # 1. Geometry -----------------------------------------------------------------
@@ -55,7 +63,8 @@ LOOK = {
     "RockWall":   (CT + "rock_wall_grey.jpg", 1.8, 0.95, None),
     "Door":       (PH + "door_paint_green.jpg", 0.8, 0.7, None),
     "Sash":       (None, 1.0, 0.6, (0.012, 0.018, 0.014)),     # dark green-black paint
-    "Glass":      (None, 1.0, 0.08, (0.010, 0.013, 0.014)),    # old window glass
+    "Glass":      (None, 1.0, 0.05, (0.01033, 0.00972, 0.00802)),  # section E: #1A1916 dust tint
+    "WBack":      (PROJECT + r"\assets\textures\shared\window_backs.jpg", 1.0, 0.9, None),
     "Iron":       (None, 1.0, 0.6, (0.012, 0.012, 0.012)),
     "Alarm":      (None, 1.0, 0.6, (0.25, 0.025, 0.017)),      # fire-alarm red
 }
@@ -79,7 +88,32 @@ def textured_material(name, image_file, roughness, colour):
         nt.links.new(tex.outputs["Color"], bsdf.inputs["Base Color"])
     else:
         bsdf.inputs["Base Color"].default_value = (*colour, 1)
+    if name == "glass":   # transparent, drawn with a sky reflection by the scene
+        bsdf.inputs["Alpha"].default_value = GLASS_ALPHA
+        mat.use_backface_culling = True
+        if hasattr(mat, "surface_render_method"):
+            mat.surface_render_method = "BLENDED"
+        elif hasattr(mat, "blend_method"):
+            mat.blend_method = "BLEND"
     return mat
+
+
+def back_uvs(obj):
+    """Window backs: each face shows its atlas cell (BACKREC, by the face's rid)."""
+    mesh = obj.data
+    while mesh.uv_layers:
+        mesh.uv_layers.remove(mesh.uv_layers[0])
+    uv = mesh.uv_layers.new(name="UVMap")
+    rid_attr = mesh.attributes.get("rid")
+    for poly in mesh.polygons:
+        rec = BACKREC[rid_attr.data[poly.index].value]
+        U0, V0, U1, V1 = rec["uv"]
+        for li in poly.loop_indices:
+            co = mesh.vertices[mesh.loops[li].vertex_index].co
+            u = co.x if rec["axis"] == "y" else co.y
+            fu = (u - rec["u0"]) / (rec["u1"] - rec["u0"])
+            fz = (co.z - rec["z0"]) / (rec["z1"] - rec["z0"])
+            uv.data[li].uv = (U0 + (U1 - U0) * fu, V0 + (V1 - V0) * fz)
 
 
 def box_uvs(obj, tile):
@@ -113,19 +147,31 @@ parts = [o for o in col.objects if o.type == "MESH"]
 for obj in parts:
     key = obj.name.split(".")[0][3:]
     image_file, tile, rough, colour = LOOK[key]
-    name = "CHR_" + SHARE.get(key, key)
+    name = "glass" if key == "Glass" else "CHR_" + SHARE.get(key, key)
     mat = bpy.data.materials.get(name)
     if not (mat and any(o.data.materials and o.data.materials[0] == mat for o in parts)):
         mat = textured_material(name, image_file, rough, colour)
     obj.data.materials.clear()
     obj.data.materials.append(mat)
-    box_uvs(obj, tile)
+    if key == "WBack":
+        back_uvs(obj)
+    else:
+        box_uvs(obj, tile)
 
 # soot on the chimney tops (a vertex value the grime bake reads; removed before export)
 brick = bpy.data.objects["CH_Brick"]
 soot = brick.data.attributes.new("soot", "FLOAT", "POINT")
 for v in brick.data.vertices:
     soot.data[v.index].value = min(max((v.co.z - 13.6) / 1.2, 0.0), 1.0)
+
+# The whole front lies in shade under the deep portico: lift its window backs in the lightmap
+# (x FRONT_BACK_LIFT, through the grime bake) so the rooms still read behind the glass, as the
+# County Hotel does under its veranda. A vertex value, removed before export.
+FRONT_BACK_LIFT = 1.5
+wb_obj = bpy.data.objects["CH_WBack"]
+lift = wb_obj.data.attributes.new("lift", "FLOAT", "POINT")
+for v in wb_obj.data.vertices:
+    lift.data[v.index].value = 1.0 if (v.co.y < PORT + 0.4 and v.co.z < ARCH_BOT) else 0.0
 
 # 3. Join, drop hidden faces, unwrap the lightmap UVs --------------------------
 ch = bpy.data.objects["CH_Walls"]
@@ -180,7 +226,11 @@ def remove_hidden_faces(obj, rays=120):
         bmesh.ops.bisect_plane(bm, geom=bm.verts[:] + bm.edges[:] + bm.faces[:], dist=1e-4,
                                plane_co=co, plane_no=no)
     bm.normal_update()
-    bvh = BVHTree.FromBMesh(bm)
+    # the glass does not block the view: rays pass it to reach (or leave) the window backs
+    glass_i = [i for i, m in enumerate(obj.data.materials) if m.name == "glass"]
+    bm.verts.index_update()
+    bvh = BVHTree.FromPolygons([v.co for v in bm.verts],
+                               [[v.index for v in f.verts] for f in bm.faces if f.material_index not in glass_i])
     dirs = fibonacci(rays)
     face_tris = {}
     for t in bm.calc_loop_triangles():
@@ -237,7 +287,7 @@ bpy.ops.uv.smart_project(angle_limit=math.radians(66), island_margin=0.004,
 bpy.ops.object.mode_set(mode="OBJECT")
 # Give the lightmap's pixels to what matters: shrink the islands of dark or out-of-the-way
 # parts (sash, glass, ironwork, the jail yard, the barely visible roof), then repack.
-LM_SHRINK = {"CHR_Sash": 0.35, "CHR_Glass": 0.35, "CHR_Door": 0.6,
+LM_SHRINK = {"CHR_Sash": 0.35, "glass": 0.03, "CHR_WBack": 0.6, "CHR_Door": 0.6,
              "CHR_RockWall": 0.5, "CHR_Clapboard": 0.5, "CHR_Slate": 0.7}
 lm_data = mesh.uv_layers["Lightmap"].data
 mat_names = [m.name for m in mesh.materials]
@@ -339,6 +389,9 @@ def point_materials_at(img):
         nt.nodes.active = node
 
 
+glass_alpha = next(n for n in bpy.data.materials["glass"].node_tree.nodes
+                   if n.type == "BSDF_PRINCIPLED").inputs["Alpha"]
+glass_alpha.default_value = 0.0             # light passes the panes to the window backs
 try:
     light_img = bake_target("CH_Light", True)
     point_materials_at(light_img)
@@ -392,7 +445,10 @@ try:
     soot_attr = N("ShaderNodeAttribute")
     soot_attr.attribute_name = "soot"
     soot_f = map_range(soot_attr.outputs["Fac"], 0.0, 1.0, 1.0, 0.45)
-    grey = mult(mult(mult(height, blotch), streaks), soot_f)
+    lift_attr = N("ShaderNodeAttribute")
+    lift_attr.attribute_name = "lift"
+    lift_f = map_range(lift_attr.outputs["Fac"], 0.0, 1.0, 1.0, FRONT_BACK_LIFT)
+    grey = mult(mult(mult(mult(height, blotch), streaks), soot_f), lift_f)
     # greenish-grey damp band just above the brownstone base
     damp = map_range(sep.outputs["Z"], 1.15, 1.9, 1.0, 0.0)
     band = N("ShaderNodeMath")
@@ -434,6 +490,7 @@ try:
         mesh.materials[i] = mat
     print("grime baked")
 finally:
+    glass_alpha.default_value = GLASS_ALPHA
     for name, state in render_state.items():
         if bpy.data.collections.get(name):
             bpy.data.collections[name].hide_render = state
@@ -486,8 +543,9 @@ for mat in mesh.materials:
         node = mat.node_tree.nodes.get(name)
         if node:
             mat.node_tree.nodes.remove(node)
-if mesh.attributes.get("soot"):
-    mesh.attributes.remove(mesh.attributes["soot"])
+for attr_name in ("soot", "lift"):
+    if mesh.attributes.get(attr_name):
+        mesh.attributes.remove(mesh.attributes[attr_name])
 
 # 6. Export ---------------------------------------------------------------------
 for o in bpy.context.scene.objects:

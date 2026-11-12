@@ -21,9 +21,21 @@ Coordinates (metres, Blender Z-up):
        the rear wall is at y = 15.21.
     Z  up from grade (lawn level).
 glTF export turns -Y into +Z, which matches the A-Frame scene's "front faces +Z".
+
+Windows (PLAN.md "E. Windows that don't read as flat black", rolled out here 2026-11-11, Rea /
+County Hotel method): every pane is ONE outward glass face (builder Glass -> material `glass`,
+transparent, see county_offices_bake.py) 4 cm in front of ONE window back (builder WBack, a
+rectangle; the oculus a 12-gon) showing a cell of the shared atlas
+assets/textures/shared/window_backs.jpg. Offices and record rooms: cream / green blinds at
+varied heights, plain dark rooms; basement, door lights and fanlights: dark rooms. No window
+repeats the cell of one within 4 m of it on the same wall. BACKREC[rid] tells the bake which
+atlas rectangle each back shows. The door leaves are now really glazed (stiles and rails round
+the light).
 """
 
 import math
+import json
+import random
 import bpy
 import bmesh
 
@@ -89,7 +101,8 @@ COLOURS = {
     "Roof": "#5a3e34",         # painted tin
     "Door": "#3a2a1f",         # dark varnished doors
     "Rock": "#77706a",         # rough stone basement
-    "Glass": "#15191d",
+    "Glass": "#1a1916",
+    "WBack": "#2a2420",
     "Iron": "#1b1b1b",         # railings, grilles, knobs
 }
 MATS = {k: plain("CO_" + k, c) for k, c in COLOURS.items()}
@@ -104,6 +117,19 @@ class MB:
 
     def __init__(self):
         self.bm = bmesh.new()
+        self.rid_layer = self.bm.faces.layers.int.new("rid")
+        self.rid = 0
+
+    def face(self, pts, d, axis, out):
+        """ONE single-sided face (outline [(u, v), ...] at depth d), facing `out` along the
+        axis (+1 / -1). Used for glass panes and window backs."""
+        f = self.bm.faces.new([self.bm.verts.new(self._pt(axis, u, d, v)) for u, v in pts])
+        f.normal_update()
+        k = {"y": 1, "x": 0, "z": 2}[axis]
+        if f.normal[k] * out < 0:
+            f.normal_flip()
+        f[self.rid_layer] = self.rid
+        return f
 
     def _closed(self, faces):
         bmesh.ops.recalc_face_normals(self.bm, faces=faces)
@@ -224,6 +250,56 @@ SOUTH = ("x", -HW, -1)
 NORTH = ("x", HW, 1)
 
 
+# ---------------------------------------------------------------------------
+# Glass panes and window backs (PLAN.md section E)
+# ---------------------------------------------------------------------------
+PROJECT = r"C:\Users\Tarik\AppFactory\Flemington Historic Walk"
+WB_CELLS = json.load(open(PROJECT + r"\assets\textures\shared\window_backs.json"))["cells"]
+GAP = 0.04                      # window back this far behind the glass
+# offices and record rooms (front, sides, upper floor): blinds at varied heights, dark rooms
+OFFICE = {"blind_cream_high": 3, "blind_cream_half": 3, "blind_cream_low": 2, "blind_cream_full": 1,
+          "blind_green_high": 2, "blind_green_half": 2, "blind_green_low": 1,
+          "dark_room": 2, "dark_room_frame": 2}
+# rear (back offices, stair): more dark rooms
+BACKSIDE = {"blind_cream_high": 2, "blind_cream_half": 2, "blind_green_half": 1,
+            "dark_room": 3, "dark_room_frame": 3}
+DIM = {"dark_room": 1, "dark_room_frame": 1}          # basement, halls behind the doors
+_wb_rng = random.Random(1871)
+_wb_seen = {}
+BACKREC = {}                    # rid -> record (read by county_offices_bake.py)
+
+
+def pick(weights, wall, u, near=4.0):
+    """A cell that differs from every window already placed within `near` metres along the
+    same wall (beside it, or on the floor above / below)."""
+    seen = _wb_seen.setdefault(wall, [])
+    avoid = {c for uu, c in seen if abs(uu - u) < near}
+    names = [n for n in weights if n not in avoid] or list(weights)
+    cell = _wb_rng.choices(names, weights=[weights[n] for n in names])[0]
+    seen.append((u, cell))
+    return cell
+
+
+def pane(wall, outline, k_glass, cell, grow=0.0, crop=None, back_outline=None):
+    """Glass face (the pane's outline) k_glass from the wall face (negative = inside) and its
+    window back GAP behind it: the outline's bounding box (or back_outline), `grow` larger all
+    round where frames hide its edge; crop = (fu0, fu1, fv0, fv1) part of the atlas cell."""
+    axis, face, out = wall
+    D = lambda k: face + out * k
+    G["Glass"].face(outline, D(k_glass), axis, out)
+    us, vs = [p[0] for p in outline], [p[1] for p in outline]
+    u0, u1, v0, v1 = min(us) - grow, max(us) + grow, min(vs) - grow, max(vs) + grow
+    U0, V0, U1, V1 = WB_CELLS[cell]["uv"]
+    if crop:
+        U0, U1, V0, V1 = (U0 + (U1 - U0) * crop[0], U0 + (U1 - U0) * crop[1],
+                          V0 + (V1 - V0) * crop[2], V0 + (V1 - V0) * crop[3])
+    rid = len(BACKREC) + 1
+    BACKREC[rid] = dict(axis=axis, u0=u0, u1=u1, z0=v0, z1=v1, uv=(U0, V0, U1, V1))
+    G["WBack"].rid = rid
+    G["WBack"].face(back_outline or rect(u0, u1, v0, v1), D(k_glass - GAP), axis, out)
+    G["WBack"].rid = 0
+
+
 def keystone(wall, cu, crown):
     axis, face, out = wall
     D = lambda k: face + out * k
@@ -231,16 +307,18 @@ def keystone(wall, cu, crown):
                       (cu - 0.11, crown + 0.20)], D(0.045), D(-0.01), axis)
 
 
-def arched_window(wall, cu, w, z_sill, crown, shutters=False, key=True, sill=True, sill_w=None, segs=None):
-    """Round-arched 2/2 double-hung window in a shallow recess: drab frame and sash,
-    dark glass, pale stone sill and keystone, optional open cream shutters."""
+def arched_window(wall, cu, w, z_sill, crown, shutters=False, key=True, sill=True, sill_w=None, segs=None,
+                  cell="dark_room"):
+    """Round-arched 2/2 double-hung window in a shallow recess: drab frame and sash, one
+    glass face with a window back (atlas `cell`), pale stone sill and keystone, optional open
+    cream shutters."""
     axis, face, out = wall
     D = lambda k: face + out * k        # k > 0 is outside the wall, k < 0 inside
     r = w / 2
     zs = crown - r
     segs = segs or (8 if wall is FRONT else 6)       # side and rear arches a little coarser
     CUT.prism(arched(cu, w, z_sill, zs, segs), D(0.25), D(-RECESS), axis)
-    G["Glass"].prism(arched(cu, w, z_sill, zs, segs), D(-REVEAL), D(-REVEAL - 0.03), axis)
+    pane(wall, arched(cu, w, z_sill, zs, segs), -REVEAL - 0.005, cell)
     S = G["Trim"]
     f = 0.07                                                       # frame
     S.prism(rect(cu - r, cu - r + f, z_sill, zs), D(-0.09), D(-REVEAL), axis)
@@ -264,7 +342,7 @@ def arched_window(wall, cu, w, z_sill, crown, shutters=False, key=True, sill=Tru
                 G["Shutter"].prism(rect(u0 + 0.07, u1 - 0.07, zb, zt), D(0.07), D(0.085), axis)
 
 
-def basement_window(wall, cu):
+def basement_window(wall, cu, cell="dark_room"):
     """Segmental-headed 0.9 x 0.5 m basement light, sill 0.35, with a 3-bar iron grille."""
     axis, face, out = wall
     D = lambda k: face + out * k
@@ -275,7 +353,8 @@ def basement_window(wall, cu):
             for i in range(5)]
     pts = [(cu - w / 2, z0), (cu + w / 2, z0)] + head
     CUT_F.prism(pts, D(0.25), D(-0.25), axis)
-    G["Glass"].prism(pts, D(-0.18), D(-0.21), axis)
+    # window back 4 cm behind the glass (the recess goes 0.25 deep): the cell's middle strip
+    pane(wall, pts, -0.18, cell, crop=(0.0, 1.0, 0.30, 0.52))
     for k in (-1, 0, 1):
         u = cu + k * 0.22
         G["Iron"].prism(rect(u - 0.0125, u + 0.0125, z0, top), D(-0.04), D(-0.065), axis)
@@ -284,7 +363,8 @@ def basement_window(wall, cu):
 
 def arched_door(wall, cu, w=1.15, z0=FOUND + 0.01, crown=4.10):
     """Round-arched doorway: drab frame, fanlight with radiating bars over a transom bar,
-    double-leaf door with glazed upper panels and a raised lower panel, stone threshold."""
+    double-leaf door with glazed upper panels (stiles and rails round the light, glass with a
+    dark hall behind) and a raised lower panel, stone threshold."""
     axis, face, out = wall
     D = lambda k: face + out * k
     r = w / 2
@@ -292,7 +372,8 @@ def arched_door(wall, cu, w=1.15, z0=FOUND + 0.01, crown=4.10):
     f = 0.08
     CUT.prism(arched(cu, w, FOUND - 0.10, zs, 10), D(0.25), D(-RECESS), axis)
     G["Stone"].prism(rect(cu - r, cu + r, FOUND - 0.10, z0), D(0.02), D(-RECESS), axis)       # threshold
-    G["Glass"].prism(arched(cu, w, zs - 0.10, zs, 10), D(-REVEAL - 0.02), D(-REVEAL - 0.05), axis)
+    pane(wall, arched(cu, w, zs - 0.10, zs, 10), -REVEAL - 0.02, pick(DIM, wall, cu, near=0.1),
+         crop=(0.0, 1.0, 0.72, 0.98))                                                       # fanlight
     for a in (math.pi / 6, math.pi / 3, math.pi / 2, 2 * math.pi / 3, 5 * math.pi / 6):    # fanlight bars
         ca, sa = math.cos(a), math.sin(a)
         nx, nz = -sa * 0.016, ca * 0.016
@@ -313,9 +394,16 @@ def arched_door(wall, cu, w=1.15, z0=FOUND + 0.01, crown=4.10):
     for i in range(2):
         x0 = cu - inner / 2 + i * leaf + 0.005
         x1 = x0 + leaf - 0.010
-        G["Door"].prism(rect(x0, x1, z0, top), D(-REVEAL), D(-REVEAL - 0.05), axis)
-        G["Door"].prism(rect(x0 + 0.07, x1 - 0.07, z0 + 0.15, z0 + 0.85), D(-REVEAL + 0.015), D(-REVEAL), axis)
-        G["Glass"].prism(rect(x0 + 0.07, x1 - 0.07, z0 + 1.05, top - 0.10), D(-REVEAL + 0.006), D(-REVEAL), axis)
+        gz0, gz1 = z0 + 1.05, top - 0.10                       # the light
+        Dr = G["Door"]
+        Dr.prism(rect(x0, x1, z0, gz0), D(-REVEAL), D(-REVEAL - 0.05), axis)                 # lower leaf
+        Dr.prism(rect(x0, x0 + 0.07, gz0, top), D(-REVEAL), D(-REVEAL - 0.05), axis)         # stiles
+        Dr.prism(rect(x1 - 0.07, x1, gz0, top), D(-REVEAL), D(-REVEAL - 0.05), axis)
+        Dr.prism(rect(x0 + 0.07, x1 - 0.07, gz1, top), D(-REVEAL), D(-REVEAL - 0.05), axis)  # top rail
+        Dr.prism(rect(x0 + 0.07, x1 - 0.07, z0 + 0.15, z0 + 0.85), D(-REVEAL + 0.015), D(-REVEAL), axis)
+        # glass 2 cm into the leaf, its back just behind the leaf (its edges hidden by the leaf)
+        pane(wall, rect(x0 + 0.07, x1 - 0.07, gz0, gz1), -REVEAL - 0.02,
+             pick(DIM, wall, cu + (i - 0.5) * 0.5, near=0.3), grow=0.04)
         kx = x1 - 0.05 if i == 0 else x0 + 0.05
         G["Iron"].prism(rect(kx - 0.02, kx + 0.02, z0 + 0.98, z0 + 1.02), D(-REVEAL + 0.05), D(-REVEAL), axis)
 
@@ -334,33 +422,33 @@ G["Stone"].prism(rect(-HW - 0.08, HW + 0.08, -0.08, BACK - 0.01), STRING_BOT, ST
 
 # Front (east): W D W D W D W on the ground floor
 for x in GROUND_X:
-    arched_window(FRONT, x, 1.0, 1.75, 4.10, shutters=True)
-    basement_window(FRONT, x)
+    arched_window(FRONT, x, 1.0, 1.75, 4.10, shutters=True, cell=pick(OFFICE, FRONT, x))
+    basement_window(FRONT, x, cell=pick(DIM, FRONT, x + 100, near=2.0))
 for x in DOOR_X:
     arched_door(FRONT, x)
 # upper floor: four singles over the ground windows, the paired window in the centre
 for x in GROUND_X:
     if x == 2.1:   # north inner: the window stands on the plain stone sign panel
-        arched_window(FRONT, x, 0.9, 5.40, 7.25, sill=False)
+        arched_window(FRONT, x, 0.9, 5.40, 7.25, sill=False, cell=pick(OFFICE, FRONT, x))
     else:
-        arched_window(FRONT, x, 0.9, 5.20, 7.25)
+        arched_window(FRONT, x, 0.9, 5.20, 7.25, cell=pick(OFFICE, FRONT, x))
 for x in (-0.5, 0.5):
-    arched_window(FRONT, x, 0.75, 5.20, 7.25, sill=False)
+    arched_window(FRONT, x, 0.75, 5.20, 7.25, sill=False, cell=pick(OFFICE, FRONT, x, near=1.2))
 G["Stone"].prism(rect(-1.0, 1.0, 5.08, 5.21), 0.06, -REVEAL, axis="y")        # one sill across both lights
 G["Stone"].box(2.1 - 0.75, 2.1 + 0.75, -0.05, 0.0, STRING_TOP, STRING_TOP + 0.35)   # sign panel (no lettering)
 
 # Sides: four bays, shuttered ground windows, plain upper windows, basement lights
 for wall in (SOUTH, NORTH):
     for y in SIDE_BAYS:
-        arched_window(wall, y, 1.0, 1.75, 4.10, shutters=True)
-        arched_window(wall, y, 0.9, 5.20, 7.25)
-        basement_window(wall, y)
+        arched_window(wall, y, 1.0, 1.75, 4.10, shutters=True, cell=pick(OFFICE, wall, y))
+        arched_window(wall, y, 0.9, 5.20, 7.25, cell=pick(OFFICE, wall, y))
+        basement_window(wall, y, cell=pick(DIM, wall, y + 100, near=2.0))
 
 # Rear (west, guess): three bays, back door in the middle on a wooden step
 for x in (-3.7, 3.7):
-    arched_window(REAR, x, 1.0, 1.75, 4.10, key=False)
+    arched_window(REAR, x, 1.0, 1.75, 4.10, key=False, cell=pick(BACKSIDE, REAR, x))
 for x in (-3.7, 0.0, 3.7):
-    arched_window(REAR, x, 0.9, 5.20, 7.25, key=False)
+    arched_window(REAR, x, 0.9, 5.20, 7.25, key=False, cell=pick(BACKSIDE, REAR, x))
 CUT.prism(rect(-0.5, 0.5, FOUND - 0.10, 3.40), BACK + 0.25, BACK - RECESS)
 G["Door"].prism(rect(-0.5, 0.5, FOUND, 3.40), BACK - REVEAL, BACK - REVEAL - 0.05)
 for zb, zt in ((FOUND + 0.15, FOUND + 1.05), (FOUND + 1.20, 3.25)):
@@ -477,7 +565,9 @@ T.arc_band(0, ARCH_ZC, ARCH_R - 0.02, ARCH_R + 0.04, ARCH_A0, math.pi - ARCH_A0,
 # oculus: pale stone ring, dark glass
 OC_Z = 9.30
 G["Stone"].ring(0, OC_Z, 0.40, 0.52, -0.06, 0.02, segs=12)
-G["Glass"].prism(circle(0, OC_Z, 0.41), -0.01, 0.02)
+# glass 4.5 cm out from the tympanum inside the 6 cm deep ring, a round window back on the brick
+pane(FRONT, circle(0, OC_Z, 0.41), 0.045, "dark_room_frame", crop=(0.0, 1.0, 0.30, 0.70),
+     back_outline=circle(0, OC_Z, 0.41))
 
 # ---------------------------------------------------------------------------
 # Roof: low hip (~18 deg), painted tin, short E-W ridge

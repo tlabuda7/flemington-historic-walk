@@ -21,6 +21,13 @@ Steps (pattern: county_offices_bake.py):
     under the cornice and on the chimney top, worn porch boards before the door) and
     multiply it in.
  6. Export the GLB. Other collections are hidden from render during the bake.
+
+Windows (PLAN.md section E, 2026-11-11): the window backs (material WLR_WBack, cells of
+assets/textures/shared/window_backs.jpg, UVs from BACKREC) are lightmapped like everything
+else; the panes are one material named exactly `glass` (#1A1916, alpha 0.40, roughness 0.05,
+BLEND, single-sided) that the scene leaves unlit and gives a sky reflection (`glass-reflect`).
+The glass is fully transparent during the bake, ignored by the hidden-face pass, and its
+Lightmap UVs are squeezed small. The name board is WLR_Dark (the old dark glass colour).
 """
 
 import math
@@ -38,6 +45,8 @@ GLB = PROJECT + r"\assets\models\wurts-law-office.glb"
 LIGHTMAP = PROJECT + r"\assets\textures\wurts-law-office-lightmap.jpg"
 LIGHTMAP_SIZE = 1024
 SAMPLES = 384
+TX = PROJECT + r"\assets\textures" + "\\"
+GLASS_ALPHA = 0.40
 TO_SUN = (-0.40, 0.90, 0.36)          # west-side building (front faces east)
 COLL, RIG, PREFIX = "WurtsLawOffice", "WL_BakeRig", "WL_"
 
@@ -61,7 +70,9 @@ def tint(avg, target):
 LOOK = {
     "White": (CT + "paint_white.jpg", 2.0, 0.7, None, tint((242, 239, 230), (0xEE, 0xEB, 0xE2))),
     "Green": (PH + "door_paint_green.jpg", 0.8, 0.6, None, tint((93, 107, 92), (0x2F, 0x3B, 0x2C))),
-    "Glass": (None, 1.0, 0.15, tuple(srgb_to_lin(c) for c in (0x1E, 0x22, 0x26)), None),
+    "Dark":  (None, 1.0, 0.15, tuple(srgb_to_lin(c) for c in (0x1E, 0x22, 0x26)), None),   # name board
+    "Glass": (None, 1.0, 0.05, tuple(srgb_to_lin(c) for c in (0x1A, 0x19, 0x16)), None),   # section E
+    "WBack": (TX + r"shared\window_backs.jpg", 1.0, 0.9, None, None),
     "Brick": (PH + "red_brick.jpg", 1.4, 0.9, None, tint((142, 103, 80), (0x87, 0x45, 0x2F))),
     "Grey":  (WT + "planks_grey.jpg", 2.0, 0.85, None, None),
 }
@@ -96,10 +107,17 @@ def textured_material(name, image_file, roughness, colour, factor):
             nt.links.new(tex.outputs["Color"], bsdf.inputs["Base Color"])
     else:
         bsdf.inputs["Base Color"].default_value = (*colour, 1)
+    if name == "glass":   # transparent, drawn with a sky reflection by the scene
+        bsdf.inputs["Alpha"].default_value = GLASS_ALPHA
+        mat.use_backface_culling = True
+        if hasattr(mat, "surface_render_method"):
+            mat.surface_render_method = "BLENDED"
+        elif hasattr(mat, "blend_method"):
+            mat.blend_method = "BLEND"
     return mat
 
 
-FINAL = {k: textured_material("WLR_" + k, LOOK[k][0], *LOOK[k][2:]) for k in LOOK}
+FINAL = {k: textured_material("glass" if k == "Glass" else "WLR_" + k, LOOK[k][0], *LOOK[k][2:]) for k in LOOK}
 
 
 def box_uvs(obj):
@@ -112,8 +130,20 @@ def box_uvs(obj):
     uv = mesh.uv_layers.new(name="UVMap")
     tiles = [LOOK[m.name[3:]][1] for m in mesh.materials]
     boards = [m.name[3:] == "Grey" for m in mesh.materials]
+    keys = [m.name[3:] for m in mesh.materials]
+    rid_attr = mesh.attributes.get("rid")
     for poly in mesh.polygons:
         tile = tiles[poly.material_index]
+        if keys[poly.material_index] == "WBack":        # window backs: their atlas cell
+            rec = BACKREC[rid_attr.data[poly.index].value]
+            U0, V0, U1, V1 = rec["uv"]
+            for li in poly.loop_indices:
+                co = mesh.vertices[mesh.loops[li].vertex_index].co
+                u = co.x if rec["axis"] == "y" else co.y
+                fu = (u - rec["u0"]) / (rec["u1"] - rec["u0"])
+                fz = (co.z - rec["z0"]) / (rec["z1"] - rec["z0"])
+                uv.data[li].uv = (U0 + (U1 - U0) * fu, V0 + (V1 - V0) * fz)
+            continue
         n = poly.normal
         h = math.hypot(n.x, n.y)
         ax = max(range(3), key=lambda i: abs(n[i]))
@@ -195,7 +225,11 @@ def remove_hidden_faces(obj, rays=120):
         bmesh.ops.bisect_plane(bm, geom=bm.verts[:] + bm.edges[:] + bm.faces[:], dist=1e-4,
                                plane_co=co, plane_no=no)
     bm.normal_update()
-    bvh = BVHTree.FromBMesh(bm)
+    # the glass does not block the view: rays pass it to reach (or leave) the window backs
+    glass_i = [i for i, m in enumerate(obj.data.materials) if m.name == "glass"]
+    bm.verts.index_update()
+    bvh = BVHTree.FromPolygons([v.co for v in bm.verts],
+                               [[v.index for v in f.verts] for f in bm.faces if f.material_index not in glass_i])
     dirs = fibonacci(rays)
     face_tris = {}
     for t in bm.calc_loop_triangles():
@@ -250,7 +284,7 @@ bpy.ops.uv.smart_project(angle_limit=math.radians(66), island_margin=0.004,
                          area_weight=0.0, correct_aspect=True, scale_to_bounds=False)
 bpy.ops.object.mode_set(mode="OBJECT")
 # Give the lightmap's pixels to what matters: shrink dark or out-of-the-way parts.
-LM_SHRINK = {"WLR_Glass": 0.35}
+LM_SHRINK = {"WLR_Dark": 0.35, "glass": 0.03, "WLR_WBack": 0.6}
 lm_data = mesh.uv_layers["Lightmap"].data
 mat_names = [m.name for m in mesh.materials]
 for p in mesh.polygons:
@@ -361,6 +395,8 @@ def point_materials_at(img):
         nt.nodes.active = node
 
 
+glass_alpha = next(n for n in FINAL["Glass"].node_tree.nodes if n.type == "BSDF_PRINCIPLED").inputs["Alpha"]
+glass_alpha.default_value = 0.0             # light passes the panes to the window backs
 try:
     light_img = bake_target("WL_Light", True)
     point_materials_at(light_img)
@@ -453,6 +489,7 @@ try:
         mesh.materials[i] = mat
     print("grime baked")
 finally:
+    glass_alpha.default_value = GLASS_ALPHA
     for name, state in render_state.items():
         if bpy.data.collections.get(name):
             bpy.data.collections[name].hide_render = state
@@ -506,7 +543,7 @@ print("LIGHTMAP_SCALE =", LIGHTMAP_SCALE, "(use baked-lighting intensity:", LIGH
 # The "DR. TOMPKINS" letters are too small to bake reliably and sit flat on the name board:
 # point all their lightmap UVs at the board's front face (union_hotel_bake.py pattern).
 mat_names = [m.name for m in mesh.materials]
-white_i, glass_i = mat_names.index("WLR_White"), mat_names.index("WLR_Glass")
+white_i, glass_i = mat_names.index("WLR_White"), mat_names.index("WLR_Dark")   # glass_i = the board
 lm_data = mesh.uv_layers["Lightmap"].data
 board = max((p for p in mesh.polygons if p.material_index == glass_i and p.normal.y < -0.5
              and abs(p.center.z - NAME_Z) < 0.03 and p.center.y < FRONT_Y - 0.035), key=lambda p: p.area)

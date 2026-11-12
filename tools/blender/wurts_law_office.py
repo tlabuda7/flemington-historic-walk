@@ -24,10 +24,20 @@ Coordinates (metres, Blender Z-up):
     Z  up from grade (lawn level).
 glTF export turns -Y into +Z, which matches the A-Frame scene's "front faces +Z".
 
-Five materials only (draw calls): WL_White, WL_Green, WL_Glass, WL_Brick, WL_Grey.
+Seven materials: WL_White, WL_Green, WL_Dark (the name board), WL_Brick, WL_Grey, WL_WBack
+and WL_Glass (exported as `glass`).
+
+Windows (PLAN.md "E. Windows that don't read as flat black", rolled out here 2026-11-11, Rea /
+County Hotel method): every pane is ONE outward glass face (builder Glass -> material `glass`,
+transparent, see wurts_law_office_bake.py) 4 cm in front of ONE rectangular window back
+(builder WBack) showing a cell of the shared atlas assets/textures/shared/window_backs.jpg: a
+law / doctor's office, so cream and green blinds at varied heights and plain dark rooms; the
+door's light a dark hall. BACKREC[rid] tells the bake which atlas rectangle each back shows.
 """
 
 import math
+import json
+import random
 import bpy
 import bmesh
 
@@ -84,7 +94,9 @@ def plain(name, color, rough=0.8):
 COLOURS = {
     "White": "#eeebe2",    # all painted wood
     "Green": "#2f3b2c",    # shutters and doors
-    "Glass": "#1e2226",
+    "Dark": "#1e2226",     # the dark name board over the door
+    "Glass": "#1a1916",    # section-E glass
+    "WBack": "#2a2420",    # window backs
     "Brick": "#8a4a36",    # chimney
     "Grey": "#8a877f",     # porch, step, underpinning, roofs
 }
@@ -100,6 +112,19 @@ class MB:
 
     def __init__(self):
         self.bm = bmesh.new()
+        self.rid_layer = self.bm.faces.layers.int.new("rid")
+        self.rid = 0
+
+    def face(self, pts, d, axis, out):
+        """ONE single-sided face (outline [(u, v), ...] at depth d), facing `out` along the
+        axis (+1 / -1). Used for glass panes and window backs."""
+        f = self.bm.faces.new([self.bm.verts.new(self._pt(axis, u, d, v)) for u, v in pts])
+        f.normal_update()
+        k = {"y": 1, "x": 0, "z": 2}[axis]
+        if f.normal[k] * out < 0:
+            f.normal_flip()
+        f[self.rid_layer] = self.rid
+        return f
 
     def _closed(self, faces):
         bmesh.ops.recalc_face_normals(self.bm, faces=faces)
@@ -254,6 +279,49 @@ for s in (-1, 1):
 # ---------------------------------------------------------------------------
 
 
+# ---------------------------------------------------------------------------
+# Glass panes and window backs (PLAN.md section E)
+# ---------------------------------------------------------------------------
+PROJECT = r"C:\Users\Tarik\AppFactory\Flemington Historic Walk"
+WB_CELLS = json.load(open(PROJECT + r"\assets\textures\shared\window_backs.json"))["cells"]
+GAP = 0.04                      # window back this far behind the glass
+OFFICE = {"blind_cream_high": 3, "blind_cream_half": 3, "blind_cream_low": 2, "blind_green_high": 2,
+          "blind_green_half": 2, "dark_room": 1, "dark_room_frame": 1}
+BACKSIDE = {"blind_cream_half": 1, "dark_room": 2, "dark_room_frame": 2}
+_wb_rng = random.Random(1811)
+_wb_seen = {}
+BACKREC = {}                    # rid -> record (read by wurts_law_office_bake.py)
+
+
+def pick(weights, wall, u, near=4.0):
+    """A cell that differs from every window already placed within `near` metres on the wall."""
+    seen = _wb_seen.setdefault(wall[:3], [])
+    avoid = {c for uu, c in seen if abs(uu - u) < near}
+    names = [n for n in weights if n not in avoid] or list(weights)
+    cell = _wb_rng.choices(names, weights=[weights[n] for n in names])[0]
+    seen.append((u, cell))
+    return cell
+
+
+def pane(wall, u0, u1, z0, z1, k_glass, cell, grow=0.0, crop=None):
+    """Glass face k_glass from the wall face (negative = inside) and its window back GAP
+    behind it, `grow` larger all round where the leaf hides its edge; crop = (fu0, fu1, fv0,
+    fv1) part of the atlas cell (v up)."""
+    axis, face, out, skin = wall
+    D = lambda k: face + out * k
+    G["Glass"].face(rect(u0, u1, z0, z1), D(k_glass), axis, out)
+    u0, u1, z0, z1 = u0 - grow, u1 + grow, z0 - grow, z1 + grow
+    U0, V0, U1, V1 = WB_CELLS[cell]["uv"]
+    if crop:
+        U0, U1, V0, V1 = (U0 + (U1 - U0) * crop[0], U0 + (U1 - U0) * crop[1],
+                          V0 + (V1 - V0) * crop[2], V0 + (V1 - V0) * crop[3])
+    rid = len(BACKREC) + 1
+    BACKREC[rid] = dict(axis=axis, u0=u0, u1=u1, z0=z0, z1=z1, uv=(U0, V0, U1, V1))
+    G["WBack"].rid = rid
+    G["WBack"].face(rect(u0, u1, z0, z1), D(k_glass - GAP), axis, out)
+    G["WBack"].rid = 0
+
+
 def head_cap(wall, cu, half, z0):
     """Flat head casing's little cornice cap: a 0.12 band and a projecting 0.03 crown."""
     axis, face, out, skin = wall
@@ -286,14 +354,16 @@ def shutter_pair(wall, cu, half, z0, z1):
                 S.prism([(b1, zb), (b2, zb), (b1, zb + h)], u0 + 0.05, u1 - 0.05, slat_axis)
 
 
-def window(wall, cu, w=0.78, z0=1.05, z1=2.75, shutters=True, panes=3, cutter=None):
+def window(wall, cu, w=0.78, z0=1.05, z1=2.75, shutters=True, panes=3, cutter=None, rooms=None):
     """6/6 (panes=3) or 2/2 (panes=1) double-hung window in a shallow recess: flat casing
-    with a capped head, sill board, white sash and muntins, dark glass, optional shutters."""
+    with a capped head, sill board, white sash and muntins, glass + window back (section E),
+    optional shutters."""
     axis, face, out, skin = wall
     D = lambda k: face + out * k
     h = w / 2
     (cutter or CUT).prism(rect(cu - h, cu + h, z0, z1), D(0.25), D(-RECESS), axis)
-    G["Glass"].prism(rect(cu - h, cu + h, z0, z1), D(-0.12), D(-0.14), axis)
+    pane(wall, cu - h, cu + h, z0, z1, -0.125, pick(rooms or OFFICE, wall, cu),
+         crop=None if w / (z1 - z0) < 0.6 else (0.0, 1.0, 0.2, 0.2 + 0.4 * (z1 - z0) / w))
     # sash: stiles, top/bottom rails, meeting rail
     zm = (z0 + z1) / 2
     for a, b in ((cu - h, cu - h + 0.05), (cu + h - 0.05, cu + h)):
@@ -337,13 +407,17 @@ def front_door():
     z0, z1 = PORCH, 2.50
     CUT.prism(rect(-h, h, z0 - 0.01, z1), D(0.25), D(-RECESS), axis)
     S = G["Green"]
-    S.prism(rect(-h, h, z0, z1), D(-0.10), D(-0.14), axis)              # leaf (flat panel field)
     st, mid = 0.12, z0 + 1.15                                            # stile width, mid-rail centre
+    gz0, gz1 = mid + 0.08, z1 - 0.12                                     # the light
+    S.prism(rect(-h, h, z0, gz0), D(-0.10), D(-0.14), axis)             # leaf (flat panel field) ...
+    S.prism(rect(-h, h, gz1, z1), D(-0.10), D(-0.14), axis)             # ... round the light
+    for a, b in ((-h, -h + st), (h - st, h)):
+        S.prism(rect(a, b, gz0, gz1), D(-0.10), D(-0.14), axis)
     for a, b in ((-h, -h + st), (h - st, h)):                            # stiles
         S.prism(rect(a, b, z0, z1), D(-0.085), D(-0.10), axis)
     for za, zb in ((z0, z0 + 0.24), (mid - 0.08, mid + 0.08), (z1 - 0.12, z1)):   # rails
         S.prism(rect(-h + st, h - st, za, zb), D(-0.085), D(-0.10), axis)
-    G["Glass"].prism(rect(-h + st, h - st, mid + 0.08, z1 - 0.12), D(-0.093), D(-0.10), axis)  # light
+    pane(FRONT, -h + st, h - st, gz0, gz1, -0.12, "dark_room", grow=0.04)   # light: glass in the leaf, dark hall
     c = 0.08
     for a, b in ((-h - c, -h), (h, h + c)):
         W.prism(rect(a, b, z0, z1), D(-0.01), D(0.025), axis)
@@ -351,8 +425,8 @@ def front_door():
     W.prism(rect(-h - c - 0.04, h + c + 0.04, DOOR_HEAD_TOP, 2.92), D(-0.01), D(0.045), axis)
     W.prism(rect(-h - c - 0.06, h + c + 0.06, 2.92, 2.95), D(-0.01), D(0.07), axis)
     # name board (dark) on the head board; its lettering is added below as WL_Letters
-    G["Glass"].prism(rect(-NAME_W / 2, NAME_W / 2, NAME_Z - NAME_H / 2, NAME_Z + NAME_H / 2),
-                     D(0.02), D(0.04), axis)
+    G["Dark"].prism(rect(-NAME_W / 2, NAME_W / 2, NAME_Z - NAME_H / 2, NAME_Z + NAME_H / 2),
+                    D(0.02), D(0.04), axis)
 
 
 front_door()
@@ -494,7 +568,8 @@ for a, b in ((LT_DOOR_Y - LT_DOOR_W / 2 - 0.07, LT_DOOR_Y - LT_DOOR_W / 2), (LT_
     W.prism(rect(a, b, FOUND, LT_DOOR_TOP + 0.07), D(-0.01), D(sk_ + 0.025), "x")
 W.prism(rect(LT_DOOR_Y - LT_DOOR_W / 2, LT_DOOR_Y + LT_DOOR_W / 2, LT_DOOR_TOP, LT_DOOR_TOP + 0.07), D(-0.01), D(sk_ + 0.025), "x")
 # lean-to window (west face): small 2/2, no shutters, no cap
-window(L_REAR, LT_WIN_X, w=LT_WIN_W, z0=LT_WIN_Z[0], z1=LT_WIN_Z[1], shutters=False, panes=2, cutter=CUT_L)
+window(L_REAR, LT_WIN_X, w=LT_WIN_W, z0=LT_WIN_Z[0], z1=LT_WIN_Z[1], shutters=False, panes=2, cutter=CUT_L,
+       rooms=BACKSIDE)
 
 # ---------------------------------------------------------------------------
 # Build objects (boolean the cut shells)

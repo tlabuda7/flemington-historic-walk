@@ -20,13 +20,23 @@ Coordinates (metres, Blender Z-up):
     Z  up from grade (lawn level).
 glTF export turns -Y into +Z, which matches the A-Frame scene's "front faces +Z".
 
-Four materials only (draw calls): paint (clapboard walls and all trim), dark (glass,
-shutters, doors), roof (slate), brick. The geometry is split into named builders so the
-bake can give each its UVs: shells = clapboard, Trim = flat paint, Deck / Skirt = paint
-with a grey tint in the bake's grime mask.
+Six materials: paint (clapboard walls and all trim), dark (shutters, doors), roof (slate),
+brick, WindowBack and glass. The geometry is split into named builders so the bake can give
+each its UVs: shells = clapboard, Trim = flat paint, Deck / Skirt = paint with a grey tint in
+the bake's grime mask.
+
+Windows (PLAN.md "E. Windows that don't read as flat black", rolled out here 2026-11-11, Rea /
+County Hotel method): every pane is ONE outward glass face (builder Glass -> material `glass`,
+transparent, see house_65_main_bake.py) 4 cm in front of ONE rectangular window back (builder
+WBack) showing a cell of the shared atlas assets/textures/shared/window_backs.jpg: a dwelling,
+so mostly lace, curtains and lace with a blind; attic and back rooms also blinds and a few dark
+rooms; the front door's transom a dark hall. No window repeats the cell of one within 3 m of it
+on the same wall. BACKREC[rid] tells the bake which atlas rectangle each back shows.
 """
 
 import math
+import json
+import random
 import bpy
 import bmesh
 
@@ -102,11 +112,12 @@ def plain(name, color, rough=0.8):
     return mat
 
 
-COLOURS = {"Paint": "#e6dfcc", "Dark": "#27322a", "Roof": "#4c5155", "Brick": "#87452f"}
+COLOURS = {"Paint": "#e6dfcc", "Dark": "#27322a", "Roof": "#4c5155", "Brick": "#87452f",
+           "Glass": "#1a1916", "WBack": "#2a2420"}
 MATS = {k: plain("H65_" + k, c) for k, c in COLOURS.items()}
 # builder -> material
 BUILDER_MAT = {"Trim": "Paint", "Deck": "Paint", "Skirt": "Paint", "Dark": "Dark",
-               "Roof": "Roof", "Brick": "Brick"}
+               "Roof": "Roof", "Brick": "Brick", "Glass": "Glass", "WBack": "WBack"}
 
 # ---------------------------------------------------------------------------
 # Mesh builder
@@ -130,6 +141,18 @@ class MB:
 
     def __init__(self):
         self.bm = bmesh.new()
+        self.rid_layer = self.bm.faces.layers.int.new("rid")
+        self.rid = 0
+
+    def face(self, wall, pts, d):
+        """ONE single-sided face (outline [(u, z), ...] on a wall plane, d out from the wall
+        face), facing outward. Used for glass panes and window backs."""
+        f = self.bm.faces.new([self.bm.verts.new(wall.pt(u, z, d)) for u, z in pts])
+        f.normal_update()
+        if f.normal.x * wall.n[0] + f.normal.y * wall.n[1] < 0:
+            f.normal_flip()
+        f[self.rid_layer] = self.rid
+        return f
 
     def _closed(self, faces):
         bmesh.ops.recalc_face_normals(self.bm, faces=faces)
@@ -295,18 +318,74 @@ for u0, u1 in spans(-1.98, 1.98, [(-0.60, 0.60)]):          # base board on the 
     T.wbox(FRONT_W, u0, u1, 0.66, 0.80, -0.01, 0.03)
 
 # ---------------------------------------------------------------------------
+# Glass panes and window backs (PLAN.md section E)
+# ---------------------------------------------------------------------------
+PROJECT = r"C:\Users\Tarik\AppFactory\Flemington Historic Walk"
+WB_CELLS = json.load(open(PROJECT + r"\assets\textures\shared\window_backs.json"))["cells"]
+GAP = 0.04                      # window back this far behind the glass
+GL, WB = G["Glass"], G["WBack"]
+# living rooms and bedrooms: lace, curtains, lace with a blind
+HOME = {"lace": 3, "lace_blind_cream": 3, "lace_blind_green": 1, "lace_full_blind_cream": 1,
+        "curtains_beige": 3, "curtains_olive": 2, "curtains_maroon_blind": 2,
+        "blind_cream_half": 1, "blind_green_half": 1}
+# attic and back rooms (kitchen, stair, store rooms)
+BACKROOM = {"blind_cream_high": 2, "blind_cream_half": 2, "blind_green_high": 1, "lace": 1,
+            "curtains_beige": 1, "dark_room": 2, "dark_room_frame": 1}
+_wb_rng = random.Random(1865)
+_wb_seen = {}
+BACKREC = {}                    # rid -> record (read by house_65_main_bake.py)
+
+
+def pick(weights, wall, u, near=3.0):
+    """A cell that differs from every window already placed within `near` metres along the
+    same wall (beside it, or on the floor above / below)."""
+    seen = _wb_seen.setdefault((wall.p0, wall.n), [])
+    avoid = {c for uu, c in seen if abs(uu - u) < near}
+    names = [n for n in weights if n not in avoid] or list(weights)
+    cell = _wb_rng.choices(names, weights=[weights[n] for n in names])[0]
+    seen.append((u, cell))
+    return cell
+
+
+def pane(wall, u0, u1, z0, z1, d_glass, cell, crop=None):
+    """Glass face at depth d_glass and its window back (same rectangle) GAP behind it;
+    crop = (fu0, fu1, fv0, fv1) part of the atlas cell (v up)."""
+    GL.face(wall, rect(u0, u1, z0, z1), d_glass)
+    U0, V0, U1, V1 = WB_CELLS[cell]["uv"]
+    if crop:
+        U0, U1, V0, V1 = (U0 + (U1 - U0) * crop[0], U0 + (U1 - U0) * crop[1],
+                          V0 + (V1 - V0) * crop[2], V0 + (V1 - V0) * crop[3])
+    rid = len(BACKREC) + 1
+    BACKREC[rid] = dict(wall=(wall.p0, wall.t), u0=u0, u1=u1, z0=z0, z1=z1, uv=(U0, V0, U1, V1))
+    WB.rid = rid
+    WB.face(wall, rect(u0, u1, z0, z1), d_glass - GAP)
+    WB.rid = 0
+
+
+def crop_for(w, h):
+    """Part of a 0.4-aspect atlas cell that fits a w x h pane at the cell's own scale."""
+    a = w / h
+    if a > 0.4:                       # wider: full width, a band of the height (a little above centre)
+        f = 0.4 / a
+        return (0.0, 1.0, 0.55 - f / 2, 0.55 + f / 2) if f < 0.98 else None
+    f = a / 0.4                       # narrower: full height, the middle of the width
+    return (0.5 - f / 2, 0.5 + f / 2, 0.0, 1.0) if f < 0.98 else None
+
+
+# ---------------------------------------------------------------------------
 # Windows, shutters, doors
 # ---------------------------------------------------------------------------
 
 
-def window(wall, cu, size, shutters=True, cap=True):
-    """2/2 double-hung window in a shallow recess: dark glass, sash (stiles, rails,
+def window(wall, cu, size, shutters=True, cap=True, rooms=None):
+    """2/2 double-hung window in a shallow recess: glass + window back (section E), sash (stiles, rails,
     meeting rail, one vertical muntin) set 0.08 in, flat 0.10 casing with a capped head,
     sill 0.05 proud; optional louvred shutters open flat beside it."""
     w, z0, z1 = size
     h = w / 2
     wall.cut.wbox(wall, cu - h, cu + h, z0, z1, -RECESS, 0.25)
-    D.wbox(wall, cu - h, cu + h, z0, z1, -0.13, -0.11)                     # glass
+    pane(wall, cu - h, cu + h, z0, z1, -0.11, pick(rooms or HOME, wall, cu),
+         crop=crop_for(w, z1 - z0))                                         # glass + window back
     s = 0.05
     for a, b in ((cu - h, cu - h + s), (cu + h - s, cu + h)):              # stiles
         T.wbox(wall, a, b, z0, z1, -0.14, -0.08)
@@ -343,7 +422,8 @@ def door(wall, cu, w, z0, z1, transom=False):
     T.wbox(wall, cu - h - 0.05, cu + h + 0.05, z0 - 0.08, z0, -0.14, 0.04)  # threshold
     if transom:
         T.wbox(wall, cu - h, cu + h, z1, z1 + 0.08, -0.14, -0.06)          # transom bar
-        D.wbox(wall, cu - h, cu + h, z1 + 0.08, top, -0.13, -0.11)          # transom glass
+        pane(wall, cu - h, cu + h, z1 + 0.08, top, -0.11, "dark_room",
+             crop=(0.0, 1.0, 0.70, 0.70 + 0.4 * (top - z1 - 0.08) / w))       # transom: dark hall
         for i in (1, 2, 3):
             u = cu - h + w * i / 4
             T.wbox(wall, u - 0.015, u + 0.015, z1 + 0.08, top, -0.12, -0.09)
@@ -362,7 +442,7 @@ for x in (-WIN_X, WIN_X):
 for x in (-WIN_X, 0.0, WIN_X):
     window(FRONT_W, x, W2)
 for x in (-0.90, 0.90):
-    window(FRONT_W, x, WA, shutters=False)
+    window(FRONT_W, x, WA, shutters=False, rooms=BACKROOM)
 
 # South wall of the front block: one window per floor at y 9.0 (the bay is near the front)
 for size in (W1, W2):
@@ -375,19 +455,19 @@ for y in (4.0, 8.6, 13.8, 17.2):
 
 # Ell south wall: side door and window below, two windows above
 door(ELL_S, 14.2, 0.90, 0.72, 2.87)
-window(ELL_S, 17.2, W1)
+window(ELL_S, 17.2, W1, rooms=BACKROOM)
 for y in (14.2, 17.2):
     window(ELL_S, y, W2)
 
 # Rear wall of the front block (south part, clear of the ell): no shutters
 for size in (W1, W2):
-    window(REAR_W, -2.15, size, shutters=False)
-window(REAR_W, -1.00, WA, shutters=False)
+    window(REAR_W, -2.15, size, shutters=False, rooms=BACKROOM)
+window(REAR_W, -1.00, WA, shutters=False, rooms=BACKROOM)
 
 # Ell rear: door onto the rear porch, a window beside it, one window above
 door(ELL_R, 2.95, 0.90, 0.72, 2.87)
-window(ELL_R, 1.20, W1_ELL_REAR)
-window(ELL_R, 2.17, W2)
+window(ELL_R, 1.20, W1_ELL_REAR, rooms=BACKROOM)
+window(ELL_R, 2.17, W2, rooms=BACKROOM)
 
 # ---------------------------------------------------------------------------
 # South bay: 2 storeys, canted, own cornice and hipped roof; no shutters
