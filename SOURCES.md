@@ -536,3 +536,5 @@ Side-street backdrops: `assets/textures/shared/backdrop_windows.jpg` (+ `.json`)
 Back-lot buildings (`assets/models/back-lots.glb`): `assets/textures/shared/backdrop_earth.jpg` is a quality-70 copy of `polyhaven/gravel_ground_01.jpg` (Poly Haven `gravel_ground_01`, CC0, listed above), made with Pillow (no download); `assets/textures/back-lots-lightmap.jpg` is baked in Blender by `tools/blender/back_lots_bake.py` (original work). The model otherwise reuses `wurts-law-office/planks_grey.jpg`, `house-65-main/clapboard_cream.jpg`, `polyhaven/red_brick.jpg`, `county-offices/roof_tin_redbrown.jpg` and `shared/backdrop_windows.jpg` (all listed above).
 
 `assets/textures/block-83-87/shutter_louvres.jpg` is drawn by `tools/prepare_block_83_87_textures.py` from the existing CC0 `door_paint_green.jpg` (no download); `assets/textures/block-83-87-lightmap.jpg` is baked in Blender (original work). The reference card for 83–87 Main (Goodspeed Histories, "Main Street looking S.") was viewed only and is not in the repository.
+
+`assets/textures/store-79-lightmap.jpg` is baked in Blender (original work); 79 Main reuses existing textures only.

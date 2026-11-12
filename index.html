@@ -612,13 +612,19 @@
       baked-lighting="lightmap: assets/textures/store-106-lightmap.jpg; intensity: 1.1209"
       glass-reflect></a-entity>
 
-    <!-- South of Court St, west side: four map-sized placeholder boxes on the 53 ft street
+    <!-- South of Court St, west side: the lots on the 53 ft street
          line (1921 Sanborn sheet 3; PLAN.md pass 2, section 9.3). 79 "Hardware & Paints"
          (3-storey frame) closes the Court St corner; 83-87 "Gro." (3-storey brick) has a flat
          porch roof on posts over the walk; 91-93 (2-storey frame) and 95-97 (2-storey brick)
-         stand back behind small front yards. Specs for the real buildings come later. -->
-    <a-entity id="bldg-79-main" position="-8.13 0 14.2" rotation="0 90 0"
-      building="width: 7.6; height: 9.75; depth: 25; stories: 3; color: #e8e1cf; wall: wood; photo: "></a-entity>
+         stand back behind small front yards. 79 and 83-87 are Blender models; the two houses follow. -->
+    <!-- Paving between the sidewalk and the two shop fronts, which stand a little behind the
+         street line (1921 map): 79 is 1.64 m back, 83-87 0.6 m. Boxes: x y z width height depth. -->
+    <a-entity id="walk-79-87" box-group="color: #6f6a60;
+      boxes: -8.92 0.075 14.22 1.66 0.15 7.7, -8.36 0.075 23.11 0.64 0.15 6.66"></a-entity>
+    <a-entity id="bldg-79-main" position="-9.74 0.15 14.22" rotation="0 90 0"
+      gltf-model="url(assets/models/store-79.glb)"
+      baked-lighting="lightmap: assets/textures/store-79-lightmap.jpg; intensity: 1.0137"
+      glass-reflect></a-entity>
     <!-- 83-87 Main: brick grocery with roof arch and sidewalk porch (tools/blender/block_83_87.py;
          from the c. 1905-12 "Main Street looking S." card; upper shutters closed as on the card). -->
     <a-entity id="bldg-83-87-main" position="-4.58 0.15 23.11" rotation="0 90 0"
