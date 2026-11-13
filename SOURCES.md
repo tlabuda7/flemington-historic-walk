@@ -527,6 +527,23 @@ true peak ≤ −1.9 dBFS.
 | `<node-id>.ogg` × 4, `timings.json` | **Kokoro-82M** v1.0 model weights and voice pack **`am_fenrir`** (hexgrad), from the Hugging Face cache | https://huggingface.co/hexgrad/Kokoro-82M | **Apache-2.0** (credited in `#credits`) | the grocer's boy's spoken lines |
 | (tool, not shipped) | the same tools as above | see Mr. Pickell's table | Apache-2.0 / MIT / GPL-3.0 (program only) | generating the clips |
 
+### Voice of Mr. Williamson (`assets/audio/voices/williamson/`)
+
+Kokoro-82M, voice **`am_puck`** (2026-11-12, chosen by the scene-integrator by measurement among the
+American and British male voices, `tools/make_voice_williamson.py --audition`: a mid-low, even voice
+(median ≈ 108 Hz, 7.1-semitone range) between am_onyx (Rittenhouse, ≈ 85 Hz / 3.8 st) and am_michael
+(Pickell, ≈ 115 Hz / 8.2 st), well below am_fenrir (grocer's boy, ≈ 132 Hz), and the best-graded of the
+remaining American male voices; slowed to speed 0.80 for a calm older man; owner to judge by ear).
+The 10 candidate voice files `voices/am_adam, am_echo, am_eric, am_liam, am_puck, am_santa, bm_daniel,
+bm_fable, bm_george, bm_lewis.pt` (≈ 0.5 MB each) were downloaded on 2026-11-12 with the owner's OK into
+the user's Hugging Face cache (not the repo). 5 clips `<node-id>.ogg` (his 5 lines) + `timings.json`;
+mono OGG Vorbis, 22.05 kHz, 64 kbps, −18.0 … −18.4 LUFS, true peak ≤ −2.1 dBFS.
+
+| File | Source | URL | Licence | Used for |
+|------|--------|-----|---------|----------|
+| `<node-id>.ogg` × 5, `timings.json` | **Kokoro-82M** v1.0 model weights and voice pack **`am_puck`** (hexgrad), voice files downloaded by the `kokoro` package | https://huggingface.co/hexgrad/Kokoro-82M | **Apache-2.0** (credited in `#credits`) | Mr. Williamson's spoken lines |
+| (tool, not shipped) | the same tools as above | see Mr. Pickell's table | Apache-2.0 / MIT / GPL-3.0 (program only) | generating the clips |
+
 ## Code libraries (loaded from CDNs, not stored in the repo)
 
 | Library | Version | URL | Licence | Used for |

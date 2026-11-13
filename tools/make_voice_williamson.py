@@ -50,8 +50,8 @@ OUT = ROOT / "assets" / "audio" / "voices" / "williamson"
 
 # ---- voice settings ---------------------------------------------------------------------
 REPO = "hexgrad/Kokoro-82M"
-VOICE = "TBD"             # placeholder: set after --audition (see PLAN.md R2-W); the script refuses to run until then
-SPEED = 0.88              # an unhurried older gentleman (Rittenhouse 0.85, Pickell 1.0)
+VOICE = "am_puck"         # chosen by --audition (see PLAN.md R2-W): median ~108 Hz, 7.1 st range, best-graded free am_* voice
+SPEED = 0.80              # an unhurried older gentleman, ~2.8 words/s (audition ran at 0.88)
 KOKORO_SR = 24000         # Kokoro's own output rate
 OUT_SR = 22050            # clips are stored at the same rate as before
 SENTENCE_PAUSE = 0.38     # silence between chunks, if Kokoro has to split a long line
@@ -165,17 +165,17 @@ def pitch_track(x, sr, fmin=60.0, fmax=300.0):
     return np.array(f0)
 
 
-def audition(pipes, nodes):
+def audition(pipes, nodes, voices=None):
     """Render every line in each candidate voice; print pitch and tempo stats (writes nothing)."""
     text = " ".join(" ".join(tts_token(t) for t in n["text"].split()) for n in nodes.values())
     nwords = len(text.split())
     print(f"{'voice':11s} {'median Hz':>9s} {'10-90% Hz':>11s} {'range st':>8s} {'words/s':>7s}")
-    for v in CANDIDATES + list(TAKEN):
+    for v in voices or CANDIDATES + list(TAKEN):
         try:
             chunks = [r.audio.numpy().astype(np.float64)
                       for r in pipes(lang_of(v))(text, voice=v, speed=SPEED, split_pattern=None)]
         except Exception as e:  # voice not available
-            print(f"{v:11s} failed: {e}")
+            print(f"{v:11s} failed: {e!r}")
             continue
         x = np.concatenate(chunks)
         f0 = pitch_track(x, KOKORO_SR)
@@ -189,6 +189,7 @@ def main():
     ap.add_argument("--ffmpeg", default=None)
     ap.add_argument("--only", default="")
     ap.add_argument("--audition", action="store_true")
+    ap.add_argument("--voices", default="", help="comma list for --audition (default: all candidates)")
     args = ap.parse_args()
     ff = args.ffmpeg
     if not ff:
@@ -207,7 +208,7 @@ def main():
 
     nodes = json.loads(DIALOGUE.read_text(encoding="utf-8"))["nodes"]
     if args.audition:
-        audition(pipes, nodes)
+        audition(pipes, nodes, [v for v in args.voices.split(",") if v])
         return
     if VOICE == "TBD" or VOICE in TAKEN:
         raise SystemExit("Set VOICE first (run --audition after the owner OKs the voice download).")

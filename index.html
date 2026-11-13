@@ -62,7 +62,7 @@
     <b>Sound</b> starts with your first click or key press (or Enter VR); M mutes / unmutes.
   </div>
   <div id="credits">
-    Voices of Mr. Pickell, Mr. Rittenhouse, the shopper and the grocer's boy: synthetic speech (Kokoro-82M, voices am_michael, am_onyx, af_heart and am_fenrir),
+    Voices of Mr. Pickell, Mr. Rittenhouse, the shopper, the grocer's boy and Mr. Williamson: synthetic speech (Kokoro-82M, voices am_michael, am_onyx, af_heart, am_fenrir and am_puck),
     <a href="https://www.apache.org/licenses/LICENSE-2.0" target="_blank" rel="noopener">Apache-2.0</a>,
     <a href="https://huggingface.co/hexgrad/Kokoro-82M" target="_blank" rel="noopener">huggingface.co/hexgrad/Kokoro-82M</a>.
   </div>
@@ -601,12 +601,12 @@
          south of the Bloomfield Ave corner. Faces west, a little south, toward visitors coming up
          from the south. 5.4 m from the shopper (8.6, -70.5), so the 2.5 m talk circles do not
          overlap. Built by tools/blender/npc_williamson.py + npc_williamson_bake.py (preview:
-         npc_williamson_preview.py). Text only for now: voice to come from
-         tools/make_voice_williamson.py (assets/audio/voices/williamson/). -->
+         npc_williamson_preview.py). Voice: assets/audio/voices/williamson/ (Kokoro am_puck,
+         tools/make_voice_williamson.py). -->
     <a-entity id="npc-williamson" position="10.9 0.15 -75.4" rotation="0 -75 0"
       gltf-model="url(assets/models/npc-williamson.glb?v=1)"
       animation-mixer="clip: Idle; crossFadeDuration: 0.4"
-      npc="dialogue: data/dialogue/williamson.json; radius: 2.5; closeRadius: 4; voiceHeight: 1.62; randomIdleStart: true"
+      npc="dialogue: data/dialogue/williamson.json; voice: assets/audio/voices/williamson/; radius: 2.5; closeRadius: 4; voiceHeight: 1.62; randomIdleStart: true"
       blob-shadow="width: 0.9; depth: 0.6; opacity: 0.6"></a-entity>
 
     <!-- ============================================================
